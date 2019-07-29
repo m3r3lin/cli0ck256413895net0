@@ -1,0 +1,61 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static "bower_components/select2/dist/css/select2.min.css" %}"/>
+{% endblock %}
+{% block page_title %}
+    نمایش پلن
+{% endblock %}
+{% block dashboard %}
+    <li>نمایش پلن</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                            <table id="BasijDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">کد پلن</th>
+                                    <th class="text-center">عنوان</th>
+                                    <th class="text-center">قیمت</th>
+                                    <th class="text-center">تاریخ ایجاد</th>
+                                    <th class="text-center">وضعیت</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for pelan in object_list %}
+                                    <tr>
+                                        <td>{{ pelan.code_pelan }}</td>
+                                        <td>{{ pelan.onvan }}</td>
+                                        <td>{{ pelan.gheymat }}</td>
+                                        <td>{{ pelan.tarikh_ijad }}</td>
+                                        <td>{{ pelan.vazeyat }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'dist/my_js/datatable.js' %}"></script>
+    <!-- my fontawesom -->
+    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
+
+{% endblock %}

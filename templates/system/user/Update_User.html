@@ -1,0 +1,289 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static "bower_components/select2/dist/css/select2.min.css" %}"/>
+{% endblock %}
+{% block page_title %}
+    بروزرسانی کاربر
+{% endblock %}
+{% block dashboard %}
+    <li>بروزرسانی کاربر</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">جهت بروزرسانی کاربر، فرم زیر را پر کنید.</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="box-body">
+                            {% include "errors.html" %}
+                            {% include "messages.html" %}
+                            <div class="row">
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.first_name.label_tag %}
+                                        <label for="first_name">{{ form.first_name.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.first_name }}
+                                    {% if form.first_name.help_text %}
+                                        <p class="help-block">{{ form.first_name.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.last_name.label_tag %}
+                                        <label for="last_name">{{ form.last_name.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.last_name }}
+                                    {% if form.last_name.help_text %}
+                                        <p class="help-block">{{ form.last_name.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.code_melli.label_tag %}
+                                        <label for="last_name">{{ form.code_melli.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.code_melli }}
+                                    {% if form.code_melli.help_text %}
+                                        <p class="help-block">{{ form.code_melli.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.mobile.label_tag %}
+                                        <label for="mobile">{{ form.mobile.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.mobile }}
+                                    {% if form.mobile.help_text %}
+                                        <p class="help-block">{{ form.mobile.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.gender.label_tag %}
+                                        <label for="gender">{{ form.gender.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.gender }}
+                                    {% if form.gender.help_text %}
+                                        <p class="help-block">{{ form.gender.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.father_name.label_tag %}
+                                        <label for="father_name">{{ form.father_name.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.father_name }}
+                                    {% if form.father_name.help_text %}
+                                        <p class="help-block">{{ form.father_name.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.address.label_tag %}
+                                        <label for="address">{{ form.address.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.address }}
+                                    {% if form.address.help_text %}
+                                        <p class="help-block">{{ form.address.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.email.label_tag %}
+                                        <label for="email">{{ form.email.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.email }}
+                                    {% if form.email.help_text %}
+                                        <p class="help-block">{{ form.email.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.shomare_hesab.label_tag %}
+                                        <label for="shomare_hesab">{{ form.shomare_hesab.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.shomare_hesab }}
+                                    {% if form.shomare_hesab.help_text %}
+                                        <p class="help-block">{{ form.shomare_hesab.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.shomare_cart.label_tag %}
+                                        <label for="shomare_cart">{{ form.shomare_cart.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.shomare_cart }}
+                                    {% if form.shomare_cart.help_text %}
+                                        <p class="help-block">{{ form.shomare_cart.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.shomare_shaba.label_tag %}
+                                        <label for="shomare_shaba">{{ form.shomare_shaba.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.shomare_shaba }}
+                                    {% if form.shomare_shaba.help_text %}
+                                        <p class="help-block">{{ form.shomare_shaba.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.name_saheb_hesab.label_tag %}
+                                        <label for="name_saheb_hesab">{{ form.name_saheb_hesab.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.name_saheb_hesab }}
+                                    {% if form.name_saheb_hesab.help_text %}
+                                        <p class="help-block">{{ form.name_saheb_hesab.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.name_bank.label_tag %}
+                                        <label for="name_bank">{{ form.name_bank.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.name_bank }}
+                                    {% if form.name_bank.help_text %}
+                                        <p class="help-block">{{ form.name_bank.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.code_posti.label_tag %}
+                                        <label for="code_posti">{{ form.code_posti.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.code_posti }}
+                                    {% if form.code_posti.help_text %}
+                                        <p class="help-block">{{ form.code_posti.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.kife_pool.label_tag %}
+                                        <label for="kife_pool">{{ form.kife_pool.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.kife_pool }}
+                                    {% if form.kife_pool.help_text %}
+                                        <p class="help-block">{{ form.kife_pool.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.kife_daramad.label_tag %}
+                                        <label for="kife_daramad">{{ form.kife_daramad.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.kife_daramad }}
+                                    {% if form.kife_daramad.help_text %}
+                                        <p class="help-block">{{ form.kife_daramad.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.code_moaref.label_tag %}
+                                        <label for="code_moaref">{{ form.code_moaref.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.code_moaref }}
+                                    {% if form.code_moaref.help_text %}
+                                        <p class="help-block">{{ form.code_moaref.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.tarikh_ozviyat.label_tag %}
+                                        <label for="tarikh_ozviyat">{{ form.tarikh_ozviyat.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.tarikh_ozviyat }}
+                                    {% if form.tarikh_ozviyat.help_text %}
+                                        <p class="help-block">{{ form.tarikh_ozviyat.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.id_telegram.label_tag %}
+                                        <label for="id_telegram">{{ form.id_telegram.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.id_telegram }}
+                                    {% if form.id_telegram.help_text %}
+                                        <p class="help-block">{{ form.id_telegram.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                            <div class="form-group col-sm6 col-md-3">
+                                    {% if form.nooe_heshab.label_tag %}
+                                        <label for="nooe_heshab">{{ form.nooe_heshab.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.nooe_heshab }}
+                                    {% if form.nooe_heshab.help_text %}
+                                        <p class="help-block">{{ form.nooe_heshab.help_text }}</p>
+                                    {% endif %}
+                                </div>
+                            <div class="form-group col-sm6 col-md-3">
+                                    {% if form.vazeyat.label_tag %}
+                                        <label for="vazeyat">{{ form.vazeyat.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.vazeyat }}
+                                    {% if form.vazeyat.help_text %}
+                                        <p class="help-block">{{ form.vazeyat.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if user.image_cart_melli %}
+                                        <img src="{{ user.image_cart_melli.url }}" class="user-image" style="width: 50px; height: 50px;float: left;" alt="User Image">
+                                    {% endif %}
+                                    {% if form.image_cart_melli.label_tag %}
+                                        <label for="image_cart_melli">{{ form.image_cart_melli.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+
+                                    {{ form.image_cart_melli }}
+
+                                    {% if form.image_cart_melli.help_text %}
+                                        <p class="help-block">{{ form.image_cart_melli.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if user.avatar %}
+                                        <img src="{{ user.avatar.url }}" class="user-image" style="width: 50px; height: 50px;float: left;" alt="User Image">
+                                    {% endif %}
+                                    {% if form.avatar.label_tag %}
+                                        <label for="avatar">{{ form.avatar.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.avatar }}
+                                    {% if form.avatar.help_text %}
+                                        <p class="help-block">{{ form.avatar.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- /.box-body -->
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary" style="background: #418cd9;border-color: #418cd9;">ذخیره تغییرات</button>
+                                <a href="{% url 'dashboard' %}" class="btn btn-danger">انصراف</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'dist/my_js/datatable.js' %}"></script>
+    <!-- my fontawesom -->
+    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
+{% endblock %}

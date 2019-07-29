@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from system.models import User, Pelan
+from system.models import User, Pelan, Tabligh
 from django.forms.widgets import ClearableFileInput
 
 
@@ -287,6 +287,72 @@ class PelanCreateForm(ModelForm):
         self.fields['tarikh_ijad'].label = "تاریخ ایجاد:"
         self.fields['tarikh_ijad'].required = True
         self.fields['tarikh_ijad'].widget.attrs.update({'class': 'form-control', 'id': 'tarikh_ijad'})
+
+        self.fields['vazeyat'].label = "وضعیت:"
+        self.fields['vazeyat'].required = True
+        self.fields['vazeyat'].widget.attrs.update({'class': 'form-control', 'id': 'vazeyat'})
+
+
+class TablighCreateForm(ModelForm):
+    class Meta:
+        model = Tabligh
+        fields = ('onvan', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'link', 'vazeyat')
+        error_messages = {
+            'onvan': {
+                'required': ("عنوان اجباری است!"),
+            },
+            'code_tabligh_gozaar': {
+                'required': ("تبلیغ گذار اجباری است!"),
+            },
+            'tarikh_ijad': {
+                'required': ("تاریخ ایجاد اجباری است!"),
+            },
+            'code_pelan': {
+                'required': ("کد پلن اجباری است!"),
+            },
+            'tedad_click': {
+                'required': ("تعداد کلیک اجباری است!"),
+            },
+            'tedad_click_shode': {
+                'required': ("تعداد کلیک شده اجباری است!"),
+            },
+            'link': {
+                'required': ("لینک اجباری است!"),
+            },
+            'vazeyat': {
+                'required': ("وضعیت اجباری است!"),
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(TablighCreateForm, self).__init__(*args, **kwargs)
+        self.fields['onvan'].label = "عنوان:"
+        self.fields['onvan'].required = True
+        self.fields['onvan'].widget.attrs.update({'class': 'form-control', 'id': 'onvan'})
+
+        self.fields['code_tabligh_gozaar'].label = "کد تبلیغ گذار:"
+        self.fields['code_tabligh_gozaar'].required = True
+        self.fields['code_tabligh_gozaar'].widget.attrs.update({'class': 'form-control', 'id': 'code_tabligh_gozaar'})
+
+        self.fields['tarikh_ijad'].label = "تاریخ ایجاد:"
+        self.fields['tarikh_ijad'].required = True
+        self.fields['tarikh_ijad'].widget.attrs.update({'class': 'form-control', 'id': 'tarikh_ijad'})
+
+        self.fields['code_pelan'].label = "کد پلن:"
+        self.fields['code_pelan'].required = True
+        self.fields['code_pelan'].widget.attrs.update({'class': 'form-control', 'id': 'code_pelan'})
+
+        self.fields['tedad_click'].label = "تعداد کلیک:"
+        self.fields['tedad_click'].required = True
+        self.fields['tedad_click'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click'})
+
+        self.fields['tedad_click_shode'].label = "تعداد کلیک شده:"
+        self.fields['tedad_click_shode'].required = True
+        self.fields['tedad_click_shode'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click_shode'})
+
+        self.fields['link'].label = "لینک:"
+        self.fields['link'].required = True
+        self.fields['link'].widget.attrs.update({'class': 'form-control', 'id': 'link'})
 
         self.fields['vazeyat'].label = "وضعیت:"
         self.fields['vazeyat'].required = True

@@ -1,0 +1,140 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static "bower_components/select2/dist/css/select2.min.css" %}"/>
+{% endblock %}
+{% block page_title %}
+    بروزرسانی تبلیغ
+{% endblock %}
+{% block dashboard %}
+    <li>بروزرسانی تبلیغ</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">جهت بروزرسانی تبلیغ، فرم زیر را پر کنید.</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="box-body">
+                            {% include "errors.html" %}
+                            {% include "messages.html" %}
+                            <div class="row">
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.onvan.label_tag %}
+                                        <label for="onvan">{{ form.onvan.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.onvan }}
+                                    {% if form.onvan.help_text %}
+                                        <p class="help-block">{{ form.onvan.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.code_tabligh_gozaar.label_tag %}
+                                        <label for="code_tabligh_gozaar">{{ form.code_tabligh_gozaar.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.code_tabligh_gozaar }}
+                                    {% if form.code_tabligh_gozaar.help_text %}
+                                        <p class="help-block">{{ form.code_tabligh_gozaar.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.tarikh_ijad.label_tag %}
+                                        <label for="tarikh_ijad">{{ form.tarikh_ijad.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.tarikh_ijad }}
+                                    {% if form.tarikh_ijad.help_text %}
+                                        <p class="help-block">{{ form.tarikh_ijad.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.code_pelan.label_tag %}
+                                        <label for="code_pelan">{{ form.code_pelan.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.code_pelan }}
+                                    {% if form.code_pelan.help_text %}
+                                        <p class="help-block">{{ form.code_pelan.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.code_pelan.label_tag %}
+                                        <label for="code_pelan">{{ form.code_pelan.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.code_pelan }}
+                                    {% if form.code_pelan.help_text %}
+                                        <p class="help-block">{{ form.code_pelan.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.tedad_click.label_tag %}
+                                        <label for="tedad_click">{{ form.tedad_click.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.tedad_click }}
+                                    {% if form.tedad_click.help_text %}
+                                        <p class="help-block">{{ form.tedad_click.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.tedad_click_shode.label_tag %}
+                                        <label for="tedad_click_shode">{{ form.tedad_click_shode.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.tedad_click_shode }}
+                                    {% if form.tedad_click_shode.help_text %}
+                                        <p class="help-block">{{ form.tedad_click_shode.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.link.label_tag %}
+                                        <label for="link">{{ form.link.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.link }}
+                                    {% if form.link.help_text %}
+                                        <p class="help-block">{{ form.link.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                            <div class="form-group col-sm6 col-md-3">
+                                    {% if form.vazeyat.label_tag %}
+                                        <label for="vazeyat">{{ form.vazeyat.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.vazeyat }}
+                                    {% if form.vazeyat.help_text %}
+                                        <p class="help-block">{{ form.vazeyat.help_text }}</p>
+                                    {% endif %}
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">ثبت پلن</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'dist/my_js/datatable.js' %}"></script>
+    <!-- my fontawesom -->
+    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
+{% endblock %}

@@ -68,7 +68,7 @@
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="m-nav__item" style="vertical-align: baseline;height: auto;">
                         <a href="#" class="header-wallet btn-danger">
-                            <span>اعتبار : {{ user.credit }}0 ریال</span>
+                            <span>اعتبار : 0 ریال</span>
                         </a>
                     </li>
                     <li class="dropdown user user-menu">
@@ -204,6 +204,22 @@
                 </li>
 
                 <li><a href="#"><i class="fa fa-lock"></i> <span>تغییر رمز</span></a></li>
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-support"></i>
+                        <span>کاربر</span>
+                        <span class="pull-left-container">
+                            <i class="fa fa-angle-right pull-left"></i>
+                        </span>
+
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{% url  'CreateUser'%}"><i class="fa fa-list"></i>ایجاد</a></li>
+                        <li><a href="{% url  'ListUser'%}"><i class="fa fa-plus"></i>نمایش</a></li>
+                    </ul>
+                </li>
+
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-support"></i>
@@ -214,10 +230,23 @@
 
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="#"><i class="fa fa-list"></i>ایجاد</a></li>
-{#                        <li><a href="#"><i class="fa fa-plus"></i>ویرایش</a></li>#}
-{#                        <li><a href="#"><i class="fa fa-plus"></i>حذف</a></li>#}
-                        <li><a href="#"><i class="fa fa-plus"></i>نمایش</a></li>
+                        <li><a href="{% url  'CreatePelan'%}"><i class="fa fa-list"></i>ایجاد</a></li>
+                        <li><a href="{% url  'ListPelan'%}"><i class="fa fa-plus"></i>نمایش</a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-support"></i>
+                        <span>تبلیغ</span>
+                        <span class="pull-left-container">
+                            <i class="fa fa-angle-right pull-left"></i>
+                        </span>
+
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{% url  'CreateTabligh'%}"><i class="fa fa-list"></i>ایجاد</a></li>
+                        <li><a href="{% url  'ListTabligh'%}"><i class="fa fa-plus"></i>نمایش</a></li>
                     </ul>
                 </li>
             </ul>

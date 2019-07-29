@@ -15,7 +15,6 @@ class PelanCreateView(LoginRequiredMixin, CreateView):
     template_name = 'system/Pelan/create_pelan.html'
     form_class = PelanCreateForm
 
-    # success_url = reverse_lazy('users:login')
     def form_valid(self, form):
         user = form.save(commit=False)
         messages.success(self.request, 'پلن مورد نظر با موفقیت ثبت شد.')
@@ -40,7 +39,7 @@ class PelanUpdateView(LoginRequiredMixin, UpdateView):
         return super(PelanUpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('UpdatePelan', kwargs={'pk': self.object.pk})
+        return reverse('ListPelan')
 
 
 class PelanDeleteView(LoginRequiredMixin, View):

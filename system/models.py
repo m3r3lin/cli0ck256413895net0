@@ -60,11 +60,32 @@ class Pelan(Model):
         ('غیرفعال', 'غیرفعال'),
         ('در انتظار', 'در انتظار'),
     )
-    code_pelan = models.AutoField(primary_key=True)
     onvan = models.CharField(max_length=30)
     gheymat = models.IntegerField(default=500000, validators=[MinValueValidator(0), MaxValueValidator(9999999999)])
     tarikh_ijad = models.DateTimeField(default=datetime.now, blank=True)
     vazeyat = models.CharField(max_length=10, choices=VAZEYAT_CHOICES)
+
+    def __str__(self):
+        return self.onvan
+
+
+class Tabligh(Model):
+    VAZEYAT_CHOICES = (
+        ('فعال', 'فعال'),
+        ('غیرفعال', 'غیرفعال'),
+        ('در انتظار', 'در انتظار'),
+    )
+    onvan = models.CharField(max_length=30)
+    code_tabligh_gozaar = models.CharField(max_length=30)
+    tarikh_ijad = models.DateTimeField(default=datetime.now, blank=True)
+    code_pelan = models.ForeignKey(Pelan, on_delete=models.CASCADE)
+    tedad_click = models.IntegerField(default=0)
+    tedad_click_shode = models.IntegerField(default=0)
+    link = models.CharField(max_length=500)
+    vazeyat = models.CharField(max_length=10, choices=VAZEYAT_CHOICES)
+
+    def __str__(self):
+        return self.onvan
 
 
 if not settings.CREATING_SUPER_USER:

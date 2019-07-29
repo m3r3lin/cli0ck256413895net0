@@ -4,10 +4,10 @@
     <link rel="stylesheet" href="{% static "bower_components/select2/dist/css/select2.min.css" %}"/>
 {% endblock %}
 {% block page_title %}
-    نمایش پلن
+    نمایش تبلیغ
 {% endblock %}
 {% block dashboard %}
-    <li>نمایش پلن</li>
+    <li>نمایش تبلیغ</li>
 {% endblock %}
 {% block main_content %}
 
@@ -21,23 +21,31 @@
                             <table id="BasijDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">کد پلن</th>
+                                    <th class="text-center">کد تبلیغ</th>
                                     <th class="text-center">عنوان</th>
-                                    <th class="text-center">قیمت</th>
+                                    <th class="text-center">کد تبلیغ گذار</th>
                                     <th class="text-center">تاریخ ایجاد</th>
+                                    <th class="text-center">کد پلن</th>
+                                    <th class="text-center">تعداد کلیک</th>
+                                    <th class="text-center">تعداد کلیک شده</th>
+                                    <th class="text-center">لینک</th>
                                     <th class="text-center">وضعیت</th>
                                     <th class="text-center">عملیات</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for pelan in object_list %}
+                                {% for tabligh in object_list %}
                                     <tr>
-                                        <td>{{ pelan.id }}</td>
-                                        <td>{{ pelan.onvan }}</td>
-                                        <td>{{ pelan.gheymat }}</td>
-                                        <td>{{ pelan.tarikh_ijad }}</td>
-                                        <td>{{ pelan.vazeyat }}</td>
-                                        <td><a class="btn btn-warning" href="{% url 'UpdatePelan' pk=pelan.id %}">ویرایش</a><a class="btn btn-danger" href="{% url 'DeletePelan' pk=pelan.id %}">حذف</a></td>
+                                        <td>{{ tabligh.id }}</td>
+                                        <td>{{ tabligh.onvan }}</td>
+                                        <td>{{ tabligh.code_tabligh_gozaar }}</td>
+                                        <td>{{ tabligh.tarikh_ijad }}</td>
+                                        <td>{{ tabligh.code_pelan }}</td>
+                                        <td>{{ tabligh.tedad_click }}</td>
+                                        <td>{{ tabligh.tedad_click_shode }}</td>
+                                        <td>{{ tabligh.link }}</td>
+                                        <td>{{ tabligh.vazeyat }}</td>
+                                        <td><a class="btn btn-warning" href="{% url 'UpdateTabligh' pk=tabligh.id %}">ویرایش</a><a class="btn btn-danger" href="{% url 'DeleteTabligh' pk=tabligh.id %}">حذف</a></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

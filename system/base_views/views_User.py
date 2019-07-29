@@ -1,6 +1,8 @@
 from django.contrib import auth, messages
-from django.shortcuts import render, redirect
-from django.views.generic import CreateView, UpdateView
+from django.db.models import ProtectedError
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
+from django.views.generic import CreateView, UpdateView, ListView
 
 from Ads_Project.functions import LoginRequiredMixin
 from system.forms import UserCreateForm, UserUpdateForm
@@ -29,11 +31,10 @@ class UserCreateView(CreateView):
         return super(UserCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
-        print(self.request.POST)
         return super(UserCreateView, self).form_invalid(form)
 
     def get_success_url(self):
-        return reverse('register')
+        return reverse('CreateUser')
 
 
 def login_user(request):
@@ -43,7 +44,6 @@ def login_user(request):
         return redirect('dashboard')
     else:
         if request.method == "POST":
-            print(request.POST.get('username'), request.POST.get('password'))
             user = auth.authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
             if user is not None:
                 if user.is_active:
@@ -95,4 +95,24 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         from django.urls import reverse
-        return reverse('UpdateUser')
+        return reverse('ListUser')
+
+class UserDeleteView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        try:
+            user = get_object_or_404(User, pk=pk)
+            user.delete()
+        except ProtectedError:
+            messages.error(self.request, 'از این نوع کاربر قبلا استفاده شده است و قابل حذف نمیباشد.')
+            return redirect('ListUser')
+        messages.success(self.request, 'کاربر موردنظر با موفقیت حذف شد')
+        return redirect('ListUser')
+
+class UserListView(LoginRequiredMixin, ListView):
+    model = User
+    template_name = 'system/user/List_User.html'
+    form_class = UserCreateForm
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        return context

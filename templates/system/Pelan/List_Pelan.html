@@ -2,12 +2,17 @@
 {% load static %}
 {% block css %}
     <link rel="stylesheet" href="{% static "bower_components/select2/dist/css/select2.min.css" %}"/>
+    <style>
+        td{
+            text-align: center;
+        }
+    </style>
 {% endblock %}
 {% block page_title %}
-    نمایش پلن
+    لیست پلن ها
 {% endblock %}
 {% block dashboard %}
-    <li>نمایش پلن</li>
+    <li>لیست پلن ها</li>
 {% endblock %}
 {% block main_content %}
 
@@ -17,6 +22,8 @@
                 <div class="box">
                     <!-- /.box-header -->
                     <div class="box-body">
+                        {% include "errors.html" %}
+                        {% include "messages.html" %}
                         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                             <table id="BasijDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
@@ -25,6 +32,7 @@
                                     <th class="text-center">عنوان</th>
                                     <th class="text-center">قیمت</th>
                                     <th class="text-center">تاریخ ایجاد</th>
+                                    <th class="text-center">تعداد کلیک</th>
                                     <th class="text-center">وضعیت</th>
                                     <th class="text-center">عملیات</th>
                                 </tr>
@@ -36,8 +44,12 @@
                                         <td>{{ pelan.onvan }}</td>
                                         <td>{{ pelan.gheymat }}</td>
                                         <td>{{ pelan.tarikh_ijad }}</td>
+                                        <td>{{ pelan.tedad_click }}</td>
                                         <td>{{ pelan.vazeyat }}</td>
-                                        <td><a class="btn btn-warning" href="{% url 'UpdatePelan' pk=pelan.id %}">ویرایش</a><a class="btn btn-danger" href="{% url 'DeletePelan' pk=pelan.id %}">حذف</a></td>
+                                        <td>
+                                            <a class="btn btn-warning my_left_margin" href="{% url 'UpdatePelan' pk=pelan.id %}">ویرایش</a>
+                                            <a class="btn btn-danger" href="{% url 'DeletePelan' pk=pelan.id %}">حذف</a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

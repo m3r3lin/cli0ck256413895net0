@@ -99,7 +99,7 @@
                                     <a href="#" class="btn btn-default btn-flat">پروفایل</a>
                                 </div>
                                 <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat">خروج</a>
+                                    <a href="{% url 'logout' %}" class="btn btn-default btn-flat">خروج</a>
                                 </div>
                             </li>
                         </ul>
@@ -215,8 +215,8 @@
 
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{% url  'CreateUser'%}"><i class="fa fa-list"></i>ایجاد</a></li>
-                        <li><a href="{% url  'ListUser'%}"><i class="fa fa-plus"></i>نمایش</a></li>
+                        <li><a href="{% url  'CreateUser' %}"><i class="fa fa-plus"></i>ایجاد کاربر</a></li>
+                        <li><a href="{% url  'ListUser' %}"><i class="fa fa-list"></i>لیست کاربران</a></li>
                     </ul>
                 </li>
 
@@ -230,8 +230,8 @@
 
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{% url  'CreatePelan'%}"><i class="fa fa-list"></i>ایجاد</a></li>
-                        <li><a href="{% url  'ListPelan'%}"><i class="fa fa-plus"></i>نمایش</a></li>
+                        <li><a href="{% url  'CreatePelan' %}"><i class="fa fa-plus"></i>ایجاد پلن</a></li>
+                        <li><a href="{% url  'ListPelan' %}"><i class="fa fa-list"></i>لیست پلن ها</a></li>
                     </ul>
                 </li>
 
@@ -245,8 +245,8 @@
 
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{% url  'CreateTabligh'%}"><i class="fa fa-list"></i>ایجاد</a></li>
-                        <li><a href="{% url  'ListTabligh'%}"><i class="fa fa-plus"></i>نمایش</a></li>
+                        <li><a href="{% url  'CreateTabligh' %}"><i class="fa fa-plus"></i>ایجاد تبلیغ</a></li>
+                        <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>
                     </ul>
                 </li>
             </ul>

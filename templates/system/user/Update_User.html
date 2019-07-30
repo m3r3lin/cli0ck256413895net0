@@ -199,16 +199,6 @@
                                 </div>
 
                                 <div class="form-group col-sm6 col-md-3">
-                                    {% if form.tarikh_ozviyat.label_tag %}
-                                        <label for="tarikh_ozviyat">{{ form.tarikh_ozviyat.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.tarikh_ozviyat }}
-                                    {% if form.tarikh_ozviyat.help_text %}
-                                        <p class="help-block">{{ form.tarikh_ozviyat.help_text }}</p>
-                                    {% endif %}
-                                </div>
-
-                                <div class="form-group col-sm6 col-md-3">
                                     {% if form.id_telegram.label_tag %}
                                         <label for="id_telegram">{{ form.id_telegram.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
@@ -218,7 +208,7 @@
                                     {% endif %}
                                 </div>
 
-                            <div class="form-group col-sm6 col-md-3">
+                                <div class="form-group col-sm6 col-md-3">
                                     {% if form.nooe_heshab.label_tag %}
                                         <label for="nooe_heshab">{{ form.nooe_heshab.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
@@ -227,7 +217,8 @@
                                         <p class="help-block">{{ form.nooe_heshab.help_text }}</p>
                                     {% endif %}
                                 </div>
-                            <div class="form-group col-sm6 col-md-3">
+
+                                <div class="form-group col-sm6 col-md-3">
                                     {% if form.vazeyat.label_tag %}
                                         <label for="vazeyat">{{ form.vazeyat.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
@@ -269,7 +260,7 @@
                             </div>
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary" style="background: #418cd9;border-color: #418cd9;">ذخیره تغییرات</button>
-                                <a href="{% url 'dashboard' %}" class="btn btn-danger">انصراف</a>
+                                <a href="{% url 'ListUser' %}" class="btn btn-danger">انصراف</a>
                             </div>
                         </div>
                     </form>

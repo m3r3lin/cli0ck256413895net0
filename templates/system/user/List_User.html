@@ -2,12 +2,17 @@
 {% load static %}
 {% block css %}
     <link rel="stylesheet" href="{% static "bower_components/select2/dist/css/select2.min.css" %}"/>
+    <style>
+        td {
+            text-align: center;
+        }
+    </style>
 {% endblock %}
 {% block page_title %}
-    نمایش کاربران
+    لیست کاربران
 {% endblock %}
 {% block dashboard %}
-    <li>نمایش کاربران</li>
+    <li>لیست کاربران</li>
 {% endblock %}
 {% block main_content %}
 
@@ -17,11 +22,13 @@
                 <div class="box">
                     <!-- /.box-header -->
                     <div class="box-body">
+                        {% include "errors.html" %}
+                        {% include "messages.html" %}
                         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                             <table id="BasijDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">کد تبلیغ</th>
+                                    <th class="text-center">کد کاربر</th>
                                     <th class="text-center">نام</th>
                                     <th class="text-center">نام خانوادگی</th>
                                     <th class="text-center">کد ملی</th>
@@ -45,7 +52,10 @@
                                         <td>{{ user.father_name }}</td>
                                         <td>{{ user.address }}</td>
                                         <td>{{ user.email }}</td>
-                                        <td><a class="btn btn-warning" href="{% url 'UpdateUser' pk=user.id %}">ویرایش</a><a class="btn btn-danger" href="{% url 'DeleteUser' pk=user.id %}">حذف</a></td>
+                                        <td>
+                                            <a class="btn btn-warning my_left_margin" href="{% url 'UpdateUser' pk=user.id %}">ویرایش</a>
+                                            <a class="btn btn-danger" href="{% url 'DeleteUser' pk=user.id %}">حذف</a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

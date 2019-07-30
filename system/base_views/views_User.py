@@ -75,8 +75,8 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'system/user/Update_User.html'
     form_class = UserUpdateForm
 
-    def get_object(self, queryset=None):
-        return self.request.user
+    # def get_object(self, queryset=None):
+    #     return self.request.user
 
     def form_valid(self, form):
         if 'avatar' in self.request.FILES:
@@ -90,12 +90,9 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, 'تغییرات شما یا موفقیت ثبت شد')
         return super(UserUpdateView, self).form_valid(form)
 
-    def form_invalid(self, form):
-        return super(UserUpdateView, self).form_invalid(form)
-
     def get_success_url(self):
-        from django.urls import reverse
         return reverse('ListUser')
+
 
 class UserDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
@@ -107,6 +104,7 @@ class UserDeleteView(LoginRequiredMixin, View):
             return redirect('ListUser')
         messages.success(self.request, 'کاربر موردنظر با موفقیت حذف شد')
         return redirect('ListUser')
+
 
 class UserListView(LoginRequiredMixin, ListView):
     model = User

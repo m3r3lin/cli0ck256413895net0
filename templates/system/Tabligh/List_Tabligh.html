@@ -2,12 +2,17 @@
 {% load static %}
 {% block css %}
     <link rel="stylesheet" href="{% static "bower_components/select2/dist/css/select2.min.css" %}"/>
+    <style>
+        td{
+            text-align: center;
+        }
+    </style>
 {% endblock %}
 {% block page_title %}
-    نمایش تبلیغ
+    لیست تبلیغات
 {% endblock %}
 {% block dashboard %}
-    <li>نمایش تبلیغ</li>
+    <li>لیست تبلیغات</li>
 {% endblock %}
 {% block main_content %}
 
@@ -17,12 +22,15 @@
                 <div class="box">
                     <!-- /.box-header -->
                     <div class="box-body">
+                        {% include "errors.html" %}
+                        {% include "messages.html" %}
                         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                             <table id="BasijDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
                                     <th class="text-center">کد تبلیغ</th>
                                     <th class="text-center">عنوان</th>
+                                    <th class="text-center">متن</th>
                                     <th class="text-center">کد تبلیغ گذار</th>
                                     <th class="text-center">تاریخ ایجاد</th>
                                     <th class="text-center">کد پلن</th>
@@ -38,6 +46,7 @@
                                     <tr>
                                         <td>{{ tabligh.id }}</td>
                                         <td>{{ tabligh.onvan }}</td>
+                                        <td>{{ tabligh.text }}</td>
                                         <td>{{ tabligh.code_tabligh_gozaar }}</td>
                                         <td>{{ tabligh.tarikh_ijad }}</td>
                                         <td>{{ tabligh.code_pelan }}</td>
@@ -45,7 +54,10 @@
                                         <td>{{ tabligh.tedad_click_shode }}</td>
                                         <td>{{ tabligh.link }}</td>
                                         <td>{{ tabligh.vazeyat }}</td>
-                                        <td><a class="btn btn-warning" href="{% url 'UpdateTabligh' pk=tabligh.id %}">ویرایش</a><a class="btn btn-danger" href="{% url 'DeleteTabligh' pk=tabligh.id %}">حذف</a></td>
+                                        <td>
+                                            <a class="btn btn-warning my_left_margin" href="{% url 'UpdateTabligh' pk=tabligh.id %}">ویرایش</a>
+                                            <a class="btn btn-danger" href="{% url 'DeleteTabligh' pk=tabligh.id %}">حذف</a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

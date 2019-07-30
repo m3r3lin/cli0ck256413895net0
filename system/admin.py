@@ -1,5 +1,5 @@
 from django.contrib import admin
-from system.models import User, Pelan, Tabligh
+from system.models import User, Pelan, Tabligh, Click, Payam
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -17,6 +17,18 @@ class TablighAdmin(admin.ModelAdmin):
     # list_display = [field.attname for field in Tabligh._meta.fields]
 
 
+class ClickAdmin(admin.ModelAdmin):
+    list_display = ('id', 'code_tabligh', 'code_montasher_konande', 'tarikh_click', 'ip',)
+    # list_display = [field.attname for field in Tabligh._meta.fields]
+
+
+class PayamAdmin(admin.ModelAdmin):
+    list_display = ('id', 'code_ferestande', 'code_girande', 'onvan', 'tarikh', 'text',)
+    # list_display = [field.attname for field in Tabligh._meta.fields]
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Pelan, PelanAdmin)
 admin.site.register(Tabligh, TablighAdmin)
+admin.site.register(Click, ClickAdmin)
+admin.site.register(Payam, PayamAdmin)

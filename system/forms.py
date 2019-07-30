@@ -96,6 +96,7 @@ class UserUpdateForm(ModelForm):
                 'required': ("نام خانوادگی اجباری است!"),
             },
             'code_melli': {
+                'unique': ("این شماره ملی قبلا ثبت شده است!"),
                 'required': ("کد ملی اجباری است!"),
             },
             'mobile': {
@@ -231,7 +232,7 @@ class UserUpdateForm(ModelForm):
         self.fields['code_moaref'].widget.attrs.update({'class': 'form-control', 'id': 'code_moaref'})
 
         self.fields['tarikh_ozviyat'].label = "تاریخ عضویت:"
-        self.fields['tarikh_ozviyat'].required = True
+        self.fields['tarikh_ozviyat'].required = False
         self.fields['tarikh_ozviyat'].widget.attrs.update({'class': 'form-control', 'id': 'tarikh_ozviyat'})
 
         self.fields['id_telegram'].label = "آی دی تلگرام:"
@@ -258,9 +259,10 @@ class UserUpdateForm(ModelForm):
 class PelanCreateForm(ModelForm):
     class Meta:
         model = Pelan
-        fields = ('onvan', 'gheymat', 'tarikh_ijad', 'vazeyat')
+        fields = ('onvan', 'gheymat', 'tarikh_ijad', 'tedad_click', 'vazeyat')
         error_messages = {
             'onvan': {
+                'unique': ("این عنوان قبلا ثبت شده است!"),
                 'required': ("عنوان اجباری است!"),
             },
             'gheymat': {
@@ -268,6 +270,9 @@ class PelanCreateForm(ModelForm):
             },
             'tarikh_ijad': {
                 'required': ("تاریخ ایجاد اجباری است!"),
+            },
+            'tedad_click': {
+                'required': ("تعداد کلیک اجباری است!"),
             },
             'vazeyat': {
                 'required': ("وضعیت اجباری است!"),
@@ -285,8 +290,12 @@ class PelanCreateForm(ModelForm):
         self.fields['gheymat'].widget.attrs.update({'class': 'form-control', 'id': 'gheymat'})
 
         self.fields['tarikh_ijad'].label = "تاریخ ایجاد:"
-        self.fields['tarikh_ijad'].required = True
+        self.fields['tarikh_ijad'].required = False
         self.fields['tarikh_ijad'].widget.attrs.update({'class': 'form-control', 'id': 'tarikh_ijad'})
+
+        self.fields['tedad_click'].label = "تعداد کلیک:"
+        self.fields['tedad_click'].required = True
+        self.fields['tedad_click'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click'})
 
         self.fields['vazeyat'].label = "وضعیت:"
         self.fields['vazeyat'].required = True
@@ -294,12 +303,17 @@ class PelanCreateForm(ModelForm):
 
 
 class TablighCreateForm(ModelForm):
+    code_pelan = forms.ModelChoiceField(queryset=Pelan.objects.order_by('-onvan'))
+
     class Meta:
         model = Tabligh
-        fields = ('onvan', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'link', 'vazeyat')
+        fields = ('onvan', 'text', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'link', 'vazeyat')
         error_messages = {
             'onvan': {
                 'required': ("عنوان اجباری است!"),
+            },
+            'text': {
+                'required': ("متن اجباری است!"),
             },
             'code_tabligh_gozaar': {
                 'required': ("تبلیغ گذار اجباری است!"),
@@ -330,12 +344,16 @@ class TablighCreateForm(ModelForm):
         self.fields['onvan'].required = True
         self.fields['onvan'].widget.attrs.update({'class': 'form-control', 'id': 'onvan'})
 
+        self.fields['text'].label = "متن:"
+        self.fields['text'].required = True
+        self.fields['text'].widget.attrs.update({'class': 'form-control', 'id': 'text'})
+
         self.fields['code_tabligh_gozaar'].label = "کد تبلیغ گذار:"
         self.fields['code_tabligh_gozaar'].required = True
         self.fields['code_tabligh_gozaar'].widget.attrs.update({'class': 'form-control', 'id': 'code_tabligh_gozaar'})
 
         self.fields['tarikh_ijad'].label = "تاریخ ایجاد:"
-        self.fields['tarikh_ijad'].required = True
+        self.fields['tarikh_ijad'].required = False
         self.fields['tarikh_ijad'].widget.attrs.update({'class': 'form-control', 'id': 'tarikh_ijad'})
 
         self.fields['code_pelan'].label = "کد پلن:"

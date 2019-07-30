@@ -33,7 +33,7 @@ class TablighUpdateView(LoginRequiredMixin, UpdateView):
     form_class = TablighCreateForm
 
     def form_valid(self, form):
-        tabligh = form.save(commit=False)
+        # tabligh = form.save(commit=False)
         messages.success(self.request, 'تبلیغ مورد نظر ویرایش شد.')
         return super(TablighUpdateView, self).form_valid(form)
 

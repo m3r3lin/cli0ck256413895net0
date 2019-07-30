@@ -9,4 +9,4 @@ from system.models import User
 class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
         user = User.objects.get(username=request.user.username)
-        return render(request, 'system/dashboard.html', {'user': user})
+        return render(request, 'panel/index/dashboard.html', {'user': user})

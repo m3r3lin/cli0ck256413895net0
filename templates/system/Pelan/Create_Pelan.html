@@ -59,6 +59,16 @@
                                 </div>
 
                                 <div class="form-group col-sm6 col-md-3">
+                                    {% if form.tedad_click.label_tag %}
+                                        <label for="tedad_click">{{ form.tedad_click.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.tedad_click }}
+                                    {% if form.tedad_click.help_text %}
+                                        <p class="help-block">{{ form.tedad_click.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
                                     {% if form.vazeyat.label_tag %}
                                         <label for="vazeyat">{{ form.vazeyat.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}

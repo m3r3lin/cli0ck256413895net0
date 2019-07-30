@@ -7,6 +7,7 @@ from system.views import Dashboard
 
 urlpatterns = [
     path('CreateUser/', UserCreateView.as_view(), name='CreateUser'),
+    # path('UpdateUser/', UserUpdateView.as_view(), name='UpdateUser'),
     path('UpdateUser/<int:pk>', UserUpdateView.as_view(), name='UpdateUser'),
     path('DeleteUser/<int:pk>', UserDeleteView.as_view(), name='DeleteUser'),
     path('ListUser/', UserListView.as_view(), name='ListUser'),

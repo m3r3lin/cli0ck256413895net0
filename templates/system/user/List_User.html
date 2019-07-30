@@ -6,6 +6,14 @@
         td {
             text-align: center;
         }
+
+        th:nth-child(1), td:nth-child(1), th:nth-child(2), td:nth-child(2),
+        th:nth-child(3), td:nth-child(3), th:nth-child(4), td:nth-child(4),
+        th:nth-child(5), td:nth-child(5), th:nth-child(6), td:nth-child(6),
+        th:nth-child(7), td:nth-child(7), th:nth-child(8), td:nth-child(8),
+        th:nth-child(10), td:nth-child(10), th:nth-child(11), td:nth-child(11) {
+            white-space: nowrap;
+        }
     </style>
 {% endblock %}
 {% block page_title %}
@@ -25,13 +33,14 @@
                         {% include "errors.html" %}
                         {% include "messages.html" %}
                         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-                            <table id="BasijDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
+                            <table id="UserDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
                                     <th class="text-center">کد کاربر</th>
                                     <th class="text-center">نام</th>
                                     <th class="text-center">نام خانوادگی</th>
                                     <th class="text-center">کد ملی</th>
+                                    <th class="text-center">تاریخ تولد</th>
                                     <th class="text-center">موبایل</th>
                                     <th class="text-center">جنسیت</th>
                                     <th class="text-center">نام پدر</th>
@@ -41,25 +50,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for user in object_list %}
-                                    <tr>
-                                        <td>{{ user.id }}</td>
-                                        <td>{{ user.first_name }}</td>
-                                        <td>{{ user.last_name }}</td>
-                                        <td>{{ user.code_melli }}</td>
-                                        <td>{{ user.mobile }}</td>
-                                        <td>{{ user.gender }}</td>
-                                        <td>{{ user.father_name }}</td>
-                                        <td>{{ user.address }}</td>
-                                        <td>{{ user.email }}</td>
-                                        <td>
-                                            <a class="btn btn-warning my_left_margin" href="{% url 'UpdateUser' pk=user.id %}">ویرایش</a>
-                                            <a class="btn btn-danger" href="{% url 'DeleteUser' pk=user.id %}">حذف</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
                                 </tbody>
-
                             </table>
                         </div>
                     </div>
@@ -69,6 +60,23 @@
             </div>
         </div>
     </section>
+    <div class="modal fade" id="confirm_modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class=" text-black">x</span></button>
+                    <h4 class="modal-title"><b>آیا تمایل دارید این تبلیغ را حذف کنید؟</b></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">خیر</button>
+                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">بلی</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
     <!-- /.modal -->
 {% endblock %}
 {% block javascripts %}
@@ -77,5 +85,14 @@
     <script src="{% static 'dist/my_js/datatable.js' %}"></script>
     <!-- my fontawesom -->
     <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
-
+    <script>
+        datatable_simple_show({
+            url: "{% url 'UserDatatable' %}",
+            real_cols: 10,
+            datable_id: '#UserDatatable',
+            del_url: "{% url 'DeleteUser' pk=0 %}",
+            up_url: "{% url 'UpdateUser' pk=0 %}",
+            modal_id: "#confirm_modal"
+        });
+    </script>
 {% endblock %}

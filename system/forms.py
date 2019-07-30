@@ -1,5 +1,11 @@
+import re
+
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django import forms
+from unidecode import unidecode
+
+from system.functions import change_date_to_english
 from system.models import User, Pelan, Tabligh
 from django.forms.widgets import ClearableFileInput
 
@@ -20,7 +26,7 @@ class UserCreateForm(ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'mobile', 'email', 'password')
+        fields = ['username', 'first_name', 'last_name', 'mobile', 'email', 'password']
         error_messages = {
             'username': {
                 'required': ("نام کاربری است!"),
@@ -78,16 +84,15 @@ class UserUpdateForm(ModelForm):
     # mobile = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'موبایل'}))
     # phone = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'تلفن'}))
     # email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder': 'ایمیل'}))
-    # address = forms.CharField(required=True, widget=forms.Textarea(attrs={'rows': 4}))
+    tarikh_tavalod = forms.CharField(required=False)
     avatar = forms.ImageField(required=False, widget=MyClearableFileInput)
     image_cart_melli = forms.ImageField(required=False, widget=MyClearableFileInput)
 
     class Meta:
         model = User
-        fields = (
-            'first_name', 'last_name', 'code_melli', 'mobile', 'gender', 'father_name', 'address', 'email', 'shomare_hesab',
-            'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'code_posti', 'kife_pool', 'kife_daramad',
-            'code_moaref', 'tarikh_ozviyat', 'id_telegram', 'nooe_heshab', 'vazeyat', 'image_cart_melli', 'avatar')
+        fields = ['first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'address', 'email', 'shomare_hesab',
+                  'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'code_posti', 'kife_pool', 'kife_daramad',
+                  'code_moaref', 'id_telegram', 'nooe_heshab', 'vazeyat', 'image_cart_melli', 'avatar']
         error_messages = {
             'first_name': {
                 'required': ("نام اجباری است!"),
@@ -98,6 +103,9 @@ class UserUpdateForm(ModelForm):
             'code_melli': {
                 'unique': ("این شماره ملی قبلا ثبت شده است!"),
                 'required': ("کد ملی اجباری است!"),
+            },
+            'tarikh_tavalod': {
+                'required': ("تاریخ تولد اجباری است!"),
             },
             'mobile': {
                 'required': ("موبایل اجباری است!"),
@@ -141,9 +149,6 @@ class UserUpdateForm(ModelForm):
             'code_moaref': {
                 'required': ("کد معرف اجباری است!"),
             },
-            'tarikh_ozviyat': {
-                'required': ("تاریخ عضویت اجباری است!"),
-            },
             'id_telegram': {
                 'required': ("آی دی تلگرام اجباری است!"),
             },
@@ -174,6 +179,10 @@ class UserUpdateForm(ModelForm):
         self.fields['code_melli'].label = "کد ملی:"
         self.fields['code_melli'].required = True
         self.fields['code_melli'].widget.attrs.update({'class': 'form-control', 'id': 'code_melli'})
+
+        self.fields['tarikh_tavalod'].label = "تاریخ تولد:"
+        self.fields['tarikh_tavalod'].required = False
+        self.fields['tarikh_tavalod'].widget.attrs.update({'class': 'form-control', 'id': 'tarikh_tavalod'})
 
         self.fields['mobile'].label = "موبایل:"
         self.fields['mobile'].required = True
@@ -231,12 +240,8 @@ class UserUpdateForm(ModelForm):
         self.fields['code_moaref'].required = True
         self.fields['code_moaref'].widget.attrs.update({'class': 'form-control', 'id': 'code_moaref'})
 
-        self.fields['tarikh_ozviyat'].label = "تاریخ عضویت:"
-        self.fields['tarikh_ozviyat'].required = False
-        self.fields['tarikh_ozviyat'].widget.attrs.update({'class': 'form-control', 'id': 'tarikh_ozviyat'})
-
         self.fields['id_telegram'].label = "آی دی تلگرام:"
-        self.fields['id_telegram'].required = True
+        self.fields['id_telegram'].required = False
         self.fields['id_telegram'].widget.attrs.update({'class': 'form-control', 'id': 'id_telegram'})
 
         self.fields['nooe_heshab'].label = "نوع حساب:"
@@ -255,11 +260,24 @@ class UserUpdateForm(ModelForm):
         self.fields['avatar'].required = False
         self.fields['avatar'].widget.attrs.update({'class': 'form-control', 'id': 'avatar'})
 
+    def clean_tarikh_tavalod(self):
+        tarikh_tavalod = self.cleaned_data['tarikh_tavalod']
+        print(tarikh_tavalod)
+        if tarikh_tavalod == '':
+            raise ValidationError("فیلد تاریخ تولد اجباری است.")
+        r = re.compile('\d\d\d\d/\d\d/\d{1,2}')
+        if tarikh_tavalod != None and tarikh_tavalod != '':
+            if (r.match(unidecode(tarikh_tavalod)) is None):
+                raise ValidationError("فرمت تاریخ تولد اشتباه است!")
+        tarikh_tavalod = change_date_to_english(tarikh_tavalod, 2)
+        print(tarikh_tavalod)
+        return tarikh_tavalod
+
 
 class PelanCreateForm(ModelForm):
     class Meta:
         model = Pelan
-        fields = ('onvan', 'gheymat', 'tarikh_ijad', 'tedad_click', 'vazeyat')
+        fields = ['onvan', 'gheymat', 'tarikh_ijad', 'tedad_click', 'vazeyat']
         error_messages = {
             'onvan': {
                 'unique': ("این عنوان قبلا ثبت شده است!"),
@@ -307,9 +325,10 @@ class TablighCreateForm(ModelForm):
 
     class Meta:
         model = Tabligh
-        fields = ('onvan', 'text', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'link', 'vazeyat')
+        fields = ['onvan', 'text', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'vazeyat']
         error_messages = {
             'onvan': {
+                'unique': ("این عنوان قبلا ثبت شده است!"),
                 'required': ("عنوان اجباری است!"),
             },
             'text': {
@@ -329,9 +348,6 @@ class TablighCreateForm(ModelForm):
             },
             'tedad_click_shode': {
                 'required': ("تعداد کلیک شده اجباری است!"),
-            },
-            'link': {
-                'required': ("لینک اجباری است!"),
             },
             'vazeyat': {
                 'required': ("وضعیت اجباری است!"),
@@ -356,7 +372,7 @@ class TablighCreateForm(ModelForm):
         self.fields['tarikh_ijad'].required = False
         self.fields['tarikh_ijad'].widget.attrs.update({'class': 'form-control', 'id': 'tarikh_ijad'})
 
-        self.fields['code_pelan'].label = "کد پلن:"
+        self.fields['code_pelan'].label = "عنوان پلن:"
         self.fields['code_pelan'].required = True
         self.fields['code_pelan'].widget.attrs.update({'class': 'form-control', 'id': 'code_pelan'})
 
@@ -365,12 +381,8 @@ class TablighCreateForm(ModelForm):
         self.fields['tedad_click'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click'})
 
         self.fields['tedad_click_shode'].label = "تعداد کلیک شده:"
-        self.fields['tedad_click_shode'].required = True
+        self.fields['tedad_click_shode'].required = False
         self.fields['tedad_click_shode'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click_shode'})
-
-        self.fields['link'].label = "لینک:"
-        self.fields['link'].required = True
-        self.fields['link'].widget.attrs.update({'class': 'form-control', 'id': 'link'})
 
         self.fields['vazeyat'].label = "وضعیت:"
         self.fields['vazeyat'].required = True

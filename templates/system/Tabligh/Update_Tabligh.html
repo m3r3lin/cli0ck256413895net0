@@ -39,16 +39,6 @@
                                 </div>
 
                                 <div class="form-group col-sm6 col-md-3">
-                                    {% if form.text.label_tag %}
-                                        <label for="text">{{ form.text.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.text }}
-                                    {% if form.text.help_text %}
-                                        <p class="help-block">{{ form.text.help_text }}</p>
-                                    {% endif %}
-                                </div>
-
-                                <div class="form-group col-sm6 col-md-3">
                                     {% if form.code_tabligh_gozaar.label_tag %}
                                         <label for="code_tabligh_gozaar">{{ form.code_tabligh_gozaar.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
@@ -89,16 +79,6 @@
                                 </div>
 
                                 <div class="form-group col-sm6 col-md-3">
-                                    {% if form.link.label_tag %}
-                                        <label for="link">{{ form.link.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.link }}
-                                    {% if form.link.help_text %}
-                                        <p class="help-block">{{ form.link.help_text }}</p>
-                                    {% endif %}
-                                </div>
-
-                                <div class="form-group col-sm6 col-md-3">
                                     {% if form.vazeyat.label_tag %}
                                         <label for="vazeyat">{{ form.vazeyat.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
@@ -107,6 +87,17 @@
                                         <p class="help-block">{{ form.vazeyat.help_text }}</p>
                                     {% endif %}
                                 </div>
+
+                                <div class="form-group col-sm6 col-md-12">
+                                    {% if form.text.label_tag %}
+                                        <label for="text">{{ form.text.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.text }}
+                                    {% if form.text.help_text %}
+                                        <p class="help-block">{{ form.text.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">
@@ -123,9 +114,16 @@
     <!-- /.modal -->
 {% endblock %}
 {% block javascripts %}
-    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
-    <script src="{% static 'dist/my_js/datatable.js' %}"></script>
-    <!-- my fontawesom -->
-    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
+    <!-- CK Editor -->
+    <script src="{% static 'bower_components/ckeditor/ckeditor.js' %}"></script>
+
+    <script>
+        $(function () {
+            // Replace the <textarea id="editor1"> with a CKEditor
+            // instance, using default configuration.
+            CKEDITOR.replace('text')
+            //bootstrap WYSIHTML5 - text editor
+            $('.textarea').wysihtml5()
+        })
+    </script>
 {% endblock %}

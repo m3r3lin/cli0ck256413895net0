@@ -3,6 +3,7 @@ from django.db.models import ProtectedError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
+from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
 from system.forms import UserCreateForm, UserUpdateForm
@@ -12,6 +13,7 @@ from django.contrib.auth import logout
 from django.urls import reverse
 
 from system.models import User
+from system.templatetags.app_filters import date_jalali
 
 
 class UserCreateView(CreateView):
@@ -34,7 +36,7 @@ class UserCreateView(CreateView):
         return super(UserCreateView, self).form_invalid(form)
 
     def get_success_url(self):
-        return reverse('CreateUser')
+        return reverse('login')
 
 
 def login_user(request):
@@ -75,9 +77,6 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'system/user/Update_User.html'
     form_class = UserUpdateForm
 
-    # def get_object(self, queryset=None):
-    #     return self.request.user
-
     def form_valid(self, form):
         if 'avatar' in self.request.FILES:
             user = User.objects.get(username=self.request.user.username)
@@ -87,8 +86,17 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
             user = User.objects.get(username=self.request.user.username)
             user.avatar = self.request.FILES['image_cart_melli']
             print('image_cart_melli saveed!!!')
+
         messages.success(self.request, 'تغییرات شما یا موفقیت ثبت شد')
         return super(UserUpdateView, self).form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+    def form_invalid(self, form):
+        print(self.request.POST)
+        print(form.cleaned_data)
+        return super().form_invalid(form)
 
     def get_success_url(self):
         return reverse('ListUser')
@@ -114,3 +122,13 @@ class UserListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         return context
+
+
+class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
+    model = User
+    columns = ['id', 'first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'address', 'email']
+
+    def render_column(self, row, column):
+        if column == 'tarikh_tavalod':
+            return date_jalali(row.tarikh_tavalod, 3)
+        return super().render_column(row, column)

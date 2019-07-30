@@ -2,6 +2,7 @@
 {% load static %}
 {% block css %}
     <link rel="stylesheet" href="{% static "bower_components/select2/dist/css/select2.min.css" %}"/>
+    <link rel="stylesheet" href="{% static 'dist/css/persian-datepicker.min.css' %}">
 {% endblock %}
 {% block page_title %}
     بروزرسانی کاربر
@@ -59,6 +60,16 @@
                                 </div>
 
                                 <div class="form-group col-sm6 col-md-3">
+                                    {% if form.tarikh_tavalod.label_tag %}
+                                        <label for="tarikh_tavalod">{{ form.tarikh_tavalod.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.tarikh_tavalod }}
+                                    {% if form.tarikh_tavalod.help_text %}
+                                        <p class="help-block">{{ form.tarikh_tavalod.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
                                     {% if form.mobile.label_tag %}
                                         <label for="mobile">{{ form.mobile.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
@@ -85,16 +96,6 @@
                                     {{ form.father_name }}
                                     {% if form.father_name.help_text %}
                                         <p class="help-block">{{ form.father_name.help_text }}</p>
-                                    {% endif %}
-                                </div>
-
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.address.label_tag %}
-                                        <label for="address">{{ form.address.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.address }}
-                                    {% if form.address.help_text %}
-                                        <p class="help-block">{{ form.address.help_text }}</p>
                                     {% endif %}
                                 </div>
 
@@ -256,6 +257,16 @@
                                     {% endif %}
                                 </div>
 
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.address.label_tag %}
+                                        <label for="address">{{ form.address.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.address }}
+                                    {% if form.address.help_text %}
+                                        <p class="help-block">{{ form.address.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">
@@ -277,4 +288,24 @@
     <script src="{% static 'dist/my_js/datatable.js' %}"></script>
     <!-- my fontawesom -->
     <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
+    <script src="{% static 'dist/js/persian-date.js' %}"></script>
+    <script src="{% static 'dist/js/persian-datepicker.min.js' %}"></script>
+    <script>
+        $('#tarikh_tavalod').persianDatepicker({
+            altFormat: 'X',
+            calendarType: 'persian',
+            persianDigit: false,
+            format: 'YYYY/MM/D',
+            observer: true,
+            initialValue: true,
+            timePicker: {
+                enabled: false,
+            },
+            toolbox: {
+                calendarSwitch: {
+                    enabled: false
+                }
+            },
+        });
+    </script>
 {% endblock %}

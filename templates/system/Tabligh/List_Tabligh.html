@@ -3,8 +3,16 @@
 {% block css %}
     <link rel="stylesheet" href="{% static "bower_components/select2/dist/css/select2.min.css" %}"/>
     <style>
-        td{
+        td {
             text-align: center;
+        }
+
+        th:nth-child(1), td:nth-child(1), th:nth-child(2), td:nth-child(2),
+        th:nth-child(3), td:nth-child(3), th:nth-child(4), td:nth-child(4),
+        th:nth-child(5), td:nth-child(5), th:nth-child(6), td:nth-child(6),
+        th:nth-child(7), td:nth-child(7), th:nth-child(9), td:nth-child(9),
+        th:nth-child(10), td:nth-child(10) {
+            white-space: nowrap;
         }
     </style>
 {% endblock %}
@@ -24,16 +32,16 @@
                     <div class="box-body">
                         {% include "errors.html" %}
                         {% include "messages.html" %}
+
                         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-                            <table id="BasijDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
+                            <table id="TablighDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
                                     <th class="text-center">کد تبلیغ</th>
                                     <th class="text-center">عنوان</th>
-                                    <th class="text-center">متن</th>
                                     <th class="text-center">کد تبلیغ گذار</th>
                                     <th class="text-center">تاریخ ایجاد</th>
-                                    <th class="text-center">کد پلن</th>
+                                    <th class="text-center">عنوان پلن</th>
                                     <th class="text-center">تعداد کلیک</th>
                                     <th class="text-center">تعداد کلیک شده</th>
                                     <th class="text-center">لینک</th>
@@ -42,26 +50,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for tabligh in object_list %}
-                                    <tr>
-                                        <td>{{ tabligh.id }}</td>
-                                        <td>{{ tabligh.onvan }}</td>
-                                        <td>{{ tabligh.text }}</td>
-                                        <td>{{ tabligh.code_tabligh_gozaar }}</td>
-                                        <td>{{ tabligh.tarikh_ijad }}</td>
-                                        <td>{{ tabligh.code_pelan }}</td>
-                                        <td>{{ tabligh.tedad_click }}</td>
-                                        <td>{{ tabligh.tedad_click_shode }}</td>
-                                        <td>{{ tabligh.link }}</td>
-                                        <td>{{ tabligh.vazeyat }}</td>
-                                        <td>
-                                            <a class="btn btn-warning my_left_margin" href="{% url 'UpdateTabligh' pk=tabligh.id %}">ویرایش</a>
-                                            <a class="btn btn-danger" href="{% url 'DeleteTabligh' pk=tabligh.id %}">حذف</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
                                 </tbody>
-
                             </table>
                         </div>
                     </div>
@@ -71,6 +60,23 @@
             </div>
         </div>
     </section>
+    <div class="modal fade" id="confirm_modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class=" text-black">x</span></button>
+                    <h4 class="modal-title"><b>آیا تمایل دارید این تبلیغ را حذف کنید؟</b></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">خیر</button>
+                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">بلی</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
     <!-- /.modal -->
 {% endblock %}
 {% block javascripts %}
@@ -79,5 +85,14 @@
     <script src="{% static 'dist/my_js/datatable.js' %}"></script>
     <!-- my fontawesom -->
     <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
-
+    <script>
+        datatable_simple_show({
+            url: "{% url 'TablighDatatable' %}",
+            real_cols: 9,
+            datable_id: '#TablighDatatable',
+            del_url: "{% url 'DeleteTabligh' pk=0 %}",
+            up_url: "{% url 'UpdateTabligh' pk=0 %}",
+            modal_id: "#confirm_modal"
+        });
+    </script>
 {% endblock %}

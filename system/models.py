@@ -12,7 +12,6 @@ from django.db.models import Model
 VAZEYAT_CHOICES = (
     ('فعال', 'فعال'),
     ('غیرفعال', 'غیرفعال'),
-    ('در انتظار', 'در انتظار'),
 )
 
 
@@ -26,9 +25,10 @@ class User(AbstractUser):
         ('منتشر کننده', 'منتشر کننده'),
         ('هر دو', 'هر دو'),
     )
-    code_melli = models.CharField(max_length=10, unique=True, null=True)
+    code_melli = models.CharField(max_length=10, unique=True, null=True, blank=True)
+    tarikh_tavalod = models.DateField(null=True, blank=True)
     mobile = models.CharField(max_length=11, null=True, blank=True)
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    gender = models.CharField(max_length=10, null=True, blank=True, choices=GENDER_CHOICES)
     father_name = models.CharField(max_length=30, null=True, blank=True)
     address = models.TextField(max_length=255, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
@@ -43,8 +43,8 @@ class User(AbstractUser):
     code_moaref = models.CharField(max_length=30, null=True, blank=True)
     tarikh_ozviyat = models.DateTimeField(default=datetime.now, null=True, blank=True)
     id_telegram = models.CharField(max_length=30, null=True, blank=True)
-    nooe_heshab = models.CharField(max_length=20, choices=NOOE_CHOICES)
-    vazeyat = models.CharField(max_length=20, choices=VAZEYAT_CHOICES)
+    nooe_heshab = models.CharField(max_length=20, null=True, blank=True, choices=NOOE_CHOICES)
+    vazeyat = models.CharField(max_length=20, null=True, blank=True, choices=VAZEYAT_CHOICES)
     image_cart_melli = models.ImageField(upload_to=upload_cart_melli_path, null=True, blank=True)
     avatar = models.ImageField(upload_to=upload_avatar_path, null=True, blank=True)
 
@@ -65,7 +65,7 @@ class Pelan(Model):
 
 class Tabligh(Model):
     onvan = models.CharField(max_length=30, unique=True)
-    text = models.TextField(max_length=255, null=True, blank=True)
+    text = models.TextField(null=True, blank=True)
     code_tabligh_gozaar = models.ForeignKey(User, on_delete=models.CASCADE)
     tarikh_ijad = models.DateTimeField(default=datetime.now, null=True, blank=True)
     code_pelan = models.ForeignKey(Pelan, on_delete=models.CASCADE)

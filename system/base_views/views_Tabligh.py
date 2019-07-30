@@ -76,7 +76,7 @@ class TablighListView(LoginRequiredMixin, ListView):
 
 class TablighDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = Tabligh
-    columns = ['id', 'onvan', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'link', 'vazeyat']
+    columns = ['id', 'onvan', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'vazeyat']
 
     def render_column(self, row, column):
         if column == 'tarikh_ijad':

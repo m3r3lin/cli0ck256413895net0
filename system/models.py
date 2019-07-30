@@ -93,6 +93,11 @@ class Payam(Model):
     tarikh = models.DateTimeField(default=datetime.now, null=True, blank=True)
 
 
+class TanzimatPaye(Model):
+    onvan = models.CharField(max_length=30, unique=True)
+    value = models.CharField(max_length=10, null=True, blank=True)
+
+
 if not settings.CREATING_SUPER_USER:
     @receiver(pre_save, sender=User)
     def set_new_user_inactive(sender, instance, **kwargs):

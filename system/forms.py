@@ -6,7 +6,7 @@ from django import forms
 from unidecode import unidecode
 
 from system.functions import change_date_to_english
-from system.models import User, Pelan, Tabligh
+from system.models import User, Pelan, Tabligh, TanzimatPaye
 from django.forms.widgets import ClearableFileInput
 
 
@@ -387,3 +387,36 @@ class TablighCreateForm(ModelForm):
         self.fields['vazeyat'].label = "وضعیت:"
         self.fields['vazeyat'].required = True
         self.fields['vazeyat'].widget.attrs.update({'class': 'form-control', 'id': 'vazeyat'})
+
+
+class ActiveCodeMoarefForm(ModelForm):
+    VAZEYAT_CHOICES = (
+        ('1', 'فعال'),
+        ('0', 'غیرفعال'),
+    )
+    value = forms.ChoiceField(choices=VAZEYAT_CHOICES)
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(ActiveCodeMoarefForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "فعال / غیرفعال:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+class SodeModirForm(ModelForm):
+    value = forms.IntegerField()
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(SodeModirForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "مقدار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})

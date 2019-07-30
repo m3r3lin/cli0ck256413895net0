@@ -2,6 +2,7 @@ from django.urls import path
 
 from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView, PelanDatatableView, PlanReportsView
 from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView
+from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
 from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView
 from system.views import Dashboard
 
@@ -27,4 +28,7 @@ urlpatterns = [
     path('DeleteTabligh/<int:pk>', TablighDeleteView.as_view(), name='DeleteTabligh'),
     path('ListTabligh/', TablighListView.as_view(), name='ListTabligh'),
     path('TablighDatatable/', TablighDatatableView.as_view(), name='TablighDatatable'),
+    # ---- TanzimatPaye
+    path('ActiveCodeMoaref/', ActiveCodeMoarefView.as_view(), name='ActiveCodeMoaref'),
+    path('SodeModir/', SodeModirView.as_view(), name='SodeModir'),
 ]

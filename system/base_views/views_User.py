@@ -132,3 +132,4 @@ class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
         if column == 'tarikh_tavalod':
             return date_jalali(row.tarikh_tavalod, 3)
         return super().render_column(row, column)
+

@@ -277,7 +277,7 @@ class UserUpdateForm(ModelForm):
 class PelanCreateForm(ModelForm):
     class Meta:
         model = Pelan
-        fields = ['onvan', 'gheymat', 'tarikh_ijad', 'tedad_click', 'vazeyat']
+        fields = ['onvan', 'gheymat', 'tedad_click', 'vazeyat']
         error_messages = {
             'onvan': {
                 'unique': ("این عنوان قبلا ثبت شده است!"),
@@ -285,9 +285,6 @@ class PelanCreateForm(ModelForm):
             },
             'gheymat': {
                 'required': ("قیمت اجباری است!"),
-            },
-            'tarikh_ijad': {
-                'required': ("تاریخ ایجاد اجباری است!"),
             },
             'tedad_click': {
                 'required': ("تعداد کلیک اجباری است!"),
@@ -307,10 +304,6 @@ class PelanCreateForm(ModelForm):
         self.fields['gheymat'].required = True
         self.fields['gheymat'].widget.attrs.update({'class': 'form-control', 'id': 'gheymat'})
 
-        self.fields['tarikh_ijad'].label = "تاریخ ایجاد:"
-        self.fields['tarikh_ijad'].required = False
-        self.fields['tarikh_ijad'].widget.attrs.update({'class': 'form-control', 'id': 'tarikh_ijad'})
-
         self.fields['tedad_click'].label = "تعداد کلیک:"
         self.fields['tedad_click'].required = True
         self.fields['tedad_click'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click'})
@@ -325,7 +318,7 @@ class TablighCreateForm(ModelForm):
 
     class Meta:
         model = Tabligh
-        fields = ['onvan', 'text', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'vazeyat']
+        fields = ['onvan', 'text', 'code_tabligh_gozaar', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'vazeyat']
         error_messages = {
             'onvan': {
                 'unique': ("این عنوان قبلا ثبت شده است!"),
@@ -336,9 +329,6 @@ class TablighCreateForm(ModelForm):
             },
             'code_tabligh_gozaar': {
                 'required': ("تبلیغ گذار اجباری است!"),
-            },
-            'tarikh_ijad': {
-                'required': ("تاریخ ایجاد اجباری است!"),
             },
             'code_pelan': {
                 'required': ("کد پلن اجباری است!"),
@@ -367,10 +357,6 @@ class TablighCreateForm(ModelForm):
         self.fields['code_tabligh_gozaar'].label = "کد تبلیغ گذار:"
         self.fields['code_tabligh_gozaar'].required = True
         self.fields['code_tabligh_gozaar'].widget.attrs.update({'class': 'form-control', 'id': 'code_tabligh_gozaar'})
-
-        self.fields['tarikh_ijad'].label = "تاریخ ایجاد:"
-        self.fields['tarikh_ijad'].required = False
-        self.fields['tarikh_ijad'].widget.attrs.update({'class': 'form-control', 'id': 'tarikh_ijad'})
 
         self.fields['code_pelan'].label = "عنوان پلن:"
         self.fields['code_pelan'].required = True

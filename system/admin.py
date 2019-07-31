@@ -18,12 +18,12 @@ class TablighAdmin(admin.ModelAdmin):
 
 
 class ClickAdmin(admin.ModelAdmin):
-    list_display = ('id', 'code_tabligh', 'code_montasher_konande', 'tarikh_click', 'ip',)
+    list_display = ('id', 'tabligh', 'montasher_konande', 'tarikh', 'ip',)
     # list_display = [field.attname for field in Tabligh._meta.fields]
 
 
 class PayamAdmin(admin.ModelAdmin):
-    list_display = ('id', 'code_ferestande', 'code_girande', 'onvan', 'tarikh', 'text',)
+    list_display = ('id', 'ferestande', 'girande', 'onvan', 'tarikh', 'text',)
     # list_display = [field.attname for field in Tabligh._meta.fields]
 
 

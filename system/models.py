@@ -25,6 +25,7 @@ class User(AbstractUser):
         ('منتشر کننده', 'منتشر کننده'),
         ('هر دو', 'هر دو'),
     )
+
     code_melli = models.CharField(max_length=10, unique=True, null=True, blank=True)
     tarikh_tavalod = models.DateField(null=True, blank=True)
     mobile = models.CharField(max_length=11, null=True, blank=True)

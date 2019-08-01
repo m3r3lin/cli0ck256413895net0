@@ -1,6 +1,6 @@
 from django.contrib import auth, messages
 from django.contrib.auth.views import PasswordChangeView
-from django.db.models import ProtectedError
+from django.db.models import ProtectedError, Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
@@ -162,6 +162,12 @@ class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
         if column == 'tarikh_tavalod':
             return date_jalali(row.tarikh_tavalod, 3)
         return super().render_column(row, column)
+
+    def filter_queryset(self, qs):
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            qs = qs.filter(Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search))
+        return qs
 
 
 class ChangeUserPasswordView(LoginRequiredMixin, PasswordChangeView):

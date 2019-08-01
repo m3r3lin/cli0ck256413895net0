@@ -2,7 +2,7 @@ import re
 
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm
+from django.forms import ModelForm, FileInput
 from django import forms
 from unidecode import unidecode
 
@@ -13,7 +13,7 @@ from django.forms.widgets import ClearableFileInput
 fullmatch_compiled = re.compile('^code_(\d{1,9})')
 
 
-class MyClearableFileInput(ClearableFileInput):
+class MyClearableFileInput(FileInput):
     initial_text = "تصویر فعلی"
     input_text = 'عوض کردن'
     clear_checkbox_label = 'پاک کردن'

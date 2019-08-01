@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import ProtectedError
+from django.db.models import ProtectedError, Q
 from django.http import request
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -20,7 +20,6 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
     form_class = TablighCreateForm
 
     def form_valid(self, form):
-        # tabligh = form.save(commit=False)
         if not self.request.user.is_superuser:
             form.instance.code_tabligh_gozaar_id = self.request.user.id
             form.instance.vazeyat = 3
@@ -116,3 +115,11 @@ class TablighDatatableView(LoginRequiredMixin, BaseDatatableView):
         if column == 'tarikh_ijad':
             return date_jalali(row.tarikh_ijad)
         return super().render_column(row, column)
+
+    def filter_queryset(self, qs):
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            qs = qs.filter(Q(onvan__icontains=search) | Q(code_tabligh_gozaar__username__icontains=search))
+        if not self.request.user.is_superuser:
+            qs = qs.filter(code_tabligh_gozaar=self.request.user)
+        return qs

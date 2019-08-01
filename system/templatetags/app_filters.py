@@ -34,9 +34,9 @@ def date_jalali(value, mode=1):
         elif mode == 3:
             date_time = value
             shamsi = gregorian_to_jalali(date_time.year, date_time.month, date_time.day)
-            return "{year}/{month}/{day}".format(year=shamsi[0],
-                                                 month=shamsi[1],
-                                                 day=shamsi[2])
+            return "{year}/{month}/{day}".format(year=shamsi[0] if shamsi[0] > 9 else '0' + str(shamsi[0]),
+                                                 month=shamsi[1] if shamsi[1] > 9 else '0' + str(shamsi[1]),
+                                                 day=shamsi[2] if shamsi[2] > 9 else '0' + str(shamsi[2]))
         elif mode == 2:
             year, month, day = value.split('-')
             shamsi = gregorian_to_jalali(int(year), int(month), int(day))

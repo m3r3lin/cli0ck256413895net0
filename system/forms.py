@@ -140,7 +140,7 @@ class UserCreateForm(TanzimatPayeMiddelware):
         self.after_init()
 
 
-class UserUpdateForm(ModelForm):
+class UserUpdateForm(TanzimatPayeMiddelware):
     tarikh_tavalod = forms.CharField(required=False)
     avatar = forms.ImageField(required=False, widget=MyClearableFileInput)
     image_cart_melli = forms.ImageField(required=False, widget=MyClearableFileInput)
@@ -319,6 +319,8 @@ class UserUpdateForm(ModelForm):
         self.fields['avatar'].label = "آواتار:"
         self.fields['avatar'].required = False
         self.fields['avatar'].widget.attrs.update({'class': 'form-control', 'id': 'avatar'})
+
+        self.after_init()
 
     def clean_tarikh_tavalod(self):
         tarikh_tavalod = self.cleaned_data['tarikh_tavalod']

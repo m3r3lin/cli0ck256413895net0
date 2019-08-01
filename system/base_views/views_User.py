@@ -107,6 +107,15 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
             return redirect(reverse('UpdateUser', kwargs={'pk': request.user.id}))
         return super().get(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = context['form']
+        tarikh_tavalod = form.initial['tarikh_tavalod']
+        if tarikh_tavalod is not None:
+            form.initial['tarikh_tavalod'] = date_jalali(tarikh_tavalod, 3)
+        context['form'] = form
+        return context
+
     def post(self, request, *args, **kwargs):
         if not request.user.is_superuser and request.user.id != kwargs['pk']:
             messages.error(request, 'شما اجازه دسترسی ندارید')

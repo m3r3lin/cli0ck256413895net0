@@ -28,6 +28,11 @@ NOOE_CHOICES = (
     (1, 'منتشر کننده'),
     (2, 'هر دو'),
 )
+VAZEYAT_PAYAM = (
+    (0, 'خوانده شده'),
+    (1, 'خوانده نشده'),
+    (2, 'ارسال شده'),
+)
 
 
 class User(AbstractUser):
@@ -95,11 +100,22 @@ class Payam(Model):
     onvan = models.CharField(max_length=150)
     text = models.TextField()
     tarikh = models.DateTimeField(auto_now_add=True)
+    vazeyat = models.IntegerField(choices=VAZEYAT_PAYAM)
+
+
+ACTIV_MOAREF = 'active_moaref'
 
 
 class TanzimatPaye(Model):
     onvan = models.CharField(max_length=250, unique=True)
     value = models.CharField(max_length=250)
+
+    @staticmethod
+    def get_settings(key, default=None):
+        try:
+            return TanzimatPaye.objects.get(onvan=key).value
+        except:
+            return default
 
 
 class Parent(Model):

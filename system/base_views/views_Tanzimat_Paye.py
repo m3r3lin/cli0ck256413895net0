@@ -4,7 +4,7 @@ from django.views.generic import UpdateView
 
 from Ads_Project.functions import LoginRequiredMixin
 from system.forms import ActiveCodeMoarefForm, SodeModirForm
-from system.models import TanzimatPaye
+from system.models import TanzimatPaye, ACTIV_MOAREF
 
 
 class ActiveCodeMoarefView(LoginRequiredMixin, UpdateView):
@@ -13,8 +13,8 @@ class ActiveCodeMoarefView(LoginRequiredMixin, UpdateView):
     form_class = ActiveCodeMoarefForm
 
     def get_object(self, queryset=None):
-        obj, cre = TanzimatPaye.objects.get_or_create(onvan='activ_moaref', defaults={
-            "onvan": 'activ_moaref',
+        obj, cre = TanzimatPaye.objects.get_or_create(onvan=ACTIV_MOAREF, defaults={
+            "onvan": ACTIV_MOAREF,
             'value': 0,
         })
         return obj

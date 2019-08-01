@@ -39,6 +39,20 @@ class UserCreateView(CreateView):
         return reverse('login')
 
 
+class UserCreateModirView(CreateView):
+    template_name = 'system/user/Create_User_Modir.html'
+    form_class = UserCreateForm
+
+    def form_valid(self, form):
+        return super(UserCreateModirView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(UserCreateModirView, self).form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('ListUser')
+
+
 def login_user(request):
     if request.user.is_authenticated:
         if request.POST.get('next') is not None:
@@ -56,7 +70,6 @@ def login_user(request):
                         return redirect('dashboard')
                 else:
                     return render(request, "system/user/login.html", {'error': 'دسترسی شما به سامانه غیر فعال شده است !'})
-
             else:
                 return render(request, "system/user/login.html", {'error': 'نام کاربری یا پسورد شما اشتباه است !'})
         else:
@@ -81,24 +94,32 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         if 'avatar' in self.request.FILES:
             user = User.objects.get(username=self.request.user.username)
             user.avatar = self.request.FILES['avatar']
-            print('avatar saveed!!!')
         if 'image_cart_melli' in self.request.FILES:
             user = User.objects.get(username=self.request.user.username)
             user.avatar = self.request.FILES['image_cart_melli']
-            print('image_cart_melli saveed!!!')
 
         messages.success(self.request, 'تغییرات شما یا موفقیت ثبت شد')
         return super(UserUpdateView, self).form_valid(form)
 
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_superuser and request.user.id != kwargs['pk']:
+            messages.error(request, 'شما اجازه دسترسی ندارید')
+            return redirect(reverse('UpdateUser', kwargs={'pk': request.user.id}))
+        return super().get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
+        if not request.user.is_superuser and request.user.id != kwargs['pk']:
+            messages.error(request, 'شما اجازه دسترسی ندارید')
+            return redirect(reverse('UpdateUser', kwargs={'pk': request.user.id}))
+
         return super().post(request, *args, **kwargs)
 
     def form_invalid(self, form):
-        print(self.request.POST)
-        print(form.cleaned_data)
         return super().form_invalid(form)
 
     def get_success_url(self):
+        if not self.request.user.is_superuser:
+            return reverse('UpdateUser', kwargs={'pk': self.request.user.id})
         return reverse('ListUser')
 
 
@@ -132,4 +153,3 @@ class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
         if column == 'tarikh_tavalod':
             return date_jalali(row.tarikh_tavalod, 3)
         return super().render_column(row, column)
-

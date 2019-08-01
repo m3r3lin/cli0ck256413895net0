@@ -1,0 +1,144 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% load app_filters %}
+{% block css %}
+{% endblock %}
+{% block page_title %}
+    ایجاد کاربر
+{% endblock %}
+{% block dashboard %}
+    <li>ایجاد کاربر</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">جهت ایجاد تبلیغ، فرم زیر را پر کنید.</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="box-body">
+                            {% include "errors.html" %}
+                            {% include "messages.html" %}
+                            <div class="row">
+
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.first_name.label_tag %}
+                                        <label for="first_name">{{ form.first_name.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.first_name }}
+                                    {% if form.first_name.help_text %}
+                                        <p class="help-block">{{ form.first_name.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.last_name.label_tag %}
+                                        <label for="last_name">{{ form.last_name.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.last_name }}
+                                    {% if form.last_name.help_text %}
+                                        <p class="help-block">{{ form.last_name.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.mobile.label_tag %}
+                                        <label for="tedad_click">{{ form.mobile.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.mobile }}
+                                    {% if form.mobile.help_text %}
+                                        <p class="help-block">{{ form.mobile.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.email.label_tag %}
+                                        <label for="email">{{ form.email.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.email }}
+                                    {% if form.email.help_text %}
+                                        <p class="help-block">{{ form.email.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.username.label_tag %}
+                                        <label for="username">{{ form.username.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.username }}
+                                    {% if form.username.help_text %}
+                                        <p class="help-block">{{ form.username.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.password.label_tag %}
+                                        <label for="password">{{ form.password.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.password }}
+                                    {% if form.password.help_text %}
+                                        <p class="help-block">{{ form.password.help_text }}</p>
+                                    {% endif %}
+                                </div>
+                                {% setting 'active_moaref' 0 as test %}
+                                {% if test == '1' %}
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.code_moaref.label_tag %}
+                                            <label for="code_moaref">{{ form.code_moaref.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.code_moaref }}
+                                        {% if form.code_moaref.help_text %}
+                                            <p class="help-block">{{ form.code_moaref.help_text }}</p>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                <!-- /.box-body -->
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">ثبت کاربر</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    <!-- CK Editor -->
+    <script src="{% static 'bower_components/ckeditor/ckeditor.js' %}"></script>
+
+    <script>
+        $(function () {
+            // Replace the <textarea id="editor1"> with a CKEditor
+            // instance, using default configuration.
+            CKEDITOR.replace('text');
+            //bootstrap WYSIHTML5 - text editor
+            $('.textarea').wysihtml5();
+            $('#code_pelan').change(function () {
+                $.ajax('{% url 'PelanReportDatatable' %}', {
+                    method: 'post',
+                    data: {
+                        csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+                        plan: $(this).val(),
+                        report_type: 'tedad_click'
+                    },
+                }).done(function (e) {
+                    $('#tedad_click').val(e.data);
+                });
+            });
+        })
+    </script>
+{% endblock %}

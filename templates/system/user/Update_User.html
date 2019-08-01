@@ -1,5 +1,6 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load app_filters %}
 {% block css %}
     <link rel="stylesheet" href="{% static 'dist/css/persian-datepicker.min.css' %}">
 {% endblock %}
@@ -168,39 +169,46 @@
                                     {% endif %}
                                 </div>
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.kife_pool.label_tag %}
-                                        <label for="kife_pool">{{ form.kife_pool.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.kife_pool }}
-                                    {% if form.kife_pool.help_text %}
-                                        <p class="help-block">{{ form.kife_pool.help_text }}</p>
-                                    {% endif %}
-                                </div>
+                                {% if request.user.is_superuser %}
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.kife_pool.label_tag %}
+                                            <label for="kife_pool">{{ form.kife_pool.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.kife_pool }}
+                                        {% if form.kife_pool.help_text %}
+                                            <p class="help-block">{{ form.kife_pool.help_text }}</p>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.kife_daramad.label_tag %}
-                                        <label for="kife_daramad">{{ form.kife_daramad.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.kife_daramad }}
-                                    {% if form.kife_daramad.help_text %}
-                                        <p class="help-block">{{ form.kife_daramad.help_text }}</p>
-                                    {% endif %}
-                                </div>
+                                {% if request.user.is_superuser %}
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.kife_daramad.label_tag %}
+                                            <label for="kife_daramad">{{ form.kife_daramad.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.kife_daramad }}
+                                        {% if form.kife_daramad.help_text %}
+                                            <p class="help-block">{{ form.kife_daramad.help_text }}</p>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.code_moaref.label_tag %}
-                                        <label for="code_moaref">{{ form.code_moaref.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.code_moaref }}
-                                    {% if form.code_moaref.help_text %}
-                                        <p class="help-block">{{ form.code_moaref.help_text }}</p>
-                                    {% endif %}
-                                </div>
+                                {% setting 'active_moaref' 0 as test %}
+                                {% if test == '1' %}
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.code_moaref.label_tag %}
+                                            <label for="code_moaref">{{ form.code_moaref.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.code_moaref }}
+                                        {% if form.code_moaref.help_text %}
+                                            <p class="help-block">{{ form.code_moaref.help_text }}</p>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
 
                                 <div class="form-group col-sm6 col-md-3">
                                     {% if form.id_telegram.label_tag %}
-                                        <label for="id_telegram">{{ form.id_telegram.label_tag }}<span class="red-star">*</span></label>
+                                        <label for="id_telegram">{{ form.id_telegram.label_tag }}</label>
                                     {% endif %}
                                     {{ form.id_telegram }}
                                     {% if form.id_telegram.help_text %}
@@ -248,7 +256,7 @@
                                         <img src="{{ user.avatar.url }}" class="user-image" style="width: 50px; height: 50px;float: left;" alt="User Image">
                                     {% endif %}
                                     {% if form.avatar.label_tag %}
-                                        <label for="avatar">{{ form.avatar.label_tag }}<span class="red-star">*</span></label>
+                                        <label for="avatar">{{ form.avatar.label_tag }}</label>
                                     {% endif %}
                                     {{ form.avatar }}
                                     {% if form.avatar.help_text %}
@@ -256,7 +264,7 @@
                                     {% endif %}
                                 </div>
 
-                                <div class="form-group col-sm6 col-md-3">
+                                <div class="form-group col-sm6 col-md-6">
                                     {% if form.address.label_tag %}
                                         <label for="address">{{ form.address.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}

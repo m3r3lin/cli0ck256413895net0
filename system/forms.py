@@ -6,8 +6,10 @@ from django import forms
 from unidecode import unidecode
 
 from system.functions import change_date_to_english
-from system.models import User, Pelan, Tabligh, TanzimatPaye
+from system.models import User, Pelan, Tabligh, TanzimatPaye, ACTIV_MOAREF
 from django.forms.widgets import ClearableFileInput
+
+fullmatch_compiled = re.compile('^code_(\d{1,9})')
 
 
 class MyClearableFileInput(ClearableFileInput):
@@ -16,43 +18,100 @@ class MyClearableFileInput(ClearableFileInput):
     clear_checkbox_label = 'پاک کردن'
 
 
-class UserCreateForm(ModelForm):
-    username = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'نام کاربری'}))
+class TanzimatPayeMiddelware(ModelForm):
+
+    def add_field(self, field_name):
+        if field_name not in self.Meta.fields:
+            self.Meta.fields.append(field_name)
+
+    def remove_field(self, field_name):
+        if field_name in self.Meta.fields:
+            del self.Meta.fields[field_name]
+
+    def add_field_message(self, field_name):
+        if field_name not in self.Meta.error_messages:
+            self.Meta.error_messages[field_name] = {}
+
+    def add_field_message_error(self, field_name, key, value):
+        self.add_field_message(field_name)
+        self.Meta.error_messages[field_name][key] = value
+
+    def add_field_message_error_direct(self, field_name, key, value):
+        if field_name in self.fields:
+            self.fields[field_name].error_messages[key] = value
+
+    def after_init(self):
+        if 'code_moaref' in self.Meta.fields:
+            if not hasattr(self, 'clean_code_moaref'):
+                setattr(self, 'clean_code_moaref', self.validate_code_moarefi)
+            try:
+                active_moarefi = int(TanzimatPaye.get_settings(ACTIV_MOAREF, 0))
+                if active_moarefi:
+                    self.fields['code_moaref'].required = True
+                    self.add_field_message_error_direct('code_moaref', 'required', "کد معرف اجباری است!")
+                else:
+                    self.fields['code_moaref'].required = False
+            except:
+                pass
+
+    def validate_code_moarefi(self):
+        c = self.cleaned_data['code_moaref']
+        active_moarefi = int(TanzimatPaye.get_settings(ACTIV_MOAREF, 0))
+        if active_moarefi:
+            fullmatch = fullmatch_compiled.fullmatch(c)
+            if fullmatch:
+                c = fullmatch.groups()[0]
+                if c.isdigit():
+                    try:
+                        return User.objects.get(pk=int(c))
+                    except User.DoesNotExist:
+                        pass
+            raise forms.ValidationError('کد معرف اشتباه است')
+        else:
+            return None
+
+
+class UserCreateForm(TanzimatPayeMiddelware):
+    # username = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'نام کاربری'}), error_messages={})
     first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'نام'}))
     last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'نام خانوادگی'}))
     mobile = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'موبایل'}))
     email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder': 'ایمیل'}))
     password = forms.CharField(widget=forms.PasswordInput(), error_messages={'required': "پسورد اجباری است!"})
+    code_moaref = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'کد معرف'}))
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'mobile', 'email', 'password']
+        fields = ['username', 'first_name', 'last_name', 'mobile', 'email', 'password', 'code_moaref']
         error_messages = {
             'username': {
-                'required': ("نام کاربری است!"),
+                'invalid': "فرمت نام کاریری اشتباه است",
+                'unique': "این نام کاربری قبلا ثبت شده است!",
+                'required': "نام کاربری است!",
             },
             'first_name': {
-                'required': ("نام است!"),
+                'required': "نام است!",
             },
             'last_name': {
-                'required': ("نام خانوادگی است!"),
+                'required': "نام خانوادگی است!",
             },
             'mobile': {
-                'required': ("موبایل اجباری است!"),
+                'required': "موبایل اجباری است!",
             },
             'email': {
-                'required': ("ایمیل اجباری است!"),
+                'required': "ایمیل اجباری است!",
             },
             'password': {
-                'required': ("پسورد اجباری است!"),
-            },
+                'required': "پسورد اجباری است!",
+            }
         }
 
     def __init__(self, *args, **kwargs):
         super(UserCreateForm, self).__init__(*args, **kwargs)
         self.fields['username'].label = "نام کاربری:"
         self.fields['username'].required = True
-        self.fields['username'].widget.attrs.update({'class': 'form-control', 'id': 'username'})
+        self.fields['username'].help_text = ''
+        self.fields['username'].widget.attrs.update({'class': 'form-control', 'id': 'username', 'placeholder': 'نام کاربری'})
 
         self.fields['first_name'].label = "نام:"
         self.fields['first_name'].required = True
@@ -74,16 +133,14 @@ class UserCreateForm(ModelForm):
         self.fields['password'].required = True
         self.fields['password'].widget.attrs.update({'class': 'form-control', 'id': 'password'})
 
+        self.fields['code_moaref'].label = "کد معرف:"
+        self.fields['code_moaref'].required = True
+        self.fields['code_moaref'].widget.attrs.update({'class': 'form-control', 'id': 'code_moaref'})
+
+        self.after_init()
+
 
 class UserUpdateForm(ModelForm):
-    # code_melli = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'کد ملی'}))
-    # username = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'نام کاربری'}))
-    # password = forms.CharField(required=True, widget=forms.PasswordInput())
-    # first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'نام'}))
-    # last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'نام خانوادگی'}))
-    # mobile = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'موبایل'}))
-    # phone = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'تلفن'}))
-    # email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder': 'ایمیل'}))
     tarikh_tavalod = forms.CharField(required=False)
     avatar = forms.ImageField(required=False, widget=MyClearableFileInput)
     image_cart_melli = forms.ImageField(required=False, widget=MyClearableFileInput)
@@ -95,74 +152,77 @@ class UserUpdateForm(ModelForm):
                   'code_moaref', 'id_telegram', 'nooe_heshab', 'vazeyat', 'image_cart_melli', 'avatar']
         error_messages = {
             'first_name': {
-                'required': ("نام اجباری است!"),
+                'required': "نام اجباری است!",
             },
             'last_name': {
-                'required': ("نام خانوادگی اجباری است!"),
+                'required': "نام خانوادگی اجباری است!",
             },
             'code_melli': {
-                'unique': ("این شماره ملی قبلا ثبت شده است!"),
-                'required': ("کد ملی اجباری است!"),
+                'unique': "این شماره ملی قبلا ثبت شده است!",
+                'required': "کد ملی اجباری است!",
             },
             'tarikh_tavalod': {
-                'required': ("تاریخ تولد اجباری است!"),
+                'required': "تاریخ تولد اجباری است!",
             },
             'mobile': {
-                'required': ("موبایل اجباری است!"),
+                'required': "موبایل اجباری است!",
             },
             'gender': {
-                'required': ("جنسیت اجباری است!"),
+                'required': "جنسیت اجباری است!",
             },
             'father_name': {
-                'required': ("نام پدر اجباری است!"),
+                'required': "نام پدر اجباری است!",
             },
             'address': {
-                'required': ("آدرس اجباری است!"),
+                'required': "آدرس اجباری است!",
             },
             'email': {
-                'required': ("ایمیل اجباری است!"),
+                'required': "ایمیل اجباری است!",
             },
             'shomare_hesab': {
-                'required': ("شماره حساب اجباری است!"),
+                'unique': "این شماره حساب قبلا ثبت شده است!",
+                'required': "شماره حساب اجباری است!",
             },
             'shomare_cart': {
-                'required': ("شماره کارت اجباری است!"),
+                'unique': "این شماره کارت قبلا ثبت شده است!",
+                'required': "شماره کارت اجباری است!",
             },
             'shomare_shaba': {
-                'required': ("شماره شبا اجباری است!"),
+                'unique': "این شماره شبا قبلا ثبت شده است!",
+                'required': "شماره شبا اجباری است!",
             },
             'name_saheb_hesab': {
-                'required': ("نام صاحب حساب اجباری است!"),
+                'required': "نام صاحب حساب اجباری است!",
             },
             'name_bank': {
-                'required': ("نام بانک اجباری است!"),
+                'required': "نام بانک اجباری است!",
             },
             'code_posti': {
-                'required': ("کدپستی اجباری است!"),
+                'required': "کدپستی اجباری است!",
             },
             'kife_pool': {
-                'required': ("کیف پول اجباری است!"),
+                'required': "کیف پول اجباری است!",
             },
             'kife_daramad': {
-                'required': ("کیف درآمد اجباری است!"),
+                'required': "کیف درآمد اجباری است!",
             },
             'code_moaref': {
                 'required': ("کد معرف اجباری است!"),
             },
             'id_telegram': {
-                'required': ("آی دی تلگرام اجباری است!"),
+                'required': "آی دی تلگرام اجباری است!",
             },
             'nooe_heshab': {
-                'required': ("نوع حساب اجباری است!"),
+                'required': "نوع حساب اجباری است!",
             },
             'vazeyat': {
-                'required': ("وضعیت اجباری است!"),
+                'required': "وضعیت اجباری است!",
             },
             'image_cart_melli': {
-                'required': ("تصویر کارت ملی اجباری است!"),
+                'required': "تصویر کارت ملی اجباری است!",
             },
             'avatar': {
-                'required': ("آواتار اجباری است!"),
+                'required': "آواتار اجباری است!",
             },
         }
 
@@ -229,11 +289,11 @@ class UserUpdateForm(ModelForm):
         self.fields['code_posti'].widget.attrs.update({'class': 'form-control', 'id': 'code_posti'})
 
         self.fields['kife_pool'].label = "کیف پول:"
-        self.fields['kife_pool'].required = True
+        self.fields['kife_pool'].required = False
         self.fields['kife_pool'].widget.attrs.update({'class': 'form-control', 'id': 'kife_pool'})
 
         self.fields['kife_daramad'].label = "کیف درآمد:"
-        self.fields['kife_daramad'].required = True
+        self.fields['kife_daramad'].required = False
         self.fields['kife_daramad'].widget.attrs.update({'class': 'form-control', 'id': 'kife_daramad'})
 
         self.fields['code_moaref'].label = "کد معرف:"
@@ -253,7 +313,7 @@ class UserUpdateForm(ModelForm):
         self.fields['vazeyat'].widget.attrs.update({'class': 'form-control', 'id': 'vazeyat'})
 
         self.fields['image_cart_melli'].label = "تصویر کارت ملی:"
-        self.fields['image_cart_melli'].required = False
+        self.fields['image_cart_melli'].required = True
         self.fields['image_cart_melli'].widget.attrs.update({'class': 'form-control', 'id': 'image_cart_meli'})
 
         self.fields['avatar'].label = "آواتار:"
@@ -262,7 +322,6 @@ class UserUpdateForm(ModelForm):
 
     def clean_tarikh_tavalod(self):
         tarikh_tavalod = self.cleaned_data['tarikh_tavalod']
-        print(tarikh_tavalod)
         if tarikh_tavalod == '':
             raise ValidationError("فیلد تاریخ تولد اجباری است.")
         r = re.compile('\d\d\d\d/\d\d/\d{1,2}')
@@ -270,7 +329,6 @@ class UserUpdateForm(ModelForm):
             if (r.match(unidecode(tarikh_tavalod)) is None):
                 raise ValidationError("فرمت تاریخ تولد اشتباه است!")
         tarikh_tavalod = change_date_to_english(tarikh_tavalod, 2)
-        print(tarikh_tavalod)
         return tarikh_tavalod
 
 
@@ -280,17 +338,17 @@ class PelanCreateForm(ModelForm):
         fields = ['onvan', 'gheymat', 'tedad_click', 'vazeyat']
         error_messages = {
             'onvan': {
-                'unique': ("این عنوان قبلا ثبت شده است!"),
-                'required': ("عنوان اجباری است!"),
+                'unique': "این عنوان قبلا ثبت شده است!",
+                'required': "عنوان اجباری است!",
             },
             'gheymat': {
-                'required': ("قیمت اجباری است!"),
+                'required': "قیمت اجباری است!",
             },
             'tedad_click': {
-                'required': ("تعداد کلیک اجباری است!"),
+                'required': "تعداد کلیک اجباری است!",
             },
             'vazeyat': {
-                'required': ("وضعیت اجباری است!"),
+                'required': "وضعیت اجباری است!",
             },
         }
 
@@ -321,26 +379,26 @@ class TablighCreateForm(ModelForm):
         fields = ['onvan', 'text', 'code_tabligh_gozaar', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'vazeyat']
         error_messages = {
             'onvan': {
-                'unique': ("این عنوان قبلا ثبت شده است!"),
-                'required': ("عنوان اجباری است!"),
+                'unique': "این عنوان قبلا ثبت شده است!",
+                'required': "عنوان اجباری است!",
             },
             'text': {
-                'required': ("متن اجباری است!"),
+                'required': "متن اجباری است!",
             },
             'code_tabligh_gozaar': {
-                'required': ("تبلیغ گذار اجباری است!"),
+                'required': "تبلیغ گذار اجباری است!",
             },
             'code_pelan': {
-                'required': ("کد پلن اجباری است!"),
+                'required': "کد پلن اجباری است!",
             },
             'tedad_click': {
-                'required': ("تعداد کلیک اجباری است!"),
+                'required': "تعداد کلیک اجباری است!",
             },
             'tedad_click_shode': {
-                'required': ("تعداد کلیک شده اجباری است!"),
+                'required': "تعداد کلیک شده اجباری است!",
             },
             'vazeyat': {
-                'required': ("وضعیت اجباری است!"),
+                'required': "وضعیت اجباری است!",
             },
         }
 
@@ -392,6 +450,7 @@ class ActiveCodeMoarefForm(ModelForm):
         self.fields['value'].label = "فعال / غیرفعال:"
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
 
 class SodeModirForm(ModelForm):
     value = forms.IntegerField()

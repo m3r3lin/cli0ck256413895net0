@@ -1,6 +1,7 @@
 from django import template
 
 from Ads_Project.functions import gregorian_to_jalali
+from system.models import TanzimatPaye
 
 register = template.Library()
 
@@ -34,8 +35,8 @@ def date_jalali(value, mode=1):
             date_time = value
             shamsi = gregorian_to_jalali(date_time.year, date_time.month, date_time.day)
             return "{year}/{month}/{day}".format(year=shamsi[0],
-                                                             month=shamsi[1],
-                                                             day=shamsi[2])
+                                                 month=shamsi[1],
+                                                 day=shamsi[2])
         elif mode == 2:
             year, month, day = value.split('-')
             shamsi = gregorian_to_jalali(int(year), int(month), int(day))
@@ -47,3 +48,8 @@ def date_jalali(value, mode=1):
                                          s=0)
     else:
         return "بدون ثبت"
+
+
+@register.simple_tag
+def setting(key, default):
+    return TanzimatPaye.get_settings(key, default)

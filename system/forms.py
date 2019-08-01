@@ -1,5 +1,6 @@
 import re
 
+from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django import forms
@@ -388,7 +389,7 @@ class TablighCreateForm(ModelForm):
                 'required': "متن اجباری است!",
             },
             'code_tabligh_gozaar': {
-                'required': "تبلیغ گذار اجباری است!",
+                'required': "کد تبلیغ گذار اجباری است!",
             },
             'code_pelan': {
                 'required': "کد پلن اجباری است!",
@@ -406,6 +407,7 @@ class TablighCreateForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TablighCreateForm, self).__init__(*args, **kwargs)
+
         self.fields['onvan'].label = "عنوان:"
         self.fields['onvan'].required = True
         self.fields['onvan'].widget.attrs.update({'class': 'form-control', 'id': 'onvan'})
@@ -431,7 +433,7 @@ class TablighCreateForm(ModelForm):
         self.fields['tedad_click_shode'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click_shode'})
 
         self.fields['vazeyat'].label = "وضعیت:"
-        self.fields['vazeyat'].required = True
+        self.fields['vazeyat'].required = False
         self.fields['vazeyat'].widget.attrs.update({'class': 'form-control', 'id': 'vazeyat'})
 
 
@@ -467,3 +469,27 @@ class SodeModirForm(ModelForm):
         self.fields['value'].label = "مقدار:"
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+class ChangeUserPasswordForm(PasswordChangeForm):
+    class Meta:
+        model = User
+        fields = ['password', ]
+        error_messages = {
+            'old_password': {
+                'password_incorrect': "پسورد شما اشتباه است",
+            },
+            'new_password1': {
+                "password_mismatch": "پسورد های باید یکی باشد"
+            },
+            'new_password2': {
+                "password_mismatch": "پسورد های باید یکی باشد"
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ChangeUserPasswordForm, self).__init__(*args, **kwargs)
+        self.fields['new_password1'].label = 'پسورد'
+        self.fields['new_password1'].help_text = ''
+
+

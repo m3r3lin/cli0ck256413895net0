@@ -1,4 +1,5 @@
 from django.contrib import auth, messages
+from django.contrib.auth.views import PasswordChangeView
 from django.db.models import ProtectedError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
@@ -6,12 +7,12 @@ from django.views.generic import CreateView, UpdateView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
-from system.forms import UserCreateForm, UserUpdateForm
+from system.forms import UserCreateForm, UserUpdateForm, ChangeUserPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.contrib.auth import logout
 from django.urls import reverse
-
+from django.contrib.auth.models import User
 from system.models import User
 from system.templatetags.app_filters import date_jalali
 
@@ -29,7 +30,7 @@ class UserCreateView(CreateView):
         else:
             messages.error(self.request, 'مقدار وارد شده برای قوانین اشتباه است')
             return super(UserCreateView, self).form_invalid(form)
-        user = form.save(commit=False)
+        form.instance.vazeyat = 1
         return super(UserCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -44,6 +45,7 @@ class UserCreateModirView(CreateView):
     form_class = UserCreateForm
 
     def form_valid(self, form):
+        form.instance.vazeyat = 1
         return super(UserCreateModirView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -62,7 +64,7 @@ def login_user(request):
         if request.method == "POST":
             user = auth.authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
             if user is not None:
-                if user.is_active:
+                if user.is_active and user.vazeyat == 1:
                     auth.login(request, user)
                     if request.GET.get('next') is not None:
                         return redirect(request.GET.get('next'))
@@ -111,8 +113,6 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         form = context['form']
         tarikh_tavalod = form.initial['tarikh_tavalod']
-        if tarikh_tavalod is not None:
-            form.initial['tarikh_tavalod'] = date_jalali(tarikh_tavalod, 3)
         context['form'] = form
         return context
 
@@ -156,9 +156,20 @@ class UserListView(LoginRequiredMixin, ListView):
 
 class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = User
-    columns = ['id', 'first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'email']
+    columns = ['id', 'username', 'first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'vazeyat']
 
     def render_column(self, row, column):
         if column == 'tarikh_tavalod':
             return date_jalali(row.tarikh_tavalod, 3)
         return super().render_column(row, column)
+
+
+class ChangeUserPasswordView(LoginRequiredMixin, PasswordChangeView):
+    template_name = 'system/user/Change_User_Password.html'
+    form_class = ChangeUserPasswordForm
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('ChangeUserPassword')

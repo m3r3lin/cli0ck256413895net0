@@ -148,80 +148,24 @@
 
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-bullhorn"></i>
-                        <span>کمپین های من</span>
-                        <span class="pull-left-container">
-                            <i class="fa fa-angle-right pull-left"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="#"><i class="fa fa-list"></i>لیست کمپین ها</a></li>
-                        <li><a href="#"><i class="fa fa-plus-square"></i>ایجاد کمپین جدید</a></li>
-                    </ul>
-                </li>
-
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-desktop"></i>
-                        <span>وب سایت های من</span>
-                        <span class="pull-left-container">
-                            <i class="fa fa-angle-right pull-left"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="#"><i class="fa fa-object-ungroup"></i>لیست وب سایت ها</a></li>
-                        <li><a href="#"><i class="fa fa-sticky-note-o"></i>ثبت سایت جدید</a></li>
-                    </ul>
-                </li>
-
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-arrow-circle-left"></i>
-                        <span>امور مالی</span>
-                        <span class="pull-left-container">
-                            <i class="fa fa-angle-right pull-left"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="#"><i class="fa fa-list-ul"></i>آخرین تراکنش ها</a></li>
-                        <li><a href="#"><i class="fa fa-university"></i>درخواست واریز</a></li>
-                    </ul>
-                </li>
-
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-support"></i>
-                        <span>پشتیبانی</span>
-                        <span class="pull-left-container">
-                            <i class="fa fa-angle-right pull-left"></i>
-                        </span>
-                        <span class="pull-left-container">
-                            <small class="label pull-left bg-green">جدید</small>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="#"><i class="fa fa-list"></i>لیست درخواست ها</a></li>
-                        <li><a href="#"><i class="fa fa-plus"></i>درخواست جدید</a></li>
-                    </ul>
-                </li>
-
-                <li><a href="#"><i class="fa fa-lock"></i> <span>تغییر رمز</span></a></li>
-
-                <li class="treeview">
-                    <a href="#">
                         <i class="fa fa-users"></i>
-                        <span>کاربران</span>
+                        {% if request.user.is_superuser %}
+                            <span>کاربران</span>
+                        {% else %}
+                            <span>مشخصات شما</span>
+                        {% endif %}
                         <span class="pull-left-container">
                         <i class="fa fa-angle-right pull-left"></i>
                     </span>
 
                     </a>
                     <ul class="treeview-menu">
-                        {% if user.is_superuser %}
+                        {% if request.user.is_superuser %}
                             <li><a href="{% url  'CreateUserModir' %}"><i class="fa fa-plus"></i>ایجاد کاربر</a></li>
                             <li><a href="{% url  'ListUser' %}"><i class="fa fa-list"></i>لیست کاربران</a></li>
                         {% else %}
                             <li><a href="{% url  'UpdateUser' pk=request.user.id %}"><i class="fa fa-list"></i>ویرایش اطلاعات کاربری</a></li>
+                            <li><a href="{% url 'ChangeUserPassword' %}"><i class="fa fa-lock"></i> <span>تغییر رمز</span></a></li>
                         {% endif %}
                     </ul>
                 </li>
@@ -245,7 +189,7 @@
 
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-buysellads"></i>
+                        <i class="fa fa-bullhorn"></i>
                         <span>تبلیغ</span>
                         <span class="pull-left-container">
                             <i class="fa fa-angle-right pull-left"></i>

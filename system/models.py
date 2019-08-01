@@ -10,14 +10,15 @@ from system.functions import upload_avatar_path, upload_cart_melli_path
 from django.db.models import Model
 
 VAZEYAT_CHOICES = (
-    (1, 'فعال'),
     (0, 'غیرفعال'),
+    (1, 'فعال'),
 )
 VAZEYAT_Tabligh = (
-    (0, 'لغو شده'),
+    (0, 'غیرفعال'),
     (1, 'فعال'),
-    (2, 'در انتظار تایید'),
-    (3, 'به اتمام رسیده'),
+    (2, 'لغو شده'),
+    (3, 'در انتظار تایید'),
+    (4, 'به اتمام رسیده'),
 )
 GENDER_CHOICES = (
     (1, 'مرد'),

@@ -3,7 +3,7 @@ from django.urls import path
 from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView, PelanDatatableView, PlanReportsView
 from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
-from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, UserCreateModirView
+from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, UserCreateModirView, ChangeUserPasswordView
 from system.views import Dashboard
 
 urlpatterns = [
@@ -16,6 +16,7 @@ urlpatterns = [
     path('DeleteUser/<int:pk>', UserDeleteView.as_view(), name='DeleteUser'),
     path('ListUser/', UserListView.as_view(), name='ListUser'),
     path('UserDatatable/', UserDatatableView.as_view(), name='UserDatatable'),
+    path('ChangeUserPassword/', ChangeUserPasswordView.as_view(), name='ChangeUserPassword'),
     # ---- Pelan
     path('CreatePelan/', PelanCreateView.as_view(), name='CreatePelan'),
     path('UpdatePelan/<int:pk>', PelanUpdateView.as_view(), name='UpdatePelan'),

@@ -20,7 +20,10 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
     form_class = TablighCreateForm
 
     def form_valid(self, form):
-        tabligh = form.save(commit=False)
+        # tabligh = form.save(commit=False)
+        if not self.request.user.is_superuser:
+            form.instance.code_tabligh_gozaar_id = self.request.user.id
+            form.instance.vazeyat = 3
         messages.success(self.request, 'تبلیغ مورد نظر با موفقیت ثبت شد.')
         return super(TablighCreateView, self).form_valid(form)
 
@@ -30,6 +33,12 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('ListTabligh')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if not self.request.user.is_superuser:
+            form.fields['code_tabligh_gozaar'].required = False
+        return form
 
 
 class TablighUpdateView(LoginRequiredMixin, UpdateView):
@@ -44,12 +53,37 @@ class TablighUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         # tabligh = form.save(commit=False)
+        if not self.request.user.is_superuser:
+            # if self.object.vazeyat != 0 and self.object.vazeyat != 1:
+            #     messages.error(self.request, 'شما نمی توانید وضعیت تبلیغ را تغییر دهید')
+            #     return self.form_invalid(form)
+
+            try:
+                obj = Tabligh.objects.get(pk=self.object.pk)
+            except:
+                messages.error(self.request, 'مشکلی پیش آمده با مدیر تماس بگیرید')
+                return self.form_invalid(form)
+            form.instance.code_tabligh_gozaar_id = self.request.user.id
+
+            if form.instance.onvan != obj.onvan or form.instance.text != obj.text or form.instance.code_pelan != obj.code_pelan or form.instance.tedad_click != obj.tedad_click:
+                form.instance.vazeyat = 3
+                # form.instance.vazeyat = self.object.vazeyat
+            else:
+                form.instance.vazeyat = self.object.vazeyat
+
         messages.success(self.request, 'تبلیغ مورد نظر ویرایش شد.')
         return super(TablighUpdateView, self).form_valid(form)
 
     def get_success_url(self):
         # return reverse('UpdateTabligh', kwargs={'pk': self.object.pk})
         return reverse('ListTabligh')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if not self.request.user.is_superuser:
+            form.fields['code_tabligh_gozaar'].required = False
+            form.fields['vazeyat'].choices = ((0, 'غیرفعال'), (1, 'فعال'))
+        return form
 
 
 class TablighDeleteView(LoginRequiredMixin, View):

@@ -11,7 +11,7 @@ from Ads_Project.functions import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView, ListView
 
 from system.forms import TablighCreateForm
-from system.models import Tabligh
+from system.models import Tabligh, User
 from system.templatetags.app_filters import date_jalali
 
 
@@ -23,6 +23,11 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
         if not self.request.user.is_superuser:
             form.instance.code_tabligh_gozaar_id = self.request.user.id
             form.instance.vazeyat = 3
+
+        r = form.instance.code_pelan.gheymat
+        user = User.objects.get(id=self.request.user.id)
+        user.kife_pool = user.kife_pool - r  #
+        user.save()
         messages.success(self.request, 'تبلیغ مورد نظر با موفقیت ثبت شد.')
         return super(TablighCreateView, self).form_valid(form)
 
@@ -47,16 +52,10 @@ class TablighUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         return context
 
     def form_valid(self, form):
-        # tabligh = form.save(commit=False)
         if not self.request.user.is_superuser:
-            # if self.object.vazeyat != 0 and self.object.vazeyat != 1:
-            #     messages.error(self.request, 'شما نمی توانید وضعیت تبلیغ را تغییر دهید')
-            #     return self.form_invalid(form)
-
             try:
                 obj = Tabligh.objects.get(pk=self.object.pk)
             except:

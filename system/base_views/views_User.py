@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.contrib.auth import logout
 from django.urls import reverse
 from django.contrib.auth.models import User
-from system.models import User
+from system.models import User, TanzimatPaye, ACTIV_MOAREF
 from system.templatetags.app_filters import date_jalali
 
 
@@ -31,6 +31,8 @@ class UserCreateView(CreateView):
             messages.error(self.request, 'مقدار وارد شده برای قوانین اشتباه است')
             return super(UserCreateView, self).form_invalid(form)
         form.instance.vazeyat = 1
+        # TODO tanzimat paye check shavad
+        form.instance.sath = 1
         return super(UserCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -93,12 +95,10 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UserUpdateForm
 
     def form_valid(self, form):
-        if 'avatar' in self.request.FILES:
-            user = User.objects.get(username=self.request.user.username)
-            user.avatar = self.request.FILES['avatar']
-        if 'image_cart_melli' in self.request.FILES:
-            user = User.objects.get(username=self.request.user.username)
-            user.avatar = self.request.FILES['image_cart_melli']
+        if TanzimatPaye.get_settings(ACTIV_MOAREF, False) != '1' and not self.request.user.is_superuser:
+            if form.instance.code_moaref is None or form.instance.code_moaref == '':
+                messages.error(self.request, 'کد معرف نمیتواند خالی باید')
+                return self.form_invalid(form)
 
         messages.success(self.request, 'تغییرات شما یا موفقیت ثبت شد')
         return super(UserUpdateView, self).form_valid(form)
@@ -130,6 +130,26 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         if not self.request.user.is_superuser:
             return reverse('UpdateUser', kwargs={'pk': self.request.user.id})
         return reverse('ListUser')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if self.request.user.is_superuser:
+            form.fields['code_melli'].required = False
+            form.fields['gender'].required = False
+            form.fields['tarikh_tavalod'].required = False
+            form.fields['code_moaref'].required = False
+            form.fields['image_cart_melli'].required = False
+            form.fields['nooe_heshab'].required = False
+            form.fields['id_telegram'].required = False
+            form.fields['address'].required = False
+            form.fields['father_name'].required = False
+            form.fields['shomare_hesab'].required = False
+            form.fields['shomare_cart'].required = False
+            form.fields['shomare_shaba'].required = False
+            form.fields['name_saheb_hesab'].required = False
+            form.fields['name_bank'].required = False
+            form.fields['code_posti'].required = False
+        return form
 
 
 class UserDeleteView(LoginRequiredMixin, View):

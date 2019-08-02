@@ -58,7 +58,7 @@ class TanzimatPayeMiddelware(ModelForm):
     def validate_code_moarefi(self):
         c = self.cleaned_data['code_moaref']
         active_moarefi = int(TanzimatPaye.get_settings(ACTIV_MOAREF, 0))
-        if active_moarefi:
+        if active_moarefi and c:
             fullmatch = fullmatch_compiled.fullmatch(c)
             if fullmatch:
                 c = fullmatch.groups()[0]
@@ -104,7 +104,7 @@ class UserCreateForm(TanzimatPayeMiddelware):
             },
             'password': {
                 'required': "پسورد اجباری است!",
-            }
+            },
         }
 
     def __init__(self, *args, **kwargs):
@@ -150,7 +150,7 @@ class UserUpdateForm(TanzimatPayeMiddelware):
         model = User
         fields = ['first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'address', 'email', 'shomare_hesab',
                   'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'code_posti', 'kife_pool', 'kife_daramad',
-                  'code_moaref', 'id_telegram', 'nooe_heshab', 'vazeyat', 'image_cart_melli', 'avatar']
+                  'code_moaref', 'sath', 'id_telegram', 'nooe_heshab', 'vazeyat', 'image_cart_melli', 'avatar']
         error_messages = {
             'first_name': {
                 'required': "نام اجباری است!",
@@ -209,6 +209,9 @@ class UserUpdateForm(TanzimatPayeMiddelware):
             },
             'code_moaref': {
                 'required': ("کد معرف اجباری است!"),
+            },
+            'sath': {
+                'required': ("سطح اجباری است!"),
             },
             'id_telegram': {
                 'required': "آی دی تلگرام اجباری است!",
@@ -300,6 +303,10 @@ class UserUpdateForm(TanzimatPayeMiddelware):
         self.fields['code_moaref'].label = "کد معرف:"
         self.fields['code_moaref'].required = True
         self.fields['code_moaref'].widget.attrs.update({'class': 'form-control', 'id': 'code_moaref'})
+
+        self.fields['sath'].label = "سطح:"
+        self.fields['sath'].required = True
+        self.fields['sath'].widget.attrs.update({'class': 'form-control', 'id': 'sath'})
 
         self.fields['id_telegram'].label = "آی دی تلگرام:"
         self.fields['id_telegram'].required = False
@@ -491,5 +498,3 @@ class ChangeUserPasswordForm(PasswordChangeForm):
         super(ChangeUserPasswordForm, self).__init__(*args, **kwargs)
         self.fields['new_password1'].label = 'پسورد'
         self.fields['new_password1'].help_text = ''
-
-

@@ -21,8 +21,9 @@ VAZEYAT_Tabligh = (
     (4, 'به اتمام رسیده'),
 )
 GENDER_CHOICES = (
-    (1, 'مرد'),
     (0, 'زن'),
+    (1, 'مرد'),
+    (2, 'نا مشخص'),
 )
 NOOE_CHOICES = (
     (0, 'تبلیغ گذار'),
@@ -40,7 +41,7 @@ class User(AbstractUser):
     code_melli = models.CharField(max_length=10, unique=True, null=True, blank=True)
     tarikh_tavalod = models.DateField(null=True, blank=True)
     mobile = models.CharField(max_length=11, null=True, blank=True)
-    gender = models.IntegerField(null=True, blank=True, choices=GENDER_CHOICES)
+    gender = models.IntegerField(default=3, null=True, blank=True, choices=GENDER_CHOICES)
     father_name = models.CharField(max_length=35, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
@@ -52,7 +53,8 @@ class User(AbstractUser):
     code_posti = models.CharField(max_length=10, null=True, blank=True)
     kife_pool = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف پول نمیتواند بیشتر از 9999999999 باشد. ')])
     kife_daramad = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف درآمد نمیتواند بیشتر از 9999999999 باشد. ')])
-    code_moaref = models.ForeignKey("User", on_delete=models.SET_NULL, null=True)
+    code_moaref = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, blank=True)
+    sath = models.IntegerField(default=0, null=True, blank=True)
     id_telegram = models.CharField(max_length=30, null=True, blank=True)
     nooe_heshab = models.IntegerField(null=True, blank=True, choices=NOOE_CHOICES)
     vazeyat = models.IntegerField(null=True, blank=True, choices=VAZEYAT_CHOICES)

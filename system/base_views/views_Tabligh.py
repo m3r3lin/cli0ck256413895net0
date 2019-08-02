@@ -24,10 +24,15 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
             form.instance.code_tabligh_gozaar_id = self.request.user.id
             form.instance.vazeyat = 3
 
-        r = form.instance.code_pelan.gheymat
-        user = User.objects.get(id=self.request.user.id)
-        user.kife_pool = user.kife_pool - r  #
-        user.save()
+            r = form.instance.code_pelan.gheymat
+            user = User.objects.get(id=self.request.user.id)
+            kife_pool = user.kife_pool
+            if kife_pool < r:
+                messages.error(request, 'شما اعتبار کافی ندارید')
+                return super(TablighCreateView, self).form_invalid(form)
+
+            user.kife_pool = kife_pool - r
+            user.save()
         messages.success(self.request, 'تبلیغ مورد نظر با موفقیت ثبت شد.')
         return super(TablighCreateView, self).form_valid(form)
 

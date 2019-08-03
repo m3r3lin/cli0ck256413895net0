@@ -95,11 +95,22 @@
             <div class="box-header with-border">
               <h3 class="box-title">اینباکس</h3>
 
-              <div class="box-tools pull-right">
+
+{#              <div class="box-tools pull-right">#}
+{#                <div class="has-feedback">#}
+{#                  <input type="text" class="form-control input-sm" placeholder="جستجو">#}
+{#                  <span class="glyphicon glyphicon-search form-control-feedback"></span>#}
+{##}
+{#                </div>#}
+{##}
+{#              </div>#}
+                <div class="box-tools pull-right">
                 <div class="has-feedback">
-                  <input type="text" class="form-control input-sm" placeholder="جستجو">
-                  <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                             <a href="{% url 'NewMessageCreate' %}" class="btn btn-primary btn-block margin-bottom">ارسال پیام جدید</a>
+
+
                 </div>
+
               </div>
               <!-- /.box-tools -->
             </div>
@@ -111,6 +122,7 @@
                  <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
                  </button>
                  <div class="btn-group">
+
                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>

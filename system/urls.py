@@ -9,7 +9,7 @@ from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModi
     Languge_siteView,Count_Level_networkView,Count_kharid_hadaghalView,Time_kharid_termView,Taien_meghdar_matlabView,\
     Show_amar_foruserView,Taeid_khodkar_tablighView
 from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, UserCreateModirView
-from system.base_views.views_Message import MessageListview,Message_show_view
+from system.base_views.views_Message import MessageListview,Message_show_view,NewMessageCreateView
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, TedadSathShabakeView
 from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, UserCreateModirView, ChangeUserPasswordView, \
     ProfileUserView
@@ -55,6 +55,8 @@ urlpatterns = [
     #messages
     path('MessageList/', MessageListview.as_view(), name='MessageList'),
     path('Message_show_view/<int:pk>', Message_show_view.as_view(), name='Message_show_view'),
+    path('NewMessageCreate/', NewMessageCreateView.as_view(), name='NewMessageCreate'),
+
     #ajax
     path('save_message/', views_Message.save_message, name='save_message'),
 

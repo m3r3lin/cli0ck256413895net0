@@ -18,10 +18,32 @@ from django.views.generic import TemplateView
 from django.shortcuts import render
 from django.http import HttpResponse
 from system.models import User
+from system.forms import NewMessageCreateForm
 from django.core import serializers
 
 
 from system.templatetags.app_filters import date_jalali
+
+
+class NewMessageCreateView(LoginRequiredMixin,CreateView):
+    model = Payam
+    template_name = 'system/message/Create_new_message.html'
+    form_class = NewMessageCreateForm
+
+
+    def form_valid(self, form):
+        payam = form.save(commit=False)
+        print("post",self.request.POST)
+        payam.vazeyat=2
+        payam.ferestande=self.request.user
+        payam.onvan='chat'
+        # payam.girande=self.request.POST.get('')
+
+        # messages.success(self.request, 'پیام مورد موردنظر  با موفقیت ثبت شد')
+        return super(NewMessageCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('MessageList')
 
 
 
@@ -34,6 +56,8 @@ class MessageListview(LoginRequiredMixin,ListView):
         context = super().get_context_data(object_list=object_list, **kwargs)
         list_girande=[]
         newlist=[]
+        user_access=User.objects.exclude(username=self.request.user)
+        print("user accsse",user_access)
         user_message1=Payam.objects.filter(ferestande=self.request.user).order_by('id')
 
         for i in user_message1:
@@ -74,6 +98,8 @@ class Message_show_view(LoginRequiredMixin,TemplateView):
         count_message=all_message.count()
         context['all_messsge']=all_message
         context['count_message']=count_message
+        context['girande']=payam.girande
+        context['ferestande']=payam.ferestande
         return context
 
     # def post(self, request, *args, **kwargs):

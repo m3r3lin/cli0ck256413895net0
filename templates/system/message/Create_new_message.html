@@ -1,0 +1,84 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+
+{% block page_title %}
+ایجاد پیام جدید
+{% endblock %}
+{% block dashboard %}
+<li>پیام</li>
+<li>ایجادپیام جدید</li>
+{% endblock %}
+{% block main_content %}
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">جهت ایجاد پیام جدید، فرم زیر را پر کنید.</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form" method="POST" action="">
+                    {% csrf_token %}
+
+                    <div class="box-body">
+                        {% include "errors.html" %}
+                        {% include "messages.html" %}
+{#                        <div class="form-group">#}
+{#                            {% if form.ferestande.label_tag %}#}
+{#                            <label for="full_name">{{ form.ferestande.label_tag }}<span class="red-star">*</span></label>#}
+{#                            {% endif %}#}
+{#                            {{ form.ferestande }}#}
+{#                            {% if form.ferestande.help_text %}#}
+{#                            <p class="help-block">{{ form.ferestande.help_text }}</p>#}
+{#                            {% endif %}#}
+{#                        </div>#}
+
+                        <div class="form-group">
+                         {% if form.girande.label_tag %}
+
+                            <label for="full_name">{{ form.girande.label_tag }}<span class="red-star">*</span></label>
+                        {% endif %}
+
+                            {{ form.girande }}
+
+
+                            {% if form.girande.help_text %}
+                            <p class="help-block">{{ form.girande.help_text }}</p>
+                            {% endif %}
+                        </div>
+
+                       <div class="form-group">
+                            {% if form.text.label_tag %}
+                            <label for="full_name">{{ form.text.label_tag }}<span class="red-star">*</span></label>
+                            {% endif %}
+                            {{ form.text }}
+                            {% if form.text.help_text %}
+                            <p class="help-block">{{ form.text.help_text }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">ثبت پیام جدید</button>
+{#                        <a class="btn btn-openid" href="{% url 'ListBasij' %}"><b>بازگشت</b></a>#}
+                    </div>
+                </form>
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+</section>
+<!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+{#<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>#}
+{#<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>#}
+{#<script src="{% static 'dist/my_js/datatable.js' %}"></script>#}
+{#<!-- my fontawesom -->#}
+{#<script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>#}
+{% endblock %}

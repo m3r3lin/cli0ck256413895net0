@@ -7,7 +7,7 @@ from django import forms
 from unidecode import unidecode
 
 from system.functions import change_date_to_english
-from system.models import User, Pelan, Tabligh, TanzimatPaye, ACTIV_MOAREF
+from system.models import User, Pelan, Tabligh, TanzimatPaye, ACTIV_MOAREF,Payam
 from django.forms.widgets import ClearableFileInput
 
 fullmatch_compiled = re.compile('^code_(\d{1,9})')
@@ -632,3 +632,60 @@ class ChangeUserPasswordForm(PasswordChangeForm):
         super(ChangeUserPasswordForm, self).__init__(*args, **kwargs)
         self.fields['new_password1'].label = 'پسورد'
         self.fields['new_password1'].help_text = ''
+
+
+class NewMessageCreateForm(ModelForm):
+    girande = forms.ModelChoiceField(queryset=User.objects.filter(girande_user_id__text__isnull=True), error_messages={
+        'required': ("فیلد گیرنده اجباری است"),
+    })
+
+    class Meta:
+        model = Payam
+        fields = ['text','girande']
+        # error_messages = {
+        #     'onvan': {
+        #         'required': ("عنوان نمیتواند خالی باشد"),
+        #         'unique': ("عنوان باید یکتا باشد"),
+        #     },
+        # }
+
+    def __init__(self, *args, **kwargs):
+        super(NewMessageCreateForm, self).__init__(*args, **kwargs)
+        # user = self.user
+        # print("user",user)
+
+        # field_name = 'ferestande'
+        # self.fields[field_name].label = "فرستنده:"
+        # self.fields[field_name].required = True
+        # self.fields[field_name].help_text = 'لطفا فرستنده را وارد کنید.'
+        # self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
+        #
+        field_name = 'girande'
+        self.fields[field_name].label = "گیرنده:"
+        self.fields[field_name].required = True
+        self.fields[field_name].help_text = 'لطفا گیرنده را وارد کنید.'
+        self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
+
+
+
+        # field_name = 'onvan'
+        # self.fields[field_name].label = "عنوان:"
+        # self.fields[field_name].required = True
+        # self.fields[field_name].help_text = 'لطفا عنوان را وارد کنید.'
+        # self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
+
+        field_name = 'text'
+        self.fields[field_name].label = "متن پیام:"
+        self.fields[field_name].required = True
+        self.fields[field_name].help_text = 'لطفا متن پیام  را وارد کنید.'
+        self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
+
+    # def clean_girande(self):
+    #     girande = self.cleaned_data['girande']
+    #     if girande==self.user.username:
+    #         raise ValidationError("شما نمیتوانید برای خودتان پیام بفرستید!")
+    #
+    #     return girande
+
+
+

@@ -67,14 +67,11 @@ class Message_show_view(LoginRequiredMixin,TemplateView):
         print("payam girande",payam.girande)
         # q = Payam.objects.filter(ferestande=self.request.user)
         all_message=Payam.objects.filter(ferestande=payam.ferestande,girande=payam.girande)
-        count_message=all_message.count()
+
         send_message=Payam.objects.filter(ferestande=payam.ferestande,girande=payam.girande)
         get_message=Payam.objects.filter(ferestande=payam.girande,girande=payam.ferestande)
         all_message=all_message.union(send_message,get_message).order_by('id')
-        # print("all_message",all_message)
-        # print("q is",q)
-        # context['q']=q
-
+        count_message=all_message.count()
         context['all_messsge']=all_message
         context['count_message']=count_message
         return context

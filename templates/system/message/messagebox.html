@@ -1,5 +1,7 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load app_filters %}
+
 
 
   <!-- Bootstrap rtl -->
@@ -138,7 +140,7 @@
                     <td class="mailbox-subject"><b>{{item.text}}</b> - {{item.text}}
                     </td>
                     <td class="mailbox-attachment"></td>
-                    <td class="mailbox-date">5 دقیقه پیش</td>
+                    <td class="mailbox-date">{{item.save_date|date_jalali }}</td>
                   </tr>
                   {% endfor %}
 

@@ -8,6 +8,7 @@ from django.db.models.signals import pre_save
 from Ads_Project import settings
 from system.functions import upload_avatar_path, upload_cart_melli_path
 from django.db.models import Model
+from django.utils import timezone
 
 VAZEYAT_CHOICES = (
     (1, 'فعال'),
@@ -101,10 +102,17 @@ class Payam(Model):
     text = models.TextField()
     tarikh = models.DateTimeField(auto_now_add=True)
     vazeyat = models.IntegerField(choices=VAZEYAT_PAYAM)
+    save_date=models.DateTimeField(default=timezone.now, blank=True, null=True)
 
 
 ACTIV_MOAREF = 'active_moaref'
-
+LANGUGE_SITE = 'languge_site'
+COUNT_LEVEL_NETWORK='count_level_network'
+COUNT_KHARI_HADAGHAL='count_kharid_hadaghl'
+TIME_KHARID_TERM='time_kharid_term'
+TAIEN_MEGHDAR_MATLAB='taien_meghdar_matlab'
+SHOW_AMAR_FOR_USER='show_amar_for_user'
+TAIED_KHODKAR_TABLIGH='taied_khodkar_tabligh'
 
 class TanzimatPaye(Model):
     onvan = models.CharField(max_length=250, unique=True)

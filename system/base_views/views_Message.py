@@ -74,6 +74,8 @@ class Message_show_view(LoginRequiredMixin,TemplateView):
         count_message=all_message.count()
         context['all_messsge']=all_message
         context['count_message']=count_message
+        context['girande']=payam.girande
+        context['ferestande']=payam.ferestande
         return context
 
     # def post(self, request, *args, **kwargs):

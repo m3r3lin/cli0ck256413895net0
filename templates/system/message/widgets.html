@@ -39,6 +39,8 @@
 
     <!-- Main content -->
     <section class="content">
+    <input type="text" id="girande" name="girande" value="{{ girande }}">
+    <input type="text" id="id_ferestande" name="ferestande" value="{{ ferestande }}">
 
 
 
@@ -69,6 +71,7 @@
               <!-- Conversations are loaded here -->
 
               <div class="direct-chat-messages">
+
                 <!-- Message. Default to the left -->
                   {% for item in all_messsge %}
 
@@ -159,8 +162,9 @@
 
         var message=$("#message").val();
         {#var ferestande={{user.username}};#}
-        var girande=$(".direct-chat-name.pull-right")[0].innerHTML
-        var ferestande=$(".direct-chat-name.pull-left")[0].innerHTML
+        {#var girande=$(".direct-chat-name.pull-right")[0].innerHTML#}
+        var girande=$("#girande").val();
+        var ferestande=$("#id_ferestande").val();
         var data={'message':message,'girande':girande,'ferestande':ferestande}
         console.log("message",message);
         console.log("data",data);
@@ -190,6 +194,14 @@
          });
 
     });
+    </script>
+    <script>
+    $(document).ready(function () {
+        var ferestande =document.getElementById('id_ferestande');
+        var girande =document.getElementById('girande');
+        ferestande.style.display = 'none';
+        girande.style.display = 'none';
+    })
     </script>
 {% endblock %}
 

@@ -206,15 +206,17 @@
                                     </div>
                                 {% endif %}
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.sath.label_tag %}
-                                        <label for="sath">{{ form.sath.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.sath }}
-                                    {% if form.sath.help_text %}
-                                        <p class="help-block">{{ form.sath.help_text }}</p>
-                                    {% endif %}
-                                </div>
+                                {% if request.user.is_superuser %}
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.sath.label_tag %}
+                                            <label for="sath">{{ form.sath.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.sath }}
+                                        {% if form.sath.help_text %}
+                                            <p class="help-block">{{ form.sath.help_text }}</p>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
 
                                 <div class="form-group col-sm6 col-md-3">
                                     {% if form.id_telegram.label_tag %}

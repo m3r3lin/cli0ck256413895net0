@@ -107,6 +107,7 @@ class Payam(Model):
 
 
 ACTIV_MOAREF = 'active_moaref'
+TEDAD_SATH_SHABAKE = 'tedad_sath_shabake'
 
 
 class TanzimatPaye(Model):

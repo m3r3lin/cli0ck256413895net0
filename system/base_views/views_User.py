@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.contrib.auth import logout
 from django.urls import reverse
 from django.contrib.auth.models import User
-from system.models import User, TanzimatPaye, ACTIV_MOAREF
+from system.models import User, TanzimatPaye, ACTIV_MOAREF, Parent, TEDAD_SATH_SHABAKE
 from system.templatetags.app_filters import date_jalali
 
 
@@ -32,7 +32,13 @@ class UserCreateView(CreateView):
             return super(UserCreateView, self).form_invalid(form)
         form.instance.vazeyat = 1
         # TODO tanzimat paye check shavad
-        form.instance.sath = 1
+        id_moaref = form.instance.code_moaref_id
+        user = User.objects.get(pk=id_moaref)
+        tedad_sath_shabake = TanzimatPaye.objects.get(onvan=TEDAD_SATH_SHABAKE)
+        if user.sath + 1 > tedad_sath_shabake:
+            messages.error(self.request, 'تعداد سطوح بیش از مقدار تعیین شده است')
+            return super(UserCreateView, self).form_invalid(form)
+        form.instance.sath = user.sath + 1
         return super(UserCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -42,7 +48,7 @@ class UserCreateView(CreateView):
         return reverse('login')
 
 
-class UserCreateModirView(CreateView):
+class UserCreateModirView(LoginRequiredMixin, CreateView):
     template_name = 'system/user/Create_User_Modir.html'
     form_class = UserCreateForm
 
@@ -95,10 +101,10 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UserUpdateForm
 
     def form_valid(self, form):
-        if TanzimatPaye.get_settings(ACTIV_MOAREF, False) != '1' and not self.request.user.is_superuser:
-            if form.instance.code_moaref is None or form.instance.code_moaref == '':
-                messages.error(self.request, 'کد معرف نمیتواند خالی باید')
-                return self.form_invalid(form)
+        # if TanzimatPaye.get_settings(ACTIV_MOAREF, False) == '0' and not self.request.user.is_superuser:
+        #     if form.instance.code_moaref is None or form.instance.code_moaref == '':
+        #         messages.error(self.request, 'کد معرف نمیتواند خالی باید')
+        #         return self.form_invalid(form)
 
         messages.success(self.request, 'تغییرات شما یا موفقیت ثبت شد')
         return super(UserUpdateView, self).form_valid(form)
@@ -149,6 +155,9 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
             form.fields['name_saheb_hesab'].required = False
             form.fields['name_bank'].required = False
             form.fields['code_posti'].required = False
+
+        if TanzimatPaye.get_settings(ACTIV_MOAREF, False) == '0' and not self.request.user.is_superuser:
+            form.fields['sath'].required = False
         return form
 
 
@@ -199,3 +208,9 @@ class ChangeUserPasswordView(LoginRequiredMixin, PasswordChangeView):
 
     def get_success_url(self):
         return reverse('ChangeUserPassword')
+
+
+class ProfileUserView(LoginRequiredMixin, View):
+    def get(self, request):
+        user = User.objects.get(username=request.user.username)
+        return render(request, 'system/user/Profile_User.html', {'user': user})

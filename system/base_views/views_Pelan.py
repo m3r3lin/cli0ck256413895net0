@@ -19,7 +19,6 @@ class PelanCreateView(LoginRequiredMixin, CreateView):
     form_class = PelanCreateForm
 
     def form_valid(self, form):
-        user = form.save(commit=False)
         messages.success(self.request, 'پلن مورد نظر با موفقیت ثبت شد.')
         return super(PelanCreateView, self).form_valid(form)
 

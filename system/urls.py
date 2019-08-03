@@ -2,8 +2,9 @@ from django.urls import path
 
 from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView, PelanDatatableView, PlanReportsView
 from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView
-from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
-from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, UserCreateModirView, ChangeUserPasswordView
+from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, TedadSathShabakeView
+from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, UserCreateModirView, ChangeUserPasswordView, \
+    ProfileUserView
 from system.views import Dashboard
 
 urlpatterns = [
@@ -17,6 +18,7 @@ urlpatterns = [
     path('ListUser/', UserListView.as_view(), name='ListUser'),
     path('UserDatatable/', UserDatatableView.as_view(), name='UserDatatable'),
     path('ChangeUserPassword/', ChangeUserPasswordView.as_view(), name='ChangeUserPassword'),
+    path('ProfileUser/', ProfileUserView.as_view(), name='ProfileUser'),
     # ---- Pelan
     path('CreatePelan/', PelanCreateView.as_view(), name='CreatePelan'),
     path('UpdatePelan/<int:pk>', PelanUpdateView.as_view(), name='UpdatePelan'),
@@ -32,5 +34,6 @@ urlpatterns = [
     path('TablighDatatable/', TablighDatatableView.as_view(), name='TablighDatatable'),
     # ---- TanzimatPaye
     path('ActiveCodeMoaref/', ActiveCodeMoarefView.as_view(), name='ActiveCodeMoaref'),
+    path('TedadSathShabake/', TedadSathShabakeView.as_view(), name='TedadSathShabake'),
     path('SodeModir/', SodeModirView.as_view(), name='SodeModir'),
 ]

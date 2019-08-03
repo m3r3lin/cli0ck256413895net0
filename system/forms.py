@@ -462,7 +462,20 @@ class ActiveCodeMoarefForm(ModelForm):
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
 
+class TedadSathShabakeForm(ModelForm):
+    value = forms.IntegerField()
 
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(TedadSathShabakeForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "تعداد سطح شبکه:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+        
 class SodeModirForm(ModelForm):
     value = forms.IntegerField()
 

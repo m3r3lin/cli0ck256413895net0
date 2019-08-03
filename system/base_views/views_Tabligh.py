@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import ProtectedError, Q
 from django.http import request
 from django.shortcuts import get_object_or_404, redirect
@@ -11,7 +10,7 @@ from Ads_Project.functions import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView, ListView
 
 from system.forms import TablighCreateForm
-from system.models import Tabligh, User
+from system.models import Tabligh, User, TanzimatPaye, TAIED_KHODKAR_TABLIGH, TAIEN_MEGHDAR_MATLAB
 from system.templatetags.app_filters import date_jalali
 
 
@@ -22,13 +21,21 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         if not self.request.user.is_superuser:
             form.instance.code_tabligh_gozaar_id = self.request.user.id
-            form.instance.vazeyat = 3
+            t = form.instance.text.__len__()
+            max_t = int(TanzimatPaye.get_settings(TAIEN_MEGHDAR_MATLAB, False))
+            if t > max_t:
+                messages.error(self.request, 'طول تبلیغ بیش از حد مجاز است')
+                return super(TablighCreateView, self).form_invalid(form)
 
+            if TanzimatPaye.get_settings(TAIED_KHODKAR_TABLIGH, False) == '1':
+                form.instance.vazeyat = 1
+            else:
+                form.instance.vazeyat = 3
             r = form.instance.code_pelan.gheymat
             user = User.objects.get(id=self.request.user.id)
             kife_pool = user.kife_pool
             if kife_pool < r:
-                messages.error(request, 'شما اعتبار کافی ندارید')
+                messages.error(self.request, 'شما اعتبار کافی ندارید')
                 return super(TablighCreateView, self).form_invalid(form)
 
             user.kife_pool = kife_pool - r
@@ -61,6 +68,12 @@ class TablighUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         if not self.request.user.is_superuser:
+            t = form.instance.text.__len__()
+            max_t = int(TanzimatPaye.get_settings(TAIEN_MEGHDAR_MATLAB, False))
+            if t > max_t:
+                messages.error(self.request, 'طول تبلیغ بیش از حد مجاز است')
+                return super(TablighCreateView, self).form_invalid(form)
+
             try:
                 obj = Tabligh.objects.get(pk=self.object.pk)
             except:
@@ -73,6 +86,8 @@ class TablighUpdateView(LoginRequiredMixin, UpdateView):
                 # form.instance.vazeyat = self.object.vazeyat
             else:
                 form.instance.vazeyat = self.object.vazeyat
+
+
 
         messages.success(self.request, 'تبلیغ مورد نظر ویرایش شد.')
         return super(TablighUpdateView, self).form_valid(form)

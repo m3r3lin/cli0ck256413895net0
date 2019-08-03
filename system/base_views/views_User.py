@@ -31,14 +31,14 @@ class UserCreateView(CreateView):
             messages.error(self.request, 'مقدار وارد شده برای قوانین اشتباه است')
             return super(UserCreateView, self).form_invalid(form)
         form.instance.vazeyat = 1
-        # TODO tanzimat paye check shavad
-        id_moaref = form.instance.code_moaref_id
-        user = User.objects.get(pk=id_moaref)
-        tedad_sath_shabake = TanzimatPaye.objects.get(onvan=TEDAD_SATH_SHABAKE)
-        if user.sath + 1 > tedad_sath_shabake:
-            messages.error(self.request, 'تعداد سطوح بیش از مقدار تعیین شده است')
-            return super(UserCreateView, self).form_invalid(form)
-        form.instance.sath = user.sath + 1
+        if TanzimatPaye.get_settings(ACTIV_MOAREF, False) == '1':
+            # TODO tanzimat paye check shavad
+            id_moaref = form.instance.code_moaref_id
+            user = User.objects.get(pk=id_moaref)
+            if user.sath + 1 > 10:
+                messages.error(self.request, 'تعداد سطوح بیش از مقدار تعیین شده است')
+                return super(UserCreateView, self).form_invalid(form)
+            form.instance.sath = user.sath + 1
         return super(UserCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -72,7 +72,7 @@ def login_user(request):
         if request.method == "POST":
             user = auth.authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
             if user is not None:
-                if user.is_active and user.vazeyat == 1:
+                if user.is_active:
                     auth.login(request, user)
                     if request.GET.get('next') is not None:
                         return redirect(request.GET.get('next'))
@@ -101,10 +101,10 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UserUpdateForm
 
     def form_valid(self, form):
-        # if TanzimatPaye.get_settings(ACTIV_MOAREF, False) == '0' and not self.request.user.is_superuser:
-        #     if form.instance.code_moaref is None or form.instance.code_moaref == '':
-        #         messages.error(self.request, 'کد معرف نمیتواند خالی باید')
-        #         return self.form_invalid(form)
+        if TanzimatPaye.get_settings(ACTIV_MOAREF, False) == '0' and not self.request.user.is_superuser:
+            if form.instance.code_moaref is None or form.instance.code_moaref == '':
+                messages.error(self.request, 'کد معرف نمیتواند خالی باید')
+                return self.form_invalid(form)
 
         messages.success(self.request, 'تغییرات شما یا موفقیت ثبت شد')
         return super(UserUpdateView, self).form_valid(form)
@@ -126,8 +126,9 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         if not request.user.is_superuser and request.user.id != kwargs['pk']:
             messages.error(request, 'شما اجازه دسترسی ندارید')
             return redirect(reverse('UpdateUser', kwargs={'pk': request.user.id}))
+        c = super().post(request, *args, **kwargs)
 
-        return super().post(request, *args, **kwargs)
+        return c
 
     def form_invalid(self, form):
         return super().form_invalid(form)
@@ -144,6 +145,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
             form.fields['gender'].required = False
             form.fields['tarikh_tavalod'].required = False
             form.fields['code_moaref'].required = False
+            form.fields['sath'].required = False
             form.fields['image_cart_melli'].required = False
             form.fields['nooe_heshab'].required = False
             form.fields['id_telegram'].required = False
@@ -213,4 +215,5 @@ class ChangeUserPasswordView(LoginRequiredMixin, PasswordChangeView):
 class ProfileUserView(LoginRequiredMixin, View):
     def get(self, request):
         user = User.objects.get(username=request.user.username)
+        user.tarikh_tavalod = date_jalali(user.tarikh_tavalod, 3)
         return render(request, 'system/user/Profile_User.html', {'user': user})

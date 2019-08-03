@@ -194,7 +194,7 @@
                                 {% endif %}
 
                                 {% setting 'active_moaref' 0 as test %}
-                                {% if test == '1' %}
+                                {% if test == '1' and request.user.is_superuser %}
                                     <div class="form-group col-sm6 col-md-3">
                                         {% if form.code_moaref.label_tag %}
                                             <label for="code_moaref">{{ form.code_moaref.label_tag }}<span class="red-star">*</span></label>
@@ -206,7 +206,7 @@
                                     </div>
                                 {% endif %}
 
-                                {% if request.user.is_superuser %}
+                                {% if test == '1' and request.user.is_superuser %}
                                     <div class="form-group col-sm6 col-md-3">
                                         {% if form.sath.label_tag %}
                                             <label for="sath">{{ form.sath.label_tag }}<span class="red-star">*</span></label>

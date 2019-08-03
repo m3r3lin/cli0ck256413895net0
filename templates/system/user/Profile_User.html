@@ -15,7 +15,7 @@
     <section class="content">
 
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
 
                 <!-- Profile Image -->
                 <div class="box box-primary">
@@ -33,7 +33,7 @@
                                 <b>کدملی</b> <a class="pull-left">{{ request.user.code_melli }}</a>
                             </li>
                             <li class="list-group-item">
-                                <b>تاریخ تولد</b> <a class="pull-left">{{ request.user.tarikh_tavalod }}</a>
+                                <b>تاریخ تولد</b> <a class="pull-left">{{ request.user.tarikh_tavalod | date_jalali:3 }}</a>
                             </li>
                             <li class="list-group-item">
                                 <b>موبایل</b> <a class="pull-left">{{ request.user.mobile }}</a>
@@ -69,16 +69,13 @@
                                 <b>سطح شما</b> <a class="pull-left">{{ request.user.sath }}</a>
                             </li>
                             <li class="list-group-item">
-                                <b>وضعیت</b> <a class="pull-left">{{ request.user.vazeyat }}</a>
-                            </li>
-                            <li class="list-group-item">
                                 <b>نام صاحب حساب</b> <a class="pull-left">{{ request.user.name_saheb_hesab }}</a>
                             </li>
                             <li class="list-group-item">
                                 <b>آدرس</b> <a class="pull-left">{{ request.user.address }}</a>
                             </li>
                         </ul>
-                        <a href="{% url 'UpdateUser' request.user.id %}" class="btn btn-primary btn-block"><b>ویرایش</b></a>
+                        <a href="{% url 'UpdateUser' request.user.id %}" class="btn btn-primary" style="width: 100%;"><b>ویرایش</b></a>
                     </div>
                     <!-- /.box-body -->
                 </div>

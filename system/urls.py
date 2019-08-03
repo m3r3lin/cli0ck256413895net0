@@ -2,15 +2,15 @@ from django.urls import path
 # from system.base_views import views_Message
 from system.base_views import views_Message
 
-
 from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView, PelanDatatableView, PlanReportsView
 from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView
-from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView,\
-    Languge_siteView,Count_Level_networkView,Count_kharid_hadaghalView,Time_kharid_termView,Taien_meghdar_matlabView,\
-    Show_amar_foruserView,Taeid_khodkar_tablighView
+from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView, Time_kharid_termView, \
+    Taien_meghdar_matlabView, Show_amar_foruserView, Taeid_khodkar_tablighView
 from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, UserCreateModirView
 from system.base_views.views_Message import MessageListview,Message_show_view,NewMessageCreateView
-from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, TedadSathShabakeView
+from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
+from system.base_views.views_Message import MessageListview, Message_show_view
+from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
 from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, UserCreateModirView, ChangeUserPasswordView, \
     ProfileUserView
 from system.views import Dashboard
@@ -42,7 +42,7 @@ urlpatterns = [
     path('TablighDatatable/', TablighDatatableView.as_view(), name='TablighDatatable'),
     # ---- TanzimatPaye
     path('ActiveCodeMoaref/', ActiveCodeMoarefView.as_view(), name='ActiveCodeMoaref'),
-    path('TedadSathShabake/', TedadSathShabakeView.as_view(), name='TedadSathShabake'),
+    path('TedadSathShabake/', Count_Level_networkView.as_view(), name='TedadSathShabake'),
     path('SodeModir/', SodeModirView.as_view(), name='SodeModir'),
     path('Languge_site/', Languge_siteView.as_view(), name='Languge_site'),
     path('Count_Level_networkView/', Count_Level_networkView.as_view(), name='Count_Level_networkView'),
@@ -52,12 +52,11 @@ urlpatterns = [
     path('Show_amar_foruserView/', Show_amar_foruserView.as_view(), name='Show_amar_foruserView'),
     path('Taeid_khodkar_tabligh/', Taeid_khodkar_tablighView.as_view(), name='Taeid_khodkar_tabligh'),
 
-    #messages
+    # messages
     path('MessageList/', MessageListview.as_view(), name='MessageList'),
     path('Message_show_view/<int:pk>', Message_show_view.as_view(), name='Message_show_view'),
     path('NewMessageCreate/', NewMessageCreateView.as_view(), name='NewMessageCreate'),
-
-    #ajax
+    # ajax
     path('save_message/', views_Message.save_message, name='save_message'),
 
 ]

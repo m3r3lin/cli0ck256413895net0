@@ -462,6 +462,26 @@ class ActiveCodeMoarefForm(ModelForm):
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
 
+
+class Languge_siteForm(ModelForm):
+    VAZEYAT_CHOICES = (
+        ('1', 'فارسی '),
+        ('0', 'انگلیسی'),
+    )
+    value = forms.ChoiceField(choices=VAZEYAT_CHOICES)
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Languge_siteForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "فارسی  / انگلیسی:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
 class TedadSathShabakeForm(ModelForm):
     value = forms.IntegerField()
 
@@ -475,7 +495,7 @@ class TedadSathShabakeForm(ModelForm):
         self.fields['value'].label = "تعداد سطح شبکه:"
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
-        
+
 class SodeModirForm(ModelForm):
     value = forms.IntegerField()
 
@@ -489,6 +509,107 @@ class SodeModirForm(ModelForm):
         self.fields['value'].label = "مقدار:"
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+class Count_level_networkForm(ModelForm):
+    value = forms.IntegerField()
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Count_level_networkForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "مقدار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+class Count_kharid_hadaghalForm(ModelForm):
+    value = forms.IntegerField()
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Count_kharid_hadaghalForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "مقدار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+class Time_kharid_termForm(ModelForm):
+    value = forms.IntegerField()
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Time_kharid_termForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "مقدار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+class Taien_meghdar_matlabForm(ModelForm):
+    value = forms.IntegerField()
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Taien_meghdar_matlabForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "مقدار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+
+class Show_amarforuserForm(ModelForm):
+    VAZEYAT_CHOICES = (
+        ('1', 'فعال'),
+        ('0', 'غیرفعال'),
+    )
+    value = forms.ChoiceField(choices=VAZEYAT_CHOICES)
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Show_amarforuserForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "فعال / غیرفعال:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+
+class Taied_khodkar_tablighForm(ModelForm):
+    VAZEYAT_CHOICES = (
+        ('1', 'فعال'),
+        ('0', 'غیرفعال'),
+    )
+    value = forms.ChoiceField(choices=VAZEYAT_CHOICES)
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Taied_khodkar_tablighForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "فعال / غیرفعال:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
 
 
 class ChangeUserPasswordForm(PasswordChangeForm):

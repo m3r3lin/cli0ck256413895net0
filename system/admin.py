@@ -1,5 +1,5 @@
 from django.contrib import admin
-from system.models import User, Pelan, Tabligh, Click, Payam
+from system.models import User, Pelan, Tabligh, Click, Payam,TanzimatPaye
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -32,3 +32,4 @@ admin.site.register(Pelan, PelanAdmin)
 admin.site.register(Tabligh, TablighAdmin)
 admin.site.register(Click, ClickAdmin)
 admin.site.register(Payam, PayamAdmin)
+admin.site.register(TanzimatPaye)

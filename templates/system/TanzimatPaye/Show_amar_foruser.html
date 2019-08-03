@@ -1,0 +1,65 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% block page_title %}
+    بروزرسانی نمایش امار برای کاربران
+{% endblock %}
+{% block dashboard %}
+    <li>بروزرسانی نمایش امار برای کاربران </li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">جهت بروزرسانی نمایش امار برای کاربران، فرم زیر را پر کنید.</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="box-body">
+                            {% include "errors.html" %}
+                            {% include "messages.html" %}
+                            <div class="row">
+
+                                <div class="form-group col-sm6 col-md-3">
+                                    {% if form.value.label_tag %}
+                                        <label for="value">{{ form.value.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.value }}
+                                    {% if form.value.help_text %}
+                                        <p class="help-block">{{ form.value.help_text }}</p>
+                                    {% endif %}
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">ثبت تنظیمات</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    <!-- CK Editor -->
+    <script src="{% static 'bower_components/ckeditor/ckeditor.js' %}"></script>
+
+    <script>
+        $(function () {
+            // Replace the <textarea id="editor1"> with a CKEditor
+            // instance, using default configuration.
+            CKEDITOR.replace('text')
+            //bootstrap WYSIHTML5 - text editor
+            $('.textarea').wysihtml5()
+        })
+    </script>
+{% endblock %}

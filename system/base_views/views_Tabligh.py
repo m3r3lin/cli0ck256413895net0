@@ -7,7 +7,7 @@ from django.views import View
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView, UpdateView, ListView, TemplateView
 
 from system.forms import TablighCreateForm
 from system.models import Tabligh, User, TanzimatPaye, TAIED_KHODKAR_TABLIGH, TAIEN_MEGHDAR_MATLAB
@@ -81,13 +81,14 @@ class TablighUpdateView(LoginRequiredMixin, UpdateView):
                 return self.form_invalid(form)
             form.instance.code_tabligh_gozaar_id = self.request.user.id
 
-            if form.instance.onvan != obj.onvan or form.instance.text != obj.text or form.instance.code_pelan != obj.code_pelan or form.instance.tedad_click != obj.tedad_click:
+            if form.instance.onvan != obj.onvan or form.instance.text != obj.text:
                 form.instance.vazeyat = 3
-                # form.instance.vazeyat = self.object.vazeyat
             else:
                 form.instance.vazeyat = self.object.vazeyat
 
-
+            form.instance.code_pelan = obj.code_pelan
+            form.instance.tedad_click = obj.tedad_click
+            form.instance.tedad_click_shode = obj.tedad_click_shode
 
         messages.success(self.request, 'تبلیغ مورد نظر ویرایش شد.')
         return super(TablighUpdateView, self).form_valid(form)
@@ -101,6 +102,10 @@ class TablighUpdateView(LoginRequiredMixin, UpdateView):
         if not self.request.user.is_superuser:
             form.fields['code_tabligh_gozaar'].required = False
             form.fields['vazeyat'].choices = ((0, 'غیرفعال'), (1, 'فعال'))
+            form.fields['code_pelan'].required = False
+            form.fields['tedad_click'].required = False
+            form.fields['tedad_click_shode'].required = False
+
         return form
 
 
@@ -142,3 +147,7 @@ class TablighDatatableView(LoginRequiredMixin, BaseDatatableView):
         if not self.request.user.is_superuser:
             qs = qs.filter(code_tabligh_gozaar=self.request.user)
         return qs
+
+
+class ShowTablighView(TemplateView):
+    template_name = 'system/Tabligh/Show_Tabligh.html'

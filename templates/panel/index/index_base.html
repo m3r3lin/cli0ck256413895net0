@@ -139,49 +139,16 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="footer"><a href="#">نمایش تمام پیام ها</a></li>
+                            <li class="footer"><a href="{% url 'MessageList' %}">نمایش تمام پیام ها</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown notifications-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <i class="fa fa-bell-o"></i>
-                            <span class="label label-warning">۱۰</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">۱۰ اعلان جدید</li>
-                            <li>
-                                <!-- inner menu: contains the actual data -->
-                                <ul class="menu">
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-aqua"></i> ۵ کاربر جدید ثبت نام کردند
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-warning text-yellow"></i> اخطار دقت کنید
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-red"></i> ۴ کاربر جدید ثبت نام کردند
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-shopping-cart text-green"></i> ۲۵ سفارش جدید
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-user text-red"></i> نام کاربریتان را تغییر دادید
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="footer"><a href="#">نمایش همه</a></li>
-                        </ul>
-                    </li>
+                    {% if not request.user.is_superuser %}
+                        <li class="m-nav__item" style="vertical-align: baseline;height: auto;">
+                            <a href="#" class="header-wallet btn-warning">
+                                <span>کد معرفی شما : code_{{ request.user.id }}</span>
+                            </a>
+                        </li>
+                    {% endif %}
                     {% if not request.user.is_superuser %}
                         <li class="m-nav__item" style="vertical-align: baseline;height: auto;">
                             <a href="#" class="header-wallet btn-danger">
@@ -208,7 +175,7 @@
                                 {% endif %}
                                 <p>
                                     {{ request.user.get_full_name }}
-                                    <small>مدیریت کل سایت</small>
+                                    <small>کد معرفی شما : code_{{ request.user.id }}</small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -428,7 +395,7 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer text-left">
-        <strong>Copyleft &copy; 2019-2020 <a href="#">بهکو</a> & <a href="http://hosseinizadeh.ir/adminlte">استاد باباولیان</a></strong>
+        <strong>Copyleft &copy; 2019-2020 <a href="#">نام شرکت</a> & <a href="http://hosseinizadeh.ir/adminlte">نام شخص</a></strong>
     </footer>
 
 

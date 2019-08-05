@@ -73,10 +73,7 @@ def login_user(request):
     if request.user.is_authenticated:
         if request.POST.get('next') is not None:
             return redirect(request.POST.get('next'))
-        if request.user.code_melli:
-            return redirect('dashboard')
-        else:
-            return redirect('UpdateUser', args=[request.user.id])
+        return redirect('dashboard')
     else:
         if request.method == "POST":
             user = auth.authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
@@ -86,10 +83,7 @@ def login_user(request):
                     if request.GET.get('next') is not None:
                         return redirect(request.GET.get('next'))
                     else:
-                        if request.user.code_melli:
-                            return redirect('dashboard')
-                        else:
-                            return redirect('UpdateUser', args=[request.user.id])
+                        return redirect('dashboard')
                 else:
                     return render(request, "system/user/login.html", {'error': 'دسترسی شما به سامانه غیر فعال شده است !'})
             else:
@@ -104,7 +98,7 @@ def logout_user(request):
     request.user.last_activity = None
     request.user.save()
     logout(request)
-    return render(request, "system/user/login.html")
+    return redirect(reverse('login'))
 
 
 class RedirectToUserUpdate(LoginRequiredMixin, View):

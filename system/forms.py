@@ -5,7 +5,7 @@ from django.forms import ModelForm, FileInput
 from django import forms
 from unidecode import unidecode
 from system.functions import change_date_to_english
-from system.models import User, Pelan, Tabligh, TanzimatPaye, ACTIV_MOAREF, Payam
+from system.models import User, Pelan, Tabligh, TanzimatPaye, ACTIV_MOAREF, Payam, Click
 from django.forms.widgets import ClearableFileInput
 from system.models import User, Pelan, Tabligh, TanzimatPaye, ACTIV_MOAREF
 
@@ -324,11 +324,11 @@ class PelanCreateForm(ModelForm):
 
         self.fields['gheymat'].label = "قیمت:"
         self.fields['gheymat'].required = True
-        self.fields['gheymat'].widget.attrs.update({'class': 'form-control', 'id': 'gheymat'})
+        self.fields['gheymat'].widget.attrs.update({'class': 'form-control', 'id': 'gheymat', 'min': 0})
 
         self.fields['tedad_click'].label = "تعداد کلیک:"
         self.fields['tedad_click'].required = True
-        self.fields['tedad_click'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click'})
+        self.fields['tedad_click'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click', 'min': 0})
 
         self.fields['vazeyat'].label = "وضعیت:"
         self.fields['vazeyat'].required = True
@@ -387,11 +387,11 @@ class TablighCreateForm(ModelForm):
 
         self.fields['tedad_click'].label = "تعداد کلیک:"
         self.fields['tedad_click'].required = True
-        self.fields['tedad_click'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click'})
+        self.fields['tedad_click'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click', 'min': 0})
 
         self.fields['tedad_click_shode'].label = "تعداد کلیک شده:"
         self.fields['tedad_click_shode'].required = False
-        self.fields['tedad_click_shode'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click_shode'})
+        self.fields['tedad_click_shode'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click_shode', 'min': 0})
 
         self.fields['vazeyat'].label = "وضعیت:"
         self.fields['vazeyat'].required = False

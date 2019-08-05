@@ -92,6 +92,13 @@ class PlanReportsView(LoginRequiredMixin, View):
                         response = {
                             'data': getattr(plan, report_type)
                         }
+                    elif report_type == 'plan-click-va-gheymat':
+                        response = {
+                            'data': {
+                                'gheymat': plan.gheymat,
+                                'click_count': plan.tedad_click
+                            }
+                        }
                     else:
                         response = {'response': 'not ok'}
                 else:

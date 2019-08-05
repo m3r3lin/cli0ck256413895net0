@@ -1,3 +1,5 @@
+import math
+
 from django.contrib import messages
 from django.db.models import ProtectedError, Q
 from django.http import request
@@ -37,9 +39,10 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
             if kife_pool < r:
                 messages.error(self.request, 'شما اعتبار کافی ندارید')
                 return super(TablighCreateView, self).form_invalid(form)
-
             user.kife_pool = kife_pool - r
             user.save()
+            form.instance.mablagh_har_click = math.trunc(form.instance.code_pelan.gheymat / form.instance.tedad_click)
+
         messages.success(self.request, 'تبلیغ مورد نظر با موفقیت ثبت شد.')
         return super(TablighCreateView, self).form_valid(form)
 

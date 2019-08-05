@@ -6,6 +6,11 @@
     داشبرد
 {% endblock %}
 {% block main_content %}
+    <div class="col-md-12">
+        {% include "errors.html" %}
+        {% include "messages.html" %}
+    </div>
+
     <!-- Main content -->
     {% for tabligh in tablighs %}
         <div class="form-group col-sm6 col-md-3">

@@ -3,6 +3,8 @@ import re
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, FileInput
+from django.forms import Form
+
 from django import forms
 from unidecode import unidecode
 
@@ -513,10 +515,13 @@ class SodeModirForm(ModelForm):
 
 class Count_level_networkForm(ModelForm):
     value = forms.IntegerField()
+    onvan=forms.CharField(error_messages={
+        'required': ("فیلد عنوان اجباری است!"),
+    })
 
     class Meta:
         model = TanzimatPaye
-        fields = ['value']
+        fields = ['onvan','value']
 
     def __init__(self, *args, **kwargs):
         super(Count_level_networkForm, self).__init__(*args, **kwargs)
@@ -524,6 +529,10 @@ class Count_level_networkForm(ModelForm):
         self.fields['value'].label = "مقدار:"
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+        self.fields['onvan'].label = "سطح:"
+        self.fields['onvan'].required = True
+        self.fields['onvan'].widget.attrs.update({'class': 'form-control', 'id': 'onvan'})
 
 
 class Count_kharid_hadaghalForm(ModelForm):
@@ -540,6 +549,21 @@ class Count_kharid_hadaghalForm(ModelForm):
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
 
+
+
+class Count_visit_tabligh_Form(ModelForm):
+    value = forms.IntegerField()
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Count_visit_tabligh_Form, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "مقدار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
 
 class Time_kharid_termForm(ModelForm):
     value = forms.IntegerField()
@@ -688,4 +712,78 @@ class NewMessageCreateForm(ModelForm):
     #     return girande
 
 
+class Vahed_poll_siteForm(ModelForm):
+    VAZEYAT_CHOICES = (
+        ('1', 'تومان'),
+        ('0', 'دلار'),
+    )
+    value = forms.ChoiceField(choices=VAZEYAT_CHOICES)
 
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Vahed_poll_siteForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "تومان  / دلار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+
+class Taien_hadaghal_etbarForm(ModelForm):
+    value = forms.IntegerField()
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Taien_hadaghal_etbarForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "مقدار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+class Amar_jaali_Form(Form):
+    count_user_online = forms.IntegerField()
+    # count_user_online = forms.CharField(error_messages={
+    #     'required': ("فیلد انتخاب تعداد کاربران انلاین اجباری است!"),
+    # })
+    count_all_user=forms.IntegerField()
+    count_user_new_today=forms.IntegerField()
+    meghdar_daramad_pardahkti=forms.IntegerField()
+    count_tabligh_thabti=forms.IntegerField()
+
+
+
+
+    # class Meta:
+        # model = TanzimatPaye
+        # fields = ['count_user_online']
+
+
+    def __init__(self, *args, **kwargs):
+        super(Amar_jaali_Form, self).__init__(*args, **kwargs)
+
+        self.fields['count_user_online'].label = "تعداد کاربران انلاین:"
+        self.fields['count_user_online'].required = True
+        self.fields['count_user_online'].widget.attrs.update({'class': 'form-control', 'id': 'count_user_online'})
+
+        self.fields['count_all_user'].label = "تعداد کل کاربران:"
+        self.fields['count_all_user'].required = True
+        self.fields['count_all_user'].widget.attrs.update({'class': 'form-control', 'id': 'count_all_user'})
+
+        self.fields['count_user_new_today'].label = "تعداد کاربران جدید امروز:"
+        self.fields['count_user_new_today'].required = True
+        self.fields['count_user_new_today'].widget.attrs.update({'class': 'form-control', 'id': 'count_user_new_today'})
+
+        self.fields['meghdar_daramad_pardahkti'].label = "مقدار در امد پرداخت شده:"
+        self.fields['meghdar_daramad_pardahkti'].required = True
+        self.fields['meghdar_daramad_pardahkti'].widget.attrs.update({'class': 'form-control', 'id': 'meghdar_daramad_pardahkti'})
+
+        self.fields['count_tabligh_thabti'].label = "تعداد تبلیغات ثبت شده:"
+        self.fields['count_tabligh_thabti'].required = True
+        self.fields['count_tabligh_thabti'].widget.attrs.update({'class': 'form-control', 'id': 'count_tabligh_thabti'})

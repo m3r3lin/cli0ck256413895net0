@@ -7,7 +7,8 @@ from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, Pela
 from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView,\
     Languge_siteView,Count_Level_networkView,Count_kharid_hadaghalView,Time_kharid_termView,Taien_meghdar_matlabView,\
-    Show_amar_foruserView,Taeid_khodkar_tablighView
+    Show_amar_foruserView,Taeid_khodkar_tablighView,Vahed_poll_siteView,Count_visit_tablighView,Taein_hadaghal_etbarView,\
+    Amar_jaali_View,Count_Level_networkDataTableView,Count_Level_networkDeleteView,Count_Level_networkUpdateView
 from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, UserCreateModirView
 from system.base_views.views_Message import MessageListview,Message_show_view,NewMessageCreateView
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, TedadSathShabakeView
@@ -45,12 +46,22 @@ urlpatterns = [
     path('TedadSathShabake/', TedadSathShabakeView.as_view(), name='TedadSathShabake'),
     path('SodeModir/', SodeModirView.as_view(), name='SodeModir'),
     path('Languge_site/', Languge_siteView.as_view(), name='Languge_site'),
+    #datatable count level network
+    path('Count_Level_networkDataTable/', Count_Level_networkDataTableView.as_view(), name='Count_Level_networkDataTable'),
+    path('Count_Level_networkDelete/<int:pk>', Count_Level_networkDeleteView.as_view(), name='Count_Level_networkDelete'),
+    path('Count_Level_networkUpdate/<int:pk>', Count_Level_networkUpdateView.as_view(), name='Count_Level_networkUpdate'),
+
     path('Count_Level_networkView/', Count_Level_networkView.as_view(), name='Count_Level_networkView'),
     path('Count_kharid_hadaghalView/', Count_kharid_hadaghalView.as_view(), name='Count_kharid_hadaghalView'),
     path('Time_kharid_termView/', Time_kharid_termView.as_view(), name='Time_kharid_termView'),
     path('Taien_meghdar_matlabView/', Taien_meghdar_matlabView.as_view(), name='Taien_meghdar_matlabView'),
     path('Show_amar_foruserView/', Show_amar_foruserView.as_view(), name='Show_amar_foruserView'),
     path('Taeid_khodkar_tabligh/', Taeid_khodkar_tablighView.as_view(), name='Taeid_khodkar_tabligh'),
+    path('Vahed_poll_site/', Vahed_poll_siteView.as_view(), name='Vahed_poll_site'),
+    path('Count_visit_tabligh/', Count_visit_tablighView.as_view(), name='Count_visit_tabligh'),
+    path('Taein_hadaghal_etbar/', Taein_hadaghal_etbarView.as_view(), name='Taein_hadaghal_etbar'),
+    path('Amar_jaali/', Amar_jaali_View.as_view(), name='Amar_jaali'),
+
 
     #messages
     path('MessageList/', MessageListview.as_view(), name='MessageList'),

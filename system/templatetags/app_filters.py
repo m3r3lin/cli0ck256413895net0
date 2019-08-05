@@ -1,7 +1,7 @@
 from django import template
 
 from Ads_Project.functions import gregorian_to_jalali
-from system.models import TanzimatPaye
+from system.models import TanzimatPaye,Payam
 
 register = template.Library()
 
@@ -53,3 +53,11 @@ def date_jalali(value, mode=1):
 @register.simple_tag
 def setting(key, default):
     return TanzimatPaye.get_settings(key, default)
+
+# @register.filter(name='get_image')
+# def get_image(key):
+#     print("key",key)
+#     ferestande=
+#     return key
+
+    # return TanzimatPaye.get_settings(key, default)

@@ -117,6 +117,9 @@ TAIEN_MEGHDAR_MATLAB='taien_meghdar_matlab'
 SHOW_AMAR_FOR_USER='show_amar_for_user'
 TAIED_KHODKAR_TABLIGH='taied_khodkar_tabligh'
 TEDAD_SATH_SHABAKE = 'tedad_sath_shabake'
+VAHED_POLL_SITE='vahed_poll_site'
+COUNT_VISIT_TABLIGH='count_visit_tabligh'
+TAEIN_HADAGHAL_ETBAR='taein_hadaghal_etbar'
 
 
 class TanzimatPaye(Model):
@@ -129,6 +132,9 @@ class TanzimatPaye(Model):
             return TanzimatPaye.objects.get(onvan=key).value
         except:
             return default
+
+    def __str__(self):
+        return self.onvan
 
 
 class Parent(Model):

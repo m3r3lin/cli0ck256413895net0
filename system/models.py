@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -9,6 +11,7 @@ from Ads_Project import settings
 from system.functions import upload_avatar_path, upload_cart_melli_path
 from django.db.models import Model, Q
 from django.utils import timezone
+from allauth.account import signals
 
 VAZEYAT_CHOICES = (
     (0, 'غیرفعال'),
@@ -183,3 +186,13 @@ if not settings.CREATING_SUPER_USER:
     def set_new_user_inactive(sender, instance, **kwargs):
         if instance._state.adding is True:
             instance.password = make_password(instance.password)
+
+
+@receiver(signals.user_logged_in)
+def password_change_callback(sender, request, user, **kwargs):
+    pass
+
+
+@receiver(signals.user_logged_out)
+def password_change_callback(sender, request, user, **kwargs):
+    pass

@@ -6,8 +6,8 @@ from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, Pela
 from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView, Time_kharid_termView, \
     Taien_meghdar_matlabView, Show_amar_foruserView, Taeid_khodkar_tablighView
-from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView
-from system.base_views.views_Message import MessageListview,Message_show_view,NewMessageCreateView
+from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, RedirectToUserUpdate
+from system.base_views.views_Message import MessageListview, Message_show_view, NewMessageCreateView
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
 from system.base_views.views_Message import MessageListview, Message_show_view
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
@@ -21,6 +21,7 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('CreateUser/', UserCreateView.as_view(), name='CreateUser'),
     path('UpdateUser/<int:pk>', UserUpdateView.as_view(), name='UpdateUser'),
+    path('UpdateUser/', RedirectToUserUpdate.as_view(), name='UpdateUser'),
     path('DeleteUser/<int:pk>', UserDeleteView.as_view(), name='DeleteUser'),
     path('ListUser/', UserListView.as_view(), name='ListUser'),
     path('UserDatatable/', UserDatatableView.as_view(), name='UserDatatable'),

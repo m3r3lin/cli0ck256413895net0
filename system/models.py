@@ -113,7 +113,7 @@ class KifPool(models.Model):
     all_received = models.IntegerField(default=0)
 
 
-class history(models.Model):
+class History(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL,null=True)
     type = models.SmallIntegerField(choices=(
         (0, 'واریز'),

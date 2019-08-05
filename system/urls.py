@@ -6,12 +6,12 @@ from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, Pela
 from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView, Time_kharid_termView, \
     Taien_meghdar_matlabView, Show_amar_foruserView, Taeid_khodkar_tablighView
-from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, UserCreateModirView
+from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView
 from system.base_views.views_Message import MessageListview,Message_show_view,NewMessageCreateView
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
 from system.base_views.views_Message import MessageListview, Message_show_view
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
-from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, UserCreateModirView, ChangeUserPasswordView, \
+from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, ChangeUserPasswordView, \
     ProfileUserView
 from system.views import Dashboard
 
@@ -20,7 +20,6 @@ urlpatterns = [
     path('dashboard/', Dashboard.as_view(), name="dashboard"),
     path('logout/', logout_user, name='logout'),
     path('CreateUser/', UserCreateView.as_view(), name='CreateUser'),
-    path('CreateUserModir/', UserCreateModirView.as_view(), name='CreateUserModir'),
     path('UpdateUser/<int:pk>', UserUpdateView.as_view(), name='UpdateUser'),
     path('DeleteUser/<int:pk>', UserDeleteView.as_view(), name='DeleteUser'),
     path('ListUser/', UserListView.as_view(), name='ListUser'),

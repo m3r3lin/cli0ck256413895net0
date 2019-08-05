@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save
 from Ads_Project import settings
 from system.functions import upload_avatar_path, upload_cart_melli_path
-from django.db.models import Model
+from django.db.models import Model, Q
 from django.utils import timezone
 
 VAZEYAT_CHOICES = (
@@ -55,12 +55,48 @@ class User(AbstractUser):
     kife_pool = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف پول نمیتواند بیشتر از 9999999999 باشد. ')])
     kife_daramad = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف درآمد نمیتواند بیشتر از 9999999999 باشد. ')])
     code_moaref = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, blank=True)
-    sath = models.IntegerField(default=0, null=True, blank=True)
+    sath = models.IntegerField(default=1, null=True, blank=True)
     id_telegram = models.CharField(max_length=30, null=True, blank=True)
     nooe_heshab = models.IntegerField(null=True, blank=True, choices=NOOE_CHOICES)
     vazeyat = models.IntegerField(null=True, blank=True, choices=VAZEYAT_CHOICES)
     image_cart_melli = models.ImageField(upload_to=upload_cart_melli_path, null=True, blank=True)
     avatar = models.ImageField(upload_to=upload_avatar_path, null=True, blank=True)
+
+    def is_complete(self):
+        if self.first_name is not None or\
+                self.last_name is not None or\
+                self.code_melli is not None or\
+                self.tarikh_tavalod is not None or\
+                self.mobile is not None or\
+                self.gender is not None or \
+                self.father_name is not None or \
+                self.address is not None or \
+                self.code_posti is not None or \
+                self.shomare_hesab is not None or \
+                self.shomare_cart is not None or \
+                self.shomare_shaba is not None or \
+                self.name_saheb_hesab is not None or \
+                self.name_bank is not None or \
+                self.email is not None or \
+                self.image_cart_melli is not None:
+            return False
+        return True
+
+    @staticmethod
+    def get_all_not_complete():
+        return User.objects.filter(Q(code_melli__isnull=True) |
+                                   Q(tarikh_tavalod__isnull=True) |
+                                   Q(gender__isnull=True) |
+                                   Q(father_name__isnull=True) |
+                                   Q(address__isnull=True) |
+                                   Q(shomare_hesab__isnull=True) |
+                                   Q(shomare_cart__isnull=True) |
+                                   Q(shomare_shaba__isnull=True) |
+                                   Q(name_saheb_hesab__isnull=True) |
+                                   Q(name_bank__isnull=True) |
+                                   Q(code_posti__isnull=True) |
+                                   Q(image_cart_melli__isnull=True)
+                                   )
 
     def __str__(self):
         return self.username
@@ -105,17 +141,17 @@ class Payam(Model):
     text = models.TextField()
     tarikh = models.DateTimeField(auto_now_add=True)
     vazeyat = models.IntegerField(choices=VAZEYAT_PAYAM)
-    save_date=models.DateTimeField(default=timezone.now, blank=True, null=True)
+    save_date = models.DateTimeField(default=timezone.now, blank=True, null=True)
 
 
 ACTIV_MOAREF = 'active_moaref'
 LANGUGE_SITE = 'languge_site'
-COUNT_LEVEL_NETWORK='count_level_network'
-COUNT_KHARI_HADAGHAL='count_kharid_hadaghl'
-TIME_KHARID_TERM='time_kharid_term'
-TAIEN_MEGHDAR_MATLAB='taien_meghdar_matlab'
-SHOW_AMAR_FOR_USER='show_amar_for_user'
-TAIED_KHODKAR_TABLIGH='taied_khodkar_tabligh'
+COUNT_LEVEL_NETWORK = 'count_level_network'
+COUNT_KHARI_HADAGHAL = 'count_kharid_hadaghl'
+TIME_KHARID_TERM = 'time_kharid_term'
+TAIEN_MEGHDAR_MATLAB = 'taien_meghdar_matlab'
+SHOW_AMAR_FOR_USER = 'show_amar_for_user'
+TAIED_KHODKAR_TABLIGH = 'taied_khodkar_tabligh'
 TEDAD_SATH_SHABAKE = 'tedad_sath_shabake'
 
 
@@ -135,9 +171,10 @@ class Parent(Model):
     node = models.ForeignKey(User, on_delete=models.CASCADE, related_name='node_user_id')
     parent = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='parent_user_id')
 
+
 class TablighatMontasherKonande(Model):
-    tabligh = models.ForeignKey(Tabligh,on_delete=models.CASCADE)
-    montasher_konande = models.ForeignKey(User,models.CASCADE)
+    tabligh = models.ForeignKey(Tabligh, on_delete=models.CASCADE)
+    montasher_konande = models.ForeignKey(User, models.CASCADE)
     tarikh = models.DateTimeField(auto_now_add=True)
 
 

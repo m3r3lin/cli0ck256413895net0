@@ -244,7 +244,6 @@
                     </a>
                     <ul class="treeview-menu">
                         {% if request.user.is_superuser %}
-                            <li><a href="{% url  'CreateUserModir' %}"><i class="fa fa-plus"></i>ایجاد کاربر</a></li>
                             <li><a href="{% url  'ListUser' %}"><i class="fa fa-list"></i>لیست کاربران</a></li>
                         {% else %}
                             <li><a href="{% url  'UpdateUser' pk=request.user.id %}"><i class="fa fa-list"></i>ویرایش اطلاعات کاربری</a></li>

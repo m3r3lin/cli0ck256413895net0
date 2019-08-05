@@ -51,7 +51,7 @@
 
                                 <div class="form-group col-sm6 col-md-3">
                                     {% if form.code_melli.label_tag %}
-                                        <label for="last_name">{{ form.code_melli.label_tag }}<span class="red-star">*</span></label>
+                                        <label for="code_melli">{{ form.code_melli.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
                                     {{ form.code_melli }}
                                     {% if form.code_melli.help_text %}
@@ -169,55 +169,6 @@
                                     {% endif %}
                                 </div>
 
-                                {% if request.user.is_superuser %}
-                                    <div class="form-group col-sm6 col-md-3">
-                                        {% if form.kife_pool.label_tag %}
-                                            <label for="kife_pool">{{ form.kife_pool.label_tag }}<span class="red-star">*</span></label>
-                                        {% endif %}
-                                        {{ form.kife_pool }}
-                                        {% if form.kife_pool.help_text %}
-                                            <p class="help-block">{{ form.kife_pool.help_text }}</p>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-
-                                {% if request.user.is_superuser %}
-                                    <div class="form-group col-sm6 col-md-3">
-                                        {% if form.kife_daramad.label_tag %}
-                                            <label for="kife_daramad">{{ form.kife_daramad.label_tag }}<span class="red-star">*</span></label>
-                                        {% endif %}
-                                        {{ form.kife_daramad }}
-                                        {% if form.kife_daramad.help_text %}
-                                            <p class="help-block">{{ form.kife_daramad.help_text }}</p>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-
-                                {% setting 'active_moaref' 0 as test %}
-                                {% if test == '1' and request.user.is_superuser %}
-                                    <div class="form-group col-sm6 col-md-3">
-                                        {% if form.code_moaref.label_tag %}
-                                            <label for="code_moaref">{{ form.code_moaref.label_tag }}<span class="red-star">*</span></label>
-                                        {% endif %}
-                                        {{ form.code_moaref }}
-                                        {% if form.code_moaref.help_text %}
-                                            <p class="help-block">{{ form.code_moaref.help_text }}</p>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-
-                                {% if test == '1' and request.user.is_superuser %}
-                                    <div class="form-group col-sm6 col-md-3">
-                                        {% if form.sath.label_tag %}
-                                            <label for="sath">{{ form.sath.label_tag }}<span class="red-star">*</span></label>
-                                        {% endif %}
-                                        {{ form.sath }}
-                                        {% if form.sath.help_text %}
-                                            <p class="help-block">{{ form.sath.help_text }}</p>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-
                                 <div class="form-group col-sm6 col-md-3">
                                     {% if form.id_telegram.label_tag %}
                                         <label for="id_telegram">{{ form.id_telegram.label_tag }}</label>
@@ -225,26 +176,6 @@
                                     {{ form.id_telegram }}
                                     {% if form.id_telegram.help_text %}
                                         <p class="help-block">{{ form.id_telegram.help_text }}</p>
-                                    {% endif %}
-                                </div>
-
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.nooe_heshab.label_tag %}
-                                        <label for="nooe_heshab">{{ form.nooe_heshab.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.nooe_heshab }}
-                                    {% if form.nooe_heshab.help_text %}
-                                        <p class="help-block">{{ form.nooe_heshab.help_text }}</p>
-                                    {% endif %}
-                                </div>
-
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.vazeyat.label_tag %}
-                                        <label for="vazeyat">{{ form.vazeyat.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.vazeyat }}
-                                    {% if form.vazeyat.help_text %}
-                                        <p class="help-block">{{ form.vazeyat.help_text }}</p>
                                     {% endif %}
                                 </div>
 

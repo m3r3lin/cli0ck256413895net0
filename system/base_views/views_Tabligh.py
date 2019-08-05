@@ -1,18 +1,18 @@
-import math
+import random
+import random
+import string
 
 from django.contrib import messages
 from django.db.models import ProtectedError, Q
-from django.http import request
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views import View
+from django.views.generic import CreateView, UpdateView, ListView, TemplateView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
-from django.views.generic import CreateView, UpdateView, ListView, TemplateView
-
 from system.forms import TablighCreateForm
-from system.models import Tabligh, User, TanzimatPaye, TAIED_KHODKAR_TABLIGH, TAIEN_MEGHDAR_MATLAB
+from system.models import Tabligh, TanzimatPaye, TAIED_KHODKAR_TABLIGH, TAIEN_MEGHDAR_MATLAB, Click
 from system.templatetags.app_filters import date_jalali
 
 
@@ -20,37 +20,56 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
     template_name = 'system/Tabligh/Create_Tabligh.html'
     form_class = TablighCreateForm
 
+    @staticmethod
+    def random_string(length):
+        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            messages.error(request,'کاربر ادمین نمیتواند تبلیغ ایجاد کند')
+            messages.error(request, 'کاربر ادمین نمیتواند تبلیغ ایجاد کند')
             return redirect(reverse('dashboard'))
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        if not self.request.user.is_superuser:
-            form.instance.code_tabligh_gozaar_id = self.request.user.id
-            t = form.instance.text.__len__()
-            max_t = int(TanzimatPaye.get_settings(TAIEN_MEGHDAR_MATLAB, False))
-            if t > max_t:
-                messages.error(self.request, 'طول تبلیغ بیش از حد مجاز است')
-                return super(TablighCreateView, self).form_invalid(form)
+        form.instance.code_tabligh_gozaar_id = self.request.user.id
+        t = form.instance.text.__len__()
+        max_t = int(TanzimatPaye.get_settings(TAIEN_MEGHDAR_MATLAB, False))
+        if t > max_t:
+            messages.error(self.request, 'طول تبلیغ بیش از حد مجاز است')
+            return super(TablighCreateView, self).form_invalid(form)
 
-            if TanzimatPaye.get_settings(TAIED_KHODKAR_TABLIGH, False) == '1':
-                form.instance.vazeyat = 1
-            else:
-                form.instance.vazeyat = 3
-            r = form.instance.code_pelan.gheymat
-            user = User.objects.get(id=self.request.user.id)
-            kife_pool = user.kife_pool
-            if kife_pool < r:
-                messages.error(self.request, 'شما اعتبار کافی ندارید')
-                return super(TablighCreateView, self).form_invalid(form)
-            user.kife_pool = kife_pool - r
-            user.save()
-            form.instance.mablagh_har_click = math.trunc(form.instance.code_pelan.gheymat / form.instance.tedad_click)
+        if TanzimatPaye.get_settings(TAIED_KHODKAR_TABLIGH, False) == '1':
+            form.instance.vazeyat = 1
+        else:
+            form.instance.vazeyat = 3
+        r = form.instance.code_pelan.gheymat
+        kife_pool = self.request.user.get_kif_kif_pool()
+        pool = kife_pool.current_balance
+        if pool < r:
+            messages.error(self.request, 'شما اعتبار کافی ندارید')
+            return super(TablighCreateView, self).form_invalid(form)
+
+        form.instance.mablagh_har_click = form.instance.code_pelan.gheymat / form.instance.tedad_click
+
+        form.instance.mablagh_tabligh = form.instance.code_pelan.gheymat
+
+        random_string = list(self.random_string(12) + str(self.request.user.id))
+        random.shuffle(random_string)
+        random.shuffle(random_string)
+        form.instance.random_url = ''.join(random_string)
+
+        form = super(TablighCreateView, self).form_valid(form)
+        try:
+            kife_pool.current_balance = pool - r
+            kife_pool.save()
+        except Exception as e:
+            # todo make sure balance is reduced
+            print(e)
+            messages.success(self.request, 'مشکلی در ایجاد تبلیغ شما اتفاق افتاده است لطفاً دوباره تلاش کنید')
+            return super(TablighCreateView, self).form_invalid(form)
 
         messages.success(self.request, 'تبلیغ مورد نظر با موفقیت ثبت شد.')
-        return super(TablighCreateView, self).form_valid(form)
+        return form
 
     def form_invalid(self, form):
         print(self.request.POST)
@@ -122,6 +141,10 @@ class TablighDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
         try:
             tabligh = get_object_or_404(Tabligh, pk=pk)
+            if tabligh.tedad_click_shode > 0 or Click.objects.filter(tabligh=tabligh).exists():
+                messages.error(self.request, 'تبلیغ مورد نظر شما نمی تواند حذف شود شما می توانید این تبلیغ را غیر فعال کنید')
+                return redirect('ListTabligh')
+            request.user.add_to_kif_pool(tabligh.mablagh_tabligh)
             tabligh.delete()
         except ProtectedError:
             messages.error(self.request, 'از این نوع تبلیغ قبلا استفاده شده است و قابل حذف نمیباشد.')
@@ -142,7 +165,7 @@ class TablighListView(LoginRequiredMixin, ListView):
 
 class TablighDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = Tabligh
-    columns = ['id', 'onvan', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'vazeyat']
+    columns = ['id', 'onvan', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'vazeyat', 'random_url']
 
     def render_column(self, row, column):
         if column == 'tarikh_ijad':

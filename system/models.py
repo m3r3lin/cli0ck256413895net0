@@ -1,17 +1,19 @@
 from datetime import datetime
 
-from django.contrib import messages
+from allauth.account import signals
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from django.dispatch import receiver
+from django.db.models import Model, Q
 from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.utils import timezone
+
 from Ads_Project import settings
 from system.functions import upload_avatar_path, upload_cart_melli_path
-from django.db.models import Model, Q
-from django.utils import timezone
-from allauth.account import signals
+
+INCREASE_BALANCE_ORDER = 12
 
 VAZEYAT_CHOICES = (
     (0, 'غیرفعال'),
@@ -55,7 +57,7 @@ class User(AbstractUser):
     name_saheb_hesab = models.CharField(max_length=80, null=True, blank=True)
     name_bank = models.CharField(max_length=80, null=True, blank=True)
     code_posti = models.CharField(max_length=10, null=True, blank=True)
-    kife_pool = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف پول نمیتواند بیشتر از 9999999999 باشد. ')])
+    # kife_pool = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف پول نمیتواند بیشتر از 9999999999 باشد. ')])
     kife_daramad = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف درآمد نمیتواند بیشتر از 9999999999 باشد. ')])
     code_moaref = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, blank=True)
     sath = models.IntegerField(default=1, null=True, blank=True)
@@ -101,12 +103,26 @@ class User(AbstractUser):
                                    Q(image_cart_melli__isnull=True)
                                    )
 
+    def get_kif_kif_pool(self) -> "KifPool":
+        k, _ = KifPool.objects.get_or_create(user=self, defaults=dict(user=self))
+        return k
+
+    def add_to_kif_pool(self, adad: int):
+        k = self.get_kif_kif_pool()
+        k.current_balance += adad
+        k.save()
+
+    @property
+    def kife_pool(self):
+        return self.get_kif_kif_pool().current_balance
+
     def __str__(self):
         return self.username
 
 
 class KifPool(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    current_balance = models.IntegerField(default=0)
     all_received_direct = models.IntegerField(default=0)
     all_received_indirect = models.IntegerField(default=0)
     all_deposit = models.IntegerField(default=0)
@@ -114,7 +130,7 @@ class KifPool(models.Model):
 
 
 class History(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL,null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     type = models.SmallIntegerField(choices=(
         (0, 'واریز'),
         (1, 'برداشت'),
@@ -144,6 +160,8 @@ class Tabligh(Model):
     tedad_click_shode = models.IntegerField(default=0)
     vazeyat = models.IntegerField(choices=VAZEYAT_Tabligh)
     mablagh_har_click = models.PositiveIntegerField()
+    mablagh_tabligh = models.PositiveIntegerField()
+    random_url = models.CharField(max_length=255)
 
     def __str__(self):
         return self.onvan
@@ -199,6 +217,14 @@ class TablighatMontasherKonande(Model):
     tabligh = models.ForeignKey(Tabligh, on_delete=models.CASCADE)
     montasher_konande = models.ForeignKey(User, models.CASCADE)
     tarikh = models.DateTimeField(auto_now_add=True)
+
+
+class Order(Model):
+    type = models.IntegerField(choices=(
+        (INCREASE_BALANCE_ORDER, 'افزایش اعتبار'),
+    ))
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    data = models.TextField(default='')
 
 
 if not settings.CREATING_SUPER_USER:

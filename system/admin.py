@@ -1,5 +1,5 @@
 from django.contrib import admin
-from system.models import User, Pelan, Tabligh, Click, Payam,TanzimatPaye
+from system.models import User, Pelan, Tabligh, Click, Payam, TanzimatPaye, KifPool
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -27,9 +27,14 @@ class PayamAdmin(admin.ModelAdmin):
     # list_display = [field.attname for field in Tabligh._meta.fields]
 
 
+class KifePoolAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Pelan, PelanAdmin)
 admin.site.register(Tabligh, TablighAdmin)
 admin.site.register(Click, ClickAdmin)
 admin.site.register(Payam, PayamAdmin)
 admin.site.register(TanzimatPaye)
+admin.site.register(KifPool,KifePoolAdmin)

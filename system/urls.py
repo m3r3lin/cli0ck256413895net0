@@ -1,16 +1,16 @@
 from django.urls import path
+
 # from system.base_views import views_Message
 from system.base_views import views_Message
-
+from system.base_views.views_Malli import IncreaseBalanceView, dargah_test_part_1
+from system.base_views.views_Message import MessageListview, Message_show_view
+from system.base_views.views_Message import NewMessageCreateView
 from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView, PelanDatatableView, PlanReportsView
 from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView
-from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView, Time_kharid_termView, \
+from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
+from system.base_views.views_Tanzimat_Paye import Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView, Time_kharid_termView, \
     Taien_meghdar_matlabView, Show_amar_foruserView, Taeid_khodkar_tablighView
-from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, RedirectToUserUpdate
-from system.base_views.views_Message import MessageListview, Message_show_view, NewMessageCreateView
-from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
-from system.base_views.views_Message import MessageListview, Message_show_view
-from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
+from system.base_views.views_User import RedirectToUserUpdate
 from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, ChangeUserPasswordView, \
     ProfileUserView
 from system.views import Dashboard
@@ -51,12 +51,13 @@ urlpatterns = [
     path('Taien_meghdar_matlabView/', Taien_meghdar_matlabView.as_view(), name='Taien_meghdar_matlabView'),
     path('Show_amar_foruserView/', Show_amar_foruserView.as_view(), name='Show_amar_foruserView'),
     path('Taeid_khodkar_tabligh/', Taeid_khodkar_tablighView.as_view(), name='Taeid_khodkar_tabligh'),
-
-    # messages
+    # ---- messages
     path('MessageList/', MessageListview.as_view(), name='MessageList'),
     path('Message_show_view/<int:pk>', Message_show_view.as_view(), name='Message_show_view'),
     path('NewMessageCreate/', NewMessageCreateView.as_view(), name='NewMessageCreate'),
-    # ajax
+    # ---- ajax
     path('save_message/', views_Message.save_message, name='save_message'),
-
+    # ---- MALLI
+    path('increase_balance/', IncreaseBalanceView.as_view(), name='increase_balance'),
+    path('virtual_bank_verification1/', dargah_test_part_1)
 ]

@@ -3,10 +3,10 @@
 {% block css %}
 {% endblock %}
 {% block page_title %}
-     افزایش اعتبار
+    افزایش اعتبار
 {% endblock %}
 {% block dashboard %}
-    <li> افزایش اعتبار</li>
+    <li>افزایش اعتبار</li>
 {% endblock %}
 {% block main_content %}
 
@@ -27,55 +27,20 @@
                             {% include "errors.html" %}
                             {% include "messages.html" %}
                             <div class="row">
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.onvan.label_tag %}
-                                        <label for="onvan">{{ form.onvan.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.onvan }}
-                                    {% if form.onvan.help_text %}
-                                        <p class="help-block">{{ form.onvan.help_text }}</p>
-                                    {% endif %}
-                                </div>
 
                                 <div class="form-group col-sm6 col-md-3">
-                                    {% if form.gheymat.label_tag %}
-                                        <label for="gheymat">{{ form.gheymat.label_tag }}<span class="red-star">*</span></label>
+                                    {% if form.how_much.label_tag %}
+                                        <label for="vazeyat">{{ form.how_much.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
-                                    {{ form.gheymat }}
-                                    {% if form.gheymat.help_text %}
-                                        <p class="help-block">{{ form.gheymat.help_text }}</p>
-                                    {% endif %}
-                                </div>
-
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.tedad_click.label_tag %}
-                                        <label for="tedad_click">{{ form.tedad_click.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.tedad_click }}
-                                    {% if form.tedad_click.help_text %}
-                                        <p class="help-block">{{ form.tedad_click.help_text }}</p>
-                                    {% endif %}
-                                </div>
-
-                                <div class="form-group col-sm6 col-md-3">
-                                    <label for="mablagh_ha_click"><label for="tedad_click">مبلغ هر کلیک:</label></label>
-                                    <input class="form-control" id="mablagh_ha_click" readonly="readonly"/>
-                                    <p class="help-block">{{ form.tedad_click.help_text }}</p>
-                                </div>
-
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.vazeyat.label_tag %}
-                                        <label for="vazeyat">{{ form.vazeyat.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.vazeyat }}
-                                    {% if form.vazeyat.help_text %}
-                                        <p class="help-block">{{ form.vazeyat.help_text }}</p>
+                                    {{ form.how_much }}
+                                    {% if form.how_much.help_text %}
+                                        <p class="help-block">{{ form.how_much.help_text }}</p>
                                     {% endif %}
                                 </div>
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">ثبت پلن</button>
+                                <button type="submit" class="btn btn-primary">افزایش اعتبار</button>
                             </div>
                         </div>
                     </form>

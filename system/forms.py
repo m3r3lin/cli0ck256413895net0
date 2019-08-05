@@ -1,12 +1,13 @@
 import re
+
+from django import forms
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, FileInput
-from django import forms
 from unidecode import unidecode
+
 from system.functions import change_date_to_english
-from system.models import User, Pelan, Tabligh, TanzimatPaye, ACTIV_MOAREF, Payam, Click
-from django.forms.widgets import ClearableFileInput
+from system.models import Payam
 from system.models import User, Pelan, Tabligh, TanzimatPaye, ACTIV_MOAREF
 
 fullmatch_compiled = re.compile('^code_(\d{1,9})')
@@ -621,3 +622,15 @@ class NewMessageCreateForm(ModelForm):
     #         raise ValidationError("شما نمیتوانید برای خودتان پیام بفرستید!")
     #
     #     return girande
+
+
+class IncreaseBalanceFrom(forms.Form):
+    how_much = forms.IntegerField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        field_name = 'how_much'
+        self.fields[field_name].label = "مبلغ به تومان:"
+        self.fields[field_name].required = True
+        self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})

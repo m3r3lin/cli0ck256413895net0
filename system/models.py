@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -9,6 +11,7 @@ from Ads_Project import settings
 from system.functions import upload_avatar_path, upload_cart_melli_path
 from django.db.models import Model
 from django.utils import timezone
+from allauth.account import signals
 
 VAZEYAT_CHOICES = (
     (0, 'غیرفعال'),
@@ -105,17 +108,17 @@ class Payam(Model):
     text = models.TextField()
     tarikh = models.DateTimeField(auto_now_add=True)
     vazeyat = models.IntegerField(choices=VAZEYAT_PAYAM)
-    save_date=models.DateTimeField(default=timezone.now, blank=True, null=True)
+    save_date = models.DateTimeField(default=timezone.now, blank=True, null=True)
 
 
 ACTIV_MOAREF = 'active_moaref'
 LANGUGE_SITE = 'languge_site'
-COUNT_LEVEL_NETWORK='count_level_network'
-COUNT_KHARI_HADAGHAL='count_kharid_hadaghl'
-TIME_KHARID_TERM='time_kharid_term'
-TAIEN_MEGHDAR_MATLAB='taien_meghdar_matlab'
-SHOW_AMAR_FOR_USER='show_amar_for_user'
-TAIED_KHODKAR_TABLIGH='taied_khodkar_tabligh'
+COUNT_LEVEL_NETWORK = 'count_level_network'
+COUNT_KHARI_HADAGHAL = 'count_kharid_hadaghl'
+TIME_KHARID_TERM = 'time_kharid_term'
+TAIEN_MEGHDAR_MATLAB = 'taien_meghdar_matlab'
+SHOW_AMAR_FOR_USER = 'show_amar_for_user'
+TAIED_KHODKAR_TABLIGH = 'taied_khodkar_tabligh'
 TEDAD_SATH_SHABAKE = 'tedad_sath_shabake'
 
 
@@ -141,3 +144,13 @@ if not settings.CREATING_SUPER_USER:
     def set_new_user_inactive(sender, instance, **kwargs):
         if instance._state.adding is True:
             instance.password = make_password(instance.password)
+
+
+@receiver(signals.user_logged_in)
+def password_change_callback(sender, request, user, **kwargs):
+    pass
+
+
+@receiver(signals.user_logged_out)
+def password_change_callback(sender, request, user, **kwargs):
+    pass

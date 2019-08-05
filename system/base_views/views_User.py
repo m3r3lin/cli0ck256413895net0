@@ -67,7 +67,10 @@ def login_user(request):
     if request.user.is_authenticated:
         if request.POST.get('next') is not None:
             return redirect(request.POST.get('next'))
-        return redirect('dashboard')
+        if request.user.code_melli:
+            return redirect('dashboard')
+        else:
+            return redirect('UpdateUser', args=[request.user.id])
     else:
         if request.method == "POST":
             user = auth.authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
@@ -77,7 +80,10 @@ def login_user(request):
                     if request.GET.get('next') is not None:
                         return redirect(request.GET.get('next'))
                     else:
-                        return redirect('dashboard')
+                        if request.user.code_melli:
+                            return redirect('dashboard')
+                        else:
+                            return redirect('UpdateUser', args=[request.user.id])
                 else:
                     return render(request, "system/user/login.html", {'error': 'دسترسی شما به سامانه غیر فعال شده است !'})
             else:
@@ -95,6 +101,11 @@ def logout_user(request):
     return render(request, "system/user/login.html")
 
 
+class RedirectToUserUpdate(LoginRequiredMixin, View):
+    def get(self, request):
+        return redirect(reverse('UpdateUser', args=[request.user.id]))
+
+
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     template_name = 'system/user/Update_User.html'
@@ -110,6 +121,8 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         return super(UserUpdateView, self).form_valid(form)
 
     def get(self, request, *args, **kwargs):
+        if 'pk' not in kwargs:
+            kwargs['pk'] = request.user.id
         if not request.user.is_superuser and request.user.id != kwargs['pk']:
             messages.error(request, 'شما اجازه دسترسی ندارید')
             return redirect(reverse('UpdateUser', kwargs={'pk': request.user.id}))

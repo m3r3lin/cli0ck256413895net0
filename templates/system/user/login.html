@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load socialaccount %}
 <html>
 <head>
     <meta charset="utf-8">
@@ -71,11 +72,11 @@
                 <!-- /.col -->
             </div>
         </form>
-        {#        <div class="social-auth-links text-center">#}
-        {#            <p>- یا -</p>#}
-        {#            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> ورود با فیسبوک</a>#}
-        {#            <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> ورود با گوگل</a>#}
-        {#        </div>#}
+        <div class="social-auth-links text-center">
+            <p>- یا -</p>
+{#            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> ورود با فیسبوک</a>#}
+            <a href="{% provider_login_url 'google' %}" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> ورود با گوگل</a>
+        </div>
         <!-- /.social-auth-links -->
 
         <a href="#">رمز عبورم را فراموش کرده ام.</a><br>

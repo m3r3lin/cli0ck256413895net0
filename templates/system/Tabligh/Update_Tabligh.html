@@ -49,35 +49,37 @@
                                     </div>
                                 {% endif %}
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.code_pelan.label_tag %}
-                                        <label for="code_pelan">{{ form.code_pelan.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.code_pelan }}
-                                    {% if form.code_pelan.help_text %}
-                                        <p class="help-block">{{ form.code_pelan.help_text }}</p>
-                                    {% endif %}
-                                </div>
+                                {% if request.user.is_superuser %}
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.code_pelan.label_tag %}
+                                            <label for="code_pelan">{{ form.code_pelan.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.code_pelan }}
+                                        {% if form.code_pelan.help_text %}
+                                            <p class="help-block">{{ form.code_pelan.help_text }}</p>
+                                        {% endif %}
+                                    </div>
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.tedad_click.label_tag %}
-                                        <label for="tedad_click">{{ form.tedad_click.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.tedad_click }}
-                                    {% if form.tedad_click.help_text %}
-                                        <p class="help-block">{{ form.tedad_click.help_text }}</p>
-                                    {% endif %}
-                                </div>
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.tedad_click.label_tag %}
+                                            <label for="tedad_click">{{ form.tedad_click.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.tedad_click }}
+                                        {% if form.tedad_click.help_text %}
+                                            <p class="help-block">{{ form.tedad_click.help_text }}</p>
+                                        {% endif %}
+                                    </div>
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.tedad_click_shode.label_tag %}
-                                        <label for="tedad_click_shode">{{ form.tedad_click_shode.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.tedad_click_shode }}
-                                    {% if form.tedad_click_shode.help_text %}
-                                        <p class="help-block">{{ form.tedad_click_shode.help_text }}</p>
-                                    {% endif %}
-                                </div>
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.tedad_click_shode.label_tag %}
+                                            <label for="tedad_click_shode">{{ form.tedad_click_shode.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.tedad_click_shode }}
+                                        {% if form.tedad_click_shode.help_text %}
+                                            <p class="help-block">{{ form.tedad_click_shode.help_text }}</p>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
 
                                 {% if request.user.is_superuser %}
                                     <div class="form-group col-sm6 col-md-3">

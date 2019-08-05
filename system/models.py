@@ -135,6 +135,11 @@ class Parent(Model):
     node = models.ForeignKey(User, on_delete=models.CASCADE, related_name='node_user_id')
     parent = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='parent_user_id')
 
+class TablighatMontasherKonande(Model):
+    tabligh = models.ForeignKey(Tabligh,on_delete=models.CASCADE)
+    montasher_konande = models.ForeignKey(User,models.CASCADE)
+    tarikh = models.DateTimeField(auto_now_add=True)
+
 
 if not settings.CREATING_SUPER_USER:
     @receiver(pre_save, sender=User)

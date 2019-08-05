@@ -6,8 +6,44 @@
     داشبرد
 {% endblock %}
 {% block main_content %}
-    <!-- Main content -->
+    <div class="col-md-12">
+        {% include "errors.html" %}
+        {% include "messages.html" %}
+    </div>
 
+    <!-- Main content -->
+    {% for tabligh in tablighs %}
+        <div class="form-group col-sm6 col-md-3">
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <h3>{{ tabligh.onvan }}</h3>
+
+                    <p>درآمد از هر مشاهده: 0</p>
+                    <p>مقدار مشاهده باقی مانده: {{ tabligh.tedad_click }}</p>
+                    <p>کاربران فعال: 0</p>
+                </div>
+                <style>
+                    .small-box-custom-footer > a.small-box-footer {
+                        padding-top: 5px;
+                        padding-bottom: 5px;
+                        border-radius: 0 !important;
+                        margin: 0;
+                    }
+                </style>
+                <div class="small-box-custom-footer" style="display: flex;">
+                    <a href="#" class="small-box-footer btn btn-danger text-center" style="width: 50%;">
+                        مشاهده آنلاین تبلیغ <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                    <a href="#" class="small-box-footer btn btn-warning text-center" style="width: 50%;">
+                        کپی لینک انتشار <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-shopping-cart"></i>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
     <!-- /.content -->
 {% endblock %}
 

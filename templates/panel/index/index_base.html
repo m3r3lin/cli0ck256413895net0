@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load app_filters %}
 <html>
 <head>
     <meta charset="utf-8">
@@ -50,7 +51,7 @@
 
     <header class="main-header">
         <!-- Logo -->
-        <a href="#" class="logo">
+        <a href="/" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini">پنل</span>
             <!-- logo for regular state and mobile devices -->
@@ -139,49 +140,16 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="footer"><a href="#">نمایش تمام پیام ها</a></li>
+                            <li class="footer"><a href="{% url 'MessageList' %}">نمایش تمام پیام ها</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown notifications-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <i class="fa fa-bell-o"></i>
-                            <span class="label label-warning">۱۰</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">۱۰ اعلان جدید</li>
-                            <li>
-                                <!-- inner menu: contains the actual data -->
-                                <ul class="menu">
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-aqua"></i> ۵ کاربر جدید ثبت نام کردند
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-warning text-yellow"></i> اخطار دقت کنید
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-red"></i> ۴ کاربر جدید ثبت نام کردند
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-shopping-cart text-green"></i> ۲۵ سفارش جدید
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-user text-red"></i> نام کاربریتان را تغییر دادید
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="footer"><a href="#">نمایش همه</a></li>
-                        </ul>
-                    </li>
+                    {% if not request.user.is_superuser %}
+                        <li class="m-nav__item" style="vertical-align: baseline;height: auto;">
+                            <a href="#" class="header-wallet btn-warning">
+                                <span>کد معرفی شما : code_{{ request.user.id }}</span>
+                            </a>
+                        </li>
+                    {% endif %}
                     {% if not request.user.is_superuser %}
                         <li class="m-nav__item" style="vertical-align: baseline;height: auto;">
                             <a href="#" class="header-wallet btn-danger">
@@ -208,7 +176,7 @@
                                 {% endif %}
                                 <p>
                                     {{ request.user.get_full_name }}
-                                    <small>مدیریت کل سایت</small>
+                                    <small>کد معرفی شما : code_{{ request.user.id }}</small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -277,7 +245,6 @@
                     </a>
                     <ul class="treeview-menu">
                         {% if request.user.is_superuser %}
-                            <li><a href="{% url  'CreateUserModir' %}"><i class="fa fa-plus"></i>ایجاد کاربر</a></li>
                             <li><a href="{% url  'ListUser' %}"><i class="fa fa-list"></i>لیست کاربران</a></li>
                         {% else %}
                             <li><a href="{% url  'UpdateUser' pk=request.user.id %}"><i class="fa fa-list"></i>ویرایش اطلاعات کاربری</a></li>
@@ -313,10 +280,13 @@
 
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{% url  'CreateTabligh' %}"><i class="fa fa-plus"></i>ایجاد تبلیغ</a></li>
+                        {% if not request.user.is_superuser %}
+                            <li><a href="{% url  'CreateTabligh' %}"><i class="fa fa-plus"></i>ایجاد تبلیغ</a></li>
+                        {% endif %}
                         <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>
                     </ul>
-                </li> <li class="treeview">
+                </li>
+                <li class="treeview">
                     <a href="#">
                         <i class="fa fa-buysellads"></i>
                         <span>پیام ها</span>
@@ -327,7 +297,22 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="{% url  'MessageList' %}"><i class="fa fa-plus"></i>پیام ها</a></li>
-{#                        <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>#}
+                        {#                        <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>#}
+                    </ul>
+                </li>
+
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-sliders"></i>
+                        <span>مالی</span>
+                        <span class="pull-left-container">
+                            <i class="fa fa-angle-right pull-left"></i>
+                        </span>
+
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{% url 'ActiveCodeMoaref' %}"><i class="fa fa-plus"></i>فعال کردن کد معرف</a></li>
                     </ul>
                 </li>
 
@@ -344,14 +329,14 @@
                         <ul class="treeview-menu">
                             <li><a href="{% url 'ActiveCodeMoaref' %}"><i class="fa fa-plus"></i>فعال کردن کد معرف</a></li>
                             <li><a href="{% url 'SodeModir' %}"><i class="fa fa-list"></i>درصد سود مدیر</a></li>
-{#                            <li><a href="#"><i class="fa fa-list"></i>سطوح شبکه</a></li>#}
+                            {#                            <li><a href="#"><i class="fa fa-list"></i>سطوح شبکه</a></li>#}
                             <li><a href="{% url 'Languge_site' %}"><i class="fa fa-list"></i>زبان سایت</a></li>
-                            <li><a href="{% url 'Count_Level_networkView' %}"><i class="fa fa-list"></i>تعداد سطح شبکه وسود</a></li>
+                            <li><a href="{% url 'Count_Level_networkView' %}"><i class="fa fa-list"></i>تعداد سطح شبکه و سود</a></li>
                             <li><a href="{% url 'Count_kharid_hadaghalView' %}"><i class="fa fa-list"></i>حداقل تعداد خریر تبلیغ</a></li>
                             <li><a href="{% url 'Time_kharid_termView' %}"><i class="fa fa-list"></i>مدت زمان خرید</a></li>
                             <li><a href="{% url 'Taien_meghdar_matlabView' %}"><i class="fa fa-list"></i>تعین مقدار مطلب </a></li>
                             <li><a href="{% url 'Show_amar_foruserView' %}"><i class="fa fa-list"></i>نمایش آمار برای کاربران </a></li>
-                            <li><a href="{% url 'Taeid_khodkar_tabligh' %}"><i class="fa fa-list"></i>تایید خودکارتبلیغ </a></li>
+                            <li><a href="{% url 'Taeid_khodkar_tabligh' %}"><i class="fa fa-list"></i>تایید خودکار تبلیغ </a></li>
                             <li><a href="{% url 'Vahed_poll_site' %}"><i class="fa fa-list"></i>واحد پول سایت </a></li>
                             <li><a href="{% url 'Count_visit_tabligh' %}"><i class="fa fa-list"></i>تعداد دیدن تبلیغ </a></li>
                             <li><a href="{% url 'Taein_hadaghal_etbar' %}"><i class="fa fa-list"></i>تعیین حداقل اعتبار </a></li>
@@ -427,7 +412,7 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer text-left">
-        <strong>Copyleft &copy; 2019-2020 <a href="#">بهکو</a> & <a href="http://hosseinizadeh.ir/adminlte">استاد باباولیان</a></strong>
+        <strong>Copyleft &copy; 2019-2020 <a href="#">نام شرکت</a> & <a href="http://hosseinizadeh.ir/adminlte">نام شخص</a></strong>
     </footer>
 
 

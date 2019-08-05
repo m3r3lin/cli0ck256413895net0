@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.contrib.auth import logout
 from django.urls import reverse
 from django.contrib.auth.models import User
-from system.models import User, TanzimatPaye, ACTIV_MOAREF, Parent, TEDAD_SATH_SHABAKE
+from system.models import User, TanzimatPaye, ACTIV_MOAREF, Parent, TEDAD_SATH_SHABAKE, COUNT_LEVEL_NETWORK
 from system.templatetags.app_filters import date_jalali
 
 
@@ -30,15 +30,36 @@ class UserCreateView(CreateView):
         else:
             messages.error(self.request, 'مقدار وارد شده برای قوانین اشتباه است')
             return super(UserCreateView, self).form_invalid(form)
+
         form.instance.vazeyat = 1
-        # TODO tanzimat paye check shavad
-        id_moaref = form.instance.code_moaref_id
-        user = User.objects.get(pk=id_moaref)
-        tedad_sath_shabake = TanzimatPaye.objects.get(onvan=TEDAD_SATH_SHABAKE)
-        if user.sath + 1 > tedad_sath_shabake:
-            messages.error(self.request, 'تعداد سطوح بیش از مقدار تعیین شده است')
-            return super(UserCreateView, self).form_invalid(form)
-        form.instance.sath = user.sath + 1
+
+        if TanzimatPaye.get_settings(ACTIV_MOAREF, False) == '1':
+            id_moaref = form.instance.code_moaref_id
+            user = User.objects.get(pk=id_moaref)
+            max_level = int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, False))
+            if user is not None:
+                if int(user.sath) + 1 > max_level:
+                    messages.error(self.request, 'تعداد سطوح بیش از مقدار تعیین شده است')
+                    return super(UserCreateView, self).form_invalid(form)
+                form.instance.sath = user.sath + 1
+            else:
+                messages.error(self.request, 'کد معرف وارد شده نا معتبر است')
+                return super(UserCreateView, self).form_invalid(form)
+        else:
+            if form.instance.code_moaref is not None:
+                id_moaref = form.instance.code_moaref_id
+                user = User.objects.get(pk=id_moaref)
+                max_level = int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, False))
+                if user is not None:
+                    if int(user.sath) + 1 > max_level:
+                        messages.error(self.request, 'تعداد سطوح بیش از مقدار تعیین شده است')
+                        return super(UserCreateView, self).form_invalid(form)
+                    form.instance.sath = user.sath + 1
+                else:
+                    messages.error(self.request, 'کد معرف وارد شده نا معتبر است')
+                    return super(UserCreateView, self).form_invalid(form)
+            else:
+                form.instance.sath = 1
         return super(UserCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -46,21 +67,6 @@ class UserCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('login')
-
-
-class UserCreateModirView(LoginRequiredMixin, CreateView):
-    template_name = 'system/user/Create_User_Modir.html'
-    form_class = UserCreateForm
-
-    def form_valid(self, form):
-        form.instance.vazeyat = 1
-        return super(UserCreateModirView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        return super(UserCreateModirView, self).form_invalid(form)
-
-    def get_success_url(self):
-        return reverse('ListUser')
 
 
 def login_user(request):
@@ -72,7 +78,7 @@ def login_user(request):
         if request.method == "POST":
             user = auth.authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
             if user is not None:
-                if user.is_active and user.vazeyat == 1:
+                if user.is_active:
                     auth.login(request, user)
                     if request.GET.get('next') is not None:
                         return redirect(request.GET.get('next'))
@@ -92,7 +98,12 @@ def logout_user(request):
     request.user.last_activity = None
     request.user.save()
     logout(request)
-    return render(request, "system/user/login.html")
+    return redirect(reverse('login'))
+
+
+class RedirectToUserUpdate(LoginRequiredMixin, View):
+    def get(self, request):
+        return redirect(reverse('UpdateUser', args=[request.user.id]))
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
@@ -101,33 +112,28 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UserUpdateForm
 
     def form_valid(self, form):
-        # if TanzimatPaye.get_settings(ACTIV_MOAREF, False) == '0' and not self.request.user.is_superuser:
-        #     if form.instance.code_moaref is None or form.instance.code_moaref == '':
-        #         messages.error(self.request, 'کد معرف نمیتواند خالی باید')
-        #         return self.form_invalid(form)
-
         messages.success(self.request, 'تغییرات شما یا موفقیت ثبت شد')
         return super(UserUpdateView, self).form_valid(form)
 
     def get(self, request, *args, **kwargs):
+        if 'pk' not in kwargs:
+            kwargs['pk'] = request.user.id
         if not request.user.is_superuser and request.user.id != kwargs['pk']:
-            messages.error(request, 'شما اجازه دسترسی ندارید')
+            messages.error(self.request, 'شما اجازه دسترسی ندارید')
             return redirect(reverse('UpdateUser', kwargs={'pk': request.user.id}))
         return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_superuser and request.user.id != kwargs['pk']:
+            messages.error(self.request, 'شما اجازه دسترسی ندارید')
+            return redirect(reverse('UpdateUser', kwargs={'pk': request.user.id}))
+        return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         form = context['form']
-        tarikh_tavalod = form.initial['tarikh_tavalod']
         context['form'] = form
         return context
-
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_superuser and request.user.id != kwargs['pk']:
-            messages.error(request, 'شما اجازه دسترسی ندارید')
-            return redirect(reverse('UpdateUser', kwargs={'pk': request.user.id}))
-
-        return super().post(request, *args, **kwargs)
 
     def form_invalid(self, form):
         return super().form_invalid(form)
@@ -143,21 +149,17 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
             form.fields['code_melli'].required = False
             form.fields['gender'].required = False
             form.fields['tarikh_tavalod'].required = False
-            form.fields['code_moaref'].required = False
             form.fields['image_cart_melli'].required = False
-            form.fields['nooe_heshab'].required = False
-            form.fields['id_telegram'].required = False
-            form.fields['address'].required = False
             form.fields['father_name'].required = False
             form.fields['shomare_hesab'].required = False
             form.fields['shomare_cart'].required = False
             form.fields['shomare_shaba'].required = False
             form.fields['name_saheb_hesab'].required = False
             form.fields['name_bank'].required = False
+            form.fields['id_telegram'].required = False
             form.fields['code_posti'].required = False
+            form.fields['address'].required = False
 
-        if TanzimatPaye.get_settings(ACTIV_MOAREF, False) == '0' and not self.request.user.is_superuser:
-            form.fields['sath'].required = False
         return form
 
 
@@ -165,9 +167,15 @@ class UserDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
         try:
             user = get_object_or_404(User, pk=pk)
+            if user.tabligh_set.exists():
+                messages.error(request, 'کاربر دارای تبلیغ می باشد')
+                return redirect('ListUser')
+            elif User.objects.filter(code_moaref=user).exists():
+                messages.error(request, 'کاربر دارای زیر مجموعه می باشد')
+                return redirect('ListUser')
             user.delete()
         except ProtectedError:
-            messages.error(self.request, 'از این نوع کاربر قبلا استفاده شده است و قابل حذف نمیباشد.')
+            messages.error(self.request, 'از این نوع کاربر قبلا استفاده شده است و قابل حذف نمی باشد.')
             return redirect('ListUser')
         messages.success(self.request, 'کاربر موردنظر با موفقیت حذف شد')
         return redirect('ListUser')
@@ -213,4 +221,5 @@ class ChangeUserPasswordView(LoginRequiredMixin, PasswordChangeView):
 class ProfileUserView(LoginRequiredMixin, View):
     def get(self, request):
         user = User.objects.get(username=request.user.username)
+        user.tarikh_tavalod = date_jalali(user.tarikh_tavalod, 3)
         return render(request, 'system/user/Profile_User.html', {'user': user})

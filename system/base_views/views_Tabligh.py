@@ -1,5 +1,6 @@
+import math
+
 from django.contrib import messages
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import ProtectedError, Q
 from django.http import request
 from django.shortcuts import get_object_or_404, redirect
@@ -8,10 +9,10 @@ from django.views import View
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView, UpdateView, ListView, TemplateView
 
 from system.forms import TablighCreateForm
-from system.models import Tabligh, User
+from system.models import Tabligh, User, TanzimatPaye, TAIED_KHODKAR_TABLIGH, TAIEN_MEGHDAR_MATLAB
 from system.templatetags.app_filters import date_jalali
 
 
@@ -19,20 +20,35 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
     template_name = 'system/Tabligh/Create_Tabligh.html'
     form_class = TablighCreateForm
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            messages.error(request,'کاربر ادمین نمیتواند تبلیغ ایجاد کند')
+            return redirect(reverse('dashboard'))
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         if not self.request.user.is_superuser:
             form.instance.code_tabligh_gozaar_id = self.request.user.id
-            form.instance.vazeyat = 3
+            t = form.instance.text.__len__()
+            max_t = int(TanzimatPaye.get_settings(TAIEN_MEGHDAR_MATLAB, False))
+            if t > max_t:
+                messages.error(self.request, 'طول تبلیغ بیش از حد مجاز است')
+                return super(TablighCreateView, self).form_invalid(form)
 
+            if TanzimatPaye.get_settings(TAIED_KHODKAR_TABLIGH, False) == '1':
+                form.instance.vazeyat = 1
+            else:
+                form.instance.vazeyat = 3
             r = form.instance.code_pelan.gheymat
             user = User.objects.get(id=self.request.user.id)
             kife_pool = user.kife_pool
             if kife_pool < r:
-                messages.error(request, 'شما اعتبار کافی ندارید')
+                messages.error(self.request, 'شما اعتبار کافی ندارید')
                 return super(TablighCreateView, self).form_invalid(form)
-
             user.kife_pool = kife_pool - r
             user.save()
+            form.instance.mablagh_har_click = math.trunc(form.instance.code_pelan.gheymat / form.instance.tedad_click)
+
         messages.success(self.request, 'تبلیغ مورد نظر با موفقیت ثبت شد.')
         return super(TablighCreateView, self).form_valid(form)
 
@@ -61,6 +77,12 @@ class TablighUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         if not self.request.user.is_superuser:
+            t = form.instance.text.__len__()
+            max_t = int(TanzimatPaye.get_settings(TAIEN_MEGHDAR_MATLAB, False))
+            if t > max_t:
+                messages.error(self.request, 'طول تبلیغ بیش از حد مجاز است')
+                return super(TablighCreateView, self).form_invalid(form)
+
             try:
                 obj = Tabligh.objects.get(pk=self.object.pk)
             except:
@@ -68,11 +90,14 @@ class TablighUpdateView(LoginRequiredMixin, UpdateView):
                 return self.form_invalid(form)
             form.instance.code_tabligh_gozaar_id = self.request.user.id
 
-            if form.instance.onvan != obj.onvan or form.instance.text != obj.text or form.instance.code_pelan != obj.code_pelan or form.instance.tedad_click != obj.tedad_click:
+            if form.instance.onvan != obj.onvan or form.instance.text != obj.text:
                 form.instance.vazeyat = 3
-                # form.instance.vazeyat = self.object.vazeyat
             else:
                 form.instance.vazeyat = self.object.vazeyat
+
+            form.instance.code_pelan = obj.code_pelan
+            form.instance.tedad_click = obj.tedad_click
+            form.instance.tedad_click_shode = obj.tedad_click_shode
 
         messages.success(self.request, 'تبلیغ مورد نظر ویرایش شد.')
         return super(TablighUpdateView, self).form_valid(form)
@@ -86,6 +111,10 @@ class TablighUpdateView(LoginRequiredMixin, UpdateView):
         if not self.request.user.is_superuser:
             form.fields['code_tabligh_gozaar'].required = False
             form.fields['vazeyat'].choices = ((0, 'غیرفعال'), (1, 'فعال'))
+            form.fields['code_pelan'].required = False
+            form.fields['tedad_click'].required = False
+            form.fields['tedad_click_shode'].required = False
+
         return form
 
 
@@ -127,3 +156,7 @@ class TablighDatatableView(LoginRequiredMixin, BaseDatatableView):
         if not self.request.user.is_superuser:
             qs = qs.filter(code_tabligh_gozaar=self.request.user)
         return qs
+
+
+class ShowTablighView(TemplateView):
+    template_name = 'system/Tabligh/Show_Tabligh.html'

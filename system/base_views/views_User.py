@@ -167,9 +167,15 @@ class UserDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
         try:
             user = get_object_or_404(User, pk=pk)
+            if user.tabligh_set.exists():
+                messages.error(request, 'کاربر دارای تبلیغ می باشد')
+                return redirect('ListUser')
+            elif User.objects.filter(code_moaref=user).exists():
+                messages.error(request, 'کاربر دارای زیر مجموعه می باشد')
+                return redirect('ListUser')
             user.delete()
         except ProtectedError:
-            messages.error(self.request, 'از این نوع کاربر قبلا استفاده شده است و قابل حذف نمیباشد.')
+            messages.error(self.request, 'از این نوع کاربر قبلا استفاده شده است و قابل حذف نمی باشد.')
             return redirect('ListUser')
         messages.success(self.request, 'کاربر موردنظر با موفقیت حذف شد')
         return redirect('ListUser')

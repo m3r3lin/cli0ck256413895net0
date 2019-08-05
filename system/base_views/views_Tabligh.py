@@ -20,6 +20,12 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
     template_name = 'system/Tabligh/Create_Tabligh.html'
     form_class = TablighCreateForm
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            messages.error(request,'کاربر ادمین نمیتواند تبلیغ ایجاد کند')
+            return redirect(reverse('dashboard'))
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         if not self.request.user.is_superuser:
             form.instance.code_tabligh_gozaar_id = self.request.user.id

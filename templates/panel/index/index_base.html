@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load app_filters %}
 <html>
 <head>
     <meta charset="utf-8">
@@ -50,7 +51,7 @@
 
     <header class="main-header">
         <!-- Logo -->
-        <a href="#" class="logo">
+        <a href="/" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini">پنل</span>
             <!-- logo for regular state and mobile devices -->
@@ -279,7 +280,9 @@
 
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{% url  'CreateTabligh' %}"><i class="fa fa-plus"></i>ایجاد تبلیغ</a></li>
+                        {% if not request.user.is_superuser %}
+                            <li><a href="{% url  'CreateTabligh' %}"><i class="fa fa-plus"></i>ایجاد تبلیغ</a></li>
+                        {% endif %}
                         <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>
                     </ul>
                 </li>
@@ -295,6 +298,21 @@
                     <ul class="treeview-menu">
                         <li><a href="{% url  'MessageList' %}"><i class="fa fa-plus"></i>پیام ها</a></li>
                         {#                        <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>#}
+                    </ul>
+                </li>
+
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-sliders"></i>
+                        <span>مالی</span>
+                        <span class="pull-left-container">
+                            <i class="fa fa-angle-right pull-left"></i>
+                        </span>
+
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{% url 'ActiveCodeMoaref' %}"><i class="fa fa-plus"></i>فعال کردن کد معرف</a></li>
                     </ul>
                 </li>
 

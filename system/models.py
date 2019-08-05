@@ -66,11 +66,11 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to=upload_avatar_path, null=True, blank=True)
 
     def is_complete(self):
-        if self.first_name is not None or\
-                self.last_name is not None or\
-                self.code_melli is not None or\
-                self.tarikh_tavalod is not None or\
-                self.mobile is not None or\
+        if self.first_name is not None or \
+                self.last_name is not None or \
+                self.code_melli is not None or \
+                self.tarikh_tavalod is not None or \
+                self.mobile is not None or \
                 self.gender is not None or \
                 self.father_name is not None or \
                 self.address is not None or \
@@ -103,6 +103,24 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class KifPool(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    all_received_direct = models.IntegerField(default=0)
+    all_received_indirect = models.IntegerField(default=0)
+    all_deposit = models.IntegerField(default=0)
+    all_received = models.IntegerField(default=0)
+
+
+class history(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL,null=True)
+    type = models.SmallIntegerField(choices=(
+        (0, 'واریز'),
+        (1, 'برداشت'),
+    ))
+    description = models.CharField(max_length=255, default='')
+    created_at = models.DateField(auto_now_add=True)
 
 
 class Pelan(Model):

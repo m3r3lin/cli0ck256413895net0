@@ -89,6 +89,7 @@ class Tabligh(Model):
     tedad_click = models.IntegerField()
     tedad_click_shode = models.IntegerField(default=0)
     vazeyat = models.IntegerField(choices=VAZEYAT_Tabligh)
+    mablagh_har_click = models.PositiveIntegerField()
 
     def __str__(self):
         return self.onvan
@@ -98,6 +99,7 @@ class Click(Model):
     tabligh = models.ForeignKey(Tabligh, on_delete=models.CASCADE)
     montasher_konande = models.ForeignKey(User, on_delete=models.CASCADE)
     tarikh = models.DateTimeField(default=datetime.now)
+    mablagh_har_click = models.PositiveIntegerField()
     ip = models.CharField(max_length=15)
 
 

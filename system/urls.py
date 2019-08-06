@@ -7,7 +7,7 @@ from system.base_views.views_Malli import IncreaseBalanceView, dargah_test_part_
 from system.base_views.views_Message import MessageListview, Message_show_view
 from system.base_views.views_Message import NewMessageCreateView
 from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView, PelanDatatableView, PlanReportsView
-from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView, PublishShowView, TablighPreviewView, PublishTablighView
+from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView, PublishShowView, TablighPreviewView, PublishTablighView, MotashershodeDatatableView, Montashshodeha
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel
 from system.base_views.views_Tanzimat_Paye import Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView, Time_kharid_termView, \
     Taien_meghdar_matlabView, Show_amar_foruserView, Taeid_khodkar_tablighView,Vahed_poll_siteView,Count_visit_tablighView,Taein_hadaghal_etbarView,\
@@ -42,9 +42,11 @@ urlpatterns = [
     path('DeleteTabligh/<int:pk>', TablighDeleteView.as_view(), name='DeleteTabligh'),
     path('ListTabligh/', TablighListView.as_view(), name='ListTabligh'),
     path('TablighDatatable/', TablighDatatableView.as_view(), name='TablighDatatable'),
+    path('EntesharDatatable/', MotashershodeDatatableView.as_view(), name='MontashshodeDatatable'),
     path('PreviewTabligh/<tabligh_token>', TablighPreviewView.as_view(), name='PreviewTabligh'),
     path('PublishTabligh/<tabligh_token>', PublishTablighView.as_view(), name='PublishTabligh'),
     path('PublishShow/', PublishShowView.as_view(), name='ShowTablighs'),
+    path('Montashshodeha/', Montashshodeha.as_view(), name='Montashshodeha'),
     # ---- TanzimatPaye
     path('ActiveCodeMoaref/', ActiveCodeMoarefView.as_view(), name='ActiveCodeMoaref'),
     path('TedadSathShabake/', Count_Level_networkView.as_view(), name='TedadSathShabake'),

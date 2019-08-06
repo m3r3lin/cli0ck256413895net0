@@ -285,6 +285,7 @@
                                 <li><a href="{% url  'ShowTablighs' %}"><i class="fa fa-plus"></i>انتشار تبلیغ</a></li>
                             {% endif %}
                             <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>
+                            <li><a href="{% url  'Montashshodeha' %}"><i class="fa fa-list"></i>لیست تبلیغات منتشر شده</a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -314,10 +315,25 @@
                         <ul class="treeview-menu">
                             {% if not request.user.is_superuser %}
                                 <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>افزایش اعتبار</a></li>
+                                <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>برداشت ها</a></li>
                             {% endif %}
+                                <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>سابقه مالی</a></li>
                         </ul>
                     </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-sliders"></i>
+                            <span>مشاهدات</span>
+                            <span class="pull-left-container">
+                            <i class="fa fa-angle-right pull-left"></i>
+                        </span>
 
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>لیست همه پیام های کاربران</a></li>
+                            <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>تعداد کابران آنلاین</a></li>
+                        </ul>
+                    </li>
                     {% if request.user.is_superuser %}
                         <li class="treeview">
                             <a href="#">

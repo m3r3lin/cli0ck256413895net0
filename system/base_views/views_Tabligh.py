@@ -186,13 +186,23 @@ class MotashershodeDatatableView(LoginRequiredMixin, BaseDatatableView):
     columns = ['id', 'tabligh_id', 'montasher_konande', 'onvan_tabligh', 'tarikh', 'pelan',
                'tedad_click', 'tedad_click_shode', 'vazeyat', 'random_url']
 
-    def render_column(self, row:TablighatMontasherKonande, column):
+    def render_column(self, row: TablighatMontasherKonande, column):
         if column == 'tarikh':
             return date_jalali(row.tarikh)
         elif column == 'tabligh':
             return row.tabligh_id
         elif column == 'onvan_tabligh':
             return row.tabligh.onvan
+        elif column == 'pelan':
+            return row.tabligh.code_pelan.onvan
+        elif column == 'tedad_click':
+            return row.tabligh.tedad_click
+        elif column == 'tedad_click_shode':
+            return row.tabligh.tedad_click_shode
+        elif column == 'vazeyat':
+            return row.tabligh.vazeyat
+        elif column == 'random_url':
+            return row.tabligh.random_url
         return super().render_column(row, column)
 
     def filter_queryset(self, qs):
@@ -237,6 +247,10 @@ class PublishShowView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         kwargs['tablighs'] = Tabligh.objects.filter(vazeyat=1).order_by('-id')[:10]
         return super().get_context_data(**kwargs)
+
+
+class Montashshodeha(LoginRequiredMixin, TemplateView):
+    template_name = 'system/Tabligh/List_Enteshar.html'
 
 
 class ShowTablighView(TemplateView):

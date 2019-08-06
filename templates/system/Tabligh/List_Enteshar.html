@@ -12,10 +12,10 @@
     </style>
 {% endblock %}
 {% block page_title %}
-    لیست تبلیغات
+    لیست تبلیغات منتشرشده
 {% endblock %}
 {% block dashboard %}
-    <li>لیست تبلیغات</li>
+    <li>لیست تبلیغات منتشرشده</li>
 {% endblock %}
 {% block main_content %}
 
@@ -82,25 +82,16 @@
     <!-- my fontawesom -->
     <script>
         datatable_simple_show({
-            url: "{% url 'TablighDatatable' %}",
-            real_cols: 9,
+            url: "{% url 'MontashshodeDatatable' %}",
+            real_cols: 10,
+            ref:'motasherkonande',
             datable_id: '#TablighDatatable',
-            del_url: "{% url 'DeleteTabligh' pk=0 %}",
-            up_url: "{% url 'UpdateTabligh' pk=0 %}",
+            del_url: "{% url 'DeletePelan' pk=0 %}",
+            up_url: "{% url 'UpdatePelan' pk=0 %}",
             modal_id: "#confirm_modal",
             do_before_initializing: function (table) {
                 var base = "{% url 'PreviewTabligh' tabligh_token='0' %}";
                 base = base.substr(0, base.length - 1);
-                $('#TablighDatatable td:nth-of-type(9)').each(function (i, b) {
-                    const text = b.innerText;
-                    var a = $('<a class="btn btn-primary">کپی کردن</a>').off().click(function (e) {
-                        e.preventDefault();
-                        console.log(this.href);
-                        copyTextToClipboard(this.href);
-                    });
-                    a.attr('href', base + text);
-                    $(b).html(a);
-                });
             }
         });
     </script>

@@ -2,7 +2,7 @@ from django import template
 from django.urls import reverse
 
 from Ads_Project.functions import gregorian_to_jalali
-from system.models import TanzimatPaye, Tabligh, TablighatMontasherKonande, User
+from system.models import TanzimatPaye, TablighatMontasherKonande, User
 
 register = template.Library()
 

@@ -145,11 +145,10 @@ def save_message(request):
             last_payam=Payam.objects.filter(ferestande=User.objects.get(username=ferestande),girande=User.objects.get(username=girande)).last()
             # print("last_payam",last_payam)
             last_pyam_messsage=last_payam.text
-            # message = Hamsar.objects.filter(hamsar=Soldier.objects.get(id=data))
-            # for i in last_payam:
-            #     list.append(i)
-            # data = serializers.serialize("json", last_payam)
-            # return HttpResponse(data, content_type="application/json")
+        
             return JsonResponse({"last_pyam_messsage":last_pyam_messsage}, safe=False)
 
-            # return HttpResponse(last_payam)
+
+        
+        
+

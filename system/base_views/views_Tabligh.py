@@ -181,6 +181,29 @@ class TablighDatatableView(LoginRequiredMixin, BaseDatatableView):
         return qs
 
 
+class MotashershodeDatatableView(LoginRequiredMixin, BaseDatatableView):
+    model = TablighatMontasherKonande
+    columns = ['id', 'tabligh_id', 'montasher_konande', 'onvan_tabligh', 'tarikh', 'pelan',
+               'tedad_click', 'tedad_click_shode', 'vazeyat', 'random_url']
+
+    def render_column(self, row:TablighatMontasherKonande, column):
+        if column == 'tarikh':
+            return date_jalali(row.tarikh)
+        elif column == 'tabligh':
+            return row.tabligh_id
+        elif column == 'onvan_tabligh':
+            return row.tabligh.onvan
+        return super().render_column(row, column)
+
+    def filter_queryset(self, qs):
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            qs = qs.filter(Q(onvan__icontains=search) | Q(code_tabligh_gozaar__username__icontains=search))
+        if not self.request.user.is_superuser:
+            qs = qs.filter(code_tabligh_gozaar=self.request.user)
+        return qs
+
+
 class TablighPreviewView(LoginRequiredMixin, View):
     def get(self, request, tabligh_token):
         tabligh = get_object_or_404(Tabligh, random_url=tabligh_token)
@@ -212,7 +235,7 @@ class PublishShowView(LoginRequiredMixin, TemplateView):
     template_name = 'system/Tabligh/Publish_Tabligh.html'
 
     def get_context_data(self, **kwargs):
-        kwargs['tablighs'] = Tabligh.objects.all()
+        kwargs['tablighs'] = Tabligh.objects.filter(vazeyat=1).order_by('-id')[:10]
         return super().get_context_data(**kwargs)
 
 

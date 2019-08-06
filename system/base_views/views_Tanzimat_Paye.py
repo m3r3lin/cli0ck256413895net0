@@ -1,16 +1,17 @@
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import UpdateView, View, FormView, CreateView
 from django.shortcuts import render, get_object_or_404, redirect
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
-from system.forms import ActiveCodeMoarefForm, SodeModirForm,\
-    Languge_siteForm,Count_level_networkForm,Count_kharid_hadaghalForm,Time_kharid_termForm,\
-    Taien_meghdar_matlabForm,Show_amarforuserForm,Taied_khodkar_tablighForm,Vahed_poll_siteForm,\
-    Count_visit_tabligh_Form,Taien_hadaghal_etbarForm,Amar_jaali_Form
+from system.forms import ActiveCodeMoarefForm, SodeModirForm, \
+    Languge_siteForm, Count_level_networkForm, Count_kharid_hadaghalForm, Time_kharid_termForm, \
+    Taien_meghdar_matlabForm, Show_amarforuserForm, Taied_khodkar_tablighForm, Vahed_poll_siteForm, \
+    Count_visit_tabligh_Form, Taien_hadaghal_etbarForm, Amar_jaali_Form, MaxNetworkCountForm
 
-from system.models import TanzimatPaye, ACTIV_MOAREF
+from system.models import TanzimatPaye, ACTIV_MOAREF, VAHED_POLL_SITE, COUNT_LEVEL_NETWORK
 from system.forms import ActiveCodeMoarefForm, SodeModirForm
 from system.models import TanzimatPaye, ACTIV_MOAREF, TEDAD_SATH_SHABAKE
 
@@ -79,12 +80,20 @@ class Count_Level_networkView(LoginRequiredMixin, CreateView):
     model = TanzimatPaye
     template_name = 'system/TanzimatPaye/Count_level_network.html'
     form_class = Count_level_networkForm
-
+    starts_with = 'sath.'
 
     def form_valid(self, form):
-        Count_Level_network = form.save(commit=False)
+        if int(form.instance.onvan) > int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, 0)):
+            messages.error(self.request, 'سطحی که شما مشخص کرده اید بیشتر از حد اکثر سطح است')
+            return super(Count_Level_networkView, self).form_invalid(form)
 
+        form.instance.onvan = self.starts_with + form.instance.onvan
         messages.success(self.request, 'سطح موردنظر ثبت شد')
+        t = TanzimatPaye.objects.filter(onvan=form.instance.onvan).first()  # type:TanzimatPaye
+        if t:
+            t.value = form.instance.value
+            t.save()
+            return HttpResponseRedirect(self.get_success_url())
         return super(Count_Level_networkView, self).form_valid(form)
 
     def get_success_url(self):
@@ -92,14 +101,20 @@ class Count_Level_networkView(LoginRequiredMixin, CreateView):
 
 
 class Count_Level_networkDataTableView(LoginRequiredMixin, BaseDatatableView):
-    model =TanzimatPaye
-    columns = ['id','onvan','value']
-    order_columns = ['id','onvan','value']
+    model = TanzimatPaye
+    columns = ['id', 'onvan', 'value']
+    order_columns = ['id', 'onvan', 'value']
 
     def get_initial_queryset(self):
         qs = super().get_initial_queryset()
-        qs = qs.filter(onvan__startswith='سطح')
+        qs = qs.filter(onvan__startswith=Count_Level_networkView.starts_with)
         return qs
+
+    def render_column(self, row, column):
+        if column == 'onvan':
+            return row.onvan[Count_Level_networkView.starts_with.__len__():]
+
+        return super(Count_Level_networkDataTableView, self).render_column(row, column)
 
     def filter_queryset(self, qs):
         search = self.request.GET.get('search[value]', None)
@@ -107,12 +122,13 @@ class Count_Level_networkDataTableView(LoginRequiredMixin, BaseDatatableView):
             qs = qs.filter(onvan__icontains=search)
         return qs
 
+
 class Count_Level_networkDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
         # if request.user.is_administrator:
 
         Count_Level_network = get_object_or_404(TanzimatPaye, pk=pk)
-        print("count_level_network",Count_Level_network)
+        print("count_level_network", Count_Level_network)
 
         Count_Level_network.delete()
 
@@ -172,7 +188,6 @@ class Count_kharid_hadaghalView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('Count_kharid_hadaghalView')
-
 
 
 class Time_kharid_termView(LoginRequiredMixin, UpdateView):
@@ -254,14 +269,15 @@ class Taeid_khodkar_tablighView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('Taeid_khodkar_tabligh')
 
+
 class Vahed_poll_siteView(LoginRequiredMixin, UpdateView):
     model = TanzimatPaye
     template_name = 'system/TanzimatPaye/Vahed_poll_site.html'
     form_class = Vahed_poll_siteForm
 
     def get_object(self, queryset=None):
-        obj, cre = TanzimatPaye.objects.get_or_create(onvan='vahed_poll_site', defaults={
-            "onvan": 'vahed_poll_site',
+        obj, cre = TanzimatPaye.objects.get_or_create(onvan=VAHED_POLL_SITE, defaults={
+            "onvan": VAHED_POLL_SITE,
             'value': 0,
         })
         return obj
@@ -274,26 +290,45 @@ class Vahed_poll_siteView(LoginRequiredMixin, UpdateView):
         return reverse('Vahed_poll_site')
 
 
+class MaxCountNetworkLevel(LoginRequiredMixin, UpdateView):
+    model = TanzimatPaye
+    template_name = 'system/TanzimatPaye/Count_level_network_max.html'
+    form_class = MaxNetworkCountForm
+
+    def get_object(self, queryset=None):
+        obj, cre = TanzimatPaye.objects.get_or_create(onvan=COUNT_LEVEL_NETWORK, defaults={
+            "onvan": COUNT_LEVEL_NETWORK,
+            'value': 5,
+        })
+        return obj
+
+    def form_valid(self, form):
+        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        return super(MaxCountNetworkLevel, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('Max_Count_Level_networkView')
 
 
 class Count_visit_tablighView(LoginRequiredMixin, UpdateView):
-        model = TanzimatPaye
-        template_name = 'system/TanzimatPaye/Count_visit_tabligh.html'
-        form_class = Count_visit_tabligh_Form
+    model = TanzimatPaye
+    template_name = 'system/TanzimatPaye/Count_visit_tabligh.html'
+    form_class = Count_visit_tabligh_Form
 
-        def get_object(self, queryset=None):
-            obj, cre = TanzimatPaye.objects.get_or_create(onvan='count_visit_tabligh', defaults={
-                "onvan": 'count_visit_tabligh',
-                'value': 0,
-            })
-            return obj
+    def get_object(self, queryset=None):
+        obj, cre = TanzimatPaye.objects.get_or_create(onvan='count_visit_tabligh', defaults={
+            "onvan": 'count_visit_tabligh',
+            'value': 0,
+        })
+        return obj
 
-        def form_valid(self, form):
-            messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
-            return super(Count_visit_tablighView, self).form_valid(form)
+    def form_valid(self, form):
+        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        return super(Count_visit_tablighView, self).form_valid(form)
 
-        def get_success_url(self):
-            return reverse('Count_visit_tabligh')
+    def get_success_url(self):
+        return reverse('Count_visit_tabligh')
+
 
 class Taein_hadaghal_etbarView(LoginRequiredMixin, UpdateView):
     model = TanzimatPaye
@@ -314,37 +349,37 @@ class Taein_hadaghal_etbarView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('Taein_hadaghal_etbar')
 
-class Amar_jaali_View(LoginRequiredMixin,View):
 
-    def post(self,request):
-        count_user_online=self.request.POST.get('count_user_online')
-        count_all_user=self.request.POST.get('count_all_user')
-        count_user_new_today=self.request.POST.get('count_user_new_today')
-        meghdar_daramad_pardahkti=self.request.POST.get('meghdar_daramad_pardahkti')
-        count_tabligh_thabti=self.request.POST.get('count_tabligh_thabti')
-        print("count_all_user",count_all_user)
-        print("count_user_new_today",count_user_new_today)
-        print("meghdar_daramad_pardahkti",meghdar_daramad_pardahkti)
+class Amar_jaali_View(LoginRequiredMixin, View):
 
-        amar_jaali=TanzimatPaye.objects.filter(onvan__startswith='amar_jaali').all()
-        print("amar_jalali",amar_jaali)
+    def post(self, request):
+        count_user_online = self.request.POST.get('count_user_online')
+        count_all_user = self.request.POST.get('count_all_user')
+        count_user_new_today = self.request.POST.get('count_user_new_today')
+        meghdar_daramad_pardahkti = self.request.POST.get('meghdar_daramad_pardahkti')
+        count_tabligh_thabti = self.request.POST.get('count_tabligh_thabti')
+        print("count_all_user", count_all_user)
+        print("count_user_new_today", count_user_new_today)
+        print("meghdar_daramad_pardahkti", meghdar_daramad_pardahkti)
+
+        amar_jaali = TanzimatPaye.objects.filter(onvan__startswith='amar_jaali').all()
+        print("amar_jalali", amar_jaali)
         for item in amar_jaali:
-            if item.onvan=="amar_jaali.count_user_online":
-                item.value=count_user_online
+            if item.onvan == "amar_jaali.count_user_online":
+                item.value = count_user_online
                 item.save()
-            if item.onvan=="amar_jaali.count_all_user":
-                item.value=count_all_user
+            if item.onvan == "amar_jaali.count_all_user":
+                item.value = count_all_user
                 item.save()
-            if item.onvan=="amar_jaali.count_user_new_today":
-                item.value=count_user_new_today
+            if item.onvan == "amar_jaali.count_user_new_today":
+                item.value = count_user_new_today
                 item.save()
-            if item.onvan=="amar_jaali.meghdar_daramad_pardahkti":
-                item.value=meghdar_daramad_pardahkti
+            if item.onvan == "amar_jaali.meghdar_daramad_pardahkti":
+                item.value = meghdar_daramad_pardahkti
                 item.save()
-            if item.onvan=="amar_jaali.count_tabligh_thabti":
-                item.value=count_tabligh_thabti
+            if item.onvan == "amar_jaali.count_tabligh_thabti":
+                item.value = count_tabligh_thabti
                 item.save()
-
 
         # print("count_user_online",count_user_online)
 
@@ -379,9 +414,7 @@ class Amar_jaali_View(LoginRequiredMixin,View):
         })
         messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
 
-        return render(request,'system/TanzimatPaye/Amar_jaali.html',{'form':form})
-
-
+        return render(request, 'system/TanzimatPaye/Amar_jaali.html', {'form': form})
 
     def get(self, request):
 
@@ -407,21 +440,16 @@ class Amar_jaali_View(LoginRequiredMixin,View):
             'value': 0,
         })
         form = Amar_jaali_Form(data={
-            'count_user_online':count_user_online.value,
-            'count_all_user':count_all_user.value,
-            'count_user_new_today':count_user_new_today.value,
-            'meghdar_daramad_pardahkti':meghdar_daramad_pardahkti.value,
-            'count_tabligh_thabti':count_tabligh_thabti.value
+            'count_user_online': count_user_online.value,
+            'count_all_user': count_all_user.value,
+            'count_user_new_today': count_user_new_today.value,
+            'meghdar_daramad_pardahkti': meghdar_daramad_pardahkti.value,
+            'count_tabligh_thabti': count_tabligh_thabti.value
         })
         # print("form",form)
 
-        return render(request,'system/TanzimatPaye/Amar_jaali.html',{'form':form})
+        return render(request, 'system/TanzimatPaye/Amar_jaali.html', {'form': form})
         # return obj
-
 
     def get_success_url(self):
         return reverse('Amar_jaali')
-
-
-
-

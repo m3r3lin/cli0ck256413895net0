@@ -113,6 +113,18 @@ class User(AbstractUser):
         k.current_balance += adad
         k.save()
 
+    def get_kif_daramad(self) -> "KifDarAmad":
+        k, _ = KifDarAmad.objects.get_or_create(user=self, defaults=dict(user=self))
+        return k
+
+    def add_to_kif_daramad(self, adad: int, direct=True):
+        k = self.get_kif_daramad()
+        if direct:
+            k.current_recieved_direct += adad
+        else:
+            k.current_recieved_direct += adad
+        k.save()
+
     @property
     def kife_pool(self):
         return self.get_kif_kif_pool().current_balance
@@ -128,6 +140,12 @@ class KifPool(models.Model):
     all_received_indirect = models.IntegerField(default=0)
     all_deposit = models.IntegerField(default=0)
     all_received = models.IntegerField(default=0)
+
+
+class KifDarAmad(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    current_recieved_direct = models.IntegerField(default=0)
+    current_recieved_indirect = models.IntegerField(default=0)
 
 
 class History(models.Model):
@@ -187,6 +205,7 @@ class Tabligh(Model):
         if self.tedad_click_shode < self.tedad_click:
             return self.tedad_click - self.tedad_click_shode
         return 0
+
     @property
     def all_users(self):
         return TablighatMontasherKonande.objects.filter(tabligh=self)
@@ -224,9 +243,9 @@ TAIEN_MEGHDAR_MATLAB = 'taien_meghdar_matlab'
 SHOW_AMAR_FOR_USER = 'show_amar_for_user'
 TAIED_KHODKAR_TABLIGH = 'taied_khodkar_tabligh'
 TEDAD_SATH_SHABAKE = 'tedad_sath_shabake'
-VAHED_POLL_SITE='vahed_poll_site'
-COUNT_VISIT_TABLIGH='count_visit_tabligh'
-TAEIN_HADAGHAL_ETBAR='taein_hadaghal_etbar'
+VAHED_POLL_SITE = 'vahed_poll_site'
+COUNT_VISIT_TABLIGH = 'count_visit_tabligh'
+TAEIN_HADAGHAL_ETBAR = 'taein_hadaghal_etbar'
 
 
 class TanzimatPaye(Model):

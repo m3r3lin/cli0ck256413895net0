@@ -454,14 +454,16 @@ class SodeModirForm(ModelForm):
 
 
 class Count_level_networkForm(ModelForm):
-    value = forms.IntegerField()
-    onvan=forms.CharField(error_messages={
+    value = forms.IntegerField(required=True,error_messages={
+        'required': ("فیلد درصد اجباری است!"),
+    })
+    onvan = forms.IntegerField(required=True,error_messages={
         'required': ("فیلد عنوان اجباری است!"),
     })
 
     class Meta:
         model = TanzimatPaye
-        fields = ['onvan','value']
+        fields = ['onvan', 'value']
 
     def __init__(self, *args, **kwargs):
         super(Count_level_networkForm, self).__init__(*args, **kwargs)
@@ -490,7 +492,6 @@ class Count_kharid_hadaghalForm(ModelForm):
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
 
 
-
 class Count_visit_tabligh_Form(ModelForm):
     value = forms.IntegerField()
 
@@ -504,6 +505,7 @@ class Count_visit_tabligh_Form(ModelForm):
         self.fields['value'].label = "مقدار:"
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
 
 class Time_kharid_termForm(ModelForm):
     value = forms.IntegerField()
@@ -603,48 +605,21 @@ class NewMessageCreateForm(ModelForm):
     class Meta:
         model = Payam
         fields = ['text', 'girande']
-        # error_messages = {
-        #     'onvan': {
-        #         'required': ("عنوان نمیتواند خالی باشد"),
-        #         'unique': ("عنوان باید یکتا باشد"),
-        #     },
-        # }
 
     def __init__(self, *args, **kwargs):
         super(NewMessageCreateForm, self).__init__(*args, **kwargs)
-        # user = self.user
-        # print("user",user)
 
-        # field_name = 'ferestande'
-        # self.fields[field_name].label = "فرستنده:"
-        # self.fields[field_name].required = True
-        # self.fields[field_name].help_text = 'لطفا فرستنده را وارد کنید.'
-        # self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
-        #
         field_name = 'girande'
         self.fields[field_name].label = "گیرنده:"
         self.fields[field_name].required = True
         self.fields[field_name].help_text = 'لطفا گیرنده را وارد کنید.'
         self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
 
-        # field_name = 'onvan'
-        # self.fields[field_name].label = "عنوان:"
-        # self.fields[field_name].required = True
-        # self.fields[field_name].help_text = 'لطفا عنوان را وارد کنید.'
-        # self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
-
         field_name = 'text'
         self.fields[field_name].label = "متن پیام:"
         self.fields[field_name].required = True
         self.fields[field_name].help_text = 'لطفا متن پیام  را وارد کنید.'
         self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
-
-    # def clean_girande(self):
-    #     girande = self.cleaned_data['girande']
-    #     if girande==self.user.username:
-    #         raise ValidationError("شما نمیتوانید برای خودتان پیام بفرستید!")
-    #
-    #     return girande
 
 
 class Vahed_poll_siteForm(ModelForm):
@@ -666,7 +641,6 @@ class Vahed_poll_siteForm(ModelForm):
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
 
 
-
 class Taien_hadaghal_etbarForm(ModelForm):
     value = forms.IntegerField()
 
@@ -682,15 +656,30 @@ class Taien_hadaghal_etbarForm(ModelForm):
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
 
 
+class MaxNetworkCountForm(ModelForm):
+    value = forms.IntegerField()
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(MaxNetworkCountForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "مقدار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
 class Amar_jaali_Form(Form):
     count_user_online = forms.IntegerField()
     # count_user_online = forms.CharField(error_messages={
     #     'required': ("فیلد انتخاب تعداد کاربران انلاین اجباری است!"),
     # })
-    count_all_user=forms.IntegerField()
-    count_user_new_today=forms.IntegerField()
-    meghdar_daramad_pardahkti=forms.IntegerField()
-    count_tabligh_thabti=forms.IntegerField()
+    count_all_user = forms.IntegerField()
+    count_user_new_today = forms.IntegerField()
+    meghdar_daramad_pardahkti = forms.IntegerField()
+    count_tabligh_thabti = forms.IntegerField()
 
     def __init__(self, *args, **kwargs):
         super(Amar_jaali_Form, self).__init__(*args, **kwargs)
@@ -714,6 +703,7 @@ class Amar_jaali_Form(Form):
         self.fields['count_tabligh_thabti'].label = "تعداد تبلیغات ثبت شده:"
         self.fields['count_tabligh_thabti'].required = True
         self.fields['count_tabligh_thabti'].widget.attrs.update({'class': 'form-control', 'id': 'count_tabligh_thabti'})
+
 
 class IncreaseBalanceFrom(forms.Form):
     how_much = forms.IntegerField()

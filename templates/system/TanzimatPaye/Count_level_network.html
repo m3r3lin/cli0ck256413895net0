@@ -36,11 +36,11 @@
                             {% include "errors.html" %}
                             {% include "messages.html" %}
                             <div class="row">
-                              <div class="form-group col-sm6 col-md-3">
+                                <div class="form-group col-sm6 col-md-3">
                                     {% if form.onvan.label_tag %}
                                         <label for="value">{{ form.onvan.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
-                                    {{ form.onvan}}
+                                    {{ form.onvan }}
                                     {% if form.onvan.help_text %}
                                         <p class="help-block">{{ form.onvan.help_text }}</p>
                                     {% endif %}
@@ -66,7 +66,7 @@
                 <!-- /.box -->
             </div>
 
-         <div class="col-md-12">
+            <div class="col-md-12">
                 <div class="box">
                     <!--<div class="box-header">-->
                     <!--<h3 class="box-title">لیست کاربران سامانه سرباز</h3>-->
@@ -93,7 +93,7 @@
                 </div>
                 <!-- /.box -->
             </div>
-         </div>
+        </div>
 
     </section>
     <div class="modal fade" id="confirm_modal">
@@ -116,39 +116,30 @@
     <!-- /.modal -->
 {% endblock %}
 {% block javascripts %}
-    <!-- CK Editor -->
-    <script src="{% static 'bower_components/ckeditor/ckeditor.js' %}"></script>
     <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
     <script src="{% static 'dist/my_js/datatable.js' %}"></script>
-    <!-- my fontawesom -->
-    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
-
-{#    <script>#}
-{#        $(function () {#}
-{#            // Replace the <textarea id="editor1"> with a CKEditor#}
-{#            // instance, using default configuration.#}
-{#            CKEDITOR.replace('text')#}
-{#            //bootstrap WYSIHTML5 - text editor#}
-{#            $('.textarea').wysihtml5()#}
-{#        })#}
-{#    </script>#}
 
     <script>
-
-
-            datatable_simple_show({
-                url: "{% url 'Count_Level_networkDataTable' %}",
-                real_cols: 3,
-                hide_id: true,
-                datable_id: '#countlevelDatatable',
-                del_url: "{% url 'Count_Level_networkDelete' pk=0 %}",
-                up_url: "{% url 'Count_Level_networkUpdate' pk=0 %}",
-                modal_id: "#confirm_modal"
-            });
-            $('#chartdiv > div:nth-child(2) > svg > g > g:nth-child(2) > g:nth-child(2) > g > g:nth-child(3)').remove()
-
-
+        var i = datatable_simple_show({
+            url: "{% url 'Count_Level_networkDataTable' %}",
+            real_cols: 3,
+            hide_id: true,
+            datable_id: '#countlevelDatatable',
+            del_url: "{% url 'Count_Level_networkDelete' pk=0 %}",
+            up_url: "{% url 'Count_Level_networkUpdate' pk=0 %}",
+            modal_id: "#confirm_modal",
+            do_after_initializing: function (table) {
+                $('.edit_button').off().click(function (e) {
+                    e.preventDefault();
+                    var onvan = i.getData($(this))[1];
+                    var val = i.getData($(this))[2];
+                    $('input[name="onvan"]').val(onvan);
+                    $('input[name="value"]').val(val);
+                });
+            },
+        });
+        $('#chartdiv > div:nth-child(2) > svg > g > g:nth-child(2) > g:nth-child(2) > g > g:nth-child(3)').remove()
 
     </script>
 

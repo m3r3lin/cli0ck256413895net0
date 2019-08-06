@@ -48,307 +48,310 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-
-    <header class="main-header">
-        <!-- Logo -->
-        <a href="/" class="logo">
-            <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini">پنل</span>
-            <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>کنترل پنل مدیریت</b></span>
-        </a>
-        <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar navbar-static-top">
-            <!-- Sidebar toggle button-->
-            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-                <span class="sr-only">Toggle navigation</span>
+    {% if request.user.is_authenticated %}
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="/" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini">پنل</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>کنترل پنل مدیریت</b></span>
             </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
 
-            <div class="navbar-custom-menu">
-                <ul class="nav navbar-nav">
-                    <!-- User Account: style can be found in dropdown.less -->
-                    <li class="dropdown messages-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <i class="fa fa-envelope-o"></i>
-                            <span class="label label-success">4</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">۴ پیام خوانده نشده</li>
-                            <li>
-                                <!-- inner menu: contains the actual data -->
-                                <ul class="menu">
-                                    <li><!-- start message -->
-                                        <a href="#">
-                                            <div class="pull-right">
-                                                <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
-                                            </div>
-                                            <h4>
-                                                علیرضا
-                                                <small><i class="fa fa-clock-o"></i> ۵ دقیقه پیش</small>
-                                            </h4>
-                                            <p>متن پیام</p>
-                                        </a>
-                                    </li>
-                                    <!-- end message -->
-                                    <li>
-                                        <a href="#">
-                                            <div class="pull-right">
-                                                <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">
-                                            </div>
-                                            <h4>
-                                                نگین
-                                                <small><i class="fa fa-clock-o"></i> ۲ ساعت پیش</small>
-                                            </h4>
-                                            <p>متن پیام</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <div class="pull-right">
-                                                <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">
-                                            </div>
-                                            <h4>
-                                                نسترن
-                                                <small><i class="fa fa-clock-o"></i> امروز</small>
-                                            </h4>
-                                            <p>متن پیام</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <div class="pull-right">
-                                                <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">
-                                            </div>
-                                            <h4>
-                                                نگین
-                                                <small><i class="fa fa-clock-o"></i> دیروز</small>
-                                            </h4>
-                                            <p>متن پیام</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <div class="pull-right">
-                                                <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">
-                                            </div>
-                                            <h4>
-                                                نسترن
-                                                <small><i class="fa fa-clock-o"></i> ۲ روز پیش</small>
-                                            </h4>
-                                            <p>متن پیام</p>
-                                        </a>
-                                    </li>
-                                </ul>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown messages-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="label label-success">4</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">۴ پیام خوانده نشده</li>
+                                <li>
+                                    <!-- inner menu: contains the actual data -->
+                                    <ul class="menu">
+                                        <li><!-- start message -->
+                                            <a href="#">
+                                                <div class="pull-right">
+                                                    <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
+                                                </div>
+                                                <h4>
+                                                    علیرضا
+                                                    <small><i class="fa fa-clock-o"></i> ۵ دقیقه پیش</small>
+                                                </h4>
+                                                <p>متن پیام</p>
+                                            </a>
+                                        </li>
+                                        <!-- end message -->
+                                        <li>
+                                            <a href="#">
+                                                <div class="pull-right">
+                                                    <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">
+                                                </div>
+                                                <h4>
+                                                    نگین
+                                                    <small><i class="fa fa-clock-o"></i> ۲ ساعت پیش</small>
+                                                </h4>
+                                                <p>متن پیام</p>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <div class="pull-right">
+                                                    <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">
+                                                </div>
+                                                <h4>
+                                                    نسترن
+                                                    <small><i class="fa fa-clock-o"></i> امروز</small>
+                                                </h4>
+                                                <p>متن پیام</p>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <div class="pull-right">
+                                                    <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">
+                                                </div>
+                                                <h4>
+                                                    نگین
+                                                    <small><i class="fa fa-clock-o"></i> دیروز</small>
+                                                </h4>
+                                                <p>متن پیام</p>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <div class="pull-right">
+                                                    <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">
+                                                </div>
+                                                <h4>
+                                                    نسترن
+                                                    <small><i class="fa fa-clock-o"></i> ۲ روز پیش</small>
+                                                </h4>
+                                                <p>متن پیام</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="footer"><a href="{% url 'MessageList' %}">نمایش تمام پیام ها</a></li>
+                            </ul>
+                        </li>
+                        {% if not request.user.is_superuser %}
+                            <li class="m-nav__item" style="vertical-align: baseline;height: auto;">
+                                <a href="#" class="header-wallet btn-warning" id="code_moarefi" data-data="code_{{ request.user.id }}">
+                                    <span>کد معرفی شما : code_{{ request.user.id }}</span>
+                                </a>
                             </li>
-                            <li class="footer"><a href="{% url 'MessageList' %}">نمایش تمام پیام ها</a></li>
-                        </ul>
-                    </li>
-                    {% if not request.user.is_superuser %}
-                        <li class="m-nav__item" style="vertical-align: baseline;height: auto;">
-                            <a href="#" class="header-wallet btn-warning">
-                                <span>کد معرفی شما : code_{{ request.user.id }}</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                    {% if not request.user.is_superuser %}
-                        <li class="m-nav__item" style="vertical-align: baseline;height: auto;">
-                            <a href="#" class="header-wallet btn-danger">
-                                <span>اعتبار : {{ request.user.kife_pool }}</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                    <li class="dropdown user user-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            {% if request.user.avatar %}
-                                <img src="{{ request.user.avatar.url }}" class="user-image" alt="User Image">
-                            {% else %}
-                                <img src="{% static 'img/avatar/avatar.png' %}" class="user-image" alt="User Image">
-                            {% endif %}
-                            <span class="hidden-xs">{{ request.user.get_full_name }}</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <!-- User image -->
-                            <li class="user-header">
+                        {% endif %}
+                        {% if not request.user.is_superuser %}
+                            <li class="m-nav__item" style="vertical-align: baseline;height: auto;">
+                                <a href="#" class="header-wallet btn-danger">
+                                    <span>اعتبار : {{ request.user.kife_pool }}</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 {% if request.user.avatar %}
-                                    <img src="{{ request.user.avatar.url }}" class="img-circle" alt="User Image">
+                                    <img src="{{ request.user.avatar.url }}" class="user-image" alt="User Image">
                                 {% else %}
-                                    <img src="{% static 'img/avatar/avatar.png' %}" class="img-circle" alt="User Image">
+                                    <img src="{% static 'img/avatar/avatar.png' %}" class="user-image" alt="User Image">
                                 {% endif %}
-                                <p>
-                                    {{ request.user.get_full_name }}
-                                    <small>کد معرفی شما : code_{{ request.user.id }}</small>
-                                </p>
-                            </li>
-                            <!-- Menu Footer-->
-                            <li class="user-footer">
-                                <div class="pull-right">
-                                    <a href="{% url 'ProfileUser' %}" class="btn btn-default btn-flat">پروفایل</a>
-                                </div>
-                                <div class="pull-left">
-                                    <a href="{% url 'logout' %}" class="btn btn-default btn-flat">خروج</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
-    <!-- right side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
-            <!-- Sidebar user panel -->
-            <div class="user-panel">
-                <div class="pull-right image">
-                    {% if request.user.avatar %}
-                        <img src="{{ request.user.avatar.url }}" class="img-circle" alt="User Image">
-                    {% else %}
-                        <img src="{% static 'img/avatar/avatar.png' %}" class="img-circle" alt="User Image">
-                    {% endif %}
+                                <span class="hidden-xs">{{ request.user.get_full_name }}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    {% if request.user.avatar %}
+                                        <img src="{{ request.user.avatar.url }}" class="img-circle" alt="User Image">
+                                    {% else %}
+                                        <img src="{% static 'img/avatar/avatar.png' %}" class="img-circle" alt="User Image">
+                                    {% endif %}
+                                    <p>
+                                        {{ request.user.get_full_name }}
+                                        <small>کد معرفی شما : code_{{ request.user.id }}</small>
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-right">
+                                        <a href="{% url 'ProfileUser' %}" class="btn btn-default btn-flat">پروفایل</a>
+                                    </div>
+                                    <div class="pull-left">
+                                        <a href="{% url 'logout' %}" class="btn btn-default btn-flat">خروج</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
-                <div class="pull-right info">
-                    <p>{{ request.user.get_full_name }}</p>
-                    <a href="#"><i class="fa fa-circle text-success"></i> آنلاین</a>
+            </nav>
+        </header>
+        <!-- right side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel">
+                    <div class="pull-right image">
+                        {% if request.user.avatar %}
+                            <img src="{{ request.user.avatar.url }}" class="img-circle" alt="User Image">
+                        {% else %}
+                            <img src="{% static 'img/avatar/avatar.png' %}" class="img-circle" alt="User Image">
+                        {% endif %}
+                    </div>
+                    <div class="pull-right info">
+                        <p>{{ request.user.get_full_name }}</p>
+                        <a href="#"><i class="fa fa-circle text-success"></i> آنلاین</a>
+                    </div>
                 </div>
-            </div>
-            <!-- search form -->
-            <form action="#" method="get" class="sidebar-form">
-                <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="جستجو">
-                    <span class="input-group-btn">
+                <!-- search form -->
+                <form action="#" method="get" class="sidebar-form">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="جستجو">
+                        <span class="input-group-btn">
                 <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>
               </span>
-                </div>
-            </form>
-            <!-- /.search form -->
-            <!-- sidebar menu: : style can be found in sidebar.less -->
+                    </div>
+                </form>
+                <!-- /.search form -->
+                <!-- sidebar menu: : style can be found in sidebar.less -->
 
-            <ul class="sidebar-menu" data-widget="tree">
-                <li class="header">منو</li>
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="header">منو</li>
 
-                <li><a href="{% url 'dashboard' %}"><i class="fa fa-tachometer"></i> <span>داشبورد</span></a></li>
+                    <li><a href="{% url 'dashboard' %}"><i class="fa fa-tachometer"></i> <span>داشبورد</span></a></li>
 
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-users"></i>
-                        {% if request.user.is_superuser %}
-                            <span>کاربران</span>
-                        {% else %}
-                            <span>مشخصات شما</span>
-                        {% endif %}
-                        <span class="pull-left-container">
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-users"></i>
+                            {% if request.user.is_superuser %}
+                                <span>کاربران</span>
+                            {% else %}
+                                <span>مشخصات شما</span>
+                            {% endif %}
+                            <span class="pull-left-container">
                         <i class="fa fa-angle-right pull-left"></i>
                     </span>
 
-                    </a>
-                    <ul class="treeview-menu">
-                        {% if request.user.is_superuser %}
-                            <li><a href="{% url  'ListUser' %}"><i class="fa fa-list"></i>لیست کاربران</a></li>
-                        {% else %}
-                            <li><a href="{% url  'UpdateUser' pk=request.user.id %}"><i class="fa fa-list"></i>ویرایش اطلاعات کاربری</a></li>
-                            <li><a href="{% url 'ChangeUserPassword' %}"><i class="fa fa-lock"></i> <span>تغییر رمز</span></a></li>
-                        {% endif %}
-                    </ul>
-                </li>
+                        </a>
+                        <ul class="treeview-menu">
+                            {% if request.user.is_superuser %}
+                                <li><a href="{% url  'ListUser' %}"><i class="fa fa-list"></i>لیست کاربران</a></li>
+                            {% else %}
+                                <li><a href="{% url  'UpdateUser' pk=request.user.id %}"><i class="fa fa-list"></i>ویرایش اطلاعات کاربری</a></li>
+                                <li><a href="{% url 'ChangeUserPassword' %}"><i class="fa fa-lock"></i> <span>تغییر رمز</span></a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
 
-                {% if request.user.is_superuser %}
+                    {% if request.user.is_superuser %}
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-paper-plane"></i>
+                                <span>پلن</span>
+                                <span class="pull-left-container">
+                            <i class="fa fa-angle-right pull-left"></i>
+                        </span>
+
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="{% url  'CreatePelan' %}"><i class="fa fa-plus"></i>ایجاد پلن</a></li>
+                                <li><a href="{% url  'ListPelan' %}"><i class="fa fa-list"></i>لیست پلن ها</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+
                     <li class="treeview">
                         <a href="#">
-                            <i class="fa fa-paper-plane"></i>
-                            <span>پلن</span>
+                            <i class="fa fa-bullhorn"></i>
+                            <span>تبلیغ</span>
                             <span class="pull-left-container">
                             <i class="fa fa-angle-right pull-left"></i>
                         </span>
 
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="{% url  'CreatePelan' %}"><i class="fa fa-plus"></i>ایجاد پلن</a></li>
-                            <li><a href="{% url  'ListPelan' %}"><i class="fa fa-list"></i>لیست پلن ها</a></li>
+                            {% if not request.user.is_superuser %}
+                                <li><a href="{% url  'CreateTabligh' %}"><i class="fa fa-plus"></i>ایجاد تبلیغ</a></li>
+                                <li><a href="{% url  'ShowTablighs' %}"><i class="fa fa-plus"></i>انتشار تبلیغ</a></li>
+                            {% endif %}
+                            <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>
                         </ul>
                     </li>
-                {% endif %}
-
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-bullhorn"></i>
-                        <span>تبلیغ</span>
-                        <span class="pull-left-container">
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-buysellads"></i>
+                            <span>پیام ها</span>
+                            <span class="pull-left-container">
                             <i class="fa fa-angle-right pull-left"></i>
                         </span>
 
-                    </a>
-                    <ul class="treeview-menu">
-                        {% if not request.user.is_superuser %}
-                            <li><a href="{% url  'CreateTabligh' %}"><i class="fa fa-plus"></i>ایجاد تبلیغ</a></li>
-                            <li><a href="{% url  'ShowTablighs' %}"><i class="fa fa-plus"></i>انتشار تبلیغ</a></li>
-                        {% endif %}
-                        <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-buysellads"></i>
-                        <span>پیام ها</span>
-                        <span class="pull-left-container">
-                            <i class="fa fa-angle-right pull-left"></i>
-                        </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="{% url  'MessageList' %}"><i class="fa fa-plus"></i>پیام ها</a></li>
+                            {#                        <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>#}
+                        </ul>
+                    </li>
 
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{% url  'MessageList' %}"><i class="fa fa-plus"></i>پیام ها</a></li>
-                        {#                        <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>#}
-                    </ul>
-                </li>
-
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-sliders"></i>
-                        <span>مالی</span>
-                        <span class="pull-left-container">
-                            <i class="fa fa-angle-right pull-left"></i>
-                        </span>
-
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>افزایش اعتبار</a></li>
-                    </ul>
-                </li>
-
-                {% if request.user.is_superuser %}
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-sliders"></i>
-                            <span>تنظیمات اولیه</span>
+                            <span>مالی</span>
                             <span class="pull-left-container">
                             <i class="fa fa-angle-right pull-left"></i>
                         </span>
 
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="{% url 'ActiveCodeMoaref' %}"><i class="fa fa-plus"></i>فعال کردن کد معرف</a></li>
-                            <li><a href="{% url 'SodeModir' %}"><i class="fa fa-list"></i>درصد سود مدیر</a></li>
-                            {#                            <li><a href="#"><i class="fa fa-list"></i>سطوح شبکه</a></li>#}
-                            <li><a href="{% url 'Languge_site' %}"><i class="fa fa-list"></i>زبان سایت</a></li>
-                            <li><a href="{% url 'Count_Level_networkView' %}"><i class="fa fa-list"></i>تعداد سطح شبکه و سود</a></li>
-                            <li><a href="{% url 'Count_kharid_hadaghalView' %}"><i class="fa fa-list"></i>حداقل تعداد خریر تبلیغ</a></li>
-                            <li><a href="{% url 'Time_kharid_termView' %}"><i class="fa fa-list"></i>مدت زمان خرید</a></li>
-                            <li><a href="{% url 'Taien_meghdar_matlabView' %}"><i class="fa fa-list"></i>تعین مقدار مطلب </a></li>
-                            <li><a href="{% url 'Show_amar_foruserView' %}"><i class="fa fa-list"></i>نمایش آمار برای کاربران </a></li>
-                            <li><a href="{% url 'Taeid_khodkar_tabligh' %}"><i class="fa fa-list"></i>تایید خودکار تبلیغ </a></li>
-                            <li><a href="{% url 'Vahed_poll_site' %}"><i class="fa fa-list"></i>واحد پول سایت </a></li>
-                            <li><a href="{% url 'Count_visit_tabligh' %}"><i class="fa fa-list"></i>تعداد دیدن تبلیغ </a></li>
-                            <li><a href="{% url 'Taein_hadaghal_etbar' %}"><i class="fa fa-list"></i>تعیین حداقل اعتبار </a></li>
-                            <li><a href="{% url 'Amar_jaali' %}"><i class="fa fa-list"></i>آمار جعلی </a></li>
+                            {% if not request.user.is_superuser %}
+                                <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>افزایش اعتبار</a></li>
+                            {% endif %}
                         </ul>
                     </li>
-                {% endif %}
-            </ul>
-        </section>
-        <!-- /.sidebar -->
-    </aside>
 
+                    {% if request.user.is_superuser %}
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-sliders"></i>
+                                <span>تنظیمات اولیه</span>
+                                <span class="pull-left-container">
+                            <i class="fa fa-angle-right pull-left"></i>
+                        </span>
+
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="{% url 'ActiveCodeMoaref' %}"><i class="fa fa-plus"></i>فعال کردن کد معرف</a></li>
+                                <li><a href="{% url 'SodeModir' %}"><i class="fa fa-list"></i>درصد سود مدیر</a></li>
+                                {#                            <li><a href="#"><i class="fa fa-list"></i>سطوح شبکه</a></li>#}
+                                <li><a href="{% url 'Languge_site' %}"><i class="fa fa-list"></i>زبان سایت</a></li>
+                                <li><a href="{% url 'Max_Count_Level_networkView' %}"><i class="fa fa-list"></i>حداکثر تعداد سطح شبکه و سود</a></li>
+                                <li><a href="{% url 'Count_Level_networkView' %}"><i class="fa fa-list"></i>تعداد سطح شبکه و سود</a></li>
+                                <li><a href="{% url 'Count_kharid_hadaghalView' %}"><i class="fa fa-list"></i>حداقل تعداد خریر تبلیغ</a></li>
+                                <li><a href="{% url 'Time_kharid_termView' %}"><i class="fa fa-list"></i>مدت زمان خرید</a></li>
+                                <li><a href="{% url 'Taien_meghdar_matlabView' %}"><i class="fa fa-list"></i>تعین مقدار مطلب </a></li>
+                                <li><a href="{% url 'Show_amar_foruserView' %}"><i class="fa fa-list"></i>نمایش آمار برای کاربران </a></li>
+                                <li><a href="{% url 'Taeid_khodkar_tabligh' %}"><i class="fa fa-list"></i>تایید خودکار تبلیغ </a></li>
+                                <li><a href="{% url 'Vahed_poll_site' %}"><i class="fa fa-list"></i>واحد پول سایت </a></li>
+                                <li><a href="{% url 'Count_visit_tabligh' %}"><i class="fa fa-list"></i>تعداد دیدن تبلیغ </a></li>
+                                <li><a href="{% url 'Taein_hadaghal_etbar' %}"><i class="fa fa-list"></i>تعیین حداقل اعتبار </a></li>
+                                <li><a href="{% url 'Amar_jaali' %}"><i class="fa fa-list"></i>آمار جعلی </a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+    {% endif %}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -457,6 +460,42 @@
 <script src="{% static 'dist/js/pages/dashboard.js' %}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{% static 'dist/js/demo.js' %}"></script>
+<script type="text/javascript">
+    function fallbackCopyTextToClipboard(text) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            var msg = successful ? 'successful' : 'unsuccessful';
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
+    }
+
+    function copyTextToClipboard(text) {
+        if (!navigator.clipboard) {
+            fallbackCopyTextToClipboard(text);
+            return;
+        }
+        navigator.clipboard.writeText(text).then(function () {
+        }, function (err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    }
+
+    $(document).ready(function () {
+        $('#code_moarefi').click(function (e) {
+            e.preventDefault();
+            copyTextToClipboard(this.getAttribute('data-data'));
+        });
+    });
+</script>
 {% block javascripts %}
 {% endblock %}
 </body>

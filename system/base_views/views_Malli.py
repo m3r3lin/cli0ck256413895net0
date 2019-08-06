@@ -1,6 +1,8 @@
+from builtins import object
+
 from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from Ads_Project.functions import LoginRequiredMixin
@@ -43,6 +45,9 @@ class IncreaseBalanceView(LoginRequiredMixin, FormView):
 
         else:
             user_id = self.request.user.id
+        user = get_object_or_404(User,pk=int(user_id))
+        user.add_to_kif_pool(form.cleaned_data['how_much'])
+        return super(IncreaseBalanceView, self).form_valid(form)
         # TODO what should we do with other orders ?
         order = Order.objects.create(user_id=user_id, type=INCREASE_BALANCE_ORDER, data=dict(
             mount=form.cleaned_data['how_much']

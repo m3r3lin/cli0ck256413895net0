@@ -95,7 +95,6 @@ class Count_Level_networkDataTableView(LoginRequiredMixin, BaseDatatableView):
     model =TanzimatPaye
     columns = ['id','onvan','value']
     order_columns = ['id','onvan','value']
-    # max_display_length = 1
 
     def get_initial_queryset(self):
         qs = super().get_initial_queryset()
@@ -316,9 +315,6 @@ class Taein_hadaghal_etbarView(LoginRequiredMixin, UpdateView):
         return reverse('Taein_hadaghal_etbar')
 
 class Amar_jaali_View(LoginRequiredMixin,View):
-    # model = TanzimatPaye
-    # template_name = 'system/TanzimatPaye/Amar_jaali.html'
-    # form_class = Amar_jaali_Form
 
     def post(self,request):
         count_user_online=self.request.POST.get('count_user_online')

@@ -114,7 +114,6 @@
                                         <p class="help-block">{{ form.text.help_text }}</p>
                                     {% endif %}
                                 </div>
-
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">
@@ -186,5 +185,9 @@
             //bootstrap WYSIHTML5 - text editor
             $('.textarea').wysihtml5()
         })
+
+        {#$('.textarea').wysihtml5();#}
+        {#CKEDITOR.removePlugins = '';#}
+        CKEDITOR.replace('text');
     </script>
 {% endblock %}

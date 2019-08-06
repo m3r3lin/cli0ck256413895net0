@@ -136,6 +136,50 @@
 
     <script>
         $(function () {
+            var calculate = function () {
+                if (mablagh && $('#tedad_click').length) {
+                    var cost = mablagh;
+                    if (isNaN(cost)) {
+                        $('#mablagh_ha_click').val(0);
+                        return;
+                    }
+                    var click_count = $('#tedad_click').val();
+                    if (isNaN(click_count)) {
+                        $('#mablagh_ha_click').val(0);
+                        return;
+                    }
+                    click_count = Number(click_count);
+                    cost = Number(cost);
+                    if (click_count <= 0 || cost <= 0) {
+                        $('#mablagh_ha_click').val(0);
+                        return;
+                    }
+                    $('#mablagh_ha_click').val(Math.trunc(cost / click_count));
+                }
+            };
+            var obtain_data = function (force_click) {
+                if ($('#code_pelan').val()) {
+                    $.ajax('{% url 'PelanReportDatatable' %}', {
+                        method: 'post',
+                        data: {
+                            csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+                            plan: $('#code_pelan').val(),
+                            report_type: 'plan-click-va-gheymat'
+                        },
+                    }).done(function (e) {
+                        mablagh = e.data['gheymat'];
+                        if (force_click)
+                            $('#tedad_click').val(e.data['click_count']);
+                        calculate();
+                    });
+                }
+            };
+            obtain_data(false);
+            calculate();
+            $('#code_pelan').change(function () {
+                obtain_data(true);
+            });
+            $('#tedad_click').keyup(calculate).change(calculate);
             // Replace the <textarea id="editor1"> with a CKEditor
             // instance, using default configuration.
             CKEDITOR.replace('text')

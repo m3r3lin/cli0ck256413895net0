@@ -8,6 +8,7 @@ from django.db import models
 from django.db.models import Model, Q
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.urls import reverse
 from django.utils import timezone
 
 from Ads_Project import settings
@@ -150,6 +151,20 @@ class Pelan(Model):
         return self.onvan
 
 
+# class ClickStrategy:
+#     @staticmethod
+#     def show(tabligh: "Tabligh"):
+#         return ''
+#
+#     @staticmethod
+#     def click(tabligh: "Tabligh", user: User):
+#         return ''
+#
+#     @staticmethod
+#     def publish(tabligh: "Tabligh"):
+#         return ''
+
+
 class Tabligh(Model):
     onvan = models.CharField(max_length=80)
     text = models.TextField()
@@ -163,6 +178,19 @@ class Tabligh(Model):
     mablagh_tabligh = models.PositiveIntegerField()
     random_url = models.CharField(max_length=255)
 
+    @property
+    def show_url(self):
+        return reverse('PreviewTabligh', args=[self.random_url])
+
+    @property
+    def subbed(self):
+        if self.tedad_click_shode < self.tedad_click:
+            return self.tedad_click - self.tedad_click_shode
+        return 0
+    @property
+    def all_users(self):
+        return TablighatMontasherKonande.objects.filter(tabligh=self)
+
     def __str__(self):
         return self.onvan
 
@@ -170,9 +198,11 @@ class Tabligh(Model):
 class Click(Model):
     tabligh = models.ForeignKey(Tabligh, on_delete=models.CASCADE)
     montasher_konande = models.ForeignKey(User, on_delete=models.CASCADE)
-    tarikh = models.DateTimeField(default=datetime.now)
     mablagh_har_click = models.PositiveIntegerField()
-    ip = models.CharField(max_length=15)
+    user_agent = models.CharField(max_length=90, null=True)
+    country = models.CharField(max_length=90, null=True)
+    ip = models.CharField(max_length=16, null=True)
+    tarikh = models.DateTimeField(auto_now_add=True)
 
 
 class Payam(Model):

@@ -114,8 +114,10 @@
                     $('#mablagh_ha_click').val(Math.trunc(cost / click_count));
                 }
             };
-            $('#tedad_click,#mablagh_ha_click').keyup(calculate);
+            $('#tedad_click,#gheymat').keyup(calculate).change(calculate);
+            if ($('#gheymat').val() != null && $('#tedad_click').val() != null) {
+                calculate()
+            }
         });
     </script>
-{#    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>#}
 {% endblock %}

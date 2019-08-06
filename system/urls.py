@@ -2,11 +2,12 @@ from django.urls import path
 
 # from system.base_views import views_Message
 from system.base_views import views_Message
+from system.base_views.views_Click import ClickedOnTablighView
 from system.base_views.views_Malli import IncreaseBalanceView, dargah_test_part_1
 from system.base_views.views_Message import MessageListview, Message_show_view
 from system.base_views.views_Message import NewMessageCreateView
 from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView, PelanDatatableView, PlanReportsView
-from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView
+from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView, PublishShowView, TablighPreviewView, PublishTablighView
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView
 from system.base_views.views_Tanzimat_Paye import Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView, Time_kharid_termView, \
     Taien_meghdar_matlabView, Show_amar_foruserView, Taeid_khodkar_tablighView
@@ -40,6 +41,9 @@ urlpatterns = [
     path('DeleteTabligh/<int:pk>', TablighDeleteView.as_view(), name='DeleteTabligh'),
     path('ListTabligh/', TablighListView.as_view(), name='ListTabligh'),
     path('TablighDatatable/', TablighDatatableView.as_view(), name='TablighDatatable'),
+    path('PreviewTabligh/<tabligh_token>', TablighPreviewView.as_view(), name='PreviewTabligh'),
+    path('PublishTabligh/<tabligh_token>', PublishTablighView.as_view(), name='PublishTabligh'),
+    path('PublishShow/', PublishShowView.as_view(), name='ShowTablighs'),
     # ---- TanzimatPaye
     path('ActiveCodeMoaref/', ActiveCodeMoarefView.as_view(), name='ActiveCodeMoaref'),
     path('TedadSathShabake/', Count_Level_networkView.as_view(), name='TedadSathShabake'),
@@ -59,5 +63,7 @@ urlpatterns = [
     path('save_message/', views_Message.save_message, name='save_message'),
     # ---- MALLI
     path('increase_balance/', IncreaseBalanceView.as_view(), name='increase_balance'),
-    path('virtual_bank_verification1/', dargah_test_part_1)
+    path('virtual_bank_verification1/', dargah_test_part_1),
+    # ---- Click
+    path('click/<enteshartoken>',ClickedOnTablighView.as_view(),name='clicked_on_tabligh'),
 ]

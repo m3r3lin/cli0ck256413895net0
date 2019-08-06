@@ -110,7 +110,6 @@
             </div>
         </div>
     </section>
-    <!-- /.modal -->
 {% endblock %}
 {% block javascripts %}
     <!-- CK Editor -->
@@ -162,7 +161,7 @@
             $('#code_pelan').change(function () {
                 obtain_data(true);
             });
-            $('#tedad_click').keyup(calculate);
+            $('#tedad_click').keyup(calculate).change(calculate);
 
             {#$('.textarea').wysihtml5();#}
             {#CKEDITOR.removePlugins = '';#}

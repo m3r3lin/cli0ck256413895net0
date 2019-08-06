@@ -3,27 +3,25 @@
 {% block css %}
 {% endblock %}
 {% block page_title %}
-    نمایش تبلیغ
+    انتشار تبلیغ
 {% endblock %}
 {% block dashboard %}
-    <li>نمایش تبلیغ</li>
+    <li>انتشار تبلیغ</li>
 {% endblock %}
 {% block main_content %}
 
     <section class="content">
         <div class="row">
-            <!-- left column -->
             <div class="col-md-12">
-                <!-- general form elements -->
-                <div class="box box-info">
-                    {% autoescape off %}
-                    {{ tabligh.text }}
-                    {% endautoescape %}
-                </div>
-                <!-- /.box -->
+                {% include "errors.html" %}
+                {% include "messages.html" %}
             </div>
+            {% include 'system/Tabligh/show_tabligh_part.html' %}
         </div>
     </section>
+    <!-- /.modal -->
 {% endblock %}
 {% block javascripts %}
+    <!-- CK Editor -->
+    <script src="{% static 'dist/my_js/show_tabligh.js' %}"></script>
 {% endblock %}

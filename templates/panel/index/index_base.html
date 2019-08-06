@@ -282,6 +282,7 @@
                     <ul class="treeview-menu">
                         {% if not request.user.is_superuser %}
                             <li><a href="{% url  'CreateTabligh' %}"><i class="fa fa-plus"></i>ایجاد تبلیغ</a></li>
+                            <li><a href="{% url  'ShowTablighs' %}"><i class="fa fa-plus"></i>انتشار تبلیغ</a></li>
                         {% endif %}
                         <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>
                     </ul>
@@ -300,7 +301,6 @@
                         {#                        <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>#}
                     </ul>
                 </li>
-
 
                 <li class="treeview">
                     <a href="#">

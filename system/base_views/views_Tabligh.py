@@ -4,7 +4,7 @@ import string
 
 from django.contrib import messages
 from django.db.models import ProtectedError, Q
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView, TemplateView
@@ -12,7 +12,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
 from system.forms import TablighCreateForm
-from system.models import Tabligh, TanzimatPaye, TAIED_KHODKAR_TABLIGH, TAIEN_MEGHDAR_MATLAB, Click
+from system.models import Tabligh, TanzimatPaye, TAIED_KHODKAR_TABLIGH, TAIEN_MEGHDAR_MATLAB, Click, TablighatMontasherKonande
 from system.templatetags.app_filters import date_jalali
 
 
@@ -179,6 +179,41 @@ class TablighDatatableView(LoginRequiredMixin, BaseDatatableView):
         if not self.request.user.is_superuser:
             qs = qs.filter(code_tabligh_gozaar=self.request.user)
         return qs
+
+
+class TablighPreviewView(LoginRequiredMixin, View):
+    def get(self, request, tabligh_token):
+        tabligh = get_object_or_404(Tabligh, random_url=tabligh_token)
+        return render(request, 'system/Tabligh/Show_Tabligh.html', context={
+            'tabligh': tabligh
+        })
+
+
+class PublishTablighView(LoginRequiredMixin, View):
+    def get(self, request, tabligh_token):
+        ref = request.GET.get('ref', None)
+        if request.user.is_superuser:
+            messages.error(request, 'ادمین نمیتواند منتشر کننده باشد')
+        else:
+            tabligh = get_object_or_404(Tabligh, random_url=tabligh_token)
+            tabligh_montasher, _ = TablighatMontasherKonande.objects.get_or_create(montasher_konande=request.user, tabligh=tabligh,
+                                                                                   defaults={
+                                                                                       'montasher_konande': request.user,
+                                                                                       'tabligh': tabligh
+                                                                                   })
+            messages.success(request, 'درخواست شما با موفقیت ثبت شد.')
+        if ref == 'dashboard':
+            return redirect(reverse('dashboard'))
+        else:
+            return redirect(reverse('ShowTablighs'))
+
+
+class PublishShowView(LoginRequiredMixin, TemplateView):
+    template_name = 'system/Tabligh/Publish_Tabligh.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['tablighs'] = Tabligh.objects.all()
+        return super().get_context_data(**kwargs)
 
 
 class ShowTablighView(TemplateView):

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load app_filters %}
 <html>
 <head>
     <meta charset="utf-8">
@@ -33,7 +34,7 @@
     <link rel="stylesheet" href="{% static '/dist/my_css/google_font.css' %}">
 </head>
 <body class="hold-transition register-page">
-<div id="rectangle" style="background-color:darkorange;"></div>
+{#<div id="rectangle" style="background-color:darkorange;"></div>#}
 <!-- /.register-box -->
 <div class="register-box">
     <div class="register-logo">
@@ -74,10 +75,15 @@
                 {{ form.password }}
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
+
+            {#            {% setting 'active_moaref' 0 as test %}#}
+            {#            {% if test == '1' %}#}
             <div class="form-group has-feedback">
                 {{ form.code_moaref }}
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                <span class="glyphicon fa fa-user-o form-control-feedback"></span>
             </div>
+            {#            {% endif %}#}
+
             <div class="row">
                 <div class="col-xs-12">
                     <div class="checkbox icheck">

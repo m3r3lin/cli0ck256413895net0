@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,9 +38,28 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'system.apps.SystemConfig',
     'django_cleanup',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'system.apps.SystemConfig',
 ]
+
+AUTH_USER_MODEL = 'system.User'
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'login'
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -123,8 +143,6 @@ STATICFILES_DIRS = (
 )
 
 CREATING_SUPER_USER = hasattr(sys, 'argv') and len(sys.argv) > 1 and sys.argv[1] == 'createsuperuser'
-
-AUTH_USER_MODEL = 'system.User'
 
 from django.contrib import messages
 from django.urls import reverse_lazy

@@ -1,0 +1,29 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block page_title %}
+    نمایش تبلیغ
+{% endblock %}
+{% block dashboard %}
+    <li>نمایش تبلیغ</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-info">
+                    {% autoescape off %}
+                    {{ tabligh.text }}
+                    {% endautoescape %}
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% load app_filters %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'dist/css/persian-datepicker.min.css' %}">
+{% endblock %}
+{% block page_title %}
+    بروزرسانی کاربر
+{% endblock %}
+{% block dashboard %}
+    <li>بروزرسانی کاربر</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+
+        <div class="row">
+            <div class="col-md-6">
+
+                <!-- Profile Image -->
+                <div class="box box-primary">
+                    <div class="box-body box-profile">
+                        {% if request.user.avatar %}
+                            <img src="{{ request.user.avatar.url }}" class="profile-user-img img-responsive img-circle" alt="User Image">
+                        {% else %}
+                            <img src="{% static 'img/avatar/avatar.png' %}" class="profile-user-img img-responsive img-circle" alt="User Image">
+                        {% endif %}
+
+                        <h3 class="profile-username text-center" style="margin-top: 20px;margin-bottom: 40px;">{{ request.user.get_full_name }}</h3>
+
+                        <div class="row">
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>کد معرفی شما</b> <a class="pull-left">code_{{ request.user.id }}</a>
+                            </div>
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>نام</b> <a class="pull-left">{{ request.user.first_name }}</a>
+                            </div>
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>نام خانوادگی</b> <a class="pull-left">{{ request.user.last_name }}</a>
+                            </div>
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>کدملی</b> <a class="pull-left">{{ request.user.code_melli }}</a>
+                            </div>
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>تاریخ تولد</b> <a class="pull-left">{{ request.user.tarikh_tavalod | date_jalali:3 }}</a>
+                            </div>
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>موبایل</b> <a class="pull-left">{{ request.user.mobile }}</a>
+                            </div>
+
+                            <div class="form-group col-sm6 col-md-6">
+                                {% if  request.user.gender == 1 %}
+                                    <b>جنسیت</b> <a class="pull-left">مرد</a>
+                                {% elif request.user.gender == 0 %}
+                                    <b>جنسیت</b> <a class="pull-left">زن</a>
+                                {% else %}
+                                    <b>جنسیت</b> <a class="pull-left">نام مشخص</a>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>نام پدر</b> <a class="pull-left">{{ request.user.father_name }}</a>
+                            </div>
+
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>ایمیل</b> <a class="pull-left">{{ request.user.email }}</a>
+                            </div>
+
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>شماره حساب</b> <a class="pull-left">{{ request.user.shomare_hesab }}</a>
+                            </div>
+
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>شماره کارت</b> <a class="pull-left">{{ request.user.shomare_cart }}</a>
+                            </div>
+
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>شماره شبا</b> <a class="pull-left">{{ request.user.shomare_shaba }}</a>
+                            </div>
+
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>نام صاحب حساب</b> <a class="pull-left">{{ request.user.name_saheb_hesab }}</a>
+                            </div>
+
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>کد پستی</b> <a class="pull-left">{{ request.user.code_posti }}</a>
+                            </div>
+
+                            <div class="form-group col-sm6 col-md-6">
+                                {% if  request.user.code_moaref == None %}
+                                    <b>کد معرف</b> <a class="pull-left">ندارد</a>
+                                {% else %}
+                                    <b>کد معرف</b> <a class="pull-left">{{ request.user.code_moaref }}</a>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group col-sm6 col-md-6">
+                                <b>سطح شما</b> <a class="pull-left">{{ request.user.sath }}</a>
+                            </div>
+
+                            <div class="form-group col-sm6 col-md-12">
+                                <b>آدرس</b> <a class="pull-left">{{ request.user.address }}</a>
+                            </div>
+                        </div>
+                        <a href="{% url 'UpdateUser' request.user.id %}" class="btn btn-primary" style="width: 100%;"><b>ویرایش</b></a>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+
+            </div>
+
+    </section>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'dist/my_js/datatable.js' %}"></script>
+    <!-- my fontawesom -->
+    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
+    <script src="{% static 'dist/js/persian-date.js' %}"></script>
+    <script src="{% static 'dist/js/persian-datepicker.min.js' %}"></script>
+{% endblock %}

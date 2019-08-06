@@ -6,7 +6,7 @@
             text-align: center;
         }
 
-        th:nth-child(10), td:nth-child(10) {
+        th:nth-child(11), td:nth-child(11) {
             white-space: nowrap;
         }
     </style>
@@ -32,6 +32,7 @@
                                 <thead>
                                 <tr>
                                     <th class="text-center">کد کاربر</th>
+                                    <th class="text-center">نام کاربر</th>
                                     <th class="text-center">نام</th>
                                     <th class="text-center">نام خانوادگی</th>
                                     <th class="text-center">کد ملی</th>
@@ -39,7 +40,7 @@
                                     <th class="text-center">موبایل</th>
                                     <th class="text-center">جنسیت</th>
                                     <th class="text-center">نام پدر</th>
-                                    <th class="text-center">ایمیل</th>
+                                    <th class="text-center">وضعیت</th>
                                     <th class="text-center">عملیات</th>
                                 </tr>
                                 </thead>
@@ -82,7 +83,7 @@
     <script>
         datatable_simple_show({
             url: "{% url 'UserDatatable' %}",
-            real_cols: 9,
+            real_cols: 10,
             datable_id: '#UserDatatable',
             del_url: "{% url 'DeleteUser' pk=0 %}",
             up_url: "{% url 'UpdateUser' pk=0 %}",

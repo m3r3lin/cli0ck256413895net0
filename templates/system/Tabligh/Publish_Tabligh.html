@@ -1,0 +1,27 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block page_title %}
+    انتشار تبلیغ
+{% endblock %}
+{% block dashboard %}
+    <li>انتشار تبلیغ</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                {% include "errors.html" %}
+                {% include "messages.html" %}
+            </div>
+            {% include 'system/Tabligh/show_tabligh_part.html' %}
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    <!-- CK Editor -->
+    <script src="{% static 'dist/my_js/show_tabligh.js' %}"></script>
+{% endblock %}

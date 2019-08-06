@@ -37,55 +37,73 @@
                                     {% endif %}
                                 </div>
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.code_tabligh_gozaar.label_tag %}
-                                        <label for="code_tabligh_gozaar">{{ form.code_tabligh_gozaar.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.code_tabligh_gozaar }}
-                                    {% if form.code_tabligh_gozaar.help_text %}
-                                        <p class="help-block">{{ form.code_tabligh_gozaar.help_text }}</p>
-                                    {% endif %}
-                                </div>
+                                {% if request.user.is_superuser %}
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.code_tabligh_gozaar.label_tag %}
+                                            <label for="code_tabligh_gozaar">{{ form.code_tabligh_gozaar.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.code_tabligh_gozaar }}
+                                        {% if form.code_tabligh_gozaar.help_text %}
+                                            <p class="help-block">{{ form.code_tabligh_gozaar.help_text }}</p>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.code_pelan.label_tag %}
-                                        <label for="code_pelan">{{ form.code_pelan.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.code_pelan }}
-                                    {% if form.code_pelan.help_text %}
-                                        <p class="help-block">{{ form.code_pelan.help_text }}</p>
-                                    {% endif %}
-                                </div>
+                                {% if request.user.is_superuser %}
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.code_pelan.label_tag %}
+                                            <label for="code_pelan">{{ form.code_pelan.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.code_pelan }}
+                                        {% if form.code_pelan.help_text %}
+                                            <p class="help-block">{{ form.code_pelan.help_text }}</p>
+                                        {% endif %}
+                                    </div>
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.tedad_click.label_tag %}
-                                        <label for="tedad_click">{{ form.tedad_click.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.tedad_click }}
-                                    {% if form.tedad_click.help_text %}
-                                        <p class="help-block">{{ form.tedad_click.help_text }}</p>
-                                    {% endif %}
-                                </div>
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.tedad_click.label_tag %}
+                                            <label for="tedad_click">{{ form.tedad_click.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.tedad_click }}
+                                        {% if form.tedad_click.help_text %}
+                                            <p class="help-block">{{ form.tedad_click.help_text }}</p>
+                                        {% endif %}
+                                    </div>
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.tedad_click_shode.label_tag %}
-                                        <label for="tedad_click_shode">{{ form.tedad_click_shode.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.tedad_click_shode }}
-                                    {% if form.tedad_click_shode.help_text %}
-                                        <p class="help-block">{{ form.tedad_click_shode.help_text }}</p>
-                                    {% endif %}
-                                </div>
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.tedad_click_shode.label_tag %}
+                                            <label for="tedad_click_shode">{{ form.tedad_click_shode.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.tedad_click_shode }}
+                                        {% if form.tedad_click_shode.help_text %}
+                                            <p class="help-block">{{ form.tedad_click_shode.help_text }}</p>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.vazeyat.label_tag %}
-                                        <label for="vazeyat">{{ form.vazeyat.label_tag }}<span class="red-star">*</span></label>
+                                {% if request.user.is_superuser %}
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.vazeyat.label_tag %}
+                                            <label for="vazeyat">{{ form.vazeyat.label_tag }}<span class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.vazeyat }}
+                                        {% if form.vazeyat.help_text %}
+                                            <p class="help-block">{{ form.vazeyat.help_text }}</p>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    {% if form.vazeyat.value == 0 or form.vazeyat.value == 1 %}
+                                        <div class="form-group col-sm6 col-md-3">
+                                            {% if form.vazeyat.label_tag %}
+                                                <label for="vazeyat">{{ form.vazeyat.label_tag }}<span class="red-star">*</span></label>
+                                            {% endif %}
+                                            {{ form.vazeyat }}
+                                            {% if form.vazeyat.help_text %}
+                                                <p class="help-block">{{ form.vazeyat.help_text }}</p>
+                                            {% endif %}
+                                        </div>
                                     {% endif %}
-                                    {{ form.vazeyat }}
-                                    {% if form.vazeyat.help_text %}
-                                        <p class="help-block">{{ form.vazeyat.help_text }}</p>
-                                    {% endif %}
-                                </div>
+                                {% endif %}
 
                                 <div class="form-group col-sm6 col-md-12">
                                     {% if form.text.label_tag %}
@@ -96,7 +114,6 @@
                                         <p class="help-block">{{ form.text.help_text }}</p>
                                     {% endif %}
                                 </div>
-
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">
@@ -118,11 +135,59 @@
 
     <script>
         $(function () {
+            var calculate = function () {
+                if (mablagh && $('#tedad_click').length) {
+                    var cost = mablagh;
+                    if (isNaN(cost)) {
+                        $('#mablagh_ha_click').val(0);
+                        return;
+                    }
+                    var click_count = $('#tedad_click').val();
+                    if (isNaN(click_count)) {
+                        $('#mablagh_ha_click').val(0);
+                        return;
+                    }
+                    click_count = Number(click_count);
+                    cost = Number(cost);
+                    if (click_count <= 0 || cost <= 0) {
+                        $('#mablagh_ha_click').val(0);
+                        return;
+                    }
+                    $('#mablagh_ha_click').val(Math.trunc(cost / click_count));
+                }
+            };
+            var obtain_data = function (force_click) {
+                if ($('#code_pelan').val()) {
+                    $.ajax('{% url 'PelanReportDatatable' %}', {
+                        method: 'post',
+                        data: {
+                            csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+                            plan: $('#code_pelan').val(),
+                            report_type: 'plan-click-va-gheymat'
+                        },
+                    }).done(function (e) {
+                        mablagh = e.data['gheymat'];
+                        if (force_click)
+                            $('#tedad_click').val(e.data['click_count']);
+                        calculate();
+                    });
+                }
+            };
+            obtain_data(false);
+            calculate();
+            $('#code_pelan').change(function () {
+                obtain_data(true);
+            });
+            $('#tedad_click').keyup(calculate).change(calculate);
             // Replace the <textarea id="editor1"> with a CKEditor
             // instance, using default configuration.
             CKEDITOR.replace('text')
             //bootstrap WYSIHTML5 - text editor
             $('.textarea').wysihtml5()
         })
+
+        {#$('.textarea').wysihtml5();#}
+        {#CKEDITOR.removePlugins = '';#}
+        CKEDITOR.replace('text');
     </script>
 {% endblock %}

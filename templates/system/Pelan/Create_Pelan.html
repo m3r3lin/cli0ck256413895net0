@@ -3,10 +3,10 @@
 {% block css %}
 {% endblock %}
 {% block page_title %}
-    ایجاد پلن
+     افزایش اعتبار
 {% endblock %}
 {% block dashboard %}
-    <li>ایجاد پلن</li>
+    <li> افزایش اعتبار</li>
 {% endblock %}
 {% block main_content %}
 
@@ -17,7 +17,7 @@
                 <!-- general form elements -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">جهت ایجاد پلن، فرم زیر را پر کنید.</h3>
+                        <h3 class="box-title">جهت افزایش اعتبار، فرم زیر را پر کنید.</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -58,6 +58,12 @@
                                 </div>
 
                                 <div class="form-group col-sm6 col-md-3">
+                                    <label for="mablagh_ha_click"><label for="tedad_click">مبلغ هر کلیک:</label></label>
+                                    <input class="form-control" id="mablagh_ha_click" readonly="readonly"/>
+                                    <p class="help-block">{{ form.tedad_click.help_text }}</p>
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
                                     {% if form.vazeyat.label_tag %}
                                         <label for="vazeyat">{{ form.vazeyat.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
@@ -85,5 +91,33 @@
     <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
     <script src="{% static 'dist/my_js/datatable.js' %}"></script>
     <!-- my fontawesom -->
-    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var calculate = function () {
+                if ($('#gheymat').length && $('#tedad_click').length) {
+                    var cost = $('#gheymat').val();
+                    if (isNaN(cost)) {
+                        $('#mablagh_ha_click').val(0);
+                        return;
+                    }
+                    var click_count = $('#tedad_click').val();
+                    if (isNaN(click_count)) {
+                        $('#mablagh_ha_click').val(0);
+                        return;
+                    }
+                    click_count = Number(click_count);
+                    cost = Number(cost)
+                    if (click_count <= 0 || cost <= 0) {
+                        $('#mablagh_ha_click').val(0);
+                        return;
+                    }
+                    $('#mablagh_ha_click').val(Math.trunc(cost / click_count));
+                }
+            };
+            $('#tedad_click,#gheymat').keyup(calculate).change(calculate);
+            if ($('#gheymat').val() != null && $('#tedad_click').val() != null) {
+                calculate()
+            }
+        });
+    </script>
 {% endblock %}

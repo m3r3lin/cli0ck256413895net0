@@ -19,7 +19,6 @@ class PelanCreateView(LoginRequiredMixin, CreateView):
     form_class = PelanCreateForm
 
     def form_valid(self, form):
-        user = form.save(commit=False)
         messages.success(self.request, 'پلن مورد نظر با موفقیت ثبت شد.')
         return super(PelanCreateView, self).form_valid(form)
 
@@ -92,6 +91,13 @@ class PlanReportsView(LoginRequiredMixin, View):
                     if hasattr(plan, report_type):
                         response = {
                             'data': getattr(plan, report_type)
+                        }
+                    elif report_type == 'plan-click-va-gheymat':
+                        response = {
+                            'data': {
+                                'gheymat': plan.gheymat,
+                                'click_count': plan.tedad_click
+                            }
                         }
                     else:
                         response = {'response': 'not ok'}

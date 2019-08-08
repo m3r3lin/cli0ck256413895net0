@@ -11,7 +11,7 @@ from system.forms import ActiveCodeMoarefForm, SodeModirForm, \
     Taien_meghdar_matlabForm, Show_amarforuserForm, Taied_khodkar_tablighForm, Vahed_poll_siteForm, \
     Count_visit_tabligh_Form, Taien_hadaghal_etbarForm, Amar_jaali_Form, MaxNetworkCountForm
 
-from system.models import TanzimatPaye, ACTIV_MOAREF, VAHED_POLL_SITE, COUNT_LEVEL_NETWORK
+from system.models import TanzimatPaye, ACTIV_MOAREF, VAHED_POLL_SITE, COUNT_LEVEL_NETWORK, SODE_MODIR
 from system.forms import ActiveCodeMoarefForm, SodeModirForm
 from system.models import TanzimatPaye, ACTIV_MOAREF, TEDAD_SATH_SHABAKE
 
@@ -42,8 +42,8 @@ class SodeModirView(LoginRequiredMixin, UpdateView):
     form_class = SodeModirForm
 
     def get_object(self, queryset=None):
-        obj, cre = TanzimatPaye.objects.get_or_create(onvan='sode_modir', defaults={
-            "onvan": 'sode_modir',
+        obj, cre = TanzimatPaye.objects.get_or_create(onvan=SODE_MODIR, defaults={
+            "onvan": SODE_MODIR,
             'value': 0,
         })
         return obj

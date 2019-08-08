@@ -2,6 +2,7 @@ from django.urls import path
 
 # from system.base_views import views_Message
 from system.base_views import views_Message
+from system.base_views.view_graph import Chart_2_View,Chart_1_View,ParentChildrenDatatableView,Parent_Children_List_View
 from system.base_views.views_Click import ClickedOnTablighView
 from system.base_views.views_Malli import IncreaseBalanceView, dargah_test_part_1
 from system.base_views.views_Message import MessageListview, Message_show_view
@@ -79,4 +80,10 @@ urlpatterns = [
     path('virtual_bank_verification1/', dargah_test_part_1),
     # ---- Click
     path('click/<enteshartoken>',ClickedOnTablighView.as_view(),name='clicked_on_tabligh'),
+    # ---- Chart
+    path('ChartOfNetwork2', Chart_2_View.as_view(), name="Chart_2"),
+    path('ChartOfNetwork', Chart_1_View.as_view(), name="Chart_1"),
+    path('parent_children/', ParentChildrenDatatableView.as_view(), name='Parent_Children_D'),
+    path('parent_children_list/', Parent_Children_List_View.as_view(), name='Parent_Children'),
+
 ]

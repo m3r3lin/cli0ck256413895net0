@@ -167,10 +167,12 @@ class TablighDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = Tabligh
     columns = ['id', 'onvan', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'vazeyat', 'random_url']
 
+
     def render_column(self, row, column):
         if column == 'tarikh_ijad':
             return date_jalali(row.tarikh_ijad)
         return super().render_column(row, column)
+
 
     def filter_queryset(self, qs):
         search = self.request.GET.get('search[value]', None)
@@ -179,6 +181,7 @@ class TablighDatatableView(LoginRequiredMixin, BaseDatatableView):
         if not self.request.user.is_superuser:
             qs = qs.filter(code_tabligh_gozaar=self.request.user)
         return qs
+
 
 
 class MotashershodeDatatableView(LoginRequiredMixin, BaseDatatableView):

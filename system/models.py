@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from allauth.account import signals
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
@@ -10,7 +9,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
-
+from datetime import timedelta
 from Ads_Project import settings
 from system.functions import upload_avatar_path, upload_cart_melli_path
 
@@ -67,7 +66,9 @@ class User(AbstractUser):
     vazeyat = models.IntegerField(null=True, blank=True, choices=VAZEYAT_CHOICES)
     image_cart_melli = models.ImageField(upload_to=upload_cart_melli_path, null=True, blank=True)
     avatar = models.ImageField(upload_to=upload_avatar_path, null=True, blank=True)
-
+    list_parent = models.TextField(null=True, blank=True)
+    last_logout = models.DateTimeField(blank=True, null=True)
+    last_activity = models.DateTimeField(blank=True, null=True)
     def is_complete(self):
         if self.first_name is not None or \
                 self.last_name is not None or \
@@ -104,6 +105,17 @@ class User(AbstractUser):
                                    Q(image_cart_melli__isnull=True)
                                    )
 
+    @property
+    def user_status(self):
+        if self.last_activity:
+            online_time_limite = timezone.now() - timedelta(seconds=1800)
+            if self.last_activity >= online_time_limite:
+                return True
+            else:
+                return False
+        else:
+            return False
+
     def get_kif_kif_pool(self) -> "KifPool":
         k, _ = KifPool.objects.get_or_create(user=self, defaults=dict(user=self))
         return k
@@ -122,7 +134,7 @@ class User(AbstractUser):
         if direct:
             k.current_recieved_direct += adad
         else:
-            k.current_recieved_direct += adad
+            k.current_recieved_indirect += adad
         k.save()
 
     @property
@@ -153,8 +165,9 @@ class History(models.Model):
     type = models.SmallIntegerField(choices=(
         (0, 'واریز'),
         (1, 'برداشت'),
+        (1, 'واریز به کیف پول'),
     ))
-    description = models.CharField(max_length=255, default='')
+    meghdar = models.IntegerField()
     created_at = models.DateField(auto_now_add=True)
 
 
@@ -246,7 +259,8 @@ TEDAD_SATH_SHABAKE = 'tedad_sath_shabake'
 VAHED_POLL_SITE = 'vahed_poll_site'
 COUNT_VISIT_TABLIGH = 'count_visit_tabligh'
 TAEIN_HADAGHAL_ETBAR = 'taein_hadaghal_etbar'
-
+SODE_MODIR='sode_modir'
+SATH = 'sath.'
 
 class TanzimatPaye(Model):
     onvan = models.CharField(max_length=250, unique=True)
@@ -255,7 +269,12 @@ class TanzimatPaye(Model):
     @staticmethod
     def get_settings(key, default=None):
         try:
-            return TanzimatPaye.objects.get(onvan=key).value
+            a=TanzimatPaye.objects.get(onvan=key).value
+            if a.isdigit():
+                return int(a)
+            elif a.isdecimal():
+                return float(a)
+            return a
         except:
             return default
 
@@ -297,3 +316,11 @@ def password_change_callback(sender, request, user, **kwargs):
 @receiver(signals.user_logged_out)
 def password_change_callback(sender, request, user, **kwargs):
     pass
+
+
+
+class HistoryIndirect(Model):
+    montasher_konande = models.ForeignKey(User, on_delete=models.CASCADE , related_name="montasherkonande")
+    parent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="parent")
+    mablagh= models.PositiveIntegerField()
+    tarikh = models.DateTimeField(auto_now_add=True)

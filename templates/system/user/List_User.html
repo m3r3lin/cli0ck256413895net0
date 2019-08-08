@@ -41,6 +41,7 @@
                                     <th class="text-center">جنسیت</th>
                                     <th class="text-center">نام پدر</th>
                                     <th class="text-center">وضعیت</th>
+                                    <th class="text-center">آنلاین/آفلاین</th>
                                     <th class="text-center">عملیات</th>
                                 </tr>
                                 </thead>
@@ -81,9 +82,16 @@
     <!-- my fontawesom -->
     <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
     <script>
+        window.data_table_cool_options["rowCallback"] = function (row, data) {
+                if (data[10]) {
+                    $('td:eq(10)', row).addClass("text-center").html('<span class="bg-green color-palette col-md-12">آنلاین</span>');
+                } else {
+                    $('td:eq(10)', row).addClass("text-center").html('<span class="bg-red color-palette col-md-12">آفلاین</span>');
+                }
+            };
         datatable_simple_show({
             url: "{% url 'UserDatatable' %}",
-            real_cols: 10,
+            real_cols: 11,
             datable_id: '#UserDatatable',
             del_url: "{% url 'DeleteUser' pk=0 %}",
             up_url: "{% url 'UpdateUser' pk=0 %}",

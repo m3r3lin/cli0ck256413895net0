@@ -1,0 +1,98 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% block css %}
+    <style>
+        td {
+            text-align: center;
+        }
+
+        th:nth-child(9), td:nth-child(9) {
+            white-space: nowrap;
+        }
+    </style>
+{% endblock %}
+{% block page_title %}
+    لیست تبلیغات منتشرشده
+{% endblock %}
+{% block dashboard %}
+    <li>لیست تبلیغات منتشرشده</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        {% include "errors.html" %}
+                        {% include "messages.html" %}
+
+                        <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                            <table id="TablighDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">کد نشر</th>
+                                    <th class="text-center">کد تبلیغ</th>
+                                    <th class="text-center">تبلیغ گذار</th>
+                                    <th class="text-center">عنوان تبلیغ</th>
+                                    <th class="text-center">تاریخ ایجاد</th>
+                                    <th class="text-center">پلن</th>
+                                    <th class="text-center">تعداد کلیک</th>
+                                    <th class="text-center">تعداد کلیک شده</th>
+                                    <th class="text-center">وضعیت</th>
+                                    <th class="text-center">لینک</th>
+                                    <th class="text-center">عملیات</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="confirm_modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class=" text-black">x</span></button>
+                    <h4 class="modal-title"><b>آیا تمایل دارید این تبلیغ را حذف کنید؟</b></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">خیر</button>
+                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">بلی</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'dist/my_js/datatable.js' %}"></script>
+    <!-- my fontawesom -->
+    <script>
+        datatable_simple_show({
+            url: "{% url 'MontashshodeDatatable' %}",
+            real_cols: 10,
+            ref:'motasherkonande',
+            datable_id: '#TablighDatatable',
+            del_url: "{% url 'DeletePelan' pk=0 %}",
+            up_url: "{% url 'UpdatePelan' pk=0 %}",
+            modal_id: "#confirm_modal",
+            do_before_initializing: function (table) {
+                var base = "{% url 'PreviewTabligh' tabligh_token='0' %}";
+                base = base.substr(0, base.length - 1);
+            }
+        });
+    </script>
+{% endblock %}

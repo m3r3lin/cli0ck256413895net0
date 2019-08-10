@@ -95,11 +95,22 @@
             <div class="box-header with-border">
               <h3 class="box-title">اینباکس</h3>
 
-              <div class="box-tools pull-right">
+
+{#              <div class="box-tools pull-right">#}
+{#                <div class="has-feedback">#}
+{#                  <input type="text" class="form-control input-sm" placeholder="جستجو">#}
+{#                  <span class="glyphicon glyphicon-search form-control-feedback"></span>#}
+{##}
+{#                </div>#}
+{##}
+{#              </div>#}
+                <div class="box-tools pull-right">
                 <div class="has-feedback">
-                  <input type="text" class="form-control input-sm" placeholder="جستجو">
-                  <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                             <a href="{% url 'NewMessageCreate' %}" class="btn btn-primary btn-block margin-bottom">ارسال پیام جدید</a>
+
+
                 </div>
+
               </div>
               <!-- /.box-tools -->
             </div>
@@ -108,16 +119,17 @@
               <div class="mailbox-controls">
                 <!-- Check all button -->
                <div class="pull-right">
-                 <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
-                 </button>
+{#                 <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>#}
+{#                 </button>#}
                  <div class="btn-group">
-                   <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-                   <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
-                   <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
+
+{#                   <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>#}
+{#                   <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>#}
+{#                   <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>#}
                  </div>
                </div>
                 <!-- /.btn-group -->
-                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                <button type="button" id="refresh_page" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
                 <div class="pull-left">
                   1-50/200
                   <div class="btn-group">
@@ -134,14 +146,30 @@
                   {% for item in user_message %}
 
                   <tr>
+                       {% if user.username == item.girande.username %}
+
                     <td><input type="checkbox"></td>
                     <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
+
+                    <td class="mailbox-name"><a href="{% url  'Message_show_view' pk=item.id %}">{{ item.ferestande }}</a></td>
+
+                    <td class="mailbox-subject"><b>{{item.text}}</b> - {{item.text}}
+                    </td>
+                    <td class="mailbox-attachment"></td>
+                    <td class="mailbox-date">{{item.save_date|date_jalali }}</td>
+                     {% else %}
+
+                     <td><input type="checkbox"></td>
+                    <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
+
                     <td class="mailbox-name"><a href="{% url  'Message_show_view' pk=item.id %}">{{ item.girande }}</a></td>
+
                     <td class="mailbox-subject"><b>{{item.text}}</b> - {{item.text}}
                     </td>
                     <td class="mailbox-attachment"></td>
                     <td class="mailbox-date">{{item.save_date|date_jalali }}</td>
                   </tr>
+                  {% endif %}
                   {% endfor %}
 
                   </tbody>
@@ -150,32 +178,7 @@
               </div>
               <!-- /.mail-box-messages -->
             </div>
-            <!-- /.box-body -->
-{#            <div class="box-footer no-padding">#}
-{#              <div class="mailbox-controls">#}
-{#                <!-- Check all button -->#}
-{#                <div class="pull-right">#}
-{#                  <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>#}
-{#                  </button>#}
-{#                  <div class="btn-group">#}
-{#                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>#}
-{#                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>#}
-{#                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>#}
-{#                  </div>#}
-{#                </div>#}
-{#                <!-- /.btn-group -->#}
-{#                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>#}
-{#                <div class="pull-left">#}
-{#                  1-50/200#}
-{#                  <div class="btn-group">#}
-{#                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>#}
-{#                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>#}
-{#                  </div>#}
-{#                  <!-- /.btn-group -->#}
-{#                </div>#}
-{#                <!-- /.pull-right -->#}
-{#              </div>#}
-{#            </div>#}
+
           </div>
           <!-- /. box -->
         </div>
@@ -212,6 +215,9 @@
 <!-- iCheck -->
 <!-- Page Script -->
 <script>
+$("#refresh_page").click(function () {
+    location.reload()
+})
   $(function () {
     //Enable iCheck plugin for checkboxes
     //iCheck for checkbox and radio inputs

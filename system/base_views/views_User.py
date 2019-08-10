@@ -1,18 +1,19 @@
 from django.contrib import auth, messages
-from django.db.models import ProtectedError
+from django.contrib.auth.views import PasswordChangeView
+from django.db.models import ProtectedError, Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
-from system.forms import UserCreateForm, UserUpdateForm
+from system.forms import UserCreateForm, UserUpdateForm, ChangeUserPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.contrib.auth import logout
 from django.urls import reverse
-
-from system.models import User
+from django.contrib.auth.models import User
+from system.models import User, TanzimatPaye, ACTIV_MOAREF, Parent, TEDAD_SATH_SHABAKE, COUNT_LEVEL_NETWORK
 from system.templatetags.app_filters import date_jalali
 
 
@@ -29,7 +30,36 @@ class UserCreateView(CreateView):
         else:
             messages.error(self.request, 'مقدار وارد شده برای قوانین اشتباه است')
             return super(UserCreateView, self).form_invalid(form)
-        user = form.save(commit=False)
+
+        form.instance.vazeyat = 1
+
+        if TanzimatPaye.get_settings(ACTIV_MOAREF, False) == '1':
+            id_moaref = form.instance.code_moaref_id
+            user = User.objects.get(pk=id_moaref)
+            max_level = int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, False))
+            if user is not None:
+                if int(user.sath) + 1 > max_level:
+                    messages.error(self.request, 'تعداد سطوح بیش از مقدار تعیین شده است')
+                    return super(UserCreateView, self).form_invalid(form)
+                form.instance.sath = user.sath + 1
+            else:
+                messages.error(self.request, 'کد معرف وارد شده نا معتبر است')
+                return super(UserCreateView, self).form_invalid(form)
+        else:
+            if form.instance.code_moaref is not None:
+                id_moaref = form.instance.code_moaref_id
+                user = User.objects.get(pk=id_moaref)
+                max_level = int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, False))
+                if user is not None:
+                    if int(user.sath) + 1 > max_level:
+                        messages.error(self.request, 'تعداد سطوح بیش از مقدار تعیین شده است')
+                        return super(UserCreateView, self).form_invalid(form)
+                    form.instance.sath = user.sath + 1
+                else:
+                    messages.error(self.request, 'کد معرف وارد شده نا معتبر است')
+                    return super(UserCreateView, self).form_invalid(form)
+            else:
+                form.instance.sath = 1
         return super(UserCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -37,20 +67,6 @@ class UserCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('login')
-
-
-class UserCreateModirView(CreateView):
-    template_name = 'system/user/Create_User_Modir.html'
-    form_class = UserCreateForm
-
-    def form_valid(self, form):
-        return super(UserCreateModirView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        return super(UserCreateModirView, self).form_invalid(form)
-
-    def get_success_url(self):
-        return reverse('ListUser')
 
 
 def login_user(request):
@@ -82,7 +98,12 @@ def logout_user(request):
     request.user.last_activity = None
     request.user.save()
     logout(request)
-    return render(request, "system/user/login.html")
+    return redirect(reverse('login'))
+
+
+class RedirectToUserUpdate(LoginRequiredMixin, View):
+    def get(self, request):
+        return redirect(reverse('UpdateUser', args=[request.user.id]))
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
@@ -91,28 +112,28 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UserUpdateForm
 
     def form_valid(self, form):
-        if 'avatar' in self.request.FILES:
-            user = User.objects.get(username=self.request.user.username)
-            user.avatar = self.request.FILES['avatar']
-        if 'image_cart_melli' in self.request.FILES:
-            user = User.objects.get(username=self.request.user.username)
-            user.avatar = self.request.FILES['image_cart_melli']
-
         messages.success(self.request, 'تغییرات شما یا موفقیت ثبت شد')
         return super(UserUpdateView, self).form_valid(form)
 
     def get(self, request, *args, **kwargs):
+        if 'pk' not in kwargs:
+            kwargs['pk'] = request.user.id
         if not request.user.is_superuser and request.user.id != kwargs['pk']:
-            messages.error(request, 'شما اجازه دسترسی ندارید')
+            messages.error(self.request, 'شما اجازه دسترسی ندارید')
             return redirect(reverse('UpdateUser', kwargs={'pk': request.user.id}))
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_superuser and request.user.id != kwargs['pk']:
-            messages.error(request, 'شما اجازه دسترسی ندارید')
+            messages.error(self.request, 'شما اجازه دسترسی ندارید')
             return redirect(reverse('UpdateUser', kwargs={'pk': request.user.id}))
-
         return super().post(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = context['form']
+        context['form'] = form
+        return context
 
     def form_invalid(self, form):
         return super().form_invalid(form)
@@ -122,14 +143,39 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
             return reverse('UpdateUser', kwargs={'pk': self.request.user.id})
         return reverse('ListUser')
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if self.request.user.is_superuser:
+            form.fields['code_melli'].required = False
+            form.fields['gender'].required = False
+            form.fields['tarikh_tavalod'].required = False
+            form.fields['image_cart_melli'].required = False
+            form.fields['father_name'].required = False
+            form.fields['shomare_hesab'].required = False
+            form.fields['shomare_cart'].required = False
+            form.fields['shomare_shaba'].required = False
+            form.fields['name_saheb_hesab'].required = False
+            form.fields['name_bank'].required = False
+            form.fields['id_telegram'].required = False
+            form.fields['code_posti'].required = False
+            form.fields['address'].required = False
+
+        return form
+
 
 class UserDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
         try:
             user = get_object_or_404(User, pk=pk)
+            if user.tabligh_set.exists():
+                messages.error(request, 'کاربر دارای تبلیغ می باشد')
+                return redirect('ListUser')
+            elif User.objects.filter(code_moaref=user).exists():
+                messages.error(request, 'کاربر دارای زیر مجموعه می باشد')
+                return redirect('ListUser')
             user.delete()
         except ProtectedError:
-            messages.error(self.request, 'از این نوع کاربر قبلا استفاده شده است و قابل حذف نمیباشد.')
+            messages.error(self.request, 'از این نوع کاربر قبلا استفاده شده است و قابل حذف نمی باشد.')
             return redirect('ListUser')
         messages.success(self.request, 'کاربر موردنظر با موفقیت حذف شد')
         return redirect('ListUser')
@@ -147,9 +193,33 @@ class UserListView(LoginRequiredMixin, ListView):
 
 class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = User
-    columns = ['id', 'first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'email']
+    columns = ['id', 'username', 'first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'vazeyat']
 
     def render_column(self, row, column):
         if column == 'tarikh_tavalod':
             return date_jalali(row.tarikh_tavalod, 3)
         return super().render_column(row, column)
+
+    def filter_queryset(self, qs):
+        search = self.request.GET.get('search[value]', None)
+        if search:
+            qs = qs.filter(Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search))
+        return qs
+
+
+class ChangeUserPasswordView(LoginRequiredMixin, PasswordChangeView):
+    template_name = 'system/user/Change_User_Password.html'
+    form_class = ChangeUserPasswordForm
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('ChangeUserPassword')
+
+
+class ProfileUserView(LoginRequiredMixin, View):
+    def get(self, request):
+        user = User.objects.get(username=request.user.username)
+        user.tarikh_tavalod = date_jalali(user.tarikh_tavalod, 3)
+        return render(request, 'system/user/Profile_User.html', {'user': user})

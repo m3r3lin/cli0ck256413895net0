@@ -1,0 +1,226 @@
+{% extends "panel/index/index_base.html" %}
+
+{% load static %}
+{% load app_filters %}
+
+{% block css %}
+{% endblock %}
+
+{% block page_title %}
+    پیام ها
+{% endblock %}
+
+{% block dashboard %}
+    <li>پیام ها</li>
+{% endblock %}
+{% block main_content %}
+    <meta charset="utf-8">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+{#  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>#}
+{#  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>#}
+  <![endif]-->
+
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini">
+    {#<div class="wrapper">#}
+
+
+    <!-- right side column. contains the logo and sidebar -->
+
+
+    <!-- Content Wrapper. Contains page content -->
+
+
+    <!-- Main content -->
+    <section class="content">
+       <input type="text" id="girande" name="girande" value="{{ girande }}">
+
+
+        <!-- =========================================================== -->
+
+
+        <!-- =========================================================== -->
+
+        <!-- Direct Chat -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- DIRECT CHAT PRIMARY -->
+                <div class="box box-primary direct-chat direct-chat-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">گفتگو</h3>
+
+                        <div class="box-tools pull-right">
+                            <span data-toggle="tooltip" title="3 New Messages"
+                                  class="badge bg-light-blue">{{ count_message }}</span>
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Contacts"
+                                    data-widget="chat-pane-toggle">
+                                <i class="fa fa-comments"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                    class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <!-- Conversations are loaded here -->
+
+                        <div class="direct-chat-messages" id="direct-chat-messages" style="height: 450px">
+
+                            <!-- Message. Default to the left -->
+                            {% for item in all_messsge %}
+
+
+                                {% if user.username == item.ferestande.username %}
+
+                                    <div class="direct-chat-msg">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-right">{{ item.ferestande }}</span>
+                                            <span class="direct-chat-timestamp pull-left">{{ item.save_date|date_jalali }}</span>
+                                        </div>
+
+                                        {# "/media/avatar/20190805a77e040cdf044523464899619.jpg#}
+                                        <!-- /.direct-chat-info -->
+                                        {# <img class="direct-chat-img" src='/media/{{ item.ferestande.avatar }}' alt="Message User Image"><!-- /.direct-chat-img -->#}
+                                        {% if item.ferestande.avatar %}
+                                            <img src='{{ item.ferestande.avatar.url }}' class="direct-chat-img" alt="Message User Image">
+                                        {% else %}
+                                            <img src='{% static 'img/avatar/avatar.png' %}' class="direct-chat-img" alt="Message User Image">
+                                        {% endif %}
+                                        <div class="direct-chat-text" id="message_ferestande">
+                                            {{ item.text|linebreaks }}
+                                        </div>
+                                        <!-- /.direct-chat-text -->
+                                    </div>
+                                {% else %}
+
+                                    <!-- /.direct-chat-msg -->
+
+                                    <!-- Message to the right -->
+                                    <div class="direct-chat-msg left">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-left">{{ item.ferestande }}</span>
+                                            <span class="direct-chat-timestamp pull-right">{{ item.save_date|date_jalali }}</span>
+                                        </div>
+                                        <!-- /.direct-chat-info -->
+{#                                        <img class="direct-chat-img" src="/media/{{ item.ferestande.avatar }}" alt="Message User Image"><!-- /.direct-chat-img -->#}
+                                        {% if item.ferestande.avatar %}
+                                            <img src='{{ item.ferestande.avatar.url }}' class="direct-chat-img" alt="Message User Image">
+                                        {% else %}
+                                            <img src='{% static 'img/avatar/avatar.png' %}' class="direct-chat-img" alt="Message User Image">
+                                        {% endif %}
+                                        <div class="direct-chat-text">
+                                            {{ item.text|linebreaks }}
+                                        </div>
+                                    </div>
+                                    <!-- /.direct-chat-text -->
+                                {% endif %}
+
+                            {% endfor %}
+                            <!-- /.direct-chat-msg -->
+                        </div>
+                        <!--/.direct-chat-messages-->
+
+                        <!-- Contacts are loaded here -->
+
+                        <!-- /.direct-chat-pane -->
+                    </div>
+                </div>
+                <!-- /.box-body -->
+{#                <div class="box-footer">#}
+                    {#                        <form action="" method="post">#}
+                    {#                  {% csrf_token %}#}
+
+{#                    <div class="input-group">#}
+{#                        <textarea id="message" name="message" placeholder="پیام" class="form-control"></textarea>#}
+                        {#                                onkeypress="if(event.keyCode == 13){alert('you press enter')}"#}
+{#                        <span class="input-group-btn">#}
+{#                        <button type="button" id="save_message" class="btn btn-primary btn-flat" style="height: 50px;">ارسال</button>#}
+{#                      </span>#}
+{#                    </div>#}
+                    {#                        </form>#}
+{#                </div>#}
+                <!-- /.box-footer-->
+            </div>
+            <!--/.direct-chat -->
+        </div>
+        <!-- /.col -->
+
+
+        <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+
+        <!-- /.content-wrapper -->
+
+
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+             immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+        </div>
+    </section>
+{% endblock %}
+<!-- ./wrapper -->
+
+<!-- jQuery 3 -->
+{% block javascripts %}
+    <script>
+        {#scroll to bottom#}
+        var objDiv = document.getElementById("direct-chat-messages");
+        objDiv.scrollTop = objDiv.scrollHeight;
+
+        $('#save_message').click(function (event) {
+
+            var message = $("#message").val();
+            {#var ferestande={{user.username}};#}
+            {#var girande=$(".direct-chat-name.pull-right")[0].innerHTML#}
+            var girande = $("#girande").val();
+            var ferestande = $("#id_ferestande").val();
+            var data = {'message': message, 'girande': girande, 'ferestande': ferestande}
+            console.log("message", message);
+            console.log("data", data);
+            console.log("frestande", ferestande);
+            console.log("girande", girande);
+            var item = $("#message_ferestande");
+            $.ajax({
+                type: "POST",
+                url: "/system/save_message/",
+                data: JSON.stringify(data),
+
+                success: function (result) {
+                    console.log("result", result);
+
+                    if (result == "") {
+                        {#first_name_mothar.empty();#}
+
+
+                    } else {
+                        window.location.reload();
+                        {#item.append(result['last_pyam_messsage']);#}
+                        {#$("#message").val("");#}
+
+                    }
+                }
+            });
+
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+
+            var girande = document.getElementById('girande');
+
+            girande.style.display = 'none';
+        })
+    </script>
+{% endblock %}
+

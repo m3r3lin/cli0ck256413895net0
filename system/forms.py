@@ -1,18 +1,20 @@
 import re
 
+from django import forms
+from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm
+from django.forms import ModelForm, FileInput, Form
 from django import forms
 from unidecode import unidecode
 
 from system.functions import change_date_to_english
+from system.models import Payam
 from system.models import User, Pelan, Tabligh, TanzimatPaye, ACTIV_MOAREF
-from django.forms.widgets import ClearableFileInput
 
 fullmatch_compiled = re.compile('^code_(\d{1,9})')
 
 
-class MyClearableFileInput(ClearableFileInput):
+class MyClearableFileInput(FileInput):
     initial_text = "تصویر فعلی"
     input_text = 'عوض کردن'
     clear_checkbox_label = 'پاک کردن'
@@ -53,11 +55,12 @@ class TanzimatPayeMiddelware(ModelForm):
                     self.fields['code_moaref'].required = False
             except:
                 pass
+        pass
 
     def validate_code_moarefi(self):
         c = self.cleaned_data['code_moaref']
-        active_moarefi = int(TanzimatPaye.get_settings(ACTIV_MOAREF, 0))
-        if active_moarefi:
+        # active_moarefi = int(TanzimatPaye.get_settings(ACTIV_MOAREF, 0))
+        if c:
             fullmatch = fullmatch_compiled.fullmatch(c)
             if fullmatch:
                 c = fullmatch.groups()[0]
@@ -72,7 +75,6 @@ class TanzimatPayeMiddelware(ModelForm):
 
 
 class UserCreateForm(TanzimatPayeMiddelware):
-    # username = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'نام کاربری'}), error_messages={})
     first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'نام'}))
     last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'نام خانوادگی'}))
     mobile = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'موبایل'}))
@@ -103,7 +105,7 @@ class UserCreateForm(TanzimatPayeMiddelware):
             },
             'password': {
                 'required': "پسورد اجباری است!",
-            }
+            },
         }
 
     def __init__(self, *args, **kwargs):
@@ -147,9 +149,8 @@ class UserUpdateForm(ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'address', 'email', 'shomare_hesab',
-                  'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'code_posti', 'kife_pool', 'kife_daramad',
-                  'code_moaref', 'id_telegram', 'nooe_heshab', 'vazeyat', 'image_cart_melli', 'avatar']
+        fields = ['first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'address', 'code_posti', 'shomare_hesab',
+                  'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'email', 'id_telegram', 'image_cart_melli', 'avatar']
         error_messages = {
             'first_name': {
                 'required': "نام اجباری است!",
@@ -176,8 +177,8 @@ class UserUpdateForm(ModelForm):
             'address': {
                 'required': "آدرس اجباری است!",
             },
-            'email': {
-                'required': "ایمیل اجباری است!",
+            'code_posti': {
+                'required': "کدپستی اجباری است!",
             },
             'shomare_hesab': {
                 'unique': "این شماره حساب قبلا ثبت شده است!",
@@ -197,26 +198,11 @@ class UserUpdateForm(ModelForm):
             'name_bank': {
                 'required': "نام بانک اجباری است!",
             },
-            'code_posti': {
-                'required': "کدپستی اجباری است!",
-            },
-            'kife_pool': {
-                'required': "کیف پول اجباری است!",
-            },
-            'kife_daramad': {
-                'required': "کیف درآمد اجباری است!",
-            },
-            'code_moaref': {
-                'required': ("کد معرف اجباری است!"),
+            'email': {
+                'required': "ایمیل اجباری است!",
             },
             'id_telegram': {
                 'required': "آی دی تلگرام اجباری است!",
-            },
-            'nooe_heshab': {
-                'required': "نوع حساب اجباری است!",
-            },
-            'vazeyat': {
-                'required': "وضعیت اجباری است!",
             },
             'image_cart_melli': {
                 'required': "تصویر کارت ملی اجباری است!",
@@ -241,7 +227,7 @@ class UserUpdateForm(ModelForm):
         self.fields['code_melli'].widget.attrs.update({'class': 'form-control', 'id': 'code_melli'})
 
         self.fields['tarikh_tavalod'].label = "تاریخ تولد:"
-        self.fields['tarikh_tavalod'].required = False
+        self.fields['tarikh_tavalod'].required = True
         self.fields['tarikh_tavalod'].widget.attrs.update({'class': 'form-control', 'id': 'tarikh_tavalod'})
 
         self.fields['mobile'].label = "موبایل:"
@@ -260,9 +246,9 @@ class UserUpdateForm(ModelForm):
         self.fields['address'].required = True
         self.fields['address'].widget.attrs.update({'class': 'form-control', 'id': 'address'})
 
-        self.fields['email'].label = "ایمیل:"
-        self.fields['email'].required = True
-        self.fields['email'].widget.attrs.update({'class': 'form-control', 'id': 'email'})
+        self.fields['code_posti'].label = "کدپستی:"
+        self.fields['code_posti'].required = True
+        self.fields['code_posti'].widget.attrs.update({'class': 'form-control', 'id': 'code_posti'})
 
         self.fields['shomare_hesab'].label = "شماره حساب:"
         self.fields['shomare_hesab'].required = True
@@ -284,33 +270,13 @@ class UserUpdateForm(ModelForm):
         self.fields['name_bank'].required = True
         self.fields['name_bank'].widget.attrs.update({'class': 'form-control', 'id': 'name_bank'})
 
-        self.fields['code_posti'].label = "کدپستی:"
-        self.fields['code_posti'].required = True
-        self.fields['code_posti'].widget.attrs.update({'class': 'form-control', 'id': 'code_posti'})
-
-        self.fields['kife_pool'].label = "کیف پول:"
-        self.fields['kife_pool'].required = False
-        self.fields['kife_pool'].widget.attrs.update({'class': 'form-control', 'id': 'kife_pool'})
-
-        self.fields['kife_daramad'].label = "کیف درآمد:"
-        self.fields['kife_daramad'].required = False
-        self.fields['kife_daramad'].widget.attrs.update({'class': 'form-control', 'id': 'kife_daramad'})
-
-        self.fields['code_moaref'].label = "کد معرف:"
-        self.fields['code_moaref'].required = True
-        self.fields['code_moaref'].widget.attrs.update({'class': 'form-control', 'id': 'code_moaref'})
+        self.fields['email'].label = "ایمیل:"
+        self.fields['email'].required = True
+        self.fields['email'].widget.attrs.update({'class': 'form-control', 'id': 'email'})
 
         self.fields['id_telegram'].label = "آی دی تلگرام:"
         self.fields['id_telegram'].required = False
         self.fields['id_telegram'].widget.attrs.update({'class': 'form-control', 'id': 'id_telegram'})
-
-        self.fields['nooe_heshab'].label = "نوع حساب:"
-        self.fields['nooe_heshab'].required = True
-        self.fields['nooe_heshab'].widget.attrs.update({'class': 'form-control', 'id': 'nooe_heshab'})
-
-        self.fields['vazeyat'].label = "وضعیت:"
-        self.fields['vazeyat'].required = True
-        self.fields['vazeyat'].widget.attrs.update({'class': 'form-control', 'id': 'vazeyat'})
 
         self.fields['image_cart_melli'].label = "تصویر کارت ملی:"
         self.fields['image_cart_melli'].required = True
@@ -360,11 +326,11 @@ class PelanCreateForm(ModelForm):
 
         self.fields['gheymat'].label = "قیمت:"
         self.fields['gheymat'].required = True
-        self.fields['gheymat'].widget.attrs.update({'class': 'form-control', 'id': 'gheymat'})
+        self.fields['gheymat'].widget.attrs.update({'class': 'form-control', 'id': 'gheymat', 'min': 0})
 
         self.fields['tedad_click'].label = "تعداد کلیک:"
         self.fields['tedad_click'].required = True
-        self.fields['tedad_click'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click'})
+        self.fields['tedad_click'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click', 'min': 0})
 
         self.fields['vazeyat'].label = "وضعیت:"
         self.fields['vazeyat'].required = True
@@ -386,7 +352,7 @@ class TablighCreateForm(ModelForm):
                 'required': "متن اجباری است!",
             },
             'code_tabligh_gozaar': {
-                'required': "تبلیغ گذار اجباری است!",
+                'required': "کد تبلیغ گذار اجباری است!",
             },
             'code_pelan': {
                 'required': "کد پلن اجباری است!",
@@ -404,6 +370,7 @@ class TablighCreateForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TablighCreateForm, self).__init__(*args, **kwargs)
+
         self.fields['onvan'].label = "عنوان:"
         self.fields['onvan'].required = True
         self.fields['onvan'].widget.attrs.update({'class': 'form-control', 'id': 'onvan'})
@@ -422,14 +389,14 @@ class TablighCreateForm(ModelForm):
 
         self.fields['tedad_click'].label = "تعداد کلیک:"
         self.fields['tedad_click'].required = True
-        self.fields['tedad_click'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click'})
+        self.fields['tedad_click'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click', 'min': 0})
 
         self.fields['tedad_click_shode'].label = "تعداد کلیک شده:"
         self.fields['tedad_click_shode'].required = False
-        self.fields['tedad_click_shode'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click_shode'})
+        self.fields['tedad_click_shode'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click_shode', 'min': 0})
 
         self.fields['vazeyat'].label = "وضعیت:"
-        self.fields['vazeyat'].required = True
+        self.fields['vazeyat'].required = False
         self.fields['vazeyat'].widget.attrs.update({'class': 'form-control', 'id': 'vazeyat'})
 
 
@@ -487,11 +454,16 @@ class SodeModirForm(ModelForm):
 
 
 class Count_level_networkForm(ModelForm):
-    value = forms.IntegerField()
+    value = forms.IntegerField(required=True,error_messages={
+        'required': ("فیلد درصد اجباری است!"),
+    })
+    onvan = forms.IntegerField(required=True,error_messages={
+        'required': ("فیلد عنوان اجباری است!"),
+    })
 
     class Meta:
         model = TanzimatPaye
-        fields = ['value']
+        fields = ['onvan', 'value']
 
     def __init__(self, *args, **kwargs):
         super(Count_level_networkForm, self).__init__(*args, **kwargs)
@@ -499,6 +471,10 @@ class Count_level_networkForm(ModelForm):
         self.fields['value'].label = "مقدار:"
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+        self.fields['onvan'].label = "سطح:"
+        self.fields['onvan'].required = True
+        self.fields['onvan'].widget.attrs.update({'class': 'form-control', 'id': 'onvan'})
 
 
 class Count_kharid_hadaghalForm(ModelForm):
@@ -510,6 +486,21 @@ class Count_kharid_hadaghalForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(Count_kharid_hadaghalForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "مقدار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+class Count_visit_tabligh_Form(ModelForm):
+    value = forms.IntegerField()
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Count_visit_tabligh_Form, self).__init__(*args, **kwargs)
 
         self.fields['value'].label = "مقدار:"
         self.fields['value'].required = True
@@ -530,6 +521,7 @@ class Time_kharid_termForm(ModelForm):
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
 
+
 class Taien_meghdar_matlabForm(ModelForm):
     value = forms.IntegerField()
 
@@ -543,7 +535,6 @@ class Taien_meghdar_matlabForm(ModelForm):
         self.fields['value'].label = "مقدار:"
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
-
 
 
 class Show_amarforuserForm(ModelForm):
@@ -565,7 +556,6 @@ class Show_amarforuserForm(ModelForm):
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
 
 
-
 class Taied_khodkar_tablighForm(ModelForm):
     VAZEYAT_CHOICES = (
         ('1', 'فعال'),
@@ -585,3 +575,144 @@ class Taied_khodkar_tablighForm(ModelForm):
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
 
 
+class ChangeUserPasswordForm(PasswordChangeForm):
+    class Meta:
+        model = User
+        fields = ['password', ]
+        error_messages = {
+            'old_password': {
+                'password_incorrect': "پسورد شما اشتباه است",
+            },
+            'new_password1': {
+                "password_mismatch": "پسورد های باید یکی باشد"
+            },
+            'new_password2': {
+                "password_mismatch": "پسورد های باید یکی باشد"
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ChangeUserPasswordForm, self).__init__(*args, **kwargs)
+        self.fields['new_password1'].label = 'پسورد'
+        self.fields['new_password1'].help_text = ''
+
+
+class NewMessageCreateForm(ModelForm):
+    # girande = forms.ModelChoiceField(queryset=User.objects.filter(girande_user_id__text__isnull=True), error_messages={
+    #     'required': ("فیلد گیرنده اجباری است"),
+    # })
+
+    class Meta:
+        model = Payam
+        fields = ['text']
+        exclude=['girande']
+
+    def __init__(self, *args, **kwargs):
+        super(NewMessageCreateForm, self).__init__(*args, **kwargs)
+
+        # field_name = 'girande'
+        # self.fields[field_name].label = "گیرنده:"
+        # self.fields[field_name].required = False
+        # self.fields[field_name].help_text = 'لطفا گیرنده را وارد کنید.'
+        # self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
+
+        field_name = 'text'
+        self.fields[field_name].label = "متن پیام:"
+        self.fields[field_name].required = True
+        self.fields[field_name].help_text = 'لطفا متن پیام  را وارد کنید.'
+        self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
+
+
+class Vahed_poll_siteForm(ModelForm):
+    VAZEYAT_CHOICES = (
+        ('1', 'تومان'),
+        ('0', 'دلار'),
+    )
+    value = forms.ChoiceField(choices=VAZEYAT_CHOICES)
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Vahed_poll_siteForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "تومان  / دلار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+class Taien_hadaghal_etbarForm(ModelForm):
+    value = forms.IntegerField()
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(Taien_hadaghal_etbarForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "مقدار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+class MaxNetworkCountForm(ModelForm):
+    value = forms.IntegerField()
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(MaxNetworkCountForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "مقدار:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+class Amar_jaali_Form(Form):
+    count_user_online = forms.IntegerField()
+    # count_user_online = forms.CharField(error_messages={
+    #     'required': ("فیلد انتخاب تعداد کاربران انلاین اجباری است!"),
+    # })
+    count_all_user = forms.IntegerField()
+    count_user_new_today = forms.IntegerField()
+    meghdar_daramad_pardahkti = forms.IntegerField()
+    count_tabligh_thabti = forms.IntegerField()
+
+    def __init__(self, *args, **kwargs):
+        super(Amar_jaali_Form, self).__init__(*args, **kwargs)
+
+        self.fields['count_user_online'].label = "تعداد کاربران انلاین:"
+        self.fields['count_user_online'].required = True
+        self.fields['count_user_online'].widget.attrs.update({'class': 'form-control', 'id': 'count_user_online'})
+
+        self.fields['count_all_user'].label = "تعداد کل کاربران:"
+        self.fields['count_all_user'].required = True
+        self.fields['count_all_user'].widget.attrs.update({'class': 'form-control', 'id': 'count_all_user'})
+
+        self.fields['count_user_new_today'].label = "تعداد کاربران جدید امروز:"
+        self.fields['count_user_new_today'].required = True
+        self.fields['count_user_new_today'].widget.attrs.update({'class': 'form-control', 'id': 'count_user_new_today'})
+
+        self.fields['meghdar_daramad_pardahkti'].label = "مقدار در امد پرداخت شده:"
+        self.fields['meghdar_daramad_pardahkti'].required = True
+        self.fields['meghdar_daramad_pardahkti'].widget.attrs.update({'class': 'form-control', 'id': 'meghdar_daramad_pardahkti'})
+
+        self.fields['count_tabligh_thabti'].label = "تعداد تبلیغات ثبت شده:"
+        self.fields['count_tabligh_thabti'].required = True
+        self.fields['count_tabligh_thabti'].widget.attrs.update({'class': 'form-control', 'id': 'count_tabligh_thabti'})
+
+
+class IncreaseBalanceFrom(forms.Form):
+    how_much = forms.IntegerField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        field_name = 'how_much'
+        self.fields[field_name].label = "مبلغ به تومان:"
+        self.fields[field_name].required = True
+        self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})

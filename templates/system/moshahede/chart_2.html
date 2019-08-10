@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title>چارت نقش کاربران</title>
+    <link rel="stylesheet" href="{% static 'treant-js-master/Treant.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'treant-js-master/examples/simple-scrollbar/simple-scrollbar.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'treant-js-master/vendor/perfect-scrollbar/perfect-scrollbar.css' %}" type="text/css"/>
+
+</head>
+<body>
+<div class="chart" id="OrganiseChart1"></div>
+<script src="{% static 'treant-js-master/vendor/raphael.js' %}"></script>
+<script src="{% static 'treant-js-master/Treant.js' %}"></script>
+<script src="{% static 'treant-js-master/vendor/jquery.min.js' %}"></script>
+<script src="{% static 'treant-js-master/vendor/jquery.mousewheel.js' %}"></script>
+<script>
+    var ALTERNATIVE = {{ chart_config |safe }}
+        new Treant(ALTERNATIVE);
+</script>
+</body>
+</html>

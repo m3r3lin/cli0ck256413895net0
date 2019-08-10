@@ -1,0 +1,66 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% block css %}
+    <style>
+        td {
+            text-align: center;
+        }
+
+        th:nth-child(9), td:nth-child(9) {
+            white-space: nowrap;
+        }
+    </style>
+{% endblock %}
+{% block page_title %}
+    لیست تبلیغات
+{% endblock %}
+{% block dashboard %}
+    <li>لیست تبلیغات</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        {% include "errors.html" %}
+                        {% include "messages.html" %}
+
+                        <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                            <table id="networkdatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">نام و نام خانوادگی</th>
+                                    <th class="text-center">سطح</th>
+                                    <th class="text-center">درامد</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'dist/my_js/datatable.js' %}"></script>
+    <!-- my fontawesom -->
+    <script>
+        datatable_simple_show({
+            url: "{% url 'Parent_Children_D' %}",
+            real_cols: 3,
+            datable_id: '#networkdatatable',
+            no_action_nutton:true
+        });
+    </script>
+{% endblock %}

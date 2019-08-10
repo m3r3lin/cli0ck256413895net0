@@ -15,7 +15,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from system.models import User, TanzimatPaye, ACTIV_MOAREF, Parent, TEDAD_SATH_SHABAKE, COUNT_LEVEL_NETWORK
 from system.templatetags.app_filters import date_jalali
-
+import simplejson as json
 
 class UserCreateView(CreateView):
     template_name = 'system/user/Create_User.html'
@@ -42,6 +42,21 @@ class UserCreateView(CreateView):
                     messages.error(self.request, 'تعداد سطوح بیش از مقدار تعیین شده است')
                     return super(UserCreateView, self).form_invalid(form)
                 form.instance.sath = user.sath + 1
+                if user.list_parent is not None:
+                    jsonDec = json.decoder.JSONDecoder()
+                    parents = jsonDec.decode(user.list_parent)
+                    parents.insert(0,[user.id])
+                    json_parent = json.dumps(parents)
+                    new_user = form.save(commit=False)
+                    new_user.list_parent=json_parent
+                    new_user.save()
+                else:
+                    parent=[]
+                    parent.append([user.id])
+                    json_parent = json.dumps(parent)
+                    new_user = form.save(commit=False)
+                    new_user.list_parent = json_parent
+                    new_user.save()
             else:
                 messages.error(self.request, 'کد معرف وارد شده نا معتبر است')
                 return super(UserCreateView, self).form_invalid(form)
@@ -55,6 +70,21 @@ class UserCreateView(CreateView):
                         messages.error(self.request, 'تعداد سطوح بیش از مقدار تعیین شده است')
                         return super(UserCreateView, self).form_invalid(form)
                     form.instance.sath = user.sath + 1
+                    if user.list_parent is not None:
+                        jsonDec = json.decoder.JSONDecoder()
+                        parents = jsonDec.decode(user.list_parent)
+                        parents.insert(0, [user.id])
+                        json_parent = json.dumps(parents)
+                        new_user = form.save(commit=False)
+                        new_user.list_parent = json_parent
+                        new_user.save()
+                    else:
+                        parent = []
+                        parent.append([user.id])
+                        json_parent = json.dumps(parent)
+                        new_user = form.save(commit=False)
+                        new_user.list_parent = json_parent
+                        new_user.save()
                 else:
                     messages.error(self.request, 'کد معرف وارد شده نا معتبر است')
                     return super(UserCreateView, self).form_invalid(form)
@@ -193,11 +223,13 @@ class UserListView(LoginRequiredMixin, ListView):
 
 class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = User
-    columns = ['id', 'username', 'first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'vazeyat']
+    columns = ['id', 'username', 'first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'vazeyat','online']
 
     def render_column(self, row, column):
         if column == 'tarikh_tavalod':
             return date_jalali(row.tarikh_tavalod, 3)
+        if column == 'online':
+            return row.user_status
         return super().render_column(row, column)
 
     def filter_queryset(self, qs):

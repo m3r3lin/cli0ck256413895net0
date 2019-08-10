@@ -86,6 +86,132 @@
         </div>
         <!-- /.info-box -->
     </div>
+
+    <!--   -->
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-teal">
+            <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">تعداد کاربران آنلاین</span>
+                <span class="info-box-number" style="text-align: left;">{{ queries.count_online_user }}</span>
+
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-blue">
+            <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">تعداد کل اعضا</span>
+                <span class="info-box-number" style="text-align: left;">{{ queries.all_user }}</span>
+
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-maroon">
+            <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">تعداد کاربران جدید امروز</span>
+                <span class="info-box-number" style="text-align: left;">{{ queries.all_User_Today }}</span>
+
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-olive">
+            <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">تعداد تبلیغات ثبت شده</span>
+                <span class="info-box-number" style="text-align: left;">{{ queries.all_tabligh }}</span>
+
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-aqua">
+            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">درآمد کل</span>
+                <span class="info-box-number">{{ queries.this_month_clicks }}</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-yellow">
+            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">کل انتشارات این ماه</span>
+                <span class="info-box-number">{{ queries.this_month_publishes }}</span>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+                <span class="progress-description">
+                    0 درصد افزایش
+                  </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-green">
+            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">کل در آمد مستقیم</span>
+                <span class="info-box-number">{{ queries.all_direct_recieve }}</span>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+                <span class="progress-description">
+                    0 درصد افزایش
+                  </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-blue">
+            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">کل در آمد غیر مستقیم</span>
+                <span class="info-box-number">{{ queries.all_indirect_recieve }}</span>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+                <span class="progress-description">
+                    0 درصد افزایش
+                  </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
     <!-- Main content -->
     {% include 'system/Tabligh/show_tabligh_part.html' %}
     <!-- /.content -->

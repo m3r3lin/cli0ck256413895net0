@@ -43,6 +43,13 @@ VAZEYAT_PAYAM = (
     (2, 'ارسال شده'),
 )
 
+class Role(models.Model):
+    name = models.CharField(max_length=255, unique=True,null=True)
+    title = models.CharField(max_length=255,null=True)
+
+    def __str__(self):
+        return self.title
+
 
 class User(AbstractUser):
     code_melli = models.CharField(max_length=10, unique=True, null=True, blank=True)
@@ -67,6 +74,8 @@ class User(AbstractUser):
     vazeyat = models.IntegerField(null=True, blank=True, choices=VAZEYAT_CHOICES)
     image_cart_melli = models.ImageField(upload_to=upload_cart_melli_path, null=True, blank=True)
     avatar = models.ImageField(upload_to=upload_avatar_path, null=True, blank=True)
+    roles = models.ManyToManyField(Role, related_name="users",
+                                   related_query_name="user", blank=True)
 
     def is_complete(self):
         if self.first_name is not None or \
@@ -131,6 +140,9 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+
 
 
 class KifPool(models.Model):

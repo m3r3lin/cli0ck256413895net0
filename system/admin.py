@@ -1,5 +1,5 @@
 from django.contrib import admin
-from system.models import User, Pelan, Tabligh, Click, Payam, TanzimatPaye, KifPool, TablighatMontasherKonande
+from system.models import User, Pelan, Tabligh, Click, Payam, TanzimatPaye, KifPool, TablighatMontasherKonande,Role
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -41,5 +41,6 @@ admin.site.register(Tabligh, TablighAdmin)
 admin.site.register(Click, ClickAdmin)
 admin.site.register(Payam, PayamAdmin)
 admin.site.register(TanzimatPaye)
+admin.site.register(Role)
 admin.site.register(KifPool,KifePoolAdmin)
 admin.site.register(TablighatMontasherKonande,TablighatMontasherKonandeAdmin)

@@ -15,6 +15,7 @@ from system.base_views.views_Tanzimat_Paye import Languge_siteView, Count_Level_
 from system.base_views.views_User import RedirectToUserUpdate
 from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, ChangeUserPasswordView, \
     ProfileUserView
+from system.base_views.views_Moshahedat import MessageListmoshahedeview,Message_show_moshahedeview
 from system.views import Dashboard
 
 urlpatterns = [
@@ -79,4 +80,9 @@ urlpatterns = [
     path('virtual_bank_verification1/', dargah_test_part_1),
     # ---- Click
     path('click/<enteshartoken>',ClickedOnTablighView.as_view(),name='clicked_on_tabligh'),
+
+    #Moshahedat
+    path('MessageListmoshahede/', MessageListmoshahedeview.as_view(), name='MessageListmoshahede'),
+    path('Message_show_moshahede/<int:pk>', Message_show_moshahedeview.as_view(), name='Message_show_moshahede'),
+
 ]

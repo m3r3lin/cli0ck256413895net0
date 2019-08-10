@@ -43,7 +43,14 @@
                             <label for="full_name">{{ form.girande.label_tag }}<span class="red-star">*</span></label>
                         {% endif %}
 
-                            {{ form.girande }}
+                        <select class="form-control" name="girande">
+                        <option value="">---------</option>
+                             {% for item in girande %}
+                            <option value="{{ item.id }}">{{ item.username }}</option>
+                            {% endfor %}
+                        </select>
+
+{#                            {{ form.girande }}#}
 
 
                             {% if form.girande.help_text %}
@@ -65,7 +72,7 @@
 
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary">ثبت پیام جدید</button>
-{#                        <a class="btn btn-openid" href="{% url 'ListBasij' %}"><b>بازگشت</b></a>#}
+                        <a class="btn btn-openid" href="{% url 'MessageList' %}"><b>بازگشت</b></a>
                     </div>
                 </form>
             </div>

@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block dashboard %}
-    <li> <a class="" href="{% url 'MessageList' %}"><b style="color: #0b93d5">پیام ها</b></a></li>
+    <li>پیام ها</li>
 {% endblock %}
 {% block main_content %}
     <meta charset="utf-8">
@@ -134,19 +134,19 @@
                     </div>
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer">
+{#                <div class="box-footer">#}
                     {#                        <form action="" method="post">#}
                     {#                  {% csrf_token %}#}
 
-                    <div class="input-group">
-                        <textarea id="message" name="message" placeholder="پیام" class="form-control"></textarea>
+{#                    <div class="input-group">#}
+{#                        <textarea id="message" name="message" placeholder="پیام" class="form-control"></textarea>#}
                         {#                                onkeypress="if(event.keyCode == 13){alert('you press enter')}"#}
-                        <span class="input-group-btn">
-                        <button type="button" id="save_message" class="btn btn-primary btn-flat" style="height: 50px;">ارسال</button>
-                      </span>
-                    </div>
+{#                        <span class="input-group-btn">#}
+{#                        <button type="button" id="save_message" class="btn btn-primary btn-flat" style="height: 50px;">ارسال</button>#}
+{#                      </span>#}
+{#                    </div>#}
                     {#                        </form>#}
-                </div>
+{#                </div>#}
                 <!-- /.box-footer-->
             </div>
             <!--/.direct-chat -->
@@ -191,32 +191,26 @@
             console.log("frestande", ferestande);
             console.log("girande", girande);
             var item = $("#message_ferestande");
-            if(message==""){
-                alert("لطفا متنی را وارد کنید.");
-                return 0
-            }
-            else {
-                $.ajax({
-                    type: "POST",
-                    url: "/system/save_message/",
-                    data: JSON.stringify(data),
+            $.ajax({
+                type: "POST",
+                url: "/system/save_message/",
+                data: JSON.stringify(data),
 
-                    success: function (result) {
-                        console.log("result", result);
+                success: function (result) {
+                    console.log("result", result);
 
-                        if (result == "") {
-                            {#first_name_mothar.empty();#}
+                    if (result == "") {
+                        {#first_name_mothar.empty();#}
 
 
-                        } else {
-                            window.location.reload();
-                            {#item.append(result['last_pyam_messsage']);#}
-                            {#$("#message").val("");#}
+                    } else {
+                        window.location.reload();
+                        {#item.append(result['last_pyam_messsage']);#}
+                        {#$("#message").val("");#}
 
-                        }
                     }
-                });
-            }
+                }
+            });
 
         });
     </script>

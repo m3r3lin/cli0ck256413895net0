@@ -598,22 +598,23 @@ class ChangeUserPasswordForm(PasswordChangeForm):
 
 
 class NewMessageCreateForm(ModelForm):
-    girande = forms.ModelChoiceField(queryset=User.objects.filter(girande_user_id__text__isnull=True), error_messages={
-        'required': ("فیلد گیرنده اجباری است"),
-    })
+    # girande = forms.ModelChoiceField(queryset=User.objects.filter(girande_user_id__text__isnull=True), error_messages={
+    #     'required': ("فیلد گیرنده اجباری است"),
+    # })
 
     class Meta:
         model = Payam
-        fields = ['text', 'girande']
+        fields = ['text']
+        exclude=['girande']
 
     def __init__(self, *args, **kwargs):
         super(NewMessageCreateForm, self).__init__(*args, **kwargs)
 
-        field_name = 'girande'
-        self.fields[field_name].label = "گیرنده:"
-        self.fields[field_name].required = True
-        self.fields[field_name].help_text = 'لطفا گیرنده را وارد کنید.'
-        self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
+        # field_name = 'girande'
+        # self.fields[field_name].label = "گیرنده:"
+        # self.fields[field_name].required = False
+        # self.fields[field_name].help_text = 'لطفا گیرنده را وارد کنید.'
+        # self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
 
         field_name = 'text'
         self.fields[field_name].label = "متن پیام:"

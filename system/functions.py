@@ -4,6 +4,7 @@ import random
 import uuid
 from unidecode import unidecode
 from Ads_Project.functions import jalali_to_gregorian
+from django.shortcuts import redirect
 
 
 def get_filename_ext(filepath):
@@ -49,3 +50,21 @@ def change_date_to_english(value, mode=1):
     string_date_time = string_date + stime
     date_time = datetime.datetime.strptime(string_date_time, "%Y %m %d %H:%M:%S")
     return date_time
+
+
+def check_role_user(*roles):
+    def decorator(func):
+        def wrapper(request, *args, **kwargs):
+            try:
+                user_roles = request.user.roles.all()
+            except:
+                return redirect('/users/logout/')
+
+            for user_role in user_roles:
+                for role in roles:
+                    if role == str(user_role.name):
+                        return func(request, *args, **kwargs)
+            return redirect('/')
+
+        return wrapper
+    return decorator

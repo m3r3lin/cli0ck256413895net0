@@ -70,74 +70,84 @@
                         <li class="dropdown messages-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-envelope-o"></i>
-                                <span class="label label-success">4</span>
+                                <span class="label label-success">{{ count_message_not_read }}</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">۴ پیام خوانده نشده</li>
+                                <li class="header">{{ count_message_not_read }} پیام خوانده نشده</li>
+
                                 <li>
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">
+                                        {% for item in message_not_read %}
                                         <li><!-- start message -->
-                                            <a href="#">
+                                            <a href="{% url  'Message_show_view' pk=item.id %}">
                                                 <div class="pull-right">
-                                                    <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
+                                                    {% if item.ferestande.avatar %}
+                                                    <img src="{{ item.ferestande.avatar.url }}" class="img-circle" alt="User Image">
+                                                        {% else %}
+                                                      <img src="{% static 'img/avatar/avatar.png' %}" class="img-circle" alt="User Image">
+
+
+                                                    {% endif %}
+
                                                 </div>
                                                 <h4>
-                                                    علیرضا
-                                                    <small><i class="fa fa-clock-o"></i> ۵ دقیقه پیش</small>
+                                                    {{ item.ferestande }}
+                                                    <small><i class="fa fa-clock-o"></i> {{ item.save_date|date_jalali }}</small>
                                                 </h4>
-                                                <p>متن پیام</p>
+                                                <p>{{ item.text }}</p>
                                             </a>
                                         </li>
+                                        {% endfor %}
                                         <!-- end message -->
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-right">
-                                                    <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">
-                                                </div>
-                                                <h4>
-                                                    نگین
-                                                    <small><i class="fa fa-clock-o"></i> ۲ ساعت پیش</small>
-                                                </h4>
-                                                <p>متن پیام</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-right">
-                                                    <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">
-                                                </div>
-                                                <h4>
-                                                    نسترن
-                                                    <small><i class="fa fa-clock-o"></i> امروز</small>
-                                                </h4>
-                                                <p>متن پیام</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-right">
-                                                    <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">
-                                                </div>
-                                                <h4>
-                                                    نگین
-                                                    <small><i class="fa fa-clock-o"></i> دیروز</small>
-                                                </h4>
-                                                <p>متن پیام</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-right">
-                                                    <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">
-                                                </div>
-                                                <h4>
-                                                    نسترن
-                                                    <small><i class="fa fa-clock-o"></i> ۲ روز پیش</small>
-                                                </h4>
-                                                <p>متن پیام</p>
-                                            </a>
-                                        </li>
+{#                                        <li>#}
+{#                                            <a href="#">#}
+{#                                                <div class="pull-right">#}
+{#                                                    <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">#}
+{#                                                </div>#}
+{#                                                <h4>#}
+{#                                                    نگین#}
+{#                                                    <small><i class="fa fa-clock-o"></i> ۲ ساعت پیش</small>#}
+{#                                                </h4>#}
+{#                                                <p>متن پیام</p>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                        <li>#}
+{#                                            <a href="#">#}
+{#                                                <div class="pull-right">#}
+{#                                                    <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">#}
+{#                                                </div>#}
+{#                                                <h4>#}
+{#                                                    نسترن#}
+{#                                                    <small><i class="fa fa-clock-o"></i> امروز</small>#}
+{#                                                </h4>#}
+{#                                                <p>متن پیام</p>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                        <li>#}
+{#                                            <a href="#">#}
+{#                                                <div class="pull-right">#}
+{#                                                    <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">#}
+{#                                                </div>#}
+{#                                                <h4>#}
+{#                                                    نگین#}
+{#                                                    <small><i class="fa fa-clock-o"></i> دیروز</small>#}
+{#                                                </h4>#}
+{#                                                <p>متن پیام</p>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                        <li>#}
+{#                                            <a href="#">#}
+{#                                                <div class="pull-right">#}
+{#                                                    <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">#}
+{#                                                </div>#}
+{#                                                <h4>#}
+{#                                                    نسترن#}
+{#                                                    <small><i class="fa fa-clock-o"></i> ۲ روز پیش</small>#}
+{#                                                </h4>#}
+{#                                                <p>متن پیام</p>#}
+{#                                            </a>#}
+{#                                        </li>#}
                                     </ul>
                                 </li>
                                 <li class="footer"><a href="{% url 'MessageList' %}">نمایش تمام پیام ها</a></li>
@@ -330,7 +340,7 @@
 
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>لیست همه پیام های کاربران</a></li>
+                            <li><a href="{% url 'MessageListmoshahede' %}"><i class="fa fa-plus"></i>لیست همه پیام های کاربران</a></li>
                             <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>تعداد کابران آنلاین</a></li>
                         </ul>
                     </li>

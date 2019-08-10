@@ -105,11 +105,11 @@
 {##}
 {#              </div>#}
                 <div class="box-tools pull-right">
-                <div class="has-feedback">
-                             <a href="{% url 'NewMessageCreate' %}" class="btn btn-primary btn-block margin-bottom">ارسال پیام جدید</a>
-
-
-                </div>
+{#                <div class="has-feedback">#}
+{#                             <a href="{% url 'NewMessageCreate' %}" class="btn btn-primary btn-block margin-bottom">ارسال پیام جدید</a>#}
+{##}
+{##}
+{#                </div>#}
 
               </div>
               <!-- /.box-tools -->
@@ -120,7 +120,7 @@
                 <!-- Check all button -->
                <div class="pull-right">
 {#                 <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>#}
-{#                 </button>#}
+                 </button>
                  <div class="btn-group">
 
 {#                   <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>#}
@@ -143,33 +143,32 @@
               <div class="table-responsive mailbox-messages">
                 <table class="table table-hover table-striped">
                   <tbody>
+
+<tr>
+
+                  <th>فرستنده</th>
+                  <th>گیرنده</th>
+                  <th>پیام</th>
+    <th></th>
+                  <th>زمان</th>
+</tr>
                   {% for item in user_message %}
 
                   <tr>
-                       {% if user.username == item.girande.username %}
 
-                    <td><input type="checkbox"></td>
-                    <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
 
-                    <td class="mailbox-name"><a href="{% url  'Message_show_view' pk=item.id %}">{{ item.ferestande }}</a></td>
 
-                    <td class="mailbox-subject"><b>{{item.text}}</b> - {{item.text}}
+                    <td class="mailbox-star">{{ item.ferestande }}</a></td>
+
+                    <td class="mailbox-name">{{ item.girande }}</a></td>
+
+                      <td class="mailbox-subject"><b><a href="{% url  'Message_show_moshahede' pk=item.id %}">{{item.text}}</a></b> - {{item.text}}
                     </td>
                     <td class="mailbox-attachment"></td>
                     <td class="mailbox-date">{{item.save_date|date_jalali }}</td>
-                     {% else %}
 
-                     <td><input type="checkbox"></td>
-                    <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
-
-                    <td class="mailbox-name"><a href="{% url  'Message_show_view' pk=item.id %}">{{ item.girande }}</a></td>
-
-                    <td class="mailbox-subject"><b>{{item.text}}</b> - {{item.text}}
-                    </td>
-                    <td class="mailbox-attachment"></td>
-                    <td class="mailbox-date">{{item.save_date|date_jalali }}</td>
                   </tr>
-                  {% endif %}
+
                   {% endfor %}
 
                   </tbody>
@@ -178,7 +177,32 @@
               </div>
               <!-- /.mail-box-messages -->
             </div>
-
+            <!-- /.box-body -->
+{#            <div class="box-footer no-padding">#}
+{#              <div class="mailbox-controls">#}
+{#                <!-- Check all button -->#}
+{#                <div class="pull-right">#}
+{#                  <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>#}
+{#                  </button>#}
+{#                  <div class="btn-group">#}
+{#                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>#}
+{#                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>#}
+{#                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>#}
+{#                  </div>#}
+{#                </div>#}
+{#                <!-- /.btn-group -->#}
+{#                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>#}
+{#                <div class="pull-left">#}
+{#                  1-50/200#}
+{#                  <div class="btn-group">#}
+{#                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>#}
+{#                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>#}
+{#                  </div>#}
+{#                  <!-- /.btn-group -->#}
+{#                </div>#}
+{#                <!-- /.pull-right -->#}
+{#              </div>#}
+{#            </div>#}
           </div>
           <!-- /. box -->
         </div>
@@ -215,9 +239,9 @@
 <!-- iCheck -->
 <!-- Page Script -->
 <script>
-$("#refresh_page").click(function () {
-    location.reload()
-})
+  $("#refresh_page").click(function () {
+      location.reload(true);
+  })
   $(function () {
     //Enable iCheck plugin for checkboxes
     //iCheck for checkbox and radio inputs

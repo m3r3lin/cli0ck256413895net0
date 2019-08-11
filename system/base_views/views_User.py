@@ -178,6 +178,8 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         if self.request.user.is_superuser:
             form.fields['code_melli'].required = False
             form.fields['gender'].required = False
+            form.fields['mobile'].required = False
+            form.fields['email'].required = False
             form.fields['tarikh_tavalod'].required = False
             form.fields['image_cart_melli'].required = False
             form.fields['father_name'].required = False
@@ -223,11 +225,13 @@ class UserListView(LoginRequiredMixin, ListView):
 
 class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = User
-    columns = ['id', 'username', 'first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'vazeyat','online']
+    columns = ['id', 'username', 'first_name', 'last_name', 'code_melli','date_joined', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'is_active','online']
 
     def render_column(self, row, column):
         if column == 'tarikh_tavalod':
             return date_jalali(row.tarikh_tavalod, 3)
+        if column == 'date_joined':
+            return date_jalali(row.date_joined, 3)
         if column == 'online':
             return row.user_status
         return super().render_column(row, column)

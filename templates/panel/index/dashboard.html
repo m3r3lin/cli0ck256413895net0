@@ -10,6 +10,31 @@
         {% include "errors.html" %}
         {% include "messages.html" %}
     </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            <section class="col-lg-12 col-md-12">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <i class="fa fa-info-circle"></i>
+                        <h3 class="box-title">اطلاعیه های مدیریت سایت</h3>
+                        <!-- tools box -->
+                        <div class="pull-left box-tools">
+                            <button type="button" class="btn bg-info btn-sm" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                        <!-- /. tools -->
+                    </div>
+                    <div class="box-body">
+                        {% for pm in queries.all_infopm %}
+                            <h5 style="margin-bottom: 25px;"><b>{{ forloop.counter }}. </b></b>{{ pm.body }}</h5>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
     <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box bg-aqua">
             <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
@@ -49,6 +74,7 @@
         <!-- /.info-box -->
     </div>
     <div class="col-md-3 col-sm-6 col-xs-12">
+
         <div class="info-box bg-green">
             <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
 
@@ -88,7 +114,7 @@
     </div>
 
     <!--   -->
-
+    {% if queries.active_show_forosh == "1" %}
     <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box bg-teal">
             <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
@@ -141,53 +167,44 @@
         </div>
         <!-- /.info-box -->
     </div>
+    {% endif %}
+    <!---   --->
 
 
     <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box bg-aqua">
-            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+        <div class="info-box bg-yellow">
+            <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">درآمد کل</span>
-                <span class="info-box-number">{{ queries.this_month_clicks }}</span>
+                <span class="info-box-number" style="text-align: left;">{{ queries.all_recive }}</span>
+
             </div>
             <!-- /.info-box-content -->
         </div>
         <!-- /.info-box -->
     </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box bg-yellow">
-            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
-
-            <div class="info-box-content">
-                <span class="info-box-text">کل انتشارات این ماه</span>
-                <span class="info-box-number">{{ queries.this_month_publishes }}</span>
-
-                <div class="progress">
-                    <div class="progress-bar" style="width: 0%"></div>
-                </div>
-                <span class="progress-description">
-                    0 درصد افزایش
-                  </span>
-            </div>
-            <!-- /.info-box-content -->
-        </div>
-        <!-- /.info-box -->
-    </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
+     <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box bg-green">
-            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+            <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
 
             <div class="info-box-content">
-                <span class="info-box-text">کل در آمد مستقیم</span>
-                <span class="info-box-number">{{ queries.all_direct_recieve }}</span>
+                <span class="info-box-text">درآمد امروز</span>
+                <span class="info-box-number" style="text-align: left;">{{ queries.all_tabligh }}</span>
 
-                <div class="progress">
-                    <div class="progress-bar" style="width: 0%"></div>
-                </div>
-                <span class="progress-description">
-                    0 درصد افزایش
-                  </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-aqua">
+            <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">درامد مستقیم امروز</span>
+                <span class="info-box-number" style="text-align: left;">{{ queries.all_user }}</span>
+
             </div>
             <!-- /.info-box-content -->
         </div>
@@ -195,23 +212,19 @@
     </div>
     <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box bg-blue">
-            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+            <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
 
             <div class="info-box-content">
-                <span class="info-box-text">کل در آمد غیر مستقیم</span>
-                <span class="info-box-number">{{ queries.all_indirect_recieve }}</span>
+                <span class="info-box-text">در امد غیر مستقیم امروز</span>
+                <span class="info-box-number" style="text-align: left;">{{ queries.all_User_Today }}</span>
 
-                <div class="progress">
-                    <div class="progress-bar" style="width: 0%"></div>
-                </div>
-                <span class="progress-description">
-                    0 درصد افزایش
-                  </span>
             </div>
             <!-- /.info-box-content -->
         </div>
         <!-- /.info-box -->
     </div>
+
+
     <!-- Main content -->
     {% include 'system/Tabligh/show_tabligh_part.html' %}
     <!-- /.content -->

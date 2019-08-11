@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 from Ads_Project.functions import LoginRequiredMixin
 from system.forms import IncreaseBalanceFrom
-from system.models import Order, User, INCREASE_BALANCE_ORDER
+from system.models import Order, User, INCREASE_BALANCE_ORDER , History
 
 
 def dargah_test_part_1(request):
@@ -47,6 +47,8 @@ class IncreaseBalanceView(LoginRequiredMixin, FormView):
             user_id = self.request.user.id
         user = get_object_or_404(User,pk=int(user_id))
         user.add_to_kif_pool(form.cleaned_data['how_much'])
+        history=History.objects.create(user=user,type='0',meghdar=int(form.cleaned_data['how_much']))
+
         return super(IncreaseBalanceView, self).form_valid(form)
         # TODO what should we do with other orders ?
         order = Order.objects.create(user_id=user_id, type=INCREASE_BALANCE_ORDER, data=dict(

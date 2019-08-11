@@ -17,6 +17,8 @@ from system.base_views.views_User import RedirectToUserUpdate
 from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, ChangeUserPasswordView, \
     ProfileUserView
 from system.base_views.views_Moshahedat import MessageListmoshahedeview,Message_show_moshahedeview
+from system.base_views.views_infopm import InfoPm, InpopmDatatableView, InpopmrListView, InfopmDeleteView, \
+    InfopmUpdateView
 from system.views import Dashboard
 
 urlpatterns = [
@@ -91,5 +93,11 @@ urlpatterns = [
     path('ChartOfNetwork', Chart_1_View.as_view(), name="Chart_1"),
     path('parent_children/', ParentChildrenDatatableView.as_view(), name='Parent_Children_D'),
     path('parent_children_list/', Parent_Children_List_View.as_view(), name='Parent_Children'),
+    # ---- Infopm
+    path('Create_InfoPm/', InfoPm.as_view(), name='Create_InfoPm'),
+    path('InpopmrList/', InpopmrListView.as_view(), name='InpopmrListView'),
+    path('InpopmDatatable/', InpopmDatatableView.as_view(), name='InpopmDatatable'),
+    path('DeleteInfopm/<int:pk>', InfopmDeleteView.as_view(), name='DeleteInfopm'),
+    path('InfopmUpdate/<int:pk>', InfopmUpdateView.as_view(), name='InfopmUpdate'),
 
 ]

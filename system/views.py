@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.views import View
 from django.db.models import Q
 
-from system.models import User, Tabligh, Click, TablighatMontasherKonande,Payam
+from system.models import User, Tabligh, Click, TablighatMontasherKonande, Payam, Infopm, TanzimatPaye
 
 
 class Dashboard(LoginRequiredMixin, View):
@@ -22,6 +22,22 @@ class Dashboard(LoginRequiredMixin, View):
         today = datetime.today()
         all_User_Today = User.objects.filter(date_joined__year=today.year, date_joined__month=today.month, date_joined__day=today.day).count()
         all_tabligh= Tabligh.objects.count()
+        all_InfoPm= Infopm.objects.filter(is_active=True).all()
+        amar_jali =TanzimatPaye.objects.filter(onvan__startswith='amar_jaali').all()
+        active_show_forosh =TanzimatPaye.objects.filter(onvan__startswith='show_amar_for_user').first()
+
+        for item in amar_jali:
+            if item.onvan == "amar_jaali.count_user_online":
+                count_user_online+=int(item.value)
+            if item.onvan == "amar_jaali.count_all_user":
+                all_User+=int(item.value)
+            if item.onvan == "amar_jaali.count_user_new_today":
+                all_User_Today+=int(item.value)
+            # if item.onvan == "amar_jaali.meghdar_daramad_pardahkti":
+            #     count_user_online+=int(item.value)
+            if item.onvan == "amar_jaali.count_tabligh_thabti":
+                all_tabligh+=int(item.value)
+
         if not user.is_superuser:
             this_month_clicks['montasher_konande'] = user
             this_month_publishes['montasher_konande'] = user
@@ -33,13 +49,15 @@ class Dashboard(LoginRequiredMixin, View):
             "count_online_user": count_user_online,
             "all_user":all_User,
             "all_User_Today":all_User_Today,
-            "all_tabligh":all_tabligh
+            "all_tabligh":all_tabligh,
+            "all_infopm":all_InfoPm,
+            "active_show_forosh":active_show_forosh.value,
+            "all_recive":k.current_recieved_direct + k.current_recieved_indirect
         }
         tablighs = Tabligh.objects.filter(vazeyat=1).order_by('-id')[:10]
         message_not_read=Payam.objects.filter(Q(girande=self.request.user),Q(vazeyat=1))
 
         count_message_not_read=message_not_read.count()
-        print('count_message_not_read',count_message_not_read)
 
         return render(request, 'panel/index/dashboard.html', {'tablighs': tablighs, 'queries': queries,
                                                               'count_message_not_read':count_message_not_read,

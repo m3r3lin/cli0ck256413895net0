@@ -79,75 +79,79 @@
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">
                                         {% for item in message_not_read %}
-                                        <li><!-- start message -->
-                                            <a href="{% url  'Message_show_view' pk=item.id %}">
-                                                <div class="pull-right">
-                                                    {% if item.ferestande.avatar %}
-                                                    <img src="{{ item.ferestande.avatar.url }}" class="img-circle" alt="User Image">
+                                            <li><!-- start message -->
+                                                <a href="{% url  'Message_show_view' pk=item.id %}">
+                                                    <div class="pull-right">
+                                                        {% if item.ferestande.avatar %}
+                                                            <img src="{{ item.ferestande.avatar.url }}"
+                                                                 class="img-circle" alt="User Image">
                                                         {% else %}
-                                                      <img src="{% static 'img/avatar/avatar.png' %}" class="img-circle" alt="User Image">
+                                                            <img src="{% static 'img/avatar/avatar.png' %}"
+                                                                 class="img-circle" alt="User Image">
 
 
-                                                    {% endif %}
+                                                        {% endif %}
 
-                                                </div>
-                                                <h4>
-                                                    {{ item.ferestande }}
-                                                    <small><i class="fa fa-clock-o"></i> {{ item.save_date|date_jalali }}</small>
-                                                </h4>
-                                                <p>{{ item.text }}</p>
-                                            </a>
-                                        </li>
+                                                    </div>
+                                                    <h4>
+                                                        {{ item.ferestande }}
+                                                        <small><i
+                                                                class="fa fa-clock-o"></i> {{ item.save_date|date_jalali }}
+                                                        </small>
+                                                    </h4>
+                                                    <p>{{ item.text }}</p>
+                                                </a>
+                                            </li>
                                         {% endfor %}
                                         <!-- end message -->
-{#                                        <li>#}
-{#                                            <a href="#">#}
-{#                                                <div class="pull-right">#}
-{#                                                    <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">#}
-{#                                                </div>#}
-{#                                                <h4>#}
-{#                                                    نگین#}
-{#                                                    <small><i class="fa fa-clock-o"></i> ۲ ساعت پیش</small>#}
-{#                                                </h4>#}
-{#                                                <p>متن پیام</p>#}
-{#                                            </a>#}
-{#                                        </li>#}
-{#                                        <li>#}
-{#                                            <a href="#">#}
-{#                                                <div class="pull-right">#}
-{#                                                    <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">#}
-{#                                                </div>#}
-{#                                                <h4>#}
-{#                                                    نسترن#}
-{#                                                    <small><i class="fa fa-clock-o"></i> امروز</small>#}
-{#                                                </h4>#}
-{#                                                <p>متن پیام</p>#}
-{#                                            </a>#}
-{#                                        </li>#}
-{#                                        <li>#}
-{#                                            <a href="#">#}
-{#                                                <div class="pull-right">#}
-{#                                                    <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">#}
-{#                                                </div>#}
-{#                                                <h4>#}
-{#                                                    نگین#}
-{#                                                    <small><i class="fa fa-clock-o"></i> دیروز</small>#}
-{#                                                </h4>#}
-{#                                                <p>متن پیام</p>#}
-{#                                            </a>#}
-{#                                        </li>#}
-{#                                        <li>#}
-{#                                            <a href="#">#}
-{#                                                <div class="pull-right">#}
-{#                                                    <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">#}
-{#                                                </div>#}
-{#                                                <h4>#}
-{#                                                    نسترن#}
-{#                                                    <small><i class="fa fa-clock-o"></i> ۲ روز پیش</small>#}
-{#                                                </h4>#}
-{#                                                <p>متن پیام</p>#}
-{#                                            </a>#}
-{#                                        </li>#}
+                                        {#                                        <li>#}
+                                        {#                                            <a href="#">#}
+                                        {#                                                <div class="pull-right">#}
+                                        {#                                                    <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">#}
+                                        {#                                                </div>#}
+                                        {#                                                <h4>#}
+                                        {#                                                    نگین#}
+                                        {#                                                    <small><i class="fa fa-clock-o"></i> ۲ ساعت پیش</small>#}
+                                        {#                                                </h4>#}
+                                        {#                                                <p>متن پیام</p>#}
+                                        {#                                            </a>#}
+                                        {#                                        </li>#}
+                                        {#                                        <li>#}
+                                        {#                                            <a href="#">#}
+                                        {#                                                <div class="pull-right">#}
+                                        {#                                                    <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">#}
+                                        {#                                                </div>#}
+                                        {#                                                <h4>#}
+                                        {#                                                    نسترن#}
+                                        {#                                                    <small><i class="fa fa-clock-o"></i> امروز</small>#}
+                                        {#                                                </h4>#}
+                                        {#                                                <p>متن پیام</p>#}
+                                        {#                                            </a>#}
+                                        {#                                        </li>#}
+                                        {#                                        <li>#}
+                                        {#                                            <a href="#">#}
+                                        {#                                                <div class="pull-right">#}
+                                        {#                                                    <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">#}
+                                        {#                                                </div>#}
+                                        {#                                                <h4>#}
+                                        {#                                                    نگین#}
+                                        {#                                                    <small><i class="fa fa-clock-o"></i> دیروز</small>#}
+                                        {#                                                </h4>#}
+                                        {#                                                <p>متن پیام</p>#}
+                                        {#                                            </a>#}
+                                        {#                                        </li>#}
+                                        {#                                        <li>#}
+                                        {#                                            <a href="#">#}
+                                        {#                                                <div class="pull-right">#}
+                                        {#                                                    <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">#}
+                                        {#                                                </div>#}
+                                        {#                                                <h4>#}
+                                        {#                                                    نسترن#}
+                                        {#                                                    <small><i class="fa fa-clock-o"></i> ۲ روز پیش</small>#}
+                                        {#                                                </h4>#}
+                                        {#                                                <p>متن پیام</p>#}
+                                        {#                                            </a>#}
+                                        {#                                        </li>#}
                                     </ul>
                                 </li>
                                 <li class="footer"><a href="{% url 'MessageList' %}">نمایش تمام پیام ها</a></li>
@@ -155,7 +159,8 @@
                         </li>
                         {% if not request.user.is_superuser %}
                             <li class="m-nav__item" style="vertical-align: baseline;height: auto;">
-                                <a href="#" class="header-wallet btn-warning" id="code_moarefi" data-data="code_{{ request.user.id }}">
+                                <a href="#" class="header-wallet btn-warning" id="code_moarefi"
+                                   data-data="code_{{ request.user.id }}">
                                     <span>کد معرفی شما : code_{{ request.user.id }}</span>
                                 </a>
                             </li>
@@ -182,7 +187,8 @@
                                     {% if request.user.avatar %}
                                         <img src="{{ request.user.avatar.url }}" class="img-circle" alt="User Image">
                                     {% else %}
-                                        <img src="{% static 'img/avatar/avatar.png' %}" class="img-circle" alt="User Image">
+                                        <img src="{% static 'img/avatar/avatar.png' %}" class="img-circle"
+                                             alt="User Image">
                                     {% endif %}
                                     <p>
                                         {{ request.user.get_full_name }}
@@ -257,8 +263,10 @@
                             {% if request.user.is_superuser %}
                                 <li><a href="{% url  'ListUser' %}"><i class="fa fa-list"></i>لیست کاربران</a></li>
                             {% else %}
-                                <li><a href="{% url  'UpdateUser' pk=request.user.id %}"><i class="fa fa-list"></i>ویرایش اطلاعات کاربری</a></li>
-                                <li><a href="{% url 'ChangeUserPassword' %}"><i class="fa fa-lock"></i> <span>تغییر رمز</span></a></li>
+                                <li><a href="{% url  'UpdateUser' pk=request.user.id %}"><i class="fa fa-list"></i>ویرایش
+                                    اطلاعات کاربری</a></li>
+                                <li><a href="{% url 'ChangeUserPassword' %}"><i class="fa fa-lock"></i>
+                                    <span>تغییر رمز</span></a></li>
                             {% endif %}
                         </ul>
                     </li>
@@ -295,7 +303,8 @@
                                 <li><a href="{% url  'ShowTablighs' %}"><i class="fa fa-plus"></i>انتشار تبلیغ</a></li>
                             {% endif %}
                             <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>
-                            <li><a href="{% url  'Montashshodeha' %}"><i class="fa fa-list"></i>لیست تبلیغات منتشر شده</a></li>
+                            <li><a href="{% url  'Montashshodeha' %}"><i class="fa fa-list"></i>لیست تبلیغات منتشر
+                                شده</a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -309,7 +318,12 @@
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="{% url  'MessageList' %}"><i class="fa fa-plus"></i>پیام ها</a></li>
-                            {#                        <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>#}
+                            {% if request.user.is_superuser %}
+                                <li><a href="{% url  'Create_InfoPm' %}"><i class="fa fa-plus"></i>ارسال اطلاعیه</a>
+                                </li>
+                                <li><a href="{% url  'InpopmrListView' %}"><i class="fa fa-plus"></i>لیست اطلاعیه ها</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </li>
 
@@ -324,10 +338,11 @@
                         </a>
                         <ul class="treeview-menu">
                             {% if not request.user.is_superuser %}
-                                <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>افزایش اعتبار</a></li>
+                                <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>افزایش اعتبار</a>
+                                </li>
                                 <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>برداشت ها</a></li>
                             {% endif %}
-                                <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>سابقه مالی</a></li>
+                            <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>سابقه مالی</a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -341,8 +356,10 @@
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="{% url 'Parent_Children' %}"><i class="fa fa-plus"></i>لیست فرزندان</a></li>
-                            <li><a href="{% url 'MessageListmoshahede' %}"><i class="fa fa-plus"></i>لیست همه پیام های کاربران</a></li>
-                            <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>تعداد کابران آنلاین</a></li>
+                            <li><a href="{% url 'MessageListmoshahede' %}"><i class="fa fa-plus"></i>لیست همه پیام های
+                                کاربران</a></li>
+                            <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>تعداد کابران آنلاین</a>
+                            </li>
                         </ul>
                     </li>
                     {% if request.user.is_superuser %}
@@ -356,20 +373,31 @@
 
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="{% url 'ActiveCodeMoaref' %}"><i class="fa fa-plus"></i>فعال کردن کد معرف</a></li>
+                                <li><a href="{% url 'ActiveCodeMoaref' %}"><i class="fa fa-plus"></i>فعال کردن کد
+                                    معرف</a></li>
                                 <li><a href="{% url 'SodeModir' %}"><i class="fa fa-list"></i>درصد سود مدیر</a></li>
                                 {#                            <li><a href="#"><i class="fa fa-list"></i>سطوح شبکه</a></li>#}
                                 <li><a href="{% url 'Languge_site' %}"><i class="fa fa-list"></i>زبان سایت</a></li>
-                                <li><a href="{% url 'Max_Count_Level_networkView' %}"><i class="fa fa-list"></i>حداکثر تعداد سطح شبکه و سود</a></li>
-                                <li><a href="{% url 'Count_Level_networkView' %}"><i class="fa fa-list"></i>تعداد سطح شبکه و سود</a></li>
-                                <li><a href="{% url 'Count_kharid_hadaghalView' %}"><i class="fa fa-list"></i>حداقل تعداد خریر تبلیغ</a></li>
-                                <li><a href="{% url 'Time_kharid_termView' %}"><i class="fa fa-list"></i>مدت زمان خرید</a></li>
-                                <li><a href="{% url 'Taien_meghdar_matlabView' %}"><i class="fa fa-list"></i>تعین مقدار مطلب </a></li>
-                                <li><a href="{% url 'Show_amar_foruserView' %}"><i class="fa fa-list"></i>نمایش آمار برای کاربران </a></li>
-                                <li><a href="{% url 'Taeid_khodkar_tabligh' %}"><i class="fa fa-list"></i>تایید خودکار تبلیغ </a></li>
-                                <li><a href="{% url 'Vahed_poll_site' %}"><i class="fa fa-list"></i>واحد پول سایت </a></li>
-                                <li><a href="{% url 'Count_visit_tabligh' %}"><i class="fa fa-list"></i>تعداد دیدن تبلیغ </a></li>
-                                <li><a href="{% url 'Taein_hadaghal_etbar' %}"><i class="fa fa-list"></i>تعیین حداقل اعتبار </a></li>
+                                <li><a href="{% url 'Max_Count_Level_networkView' %}"><i class="fa fa-list"></i>حداکثر
+                                    تعداد سطح شبکه و سود</a></li>
+                                <li><a href="{% url 'Count_Level_networkView' %}"><i class="fa fa-list"></i>تعداد سطح
+                                    شبکه و سود</a></li>
+                                <li><a href="{% url 'Count_kharid_hadaghalView' %}"><i class="fa fa-list"></i>حداقل
+                                    تعداد خریر تبلیغ</a></li>
+                                <li><a href="{% url 'Time_kharid_termView' %}"><i class="fa fa-list"></i>مدت زمان
+                                    خرید</a></li>
+                                <li><a href="{% url 'Taien_meghdar_matlabView' %}"><i class="fa fa-list"></i>تعین مقدار
+                                    مطلب </a></li>
+                                <li><a href="{% url 'Show_amar_foruserView' %}"><i class="fa fa-list"></i>نمایش آمار
+                                    برای کاربران </a></li>
+                                <li><a href="{% url 'Taeid_khodkar_tabligh' %}"><i class="fa fa-list"></i>تایید خودکار
+                                    تبلیغ </a></li>
+                                <li><a href="{% url 'Vahed_poll_site' %}"><i class="fa fa-list"></i>واحد پول سایت </a>
+                                </li>
+                                <li><a href="{% url 'Count_visit_tabligh' %}"><i class="fa fa-list"></i>تعداد دیدن تبلیغ
+                                </a></li>
+                                <li><a href="{% url 'Taein_hadaghal_etbar' %}"><i class="fa fa-list"></i>تعیین حداقل
+                                    اعتبار </a></li>
                                 <li><a href="{% url 'Amar_jaali' %}"><i class="fa fa-list"></i>آمار جعلی </a></li>
                             </ul>
                         </li>
@@ -442,7 +470,8 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer text-left">
-        <strong>Copyleft &copy; 2019-2020 <a href="#">نام شرکت</a> & <a href="http://hosseinizadeh.ir/adminlte">نام شخص</a></strong>
+        <strong>Copyleft &copy; 2019-2020 <a href="#">نام شرکت</a> & <a href="http://hosseinizadeh.ir/adminlte">نام
+            شخص</a></strong>
     </footer>
 
 

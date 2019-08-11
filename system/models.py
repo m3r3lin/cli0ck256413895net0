@@ -338,3 +338,7 @@ class HistoryIndirect(Model):
     parent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="parent")
     mablagh= models.PositiveIntegerField()
     tarikh = models.DateTimeField(auto_now_add=True)
+
+class Infopm(Model):
+    is_active= models.BooleanField(default=True)
+    body = models.TextField(default='')

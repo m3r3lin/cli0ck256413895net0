@@ -8,7 +8,7 @@ from django import forms
 from unidecode import unidecode
 
 from system.functions import change_date_to_english
-from system.models import Payam
+from system.models import Payam, Infopm
 from system.models import User, Pelan, Tabligh, TanzimatPaye, ACTIV_MOAREF
 
 fullmatch_compiled = re.compile('^code_(\d{1,9})')
@@ -143,6 +143,7 @@ class UserCreateForm(TanzimatPayeMiddelware):
 
 
 class UserUpdateForm(ModelForm):
+    is_active = forms.BooleanField(required=False)
     tarikh_tavalod = forms.CharField(required=False)
     avatar = forms.ImageField(required=False, widget=MyClearableFileInput)
     image_cart_melli = forms.ImageField(required=False, widget=MyClearableFileInput)
@@ -150,7 +151,7 @@ class UserUpdateForm(ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'address', 'code_posti', 'shomare_hesab',
-                  'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'email', 'id_telegram', 'image_cart_melli', 'avatar']
+                  'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'email', 'id_telegram', 'image_cart_melli', 'avatar' , 'is_active']
         error_messages = {
             'first_name': {
                 'required': "نام اجباری است!",
@@ -209,8 +210,7 @@ class UserUpdateForm(ModelForm):
             },
             'avatar': {
                 'required': "آواتار اجباری است!",
-            },
-        }
+            }}
 
     def __init__(self, *args, **kwargs):
         super(UserUpdateForm, self).__init__(*args, **kwargs)
@@ -285,6 +285,9 @@ class UserUpdateForm(ModelForm):
         self.fields['avatar'].label = "آواتار:"
         self.fields['avatar'].required = False
         self.fields['avatar'].widget.attrs.update({'class': 'form-control', 'id': 'avatar'})
+
+        self.fields['is_active'].label = "وضعیت فعال یا غیرفعال بودن کاربر:"
+        self.fields['is_active'].required = False
 
     def clean_tarikh_tavalod(self):
         tarikh_tavalod = self.cleaned_data['tarikh_tavalod']
@@ -716,3 +719,20 @@ class IncreaseBalanceFrom(forms.Form):
         self.fields[field_name].label = "مبلغ به تومان:"
         self.fields[field_name].required = True
         self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
+
+
+class Create_Infopm(ModelForm):
+
+    class Meta:
+        model = Infopm
+        fields = ['is_active', 'body']
+
+    def __init__(self, *args, **kwargs):
+        super(Create_Infopm, self).__init__(*args, **kwargs)
+
+        self.fields['body'].label = "متن پیام:"
+        self.fields['body'].required = True
+        self.fields['body'].widget.attrs.update({'class': 'form-control','id': 'body','rows': 6})
+
+        self.fields['is_active'].label = "فعال یا غیرفعال:"
+        self.fields['is_active'].required = False

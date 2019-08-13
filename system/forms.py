@@ -720,6 +720,13 @@ class IncreaseBalanceFrom(forms.Form):
         self.fields[field_name].required = True
         self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
 
+    def clean_how_much(self):
+        how_much = self.cleaned_data['how_much']
+        if how_much>0:
+            return how_much
+        else:
+            raise forms.ValidationError('مقدار وارد شده صحیح نمیباشد.')
+
 
 class Create_Infopm(ModelForm):
 

@@ -51,7 +51,8 @@ class ClickedOnTablighView(View):
                         HistoryIndirect.objects.create(montasher_konande=user, parent=parent_user,
                                                      mablagh=sod)
         user.add_to_kif_daramad(click.mablagh_har_click*(100-sode_modir)/100)
-
+        click.mablagh_har_click=click.mablagh_har_click*(100-sode_modir)/100
+        click.save()
         if user.id != request.user.id:
             tabligh.tedad_click_shode += 1
             tabligh.save()

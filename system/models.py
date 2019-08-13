@@ -179,7 +179,7 @@ class History(models.Model):
     type = models.SmallIntegerField(choices=(
         (0, 'واریز'),
         (1, 'برداشت'),
-        (1, 'واریز به کیف پول'),
+        (2, 'انتقال از کیف درآمد به کیف پول'),
     ))
     meghdar = models.IntegerField()
     created_at = models.DateField(auto_now_add=True)

@@ -4,7 +4,8 @@ from django.urls import path
 from system.base_views import views_Message
 from system.base_views.view_graph import Chart_2_View,Chart_1_View,ParentChildrenDatatableView,Parent_Children_List_View
 from system.base_views.views_Click import ClickedOnTablighView
-from system.base_views.views_Malli import IncreaseBalanceView, dargah_test_part_1
+from system.base_views.views_Malli import IncreaseBalanceView, dargah_test_part_1, HistoryMaliDatatableView, \
+    HistoryMaliListView, MoveDaramad2KifView
 from system.base_views.views_Message import MessageListview, Message_show_view
 from system.base_views.views_Message import NewMessageCreateView
 from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView, PelanDatatableView, PlanReportsView
@@ -81,6 +82,10 @@ urlpatterns = [
     # ---- MALLI
     path('increase_balance/', IncreaseBalanceView.as_view(), name='increase_balance'),
     path('virtual_bank_verification1/', dargah_test_part_1),
+    path('HistoryMali/', HistoryMaliListView.as_view(), name='HistoryMaliList'),
+    path('HistoryMaliDatatable/', HistoryMaliDatatableView.as_view(), name='HistoryMaliDatatable'),
+    path('move_2_kif/', MoveDaramad2KifView.as_view(), name='MoveDaramad2Kif'),
+
     # ---- Click
     path('click/<enteshartoken>',ClickedOnTablighView.as_view(),name='clicked_on_tabligh'),
 

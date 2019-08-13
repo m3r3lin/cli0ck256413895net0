@@ -5,9 +5,9 @@ from django.utils import timezone
 from Ads_Project.functions import LoginRequiredMixin
 from django.shortcuts import render
 from django.views import View
-from django.db.models import Q
+from django.db.models import Q, Sum
 
-from system.models import User, Tabligh, Click, TablighatMontasherKonande, Payam, Infopm, TanzimatPaye
+from system.models import User, Tabligh, Click, TablighatMontasherKonande, Payam, Infopm, TanzimatPaye,HistoryIndirect
 
 
 class Dashboard(LoginRequiredMixin, View):
@@ -25,7 +25,12 @@ class Dashboard(LoginRequiredMixin, View):
         all_InfoPm= Infopm.objects.filter(is_active=True).all()
         amar_jali =TanzimatPaye.objects.filter(onvan__startswith='amar_jaali').all()
         active_show_forosh =TanzimatPaye.objects.filter(onvan__startswith='show_amar_for_user').first()
-
+        direct_today=Click.objects.filter(montasher_konande=user,tarikh__year=today.year, tarikh__month=today.month, tarikh__day=today.day).aggregate(Sum('mablagh_har_click'))
+        indirect_today=HistoryIndirect.objects.filter(parent=user,tarikh__year=today.year, tarikh__month=today.month, tarikh__day=today.day).aggregate(Sum('mablagh'))
+        if indirect_today['mablagh__sum'] is None:
+            indirect_today['mablagh__sum']=0
+        if direct_today['mablagh_har_click__sum'] is None:
+            direct_today['mablagh_har_click__sum']=0
         for item in amar_jali:
             if item.onvan == "amar_jaali.count_user_online":
                 count_user_online+=int(item.value)
@@ -52,7 +57,10 @@ class Dashboard(LoginRequiredMixin, View):
             "all_tabligh":all_tabligh,
             "all_infopm":all_InfoPm,
             "active_show_forosh":active_show_forosh.value,
-            "all_recive":k.current_recieved_direct + k.current_recieved_indirect
+            "all_recive":k.current_recieved_direct + k.current_recieved_indirect,
+            "today_direct": direct_today['mablagh_har_click__sum'],
+            "today_indirect":indirect_today['mablagh__sum'],
+            "today_daramad": direct_today['mablagh_har_click__sum']+indirect_today['mablagh__sum']
         }
         tablighs = Tabligh.objects.filter(vazeyat=1).order_by('-id')[:10]
         message_not_read=Payam.objects.filter(Q(girande=self.request.user),Q(vazeyat=1))

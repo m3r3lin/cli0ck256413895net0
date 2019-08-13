@@ -1,0 +1,92 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% block css %}
+    <style>
+        td {
+            text-align: center;
+        }
+
+        th:nth-child(11), td:nth-child(11) {
+            white-space: nowrap;
+        }
+    </style>
+{% endblock %}
+{% block page_title %}
+    تاریخچه مالی
+{% endblock %}
+{% block dashboard %}
+    <li>تاریخچه مالی</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        {% include "errors.html" %}
+                        {% include "messages.html" %}
+                        <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                            <table id="UserDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">شناسه</th>
+                                    <th class="text-center">نام و نام خانوادگی</th>
+                                    <th class="text-center">نوع درخواست</th>
+                                    <th class="text-center">مقدار</th>
+                                    <th class="text-center">تاریخ</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="confirm_modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class=" text-black">x</span></button>
+                    <h4 class="modal-title"><b>آیا تمایل دارید این اطلاعیه را حذف کنید؟</b></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">خیر</button>
+                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">بلی</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'dist/my_js/datatable.js' %}"></script>
+    <!-- my fontawesom -->
+    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
+    <script>
+        window.data_table_cool_options["rowCallback"] = function (row, data) {
+            };
+        var table = datatable_simple_show({
+            url: "{% url 'HistoryMaliDatatable' %}",
+            no_action_nutton:true,
+            real_cols: 5,
+            datable_id: '#UserDatatable',
+            modal_id: "#confirm_modal"
+        });
+        {% if not request.user.is_superuser %}
+            table.columns([1]).visible(false);
+        {%  endif  %}
+
+    </script>
+{% endblock %}

@@ -212,8 +212,6 @@ class MotashershodeDatatableView(LoginRequiredMixin, BaseDatatableView):
         search = self.request.GET.get('search[value]', None)
         if search:
             qs = qs.filter(Q(onvan__icontains=search) | Q(code_tabligh_gozaar__username__icontains=search))
-        if not self.request.user.is_superuser:
-            qs = qs.filter(code_tabligh_gozaar=self.request.user)
         return qs
 
 

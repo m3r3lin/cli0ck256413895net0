@@ -1,0 +1,54 @@
+@font-face {
+    font-family: 'IRANSans-web';
+    src: url('rtl-font/IRANSans-web.eot?#') format('eot'),
+    url('rtl-font/IRANSans-web.woff') format('woff'),
+    url('rtl-font/IRANSans-web.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IRANSans-medium';
+    src: url('rtl-font/IRANSans-Medium-web.eot?#') format('eot'),
+    url('rtl-font/IRANSans-Medium-web.woff') format('woff'),
+    url('rtl-font/IRANSans-Medium-web.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IRANSans-light';
+    src: url('rtl-font/IRANSans-Light-web.eot?#') format('eot'),
+    url('rtl-font/IRANSans-Light-web.woff') format('woff'),
+    url('rtl-font/IRANSans-Light-web.woff2') format('woff2');
+}
+
+body {
+    background: url("/static/dist/img/login_bg.jpg") !important;
+    background-position: 0px -60px !important;
+
+    background-repeat: no-repeat;
+    background-size: cover !important;
+}
+
+#rectangle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 350px;
+    position: fixed;
+}
+
+.login-box {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.login-box-body {
+    background-color: rgba(255, 255, 255, 1) !important;
+    box-shadow: #bfbfbf 0px 0px 3px 0px !important;
+}
+
+.login-logo > a {
+    font-family: 'IRANSans-medium';
+    font-size: 30px;
+}

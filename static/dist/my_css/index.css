@@ -1,0 +1,58 @@
+@font-face {
+    font-family: 'IRANSans-web';
+    src: url('rtl-font/IRANSans-web.eot?#') format('eot'),
+    url('rtl-font/IRANSans-web.woff') format('woff'),
+    url('rtl-font/IRANSans-web.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IRANSans-medium';
+    src: url('rtl-font/IRANSans-Medium-web.eot?#') format('eot'),
+    url('rtl-font/IRANSans-Medium-web.woff') format('woff'),
+    url('rtl-font/IRANSans-Medium-web.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IRANSans-light';
+    src: url('rtl-font/IRANSans-Light-web.eot?#') format('eot'),
+    url('rtl-font/IRANSans-Light-web.woff') format('woff'),
+    url('rtl-font/IRANSans-Light-web.woff2') format('woff2');
+}
+
+.content-header > h1 > small, .content-header > ol li, .content-header > ol li a, box-title {
+    font-family: IRANSans-light;
+}
+
+.vertical-middle-align td {
+    vertical-align: middle !important;
+}
+
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:after {
+    color: #eee;
+}
+
+table.dataTable thead .sorting:after {
+    opacity: 0.2;
+    content: "\25B3";
+    padding: 5px;
+    /* sort */
+}
+
+table.dataTable thead .sorting_asc:after {
+    content: "\25B2";
+    /* sort-by-attributes */
+}
+
+table.dataTable thead .sorting_desc:after {
+    content: "\25BC";
+    /* sort-by-attributes-alt */
+}
+
+.my_left_margin {
+    margin-left: 5px;
+}
+
+select {
+    padding: 2px !important;
+}

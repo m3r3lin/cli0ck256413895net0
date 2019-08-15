@@ -213,13 +213,14 @@
                         <ul class="treeview-menu">
                             {% if request.user.is_superuser %}
                                 <li><a href="{% url  'ListUser' %}"><i class="fa fa-list"></i>لیست کاربران</a></li>
+                                <li><a href="{% url 'socialaccount_connections' %}"><i class="fa fa-lock"></i>
+                                    <span>اتصال به حساب های کاربری</span></a>
+                                </li>
                             {% else %}
                                 <li><a href="{% url  'UpdateUser' pk=request.user.id %}"><i class="fa fa-list"></i>ویرایش
                                     اطلاعات کاربری</a></li>
                                 <li><a href="{% url 'ChangeUserPassword' %}"><i class="fa fa-lock"></i>
                                     <span>تغییر رمز</span></a></li>
-                                <li><a href="{% url 'socialaccount_connections' %}"><i class="fa fa-lock"></i>
-                                    <span>اتصال به حساب های کاربری</span></a></li>
                             {% endif %}
                         </ul>
                     </li>

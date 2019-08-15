@@ -12,7 +12,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
 from system.forms import TablighCreateForm
-from system.models import Tabligh, TanzimatPaye, TAIED_KHODKAR_TABLIGH, TAIEN_MEGHDAR_MATLAB, Click, TablighatMontasherKonande
+from system.models import Tabligh, TanzimatPaye, TAIED_KHODKAR_TABLIGH, TAIEN_MEGHDAR_MATLAB, Click, TablighatMontasherKonande, TEDAD_SATH_SHABAKE, SATH, SoodeTabligh, COUNT_LEVEL_NETWORK, SODE_MODIR, User, LEAST_BALANCE_REQUIRED
 from system.templatetags.app_filters import date_jalali
 
 
@@ -65,8 +65,52 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
         except Exception as e:
             # todo make sure balance is reduced
             print(e)
-            messages.success(self.request, 'مشکلی در ایجاد تبلیغ شما اتفاق افتاده است لطفاً دوباره تلاش کنید')
+            messages.error(self.request, 'مشکلی در ایجاد تبلیغ شما اتفاق افتاده است لطفاً دوباره تلاش کنید')
             return super(TablighCreateView, self).form_invalid(form)
+        tedad_sath_shabake = TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, 0)
+        sode_modir = TanzimatPaye.get_settings(SODE_MODIR)
+
+        soode_admin_kol = ((self.object.mablagh_tabligh * sode_modir) / 100)
+        soode_admin = ((self.object.mablagh_har_click * sode_modir) / 100)
+        pool_ezafe = self.object.mablagh_har_click - soode_admin
+        User.objects.filter(is_superuser=True).first().add_to_kif_pool(soode_admin_kol)
+        SoodeTabligh.objects.get_or_create(sath=0, tabligh=self.object, defaults={
+            "sath": 0,
+            "tabligh": self.object,
+            "soode_mostaghim": soode_admin_kol,
+            "soode_gheire_mostaghim": 0,
+        })
+
+        if tedad_sath_shabake == 0:
+            SoodeTabligh.objects.get_or_create(sath=1, tabligh=self.object, defaults={
+                "sath": 1,
+                "tabligh": self.object,
+                "soode_mostaghim": pool_ezafe,
+                "soode_gheire_mostaghim": 0,
+            })
+        else:
+            sum = 0
+            for i in range(tedad_sath_shabake):
+                sath = i + 1
+                settings_sood = TanzimatPaye.get_settings(SATH + str(sath), 0)
+
+                if settings_sood == 0:
+                    sood = 0
+                else:
+                    sood = (pool_ezafe * settings_sood) / 100
+
+                if settings_sood + sum == 0:
+                    sood_gheir_mostaghim = 0
+                else:
+                    sood_gheir_mostaghim = (pool_ezafe * (settings_sood + sum)) / 100
+
+                SoodeTabligh.objects.get_or_create(sath=sath, tabligh=self.object, defaults={
+                    "sath": sath,
+                    "tabligh": self.object,
+                    "soode_mostaghim": pool_ezafe - sood_gheir_mostaghim,
+                    "soode_gheire_mostaghim": sood,
+                })
+                sum += settings_sood
 
         messages.success(self.request, 'تبلیغ مورد نظر با موفقیت ثبت شد.')
         return form
@@ -144,7 +188,10 @@ class TablighDeleteView(LoginRequiredMixin, View):
             if tabligh.tedad_click_shode > 0 or Click.objects.filter(tabligh=tabligh).exists():
                 messages.error(self.request, 'تبلیغ مورد نظر شما نمی تواند حذف شود شما می توانید این تبلیغ را غیر فعال کنید')
                 return redirect('ListTabligh')
-            request.user.add_to_kif_pool(tabligh.mablagh_tabligh)
+            tabligh.code_tabligh_gozaar.add_to_kif_pool(tabligh.mablagh_tabligh)
+            sode_modir = TanzimatPaye.get_settings(SODE_MODIR)
+            SoodeTabligh.objects.filter(sath=0, tabligh=tabligh)
+            User.objects.filter(is_superuser=True).first().sub_from_kif_pool(SoodeTabligh.objects.filter(sath=0, tabligh=tabligh).first().soode_mostaghim)
             tabligh.delete()
         except ProtectedError:
             messages.error(self.request, 'از این نوع تبلیغ قبلا استفاده شده است و قابل حذف نمیباشد.')
@@ -167,12 +214,10 @@ class TablighDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = Tabligh
     columns = ['id', 'onvan', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'vazeyat', 'random_url']
 
-
     def render_column(self, row, column):
         if column == 'tarikh_ijad':
             return date_jalali(row.tarikh_ijad)
         return super().render_column(row, column)
-
 
     def filter_queryset(self, qs):
         search = self.request.GET.get('search[value]', None)
@@ -181,7 +226,6 @@ class TablighDatatableView(LoginRequiredMixin, BaseDatatableView):
         if not self.request.user.is_superuser:
             qs = qs.filter(code_tabligh_gozaar=self.request.user)
         return qs
-
 
 
 class MotashershodeDatatableView(LoginRequiredMixin, BaseDatatableView):
@@ -224,10 +268,22 @@ class TablighPreviewView(LoginRequiredMixin, View):
 
 
 class PublishTablighView(LoginRequiredMixin, View):
+
     def get(self, request, tabligh_token):
         ref = request.GET.get('ref', None)
+        self.least_balance = None
+
+        def get_least_balance():
+            if self.least_balance is None:
+                self.least_balance = TanzimatPaye.get_settings(LEAST_BALANCE_REQUIRED)
+            return self.least_balance
+
         if request.user.is_superuser:
             messages.error(request, 'ادمین نمیتواند منتشر کننده باشد')
+            return redirect(reverse('dashboard'))
+        elif request.user.get_kif_kif_pool().current_balance <= get_least_balance():
+            messages.error(request, 'حداقل مبلغ مورد نیاز برای ثبت و نمایش تبلیغات {} است'.format(get_least_balance()))
+            return redirect(reverse('dashboard'))
         else:
             tabligh = get_object_or_404(Tabligh, random_url=tabligh_token)
             tabligh_montasher, _ = TablighatMontasherKonande.objects.get_or_create(montasher_konande=request.user, tabligh=tabligh,

@@ -10,7 +10,7 @@ from system.base_views.views_Message import MessageListview, Message_show_view
 from system.base_views.views_Message import NewMessageCreateView
 from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView, PelanDatatableView, PlanReportsView
 from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView, PublishShowView, TablighPreviewView, PublishTablighView, MotashershodeDatatableView, Montashshodeha
-from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel
+from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel, LeastBalanceRequiredView
 from system.base_views.views_Tanzimat_Paye import Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView, Time_kharid_termView, \
     Taien_meghdar_matlabView, Show_amar_foruserView, Taeid_khodkar_tablighView,Vahed_poll_siteView,Count_visit_tablighView,Taein_hadaghal_etbarView,\
     Amar_jaali_View,Count_Level_networkDataTableView,Count_Level_networkDeleteView,Count_Level_networkUpdateView
@@ -54,6 +54,7 @@ urlpatterns = [
     path('Montashshodeha/', Montashshodeha.as_view(), name='Montashshodeha'),
     # ---- TanzimatPaye
     path('ActiveCodeMoaref/', ActiveCodeMoarefView.as_view(), name='ActiveCodeMoaref'),
+    path('LeastBalanceRequired/', LeastBalanceRequiredView.as_view(), name='LeastBalanceRequired'),
     path('TedadSathShabake/', Count_Level_networkView.as_view(), name='TedadSathShabake'),
     path('SodeModir/', SodeModirView.as_view(), name='SodeModir'),
     path('Languge_site/', Languge_siteView.as_view(), name='Languge_site'),

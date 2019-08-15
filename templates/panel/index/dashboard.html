@@ -115,58 +115,58 @@
 
     <!--   -->
     {% if queries.active_show_forosh == "1" %}
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box bg-teal">
-            <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-teal">
+                <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
 
-            <div class="info-box-content">
-                <span class="info-box-text">تعداد کاربران آنلاین</span>
-                <span class="info-box-number" style="text-align: left;">{{ queries.count_online_user }}</span>
+                <div class="info-box-content">
+                    <span class="info-box-text">تعداد کاربران آنلاین</span>
+                    <span class="info-box-number" style="text-align: left;">{{ queries.count_online_user }}</span>
 
+                </div>
+                <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box-content -->
+            <!-- /.info-box -->
         </div>
-        <!-- /.info-box -->
-    </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box bg-blue">
-            <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-blue">
+                <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
 
-            <div class="info-box-content">
-                <span class="info-box-text">تعداد کل اعضا</span>
-                <span class="info-box-number" style="text-align: left;">{{ queries.all_user }}</span>
+                <div class="info-box-content">
+                    <span class="info-box-text">تعداد کل اعضا</span>
+                    <span class="info-box-number" style="text-align: left;">{{ queries.all_user }}</span>
 
+                </div>
+                <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box-content -->
+            <!-- /.info-box -->
         </div>
-        <!-- /.info-box -->
-    </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box bg-maroon">
-            <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-maroon">
+                <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
 
-            <div class="info-box-content">
-                <span class="info-box-text">تعداد کاربران جدید امروز</span>
-                <span class="info-box-number" style="text-align: left;">{{ queries.all_User_Today }}</span>
+                <div class="info-box-content">
+                    <span class="info-box-text">تعداد کاربران جدید امروز</span>
+                    <span class="info-box-number" style="text-align: left;">{{ queries.all_User_Today }}</span>
 
+                </div>
+                <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box-content -->
+            <!-- /.info-box -->
         </div>
-        <!-- /.info-box -->
-    </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box bg-olive">
-            <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-olive">
+                <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
 
-            <div class="info-box-content">
-                <span class="info-box-text">تعداد تبلیغات ثبت شده</span>
-                <span class="info-box-number" style="text-align: left;">{{ queries.all_tabligh }}</span>
+                <div class="info-box-content">
+                    <span class="info-box-text">تعداد تبلیغات ثبت شده</span>
+                    <span class="info-box-number" style="text-align: left;">{{ queries.all_tabligh }}</span>
 
+                </div>
+                <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box-content -->
+            <!-- /.info-box -->
         </div>
-        <!-- /.info-box -->
-    </div>
     {% endif %}
     <!---   --->
 
@@ -184,7 +184,7 @@
         </div>
         <!-- /.info-box -->
     </div>
-     <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box bg-green">
             <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
 
@@ -226,7 +226,9 @@
 
 
     <!-- Main content -->
-    {% include 'system/Tabligh/show_tabligh_part.html' %}
+    {% if not request.user.is_superuser %}
+        {% include 'system/Tabligh/show_tabligh_part.html' %}
+    {% endif %}
     <!-- /.content -->
 {% endblock %}
 

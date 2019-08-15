@@ -300,11 +300,14 @@
                         <ul class="treeview-menu">
                             {% if not request.user.is_superuser %}
                                 <li><a href="{% url  'CreateTabligh' %}"><i class="fa fa-plus"></i>ایجاد تبلیغ</a></li>
-                                <li><a href="{% url  'ShowTablighs' %}"><i class="fa fa-plus"></i>انتشار تبلیغ</a></li>
+                                <li><a href="{% url  'ShowTablighs' %}"><i class="fa fa-plus"></i>تبلیغات قابل انتشار</a></li>
                             {% endif %}
-                            <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>لیست تبلیغات</a></li>
-                            <li><a href="{% url  'Montashshodeha' %}"><i class="fa fa-list"></i>لیست تبلیغات منتشر
-                                شده</a></li>
+                            {% if request.user.is_superuser %}
+                                <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>همه تبلیغات</a></li>
+                            {% else %}
+                                <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-list"></i>تبلیغات شما</a></li>
+                            {% endif %}
+                            <li><a href="{% url  'Montashshodeha' %}"><i class="fa fa-list"></i>لیست تبلیغات قابل انتشار</a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -380,11 +383,12 @@
                                 {#                            <li><a href="#"><i class="fa fa-list"></i>سطوح شبکه</a></li>#}
                                 <li><a href="{% url 'Languge_site' %}"><i class="fa fa-list"></i>زبان سایت</a></li>
                                 <li><a href="{% url 'Max_Count_Level_networkView' %}"><i class="fa fa-list"></i>حداکثر
-                                    تعداد سطح شبکه و سود</a></li>
-                                <li><a href="{% url 'Count_Level_networkView' %}"><i class="fa fa-list"></i>تعداد سطح
-                                    شبکه و سود</a></li>
+                                    تعداد سطح شبکه</a></li>
+                                <li><a href="{% url 'Count_Level_networkView' %}"><i class="fa fa-list"></i>تعین مقدار سود هر سطح</a></li>
                                 <li><a href="{% url 'Count_kharid_hadaghalView' %}"><i class="fa fa-list"></i>حداقل
                                     تعداد خریر تبلیغ</a></li>
+                                <li><a href="{% url 'LeastBalanceRequired' %}"><i class="fa fa-list"></i>حداقل
+                                    پول برای نمایش تبلیغ</a></li>
                                 <li><a href="{% url 'Time_kharid_termView' %}"><i class="fa fa-list"></i>مدت زمان
                                     خرید</a></li>
                                 <li><a href="{% url 'Taien_meghdar_matlabView' %}"><i class="fa fa-list"></i>تعین مقدار

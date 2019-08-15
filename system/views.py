@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.views import View
 from django.db.models import Q, Sum
 
-from system.models import User, Tabligh, Click, TablighatMontasherKonande, Payam, Infopm, TanzimatPaye,HistoryIndirect
+from system.models import User, Tabligh, Click, TablighatMontasherKonande, Payam, Infopm, TanzimatPaye, HistoryIndirect, SHOW_AMAR_FOR_USER
 
 
 class Dashboard(LoginRequiredMixin, View):
@@ -24,7 +24,7 @@ class Dashboard(LoginRequiredMixin, View):
         all_tabligh= Tabligh.objects.count()
         all_InfoPm= Infopm.objects.filter(is_active=True).all()
         amar_jali =TanzimatPaye.objects.filter(onvan__startswith='amar_jaali').all()
-        active_show_forosh =TanzimatPaye.objects.filter(onvan__startswith='show_amar_for_user').first()
+        active_show_forosh = TanzimatPaye.get_settings(SHOW_AMAR_FOR_USER,0)
         direct_today=Click.objects.filter(montasher_konande=user,tarikh__year=today.year, tarikh__month=today.month, tarikh__day=today.day).aggregate(Sum('mablagh_har_click'))
         indirect_today=HistoryIndirect.objects.filter(parent=user,tarikh__year=today.year, tarikh__month=today.month, tarikh__day=today.day).aggregate(Sum('mablagh'))
         if indirect_today['mablagh__sum'] is None:
@@ -56,7 +56,7 @@ class Dashboard(LoginRequiredMixin, View):
             "all_User_Today":all_User_Today,
             "all_tabligh":all_tabligh,
             "all_infopm":all_InfoPm,
-            "active_show_forosh":active_show_forosh.value,
+            "active_show_forosh":active_show_forosh,
             "all_recive":k.current_recieved_direct + k.current_recieved_indirect,
             "today_direct": direct_today['mablagh_har_click__sum'],
             "today_indirect":indirect_today['mablagh__sum'],

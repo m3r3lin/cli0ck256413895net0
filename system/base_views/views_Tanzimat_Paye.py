@@ -9,9 +9,9 @@ from Ads_Project.functions import LoginRequiredMixin
 from system.forms import ActiveCodeMoarefForm, SodeModirForm, \
     Languge_siteForm, Count_level_networkForm, Count_kharid_hadaghalForm, Time_kharid_termForm, \
     Taien_meghdar_matlabForm, Show_amarforuserForm, Taied_khodkar_tablighForm, Vahed_poll_siteForm, \
-    Count_visit_tabligh_Form, Taien_hadaghal_etbarForm, Amar_jaali_Form, MaxNetworkCountForm
+    Count_visit_tabligh_Form, Taien_hadaghal_etbarForm, Amar_jaali_Form, MaxNetworkCountForm, LeastBalanceRequiredForm
 
-from system.models import TanzimatPaye, ACTIV_MOAREF, VAHED_POLL_SITE, COUNT_LEVEL_NETWORK, SODE_MODIR
+from system.models import TanzimatPaye, ACTIV_MOAREF, VAHED_POLL_SITE, COUNT_LEVEL_NETWORK, SODE_MODIR, SHOW_AMAR_FOR_USER, SATH, LEAST_BALANCE_REQUIRED, COUNT_KHARI_HADAGHAL
 from system.forms import ActiveCodeMoarefForm, SodeModirForm
 from system.models import TanzimatPaye, ACTIV_MOAREF, TEDAD_SATH_SHABAKE
 
@@ -34,6 +34,26 @@ class ActiveCodeMoarefView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('ActiveCodeMoaref')
+
+
+class LeastBalanceRequiredView(LoginRequiredMixin, UpdateView):
+    model = TanzimatPaye
+    template_name = 'system/TanzimatPaye/Least_Balance_Required.html'
+    form_class = LeastBalanceRequiredForm
+
+    def get_object(self, queryset=None):
+        obj, cre = TanzimatPaye.objects.get_or_create(onvan=LEAST_BALANCE_REQUIRED, defaults={
+            "onvan": LEAST_BALANCE_REQUIRED,
+            'value': 0,
+        })
+        return obj
+
+    def form_valid(self, form):
+        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('LeastBalanceRequired')
 
 
 class SodeModirView(LoginRequiredMixin, UpdateView):
@@ -80,14 +100,14 @@ class Count_Level_networkView(LoginRequiredMixin, CreateView):
     model = TanzimatPaye
     template_name = 'system/TanzimatPaye/Count_level_network.html'
     form_class = Count_level_networkForm
-    starts_with = 'sath.'
+    starts_with = SATH
 
     def form_valid(self, form):
         if int(form.instance.onvan) > int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, 0)):
             messages.error(self.request, 'سطحی که شما مشخص کرده اید بیشتر از حد اکثر سطح است')
             return super(Count_Level_networkView, self).form_invalid(form)
 
-        form.instance.onvan = self.starts_with + form.instance.onvan
+        form.instance.onvan = Count_Level_networkView.starts_with + str(int(form.instance.onvan))
         messages.success(self.request, 'سطح موردنظر ثبت شد')
         t = TanzimatPaye.objects.filter(onvan=form.instance.onvan).first()  # type:TanzimatPaye
         if t:
@@ -176,8 +196,8 @@ class Count_kharid_hadaghalView(LoginRequiredMixin, UpdateView):
     form_class = Count_kharid_hadaghalForm
 
     def get_object(self, queryset=None):
-        obj, cre = TanzimatPaye.objects.get_or_create(onvan='count_kharid_hadaghl', defaults={
-            "onvan": 'count_kharid_hadaghl',
+        obj, cre = TanzimatPaye.objects.get_or_create(onvan=COUNT_KHARI_HADAGHAL, defaults={
+            "onvan": COUNT_KHARI_HADAGHAL,
             'value': 0,
         })
         return obj
@@ -236,8 +256,8 @@ class Show_amar_foruserView(LoginRequiredMixin, UpdateView):
     form_class = Show_amarforuserForm
 
     def get_object(self, queryset=None):
-        obj, cre = TanzimatPaye.objects.get_or_create(onvan='show_amar_for_user', defaults={
-            "onvan": 'show_amar_for_user',
+        obj, cre = TanzimatPaye.objects.get_or_create(onvan=SHOW_AMAR_FOR_USER, defaults={
+            "onvan": SHOW_AMAR_FOR_USER,
             'value': 0,
         })
         return obj

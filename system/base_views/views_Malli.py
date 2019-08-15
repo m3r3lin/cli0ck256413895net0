@@ -11,7 +11,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 from system.templatetags.app_filters import date_jalali
 from Ads_Project.functions import LoginRequiredMixin
 from system.forms import IncreaseBalanceFrom
-from system.models import Order, User, INCREASE_BALANCE_ORDER , History
+from system.models import Order, User, INCREASE_BALANCE_ORDER, History, Tabligh, COUNT_KHARI_HADAGHAL
 
 
 def dargah_test_part_1(request):
@@ -49,9 +49,9 @@ class IncreaseBalanceView(LoginRequiredMixin, FormView):
 
         else:
             user_id = self.request.user.id
-        user = get_object_or_404(User,pk=int(user_id))
+        user = get_object_or_404(User, pk=int(user_id))
         user.add_to_kif_pool(form.cleaned_data['how_much'])
-        History.objects.create(user=user,type='0',meghdar=int(form.cleaned_data['how_much']))
+        History.objects.create(user=user, type='0', meghdar=int(form.cleaned_data['how_much']))
 
         return super(IncreaseBalanceView, self).form_valid(form)
         # TODO what should we do with other orders ?
@@ -65,8 +65,6 @@ class IncreaseBalanceView(LoginRequiredMixin, FormView):
         return super().form_invalid(form)
 
 
-
-
 class HistoryMaliListView(LoginRequiredMixin, ListView):
     model = History
     template_name = 'system/Malli/List_malihistory.html'
@@ -78,10 +76,10 @@ class HistoryMaliListView(LoginRequiredMixin, ListView):
 
 class HistoryMaliDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = History
-    columns = ['id', 'user', 'type','meghdar','created_at' ]
+    columns = ['id', 'user', 'type', 'meghdar', 'created_at']
 
     def get_initial_queryset(self):
-        user=self.request.user
+        user = self.request.user
         qs = super().get_initial_queryset()
         if user.is_superuser:
             return qs
@@ -90,7 +88,7 @@ class HistoryMaliDatatableView(LoginRequiredMixin, BaseDatatableView):
 
     def render_column(self, row, column):
         if column == 'created_at':
-            return date_jalali(row.created_at,3)
+            return date_jalali(row.created_at, 3)
         return super().render_column(row, column)
 
     def filter_queryset(self, qs):
@@ -100,7 +98,7 @@ class HistoryMaliDatatableView(LoginRequiredMixin, BaseDatatableView):
                 if search in "واریز":
                     qs = qs.filter(Q(type=0) | Q(meghdar__icontains=search) | Q(user__username__icontains=search))
                 elif search in "برداشت":
-                    qs = qs.filter(Q(type=1) | Q(meghdar__icontains=search  | Q(user__username__icontains=search)))
+                    qs = qs.filter(Q(type=1) | Q(meghdar__icontains=search | Q(user__username__icontains=search)))
                 elif search in "انتقال از کیف درآمد به کیف پول":
                     qs = qs.filter(Q(type=2) | Q(meghdar__icontains=search) | Q(user__username__icontains=search))
                 else:
@@ -129,33 +127,38 @@ class MoveDaramad2KifView(LoginRequiredMixin, FormView):
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
-        user = get_object_or_404(User,pk=int(self.request.user.id))
-        get_value=int(form.cleaned_data['how_much'])
-        kif_daramad=user.get_kif_daramad()
-        if (kif_daramad.current_recieved_direct + kif_daramad.current_recieved_indirect)>=get_value:
-            if kif_daramad.current_recieved_indirect < kif_daramad.current_recieved_direct :
+        user = self.request.user
+        get_value = int(form.cleaned_data['how_much'])
+
+        count = Tabligh.objects.filter(code_tabligh_gozaar=user, vazeyat=1).count()
+        kharid_hadaghal = COUNT_KHARI_HADAGHAL
+        indirect_allowed = count >= kharid_hadaghal
+
+        kif_daramad = user.get_kif_daramad()
+        if (kif_daramad.current_recieved_direct + kif_daramad.current_recieved_indirect) >= get_value:
+            if kif_daramad.current_recieved_indirect < kif_daramad.current_recieved_direct:
                 if get_value >= kif_daramad.current_recieved_indirect:
-                    get_value-=kif_daramad.current_recieved_indirect
-                    kif_daramad.current_recieved_indirect=0
-                    if get_value>0:
-                        kif_daramad.current_recieved_direct-=get_value
+                    get_value -= kif_daramad.current_recieved_indirect
+                    kif_daramad.current_recieved_indirect = 0
+                    if get_value > 0:
+                        kif_daramad.current_recieved_direct -= get_value
                     kif_daramad.save()
                 else:
-                    kif_daramad.daramad.current_recieved_indirect-=get_value
+                    kif_daramad.current_recieved_indirect -= get_value
                     kif_daramad.save()
             else:
-                if get_value >= kif_daramad.daramad.current_recieved_direct:
+                if get_value >= kif_daramad.current_recieved_direct:
                     get_value -= kif_daramad.current_recieved_direct
                     kif_daramad.current_recieved_direct = 0
                     if get_value > 0:
                         kif_daramad.current_recieved_indirect -= get_value
-                        kif_daramad.save()
+                    kif_daramad.save()
                 else:
-                    kif_daramad.daramad.current_recieved_direct-=get_value
+                    kif_daramad.current_recieved_direct -= get_value
                     kif_daramad.save()
             get_value = int(form.cleaned_data['how_much'])
-            kif_pol=user.get_kif_kif_pool()
-            kif_pol.current_balance+=int(get_value)
+            kif_pol = user.get_kif_kif_pool()
+            kif_pol.current_balance += int(get_value)
             kif_pol.save()
             History.objects.create(user=user, type='2', meghdar=int(form.cleaned_data['how_much']))
             messages.success(self.request, 'مبلغ درخواستی شما با موفقیت به کیف پول منتقل شد.')
@@ -166,5 +169,3 @@ class MoveDaramad2KifView(LoginRequiredMixin, FormView):
 
     def form_invalid(self, form):
         return super().form_invalid(form)
-
-

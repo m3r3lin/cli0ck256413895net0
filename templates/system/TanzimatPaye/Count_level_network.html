@@ -130,6 +130,7 @@
             up_url: "{% url 'Count_Level_networkUpdate' pk=0 %}",
             modal_id: "#confirm_modal",
             do_after_initializing: function (table) {
+                console.log(table);
                 $('.edit_button').off().click(function (e) {
                     e.preventDefault();
                     var onvan = i.getData($(this))[1];

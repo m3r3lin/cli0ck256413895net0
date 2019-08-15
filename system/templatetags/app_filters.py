@@ -53,7 +53,8 @@ def date_jalali(value, mode=1):
 
 @register.simple_tag
 def setting(key, default):
-    return TanzimatPaye.get_settings(key, default)
+    settings = TanzimatPaye.get_settings(key, default)
+    return settings
 
 
 @register.simple_tag

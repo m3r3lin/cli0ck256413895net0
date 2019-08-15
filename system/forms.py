@@ -151,7 +151,7 @@ class UserUpdateForm(ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'address', 'code_posti', 'shomare_hesab',
-                  'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'email', 'id_telegram', 'image_cart_melli', 'avatar' , 'is_active']
+                  'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'email', 'id_telegram', 'image_cart_melli', 'avatar', 'is_active']
         error_messages = {
             'first_name': {
                 'required': "نام اجباری است!",
@@ -422,6 +422,23 @@ class ActiveCodeMoarefForm(ModelForm):
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
 
 
+class LeastBalanceRequiredForm(ModelForm):
+    value = forms.IntegerField(error_messages={
+        'required': 'فیلد حداقل میزان اعتبار برای نمایش تبلیغات اجباری است',
+    })
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(LeastBalanceRequiredForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "حداقل میزان اعتبار برای نمایش تبلیغات:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
 class Languge_siteForm(ModelForm):
     VAZEYAT_CHOICES = (
         ('1', 'فارسی '),
@@ -457,10 +474,10 @@ class SodeModirForm(ModelForm):
 
 
 class Count_level_networkForm(ModelForm):
-    value = forms.IntegerField(required=True,error_messages={
+    value = forms.IntegerField(required=True, error_messages={
         'required': ("فیلد درصد اجباری است!"),
     })
-    onvan = forms.IntegerField(required=True,error_messages={
+    onvan = forms.IntegerField(required=True, error_messages={
         'required': ("فیلد عنوان اجباری است!"),
     })
 
@@ -608,7 +625,7 @@ class NewMessageCreateForm(ModelForm):
     class Meta:
         model = Payam
         fields = ['text']
-        exclude=['girande']
+        exclude = ['girande']
 
     def __init__(self, *args, **kwargs):
         super(NewMessageCreateForm, self).__init__(*args, **kwargs)
@@ -722,14 +739,13 @@ class IncreaseBalanceFrom(forms.Form):
 
     def clean_how_much(self):
         how_much = self.cleaned_data['how_much']
-        if how_much>0:
+        if how_much > 0:
             return how_much
         else:
             raise forms.ValidationError('مقدار وارد شده صحیح نمیباشد.')
 
 
 class Create_Infopm(ModelForm):
-
     class Meta:
         model = Infopm
         fields = ['is_active', 'body']
@@ -739,7 +755,7 @@ class Create_Infopm(ModelForm):
 
         self.fields['body'].label = "متن پیام:"
         self.fields['body'].required = True
-        self.fields['body'].widget.attrs.update({'class': 'form-control','id': 'body','rows': 6})
+        self.fields['body'].widget.attrs.update({'class': 'form-control', 'id': 'body', 'rows': 6})
 
         self.fields['is_active'].label = "فعال یا غیرفعال:"
         self.fields['is_active'].required = False

@@ -43,9 +43,10 @@ VAZEYAT_PAYAM = (
     (2, 'ارسال شده'),
 )
 
+
 class Role(models.Model):
-    name = models.CharField(max_length=255, unique=True,null=True)
-    title = models.CharField(max_length=255,null=True)
+    name = models.CharField(max_length=255, unique=True, null=True)
+    title = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return self.title
@@ -66,7 +67,7 @@ class User(AbstractUser):
     name_bank = models.CharField(max_length=80, null=True, blank=True)
     code_posti = models.CharField(max_length=10, null=True, blank=True)
     # kife_pool = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف پول نمیتواند بیشتر از 9999999999 باشد. ')])
-    kife_daramad = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف درآمد نمیتواند بیشتر از 9999999999 باشد. ')])
+    kife_daramad = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف درآمد نمیتواند بیشتر از 9999999999 باشد. ')])
     code_moaref = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, blank=True)
     sath = models.IntegerField(default=1, null=True, blank=True)
     id_telegram = models.CharField(max_length=30, null=True, blank=True)
@@ -74,12 +75,11 @@ class User(AbstractUser):
     vazeyat = models.IntegerField(null=True, blank=True, choices=VAZEYAT_CHOICES)
     image_cart_melli = models.ImageField(upload_to=upload_cart_melli_path, null=True, blank=True)
     avatar = models.ImageField(upload_to=upload_avatar_path, null=True, blank=True)
-    roles = models.ManyToManyField(Role, related_name="users",
-                                   related_query_name="user", blank=True)
-
+    roles = models.ManyToManyField(Role, related_name="users", related_query_name="user", blank=True)
     list_parent = models.TextField(null=True, blank=True)
     last_logout = models.DateTimeField(blank=True, null=True)
     last_activity = models.DateTimeField(blank=True, null=True)
+
     def is_complete(self):
         if self.first_name is not None or \
                 self.last_name is not None or \
@@ -136,6 +136,11 @@ class User(AbstractUser):
         k.current_balance += adad
         k.save()
 
+    def sub_from_kif_pool(self, adad: int):
+        k = self.get_kif_kif_pool()
+        k.current_balance -= adad
+        k.save()
+
     def get_kif_daramad(self) -> "KifDarAmad":
         k, _ = KifDarAmad.objects.get_or_create(user=self, defaults=dict(user=self))
         return k
@@ -156,22 +161,19 @@ class User(AbstractUser):
         return self.username
 
 
-
-
-
 class KifPool(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    current_balance = models.IntegerField(default=0)
-    all_received_direct = models.IntegerField(default=0)
-    all_received_indirect = models.IntegerField(default=0)
-    all_deposit = models.IntegerField(default=0)
-    all_received = models.IntegerField(default=0)
+    current_balance = models.FloatField(default=0)
+    all_received_direct = models.FloatField(default=0)
+    all_received_indirect = models.FloatField(default=0)
+    all_deposit = models.FloatField(default=0)
+    all_received = models.FloatField(default=0)
 
 
 class KifDarAmad(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    current_recieved_direct = models.IntegerField(default=0)
-    current_recieved_indirect = models.IntegerField(default=0)
+    current_recieved_direct = models.FloatField(default=0)
+    current_recieved_indirect = models.FloatField(default=0)
 
 
 class History(models.Model):
@@ -219,7 +221,7 @@ class Tabligh(Model):
     tedad_click = models.IntegerField()
     tedad_click_shode = models.IntegerField(default=0)
     vazeyat = models.IntegerField(choices=VAZEYAT_Tabligh)
-    mablagh_har_click = models.PositiveIntegerField()
+    mablagh_har_click = models.FloatField()
     mablagh_tabligh = models.PositiveIntegerField()
     random_url = models.CharField(max_length=255)
 
@@ -244,7 +246,7 @@ class Tabligh(Model):
 class Click(Model):
     tabligh = models.ForeignKey(Tabligh, on_delete=models.CASCADE)
     montasher_konande = models.ForeignKey(User, on_delete=models.CASCADE)
-    mablagh_har_click = models.PositiveIntegerField()
+    mablagh_har_click = models.FloatField()
     user_agent = models.CharField(max_length=90, null=True)
     country = models.CharField(max_length=90, null=True)
     ip = models.CharField(max_length=16, null=True)
@@ -273,8 +275,10 @@ TEDAD_SATH_SHABAKE = 'tedad_sath_shabake'
 VAHED_POLL_SITE = 'vahed_poll_site'
 COUNT_VISIT_TABLIGH = 'count_visit_tabligh'
 TAEIN_HADAGHAL_ETBAR = 'taein_hadaghal_etbar'
-SODE_MODIR='sode_modir'
+LEAST_BALANCE_REQUIRED = 'least_balance_required'
+SODE_MODIR = 'sode_modir'
 SATH = 'sath.'
+
 
 class TanzimatPaye(Model):
     onvan = models.CharField(max_length=250, unique=True)
@@ -283,7 +287,7 @@ class TanzimatPaye(Model):
     @staticmethod
     def get_settings(key, default=None):
         try:
-            a=TanzimatPaye.objects.get(onvan=key).value
+            a = TanzimatPaye.objects.get(onvan=key).value
             if a.isdigit():
                 return int(a)
             elif a.isdecimal():
@@ -332,13 +336,20 @@ def password_change_callback(sender, request, user, **kwargs):
     pass
 
 
-
 class HistoryIndirect(Model):
-    montasher_konande = models.ForeignKey(User, on_delete=models.CASCADE , related_name="montasherkonande")
-    parent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="parent")
-    mablagh= models.PositiveIntegerField()
+    montasher_konande = models.ForeignKey(User, on_delete=models.CASCADE, related_name="montasherkonande")
+    parent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="parent",null=True)
+    mablagh = models.FloatField()
     tarikh = models.DateTimeField(auto_now_add=True)
 
+
 class Infopm(Model):
-    is_active= models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     body = models.TextField(default='')
+
+
+class SoodeTabligh(Model):
+    tabligh = models.ForeignKey(Tabligh, on_delete=models.CASCADE)
+    sath = models.IntegerField()
+    soode_mostaghim = models.FloatField()
+    soode_gheire_mostaghim = models.FloatField(default=0)

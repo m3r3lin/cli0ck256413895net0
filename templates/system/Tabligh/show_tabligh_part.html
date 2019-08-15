@@ -16,49 +16,54 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-{% for tabligh in tablighs %}
-    <div class="form-group col-sm-12 col-md-6">
-        <div class="small-box bg-aqua">
-            <div class="inner">
-                <h3>{{ tabligh.onvan }}</h3>
-                <p>درآمد از هر مشاهده: <b>{{ tabligh.mablagh_har_click }}</b></p>
-                <p>مقدار کل مشاهده: {{ tabligh.tedad_click }}</p>
-                <p>مقدار مشاهده باقی مانده: {{ tabligh.subbed }}</p>
-                <p>کاربران فعال: {{ tabligh.all_users.count }}</p>
-            </div>
-            <style>
-                .small-box-custom-footer > a.small-box-footer {
-                    padding-top: 5px;
-                    padding-bottom: 5px;
-                    border-radius: 0 !important;
-                    margin: 0;
-                }
-            </style>
-            <div class="small-box-custom-footer" style="display: flex;">
-                {% is_publishing tabligh request.user as user_publishes %}
-                <a href="{{ tabligh.show_url }}" class="small-box-footer btn btn-danger text-center show_tabligh" style="{% if request.user.is_superuser %}width: 100%;{% else %}width: 50%;{% endif %}">
-                    مشاهده آنلاین تبلیغ <i class="fa fa-arrow-circle-right"></i>
-                </a>
+{% setting "least_balance_required" 0 as least_balance_required %}
+{% if request.user.get_kif_kif_pool.current_balance >= least_balance_required %}
+    {% for tabligh in tablighs %}
+        <div class="form-group col-sm-12 col-md-6">
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <h3>{{ tabligh.onvan }}</h3>
+                    <p>درآمد از هر مشاهده: <b>{{ tabligh.mablagh_har_click }}</b></p>
+                    <p>مقدار کل مشاهده: {{ tabligh.tedad_click }}</p>
+                    <p>مقدار مشاهده باقی مانده: {{ tabligh.subbed }}</p>
+                    <p>کاربران فعال: {{ tabligh.all_users.count }}</p>
+                </div>
+                <style>
+                    .small-box-custom-footer > a.small-box-footer {
+                        padding-top: 5px;
+                        padding-bottom: 5px;
+                        border-radius: 0 !important;
+                        margin: 0;
+                    }
+                </style>
+                <div class="small-box-custom-footer" style="display: flex;">
+                    {% is_publishing tabligh request.user as user_publishes %}
+                    <a href="{{ tabligh.show_url }}" class="small-box-footer btn btn-danger text-center show_tabligh" style="{% if request.user.is_superuser %}width: 100%;{% else %}width: 50%;{% endif %}">
+                        مشاهده آنلاین تبلیغ <i class="fa fa-arrow-circle-right"></i>
+                    </a>
 
-                {% if user_publishes.exists %}
-                    <a href="{% url 'clicked_on_tabligh' enteshartoken=tabligh.random_url|generate_publish_url:request.user %}" class="small-box-footer btn btn-warning text-center copy_link" style="width: 50%;">
-                        کپی لینک انتشار <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                {% elif request.user.is_superuser %}
-                {% else %}
-                    <a href="#" class="small-box-footer btn btn-warning text-center publish_tabligh" data-data="{{ tabligh.random_url }}" style="width: 50%;">
-                        انتشار <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                {% endif %}
-            </div>
-            <div class="icon">
-                <i class="fa fa-shopping-cart"></i>
+                    {% if user_publishes.exists %}
+                        <a href="{% url 'clicked_on_tabligh' enteshartoken=tabligh.random_url|generate_publish_url:request.user %}" class="small-box-footer btn btn-warning text-center copy_link" style="width: 50%;">
+                            کپی لینک انتشار <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    {% elif request.user.is_superuser %}
+                    {% else %}
+                        <a href="#" class="small-box-footer btn btn-warning text-center publish_tabligh" data-data="{{ tabligh.random_url }}" style="width: 50%;">
+                            انتشار <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="icon">
+                    <i class="fa fa-shopping-cart"></i>
+                </div>
             </div>
         </div>
-    </div>
-    <script type="text/javascript">
-        window.where_to_publish = "{% url 'PublishTabligh' tabligh_token='0' %}";
-        window.where_to_publish = window.where_to_publish.substr(0, window.where_to_publish.length - 1);
-        console.log(window.where_to_publish)
-    </script>
-{% endfor %}
+        <script type="text/javascript">
+            window.where_to_publish = "{% url 'PublishTabligh' tabligh_token='0' %}";
+            window.where_to_publish = window.where_to_publish.substr(0, window.where_to_publish.length - 1);
+            console.log(window.where_to_publish)
+        </script>
+    {% endfor %}
+{% else %}
+    <h2>شما باید حداقل {{ least_balance_required }} در کیف پول خود </h2>
+{% endif %}

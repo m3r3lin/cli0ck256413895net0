@@ -2,9 +2,11 @@ import datetime
 import os
 import random
 import uuid
-from unidecode import unidecode
-from Ads_Project.functions import jalali_to_gregorian
+
 from django.shortcuts import redirect
+from unidecode import unidecode
+
+from Ads_Project.functions import jalali_to_gregorian
 
 
 def get_filename_ext(filepath):
@@ -29,6 +31,7 @@ def upload_cart_melli_path(instance, filename):
         random.randint(1, 3910209312))
     final_filename = '{new_filename}{ext}'.format(new_filename=random_filename, ext=ext)
     return "cart_melli/{final_filename}".format(final_filename=final_filename)
+
 
 def change_date_to_english(value, mode=1):
     if mode == 3:
@@ -67,4 +70,14 @@ def check_role_user(*roles):
             return redirect('/')
 
         return wrapper
+
     return decorator
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip

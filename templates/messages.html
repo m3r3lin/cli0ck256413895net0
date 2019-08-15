@@ -1,16 +1,17 @@
-{%block css%}
-<style>
-    .close {
-        color: #fff !important;
-        opacity: 1 !important;
-    }
-</style>
-{%endblock%}
+{% load i18n %}
+{% block css %}
+    <style>
+        .close {
+            color: #fff !important;
+            opacity: 1 !important;
+        }
+    </style>
+{% endblock %}
 {% if messages %}
-{% for message in messages %}
-<div class="alert {% if message.tags %} {{ message.tags }} {% else %} alert-danger {% endif %} alert-dismissible" role="alert">
-    <a href="#" class="close pull-left" data-dismiss="alert" aria-label="close">&times;</a>
-    {{ message }}
-</div>
-{% endfor %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags %} {{ message.tags }} {% else %} alert-danger {% endif %} alert-dismissible" role="alert">
+            <a href="#" class="close pull-left" data-dismiss="alert" aria-label="close">&times;</a>
+            {{ message }}
+        </div>
+    {% endfor %}
 {% endif %}

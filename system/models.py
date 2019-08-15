@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import timedelta
 
 from allauth.account import signals
 from django.contrib.auth.hashers import make_password
@@ -10,7 +10,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
-from datetime import timedelta
+
 from Ads_Project import settings
 from system.functions import upload_avatar_path, upload_cart_melli_path
 
@@ -67,7 +67,8 @@ class User(AbstractUser):
     name_bank = models.CharField(max_length=80, null=True, blank=True)
     code_posti = models.CharField(max_length=10, null=True, blank=True)
     # kife_pool = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف پول نمیتواند بیشتر از 9999999999 باشد. ')])
-    kife_daramad = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف درآمد نمیتواند بیشتر از 9999999999 باشد. ')])
+    kife_daramad = models.FloatField(default=0, validators=[MinValueValidator(0),
+                                                            MaxValueValidator(9999999999, message='کیف درآمد نمیتواند بیشتر از 9999999999 باشد. ')])
     code_moaref = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, blank=True)
     sath = models.IntegerField(default=1, null=True, blank=True)
     id_telegram = models.CharField(max_length=30, null=True, blank=True)
@@ -156,6 +157,10 @@ class User(AbstractUser):
     @property
     def kife_pool(self):
         return self.get_kif_kif_pool().current_balance
+
+    def allow_indirect(self):
+        allowed = TanzimatPaye.get_settings(COUNT_KHARI_HADAGHAL, 0)
+        return self.tabligh_set.filter(vazeyat=1).count() >= allowed
 
     def __str__(self):
         return self.username
@@ -338,7 +343,7 @@ def password_change_callback(sender, request, user, **kwargs):
 
 class HistoryIndirect(Model):
     montasher_konande = models.ForeignKey(User, on_delete=models.CASCADE, related_name="montasherkonande")
-    parent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="parent",null=True)
+    parent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="parent", null=True)
     mablagh = models.FloatField()
     tarikh = models.DateTimeField(auto_now_add=True)
 

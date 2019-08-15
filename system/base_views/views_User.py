@@ -1,21 +1,23 @@
+import simplejson as json
+from allauth.socialaccount.views import ConnectionsView
 from django.contrib import auth, messages
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView
 from django.db.models import ProtectedError, Q
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.utils import timezone
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
 from system.forms import UserCreateForm, UserUpdateForm, ChangeUserPasswordForm
-from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-from django.contrib.auth import logout
-from django.urls import reverse
-from django.contrib.auth.models import User
-from system.models import User, TanzimatPaye, ACTIV_MOAREF, Parent, TEDAD_SATH_SHABAKE, COUNT_LEVEL_NETWORK
+from system.models import User, TanzimatPaye, ACTIV_MOAREF, COUNT_LEVEL_NETWORK
 from system.templatetags.app_filters import date_jalali
-import simplejson as json
+
 
 class UserCreateView(CreateView):
     template_name = 'system/user/Create_User.html'
@@ -45,13 +47,13 @@ class UserCreateView(CreateView):
                 if user.list_parent is not None:
                     jsonDec = json.decoder.JSONDecoder()
                     parents = jsonDec.decode(user.list_parent)
-                    parents.insert(0,[user.id])
+                    parents.insert(0, [user.id])
                     json_parent = json.dumps(parents)
                     new_user = form.save(commit=False)
-                    new_user.list_parent=json_parent
+                    new_user.list_parent = json_parent
                     new_user.save()
                 else:
-                    parent=[]
+                    parent = []
                     parent.append([user.id])
                     json_parent = json.dumps(parent)
                     new_user = form.save(commit=False)
@@ -94,6 +96,13 @@ class UserCreateView(CreateView):
 
     def form_invalid(self, form):
         return super(UserCreateView, self).form_invalid(form)
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        referer = self.request.GET.get('referer', None)
+        if 'code_moaref' in form.fields and referer:
+            form.fields['code_moaref'].widget.attrs['value'] = f"code_{referer}"
+        return form
 
     def get_success_url(self):
         return reverse('login')
@@ -225,7 +234,8 @@ class UserListView(LoginRequiredMixin, ListView):
 
 class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = User
-    columns = ['id', 'username', 'first_name', 'last_name', 'code_melli','date_joined', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'is_active','online']
+    columns = ['id', 'username', 'first_name', 'last_name', 'code_melli', 'date_joined', 'tarikh_tavalod', 'mobile', 'gender', 'father_name',
+               'is_active', 'online']
 
     def render_column(self, row, column):
         if column == 'tarikh_tavalod':
@@ -259,3 +269,6 @@ class ProfileUserView(LoginRequiredMixin, View):
         user = User.objects.get(username=request.user.username)
         user.tarikh_tavalod = date_jalali(user.tarikh_tavalod, 3)
         return render(request, 'system/user/Profile_User.html', {'user': user})
+
+class ConnectView(ConnectionsView):
+    pass

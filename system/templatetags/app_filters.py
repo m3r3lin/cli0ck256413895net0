@@ -62,6 +62,11 @@ def is_publishing(tabligh, user):
     return TablighatMontasherKonande.objects.filter(tabligh=tabligh, montasher_konande=user)
 
 
+@register.simple_tag
+def r(data):
+    return data
+
+
 @register.filter(name='generate_publish_url')
 def generate_publish_url(value, user: User):
     return value + '--' + str(user.id)

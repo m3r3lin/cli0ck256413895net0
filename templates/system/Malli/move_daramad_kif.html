@@ -1,5 +1,6 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load app_filters %}
 {% block css %}
 {% endblock %}
 {% block page_title %}
@@ -27,8 +28,41 @@
                             {% include "errors.html" %}
                             {% include "messages.html" %}
                             <div class="row">
-
-                                <div class="form-group col-sm6 col-md-3">
+                                {% r request.user.get_kif_daramad.current_recieved_direct as direct %}
+                                {% r request.user.get_kif_daramad.current_recieved_indirect as indirect %}
+                                {% if not request.user.allow_indirect %}
+                                    <div class="col-md-12 ">
+                                        <div class="alert alert-warning alert-dismissable" role="alert">
+                                            <a href="#" class="close pull-left" data-dismiss="alert" aria-label="close">×</a>
+                                            شما باید حداقل تعداد
+                                            <b>{% setting 'count_kharid_hadaghl' 0 %}</b>
+                                            تبلیغ خریداری کنید تا بتوانید از سود زیر مجوعه خود استفاده کنید.
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="col-md-4">
+                                    <div class="alert alert-info">
+                                        میزان در آمد مستقیم شما :
+                                        <b>{{ direct }}</b>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="alert alert-info">
+                                        میزان در آمد غیر مستقیم شما :
+                                        <b>{{ indirect }}</b>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="alert alert-info">
+                                        میزان در آمد قابل برداشت:
+                                        <b>{% if request.user.allow_indirect %}
+                                            {{ direct|add:indirect }}
+                                        {% else %}
+                                            {{ direct }}
+                                        {% endif %}</b>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm6 col-md-4">
                                     {% if form.how_much.label_tag %}
                                         <label for="vazeyat">{{ form.how_much.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
@@ -82,5 +116,5 @@
             $('#tedad_click,#mablagh_ha_click').keyup(calculate);
         });
     </script>
-{#    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>#}
+    {#    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>#}
 {% endblock %}

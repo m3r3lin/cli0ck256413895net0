@@ -1,6 +1,3 @@
-from builtins import object
-from typing import re
-
 from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponse
@@ -8,10 +5,11 @@ from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import FormView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
-from system.templatetags.app_filters import date_jalali
+
 from Ads_Project.functions import LoginRequiredMixin
 from system.forms import IncreaseBalanceFrom
-from system.models import Order, User, INCREASE_BALANCE_ORDER, History, Tabligh, COUNT_KHARI_HADAGHAL
+from system.models import Order, User, INCREASE_BALANCE_ORDER, History, Tabligh, COUNT_KHARI_HADAGHAL, TanzimatPaye
+from system.templatetags.app_filters import date_jalali
 
 
 def dargah_test_part_1(request):
@@ -130,9 +128,7 @@ class MoveDaramad2KifView(LoginRequiredMixin, FormView):
         user = self.request.user
         get_value = int(form.cleaned_data['how_much'])
 
-        count = Tabligh.objects.filter(code_tabligh_gozaar=user, vazeyat=1).count()
-        kharid_hadaghal = COUNT_KHARI_HADAGHAL
-        indirect_allowed = count >= kharid_hadaghal
+        indirect_allowed = user.allow_indirect()
 
         kif_daramad = user.get_kif_daramad()
         if (kif_daramad.current_recieved_direct + kif_daramad.current_recieved_indirect) >= get_value:
@@ -146,13 +142,21 @@ class MoveDaramad2KifView(LoginRequiredMixin, FormView):
                 else:
                     kif_daramad.current_recieved_indirect -= get_value
                     kif_daramad.save()
-            else:
+            elif indirect_allowed:
                 if get_value >= kif_daramad.current_recieved_direct:
                     get_value -= kif_daramad.current_recieved_direct
                     kif_daramad.current_recieved_direct = 0
                     if get_value > 0:
                         kif_daramad.current_recieved_indirect -= get_value
                     kif_daramad.save()
+                else:
+                    kif_daramad.current_recieved_direct -= get_value
+                    kif_daramad.save()
+
+            else:
+                if get_value > kif_daramad.current_recieved_direct:
+                    messages.error(self.request, 'مقدار وارد شده ار درآمد در دسترس شما بیشتر است.')
+                    return super(MoveDaramad2KifView, self).form_invalid(form)
                 else:
                     kif_daramad.current_recieved_direct -= get_value
                     kif_daramad.save()

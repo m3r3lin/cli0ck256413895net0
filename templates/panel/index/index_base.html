@@ -103,55 +103,6 @@
                                                 </a>
                                             </li>
                                         {% endfor %}
-                                        <!-- end message -->
-                                        {#                                        <li>#}
-                                        {#                                            <a href="#">#}
-                                        {#                                                <div class="pull-right">#}
-                                        {#                                                    <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">#}
-                                        {#                                                </div>#}
-                                        {#                                                <h4>#}
-                                        {#                                                    نگین#}
-                                        {#                                                    <small><i class="fa fa-clock-o"></i> ۲ ساعت پیش</small>#}
-                                        {#                                                </h4>#}
-                                        {#                                                <p>متن پیام</p>#}
-                                        {#                                            </a>#}
-                                        {#                                        </li>#}
-                                        {#                                        <li>#}
-                                        {#                                            <a href="#">#}
-                                        {#                                                <div class="pull-right">#}
-                                        {#                                                    <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">#}
-                                        {#                                                </div>#}
-                                        {#                                                <h4>#}
-                                        {#                                                    نسترن#}
-                                        {#                                                    <small><i class="fa fa-clock-o"></i> امروز</small>#}
-                                        {#                                                </h4>#}
-                                        {#                                                <p>متن پیام</p>#}
-                                        {#                                            </a>#}
-                                        {#                                        </li>#}
-                                        {#                                        <li>#}
-                                        {#                                            <a href="#">#}
-                                        {#                                                <div class="pull-right">#}
-                                        {#                                                    <img src="{% static 'dist/img/user3-128x128.jpg' %}" class="img-circle" alt="User Image">#}
-                                        {#                                                </div>#}
-                                        {#                                                <h4>#}
-                                        {#                                                    نگین#}
-                                        {#                                                    <small><i class="fa fa-clock-o"></i> دیروز</small>#}
-                                        {#                                                </h4>#}
-                                        {#                                                <p>متن پیام</p>#}
-                                        {#                                            </a>#}
-                                        {#                                        </li>#}
-                                        {#                                        <li>#}
-                                        {#                                            <a href="#">#}
-                                        {#                                                <div class="pull-right">#}
-                                        {#                                                    <img src="{% static 'dist/img/user4-128x128.jpg' %}" class="img-circle" alt="User Image">#}
-                                        {#                                                </div>#}
-                                        {#                                                <h4>#}
-                                        {#                                                    نسترن#}
-                                        {#                                                    <small><i class="fa fa-clock-o"></i> ۲ روز پیش</small>#}
-                                        {#                                                </h4>#}
-                                        {#                                                <p>متن پیام</p>#}
-                                        {#                                            </a>#}
-                                        {#                                        </li>#}
                                     </ul>
                                 </li>
                                 <li class="footer"><a href="{% url 'MessageList' %}">نمایش تمام پیام ها</a></li>
@@ -267,6 +218,8 @@
                                     اطلاعات کاربری</a></li>
                                 <li><a href="{% url 'ChangeUserPassword' %}"><i class="fa fa-lock"></i>
                                     <span>تغییر رمز</span></a></li>
+                                <li><a href="{% url 'socialaccount_connections' %}"><i class="fa fa-lock"></i>
+                                    <span>اتصال به حساب های کاربری</span></a></li>
                             {% endif %}
                         </ul>
                     </li>
@@ -341,9 +294,7 @@
                         </a>
                         <ul class="treeview-menu">
                             {% if not request.user.is_superuser %}
-                                <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>افزایش اعتبار</a>
-                                </li>
-                                <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>برداشت ها</a></li>
+                                <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>افزایش اعتبار</a></li>
                                 <li><a href="{% url 'MoveDaramad2Kif' %}"><i class="fa fa-plus"></i>انتقال به کیف درامد</a></li>
                             {% endif %}
                             <li><a href="{% url 'HistoryMaliList' %}"><i class="fa fa-plus"></i>سابقه مالی</a></li>
@@ -360,9 +311,8 @@
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="{% url 'Parent_Children' %}"><i class="fa fa-plus"></i>لیست فرزندان</a></li>
-                            <li><a href="{% url 'MessageListmoshahede' %}"><i class="fa fa-plus"></i>لیست همه پیام های
-                                کاربران</a></li>
-                            <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>تعداد کابران آنلاین</a>
+                            </li>
+                            <li><a href="{% url 'show_click' %}"><i class="fa fa-plus"></i>کلیک های کاربر</a></li>
                             </li>
                         </ul>
                     </li>
@@ -411,6 +361,29 @@
             </section>
             <!-- /.sidebar -->
         </aside>
+    {% else %}
+
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="/" class="logo">
+                <span class="logo-mini">نمایش تبلیغ</span>
+                <span class="logo-lg"><b>کنترل پنل میهمان</b></span>
+            </a>
+        </header>
+        <!-- right side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <ul class="sidebar-menu" data-widget="tree">
+                    {% if montasher_konande %}
+                        <li><a href="/system/CreateUser/?referer={{ montasher_konande.id }}"><i class="fa fa-address-book"></i> <span>ثبت نام</span></a></li>
+                    {% else %}
+                    {% endif %}
+                    <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i> <span>ورود</span></a></li>
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
     {% endif %}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -453,7 +426,9 @@
                 }
             </style>
             <ol class="breadcrumb">
-                <li><a href="/">داشبرد</a></li>
+                {% if request.user.is_authenticated %}
+                    <li><a href="/">داشبرد</a></li>
+                {% endif %}
                 {% block dashboard %}
                 {% endblock %}
             </ol>

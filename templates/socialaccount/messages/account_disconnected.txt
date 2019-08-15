@@ -1,0 +1,2 @@
+{% load i18n %}
+{% blocktrans %}حساب کاربری از حالت اتصال خارج شد{% endblocktrans %}

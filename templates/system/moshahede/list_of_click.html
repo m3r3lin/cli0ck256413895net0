@@ -1,21 +1,10 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
-{% block css %}
-    <style>
-        td {
-            text-align: center;
-        }
-
-        th:nth-child(9), td:nth-child(9) {
-            white-space: nowrap;
-        }
-    </style>
-{% endblock %}
 {% block page_title %}
-    لیست تبلیغات
+    لیست کلیک ها
 {% endblock %}
 {% block dashboard %}
-    <li>لیست تبلیغات</li>
+    <li>لیست کلیک ها</li>
 {% endblock %}
 {% block main_content %}
 
@@ -32,9 +21,12 @@
                             <table id="networkdatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">نام و نام خانوادگی</th>
-                                    <th class="text-center">سطح</th>
-                                    <th class="text-center">درامد</th>
+                                    <th class="text-center">شناسه</th>
+                                    <th class="text-center">کاربر</th>
+                                    <th class="text-center">ساعت کلیک</th>
+                                    <th class="text-center">تبلیغ</th>
+                                    <th class="text-center">مبلغ هر کلیک</th>
+                                    <th class="text-center">آیی پی</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -57,10 +49,11 @@
     <!-- my fontawesom -->
     <script>
         datatable_simple_show({
-            url: "{% url 'Parent_Children_D' %}",
-            real_cols: 3,
+            url: "{% url 'clickdatatable' %}",
+            real_cols: 6,
+            hide_id: true,
             datable_id: '#networkdatatable',
-            no_action_nutton:true
+            no_action_nutton: true
         });
     </script>
 {% endblock %}

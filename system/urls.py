@@ -3,13 +3,14 @@ from django.urls import path
 # from system.base_views import views_Message
 from system.base_views import views_Message
 from system.base_views.view_graph import Chart_2_View,Chart_1_View,ParentChildrenDatatableView,Parent_Children_List_View
-from system.base_views.views_Click import ClickedOnTablighView
+from system.base_views.views_Click import ClickedOnTablighView, ClickDatatableView, ShowClick
 from system.base_views.views_Malli import IncreaseBalanceView, dargah_test_part_1, HistoryMaliDatatableView, \
     HistoryMaliListView, MoveDaramad2KifView
 from system.base_views.views_Message import MessageListview, Message_show_view
 from system.base_views.views_Message import NewMessageCreateView
 from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView, PelanDatatableView, PlanReportsView
-from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView, PublishShowView, TablighPreviewView, PublishTablighView, MotashershodeDatatableView, Montashshodeha
+from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView, \
+    PublishShowView, TablighPreviewView, PublishTablighView, MotashershodeDatatableView, Montashshodeha, ActivateTablighView
 from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel, LeastBalanceRequiredView
 from system.base_views.views_Tanzimat_Paye import Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView, Time_kharid_termView, \
     Taien_meghdar_matlabView, Show_amar_foruserView, Taeid_khodkar_tablighView,Vahed_poll_siteView,Count_visit_tablighView,Taein_hadaghal_etbarView,\
@@ -46,6 +47,7 @@ urlpatterns = [
     path('UpdateTabligh/<int:pk>', TablighUpdateView.as_view(), name='UpdateTabligh'),
     path('DeleteTabligh/<int:pk>', TablighDeleteView.as_view(), name='DeleteTabligh'),
     path('ListTabligh/', TablighListView.as_view(), name='ListTabligh'),
+    path('ActivateTablighView/', ActivateTablighView.as_view(), name='ActivateTablighView'),
     path('TablighDatatable/', TablighDatatableView.as_view(), name='TablighDatatable'),
     path('EntesharDatatable/', MotashershodeDatatableView.as_view(), name='MontashshodeDatatable'),
     path('PreviewTabligh/<tabligh_token>', TablighPreviewView.as_view(), name='PreviewTabligh'),
@@ -89,6 +91,8 @@ urlpatterns = [
 
     # ---- Click
     path('click/<enteshartoken>',ClickedOnTablighView.as_view(),name='clicked_on_tabligh'),
+    path('showclicks/', ShowClick.as_view(),name='show_click'),
+    path('clickdatatable/', ClickDatatableView.as_view(), name='clickdatatable'),
 
     #Moshahedat
     path('MessageListmoshahede/', MessageListmoshahedeview.as_view(), name='MessageListmoshahede'),
@@ -105,5 +109,4 @@ urlpatterns = [
     path('InpopmDatatable/', InpopmDatatableView.as_view(), name='InpopmDatatable'),
     path('DeleteInfopm/<int:pk>', InfopmDeleteView.as_view(), name='DeleteInfopm'),
     path('InfopmUpdate/<int:pk>', InfopmUpdateView.as_view(), name='InfopmUpdate'),
-
 ]

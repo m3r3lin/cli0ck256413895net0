@@ -1,15 +1,16 @@
+import simplejson as json
 from django.db.models import Q
 from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, render
 from django.views import View
-from django.views.generic import FormView
-import encodings.base64_codec
+from django.views.generic import TemplateView
+from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
-from system.models import User, Tabligh, Click, TablighatMontasherKonande, SODE_MODIR, TanzimatPaye, SATH, \
+from system.functions import get_client_ip
+from system.models import User, Tabligh, Click, SODE_MODIR, TanzimatPaye, \
     COUNT_LEVEL_NETWORK, HistoryIndirect, SoodeTabligh
-import simplejson as json
+from system.templatetags.app_filters import date_jalali
 
 
 class ClickedOnTablighView(View):
@@ -35,6 +36,7 @@ class ClickedOnTablighView(View):
         click = Click()
         click.tabligh = tabligh
         click.montasher_konande = user
+        click.ip = get_client_ip(request)
         sode_modir = TanzimatPaye.get_settings(SODE_MODIR)
         max_sath_sod = TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK)
 
@@ -74,5 +76,27 @@ class ClickedOnTablighView(View):
             tabligh.save()
 
         return render(request, 'system/Tabligh/Show_Tabligh.html', context={
-            "tabligh": tabligh
+            "tabligh": tabligh,
+            "montasher_konande":user,
         })
+
+
+class ShowClick(LoginRequiredMixin, TemplateView):
+    template_name = 'system/moshahede/list_of_click.html'
+
+
+class ClickDatatableView(LoginRequiredMixin, BaseDatatableView):
+    model = Click
+    columns = ['id', 'montasher_konande', 'tarikh', 'tabligh', 'mablagh_har_click', 'ip']
+
+    def render_column(self, row, column):
+        if column == 'tarikh':
+            return date_jalali(row.tarikh)
+        return super().render_column(row, column)
+
+    def filter_queryset(self, qs):
+        search = self.request.GET.get('search[value]', None)
+        qs = qs.filter(Q(tabligh__onvan__icontains=search)
+                       | Q(montasher_konande__username__icontains=search)
+                       | Q(ip__icontains=search))
+        return qs

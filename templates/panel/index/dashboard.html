@@ -80,7 +80,7 @@
 
             <div class="info-box-content">
                 <span class="info-box-text">کل در آمد مستقیم</span>
-                <span class="info-box-number">{{ queries.all_direct_recieve }}</span>
+                <span class="info-box-number">{{ queries.all_direct_recieve|floatformat:0 }}</span>
 
                 <div class="progress">
                     <div class="progress-bar" style="width: 0%"></div>
@@ -99,7 +99,7 @@
 
             <div class="info-box-content">
                 <span class="info-box-text">کل در آمد غیر مستقیم</span>
-                <span class="info-box-number">{{ queries.all_indirect_recieve }}</span>
+                <span class="info-box-number">{{ queries.all_indirect_recieve|floatformat:0 }}</span>
 
                 <div class="progress">
                     <div class="progress-bar" style="width: 0%"></div>
@@ -177,7 +177,7 @@
 
             <div class="info-box-content">
                 <span class="info-box-text">درآمد کل</span>
-                <span class="info-box-number" style="text-align: left;">{{ queries.all_recive }}</span>
+                <span class="info-box-number" style="text-align: left;">{{ queries.all_recive|floatformat:0 }}</span>
 
             </div>
             <!-- /.info-box-content -->
@@ -190,7 +190,7 @@
 
             <div class="info-box-content">
                 <span class="info-box-text">درآمد امروز</span>
-                <span class="info-box-number" style="text-align: left;">{{ queries.today_daramad }}</span>
+                <span class="info-box-number" style="text-align: left;">{{ queries.today_daramad|floatformat:0 }}</span>
 
             </div>
             <!-- /.info-box-content -->
@@ -203,7 +203,7 @@
 
             <div class="info-box-content">
                 <span class="info-box-text">درامد مستقیم امروز</span>
-                <span class="info-box-number" style="text-align: left;">{{ queries.today_direct }}</span>
+                <span class="info-box-number" style="text-align: left;">{{ queries.today_direct|floatformat:0 }}</span>
 
             </div>
             <!-- /.info-box-content -->
@@ -216,7 +216,7 @@
 
             <div class="info-box-content">
                 <span class="info-box-text">در امد غیر مستقیم امروز</span>
-                <span class="info-box-number" style="text-align: left;">{{ queries.today_indirect }}</span>
+                <span class="info-box-number" style="text-align: left;">{{ queries.today_indirect|floatformat:0 }}</span>
 
             </div>
             <!-- /.info-box-content -->

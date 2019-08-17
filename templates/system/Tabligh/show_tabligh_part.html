@@ -24,7 +24,7 @@
             <div class="small-box bg-aqua">
                 <div class="inner">
                     <h3 class="onvan">{{ tabligh.onvan }}</h3>
-                    <p>درآمد از هر مشاهده: <b>{{ tabligh.mablagh_har_click }}</b></p>
+                    <p>درآمد از هر مشاهده: <b>{{ tabligh.mablagh_har_click|floatformat:0 }}</b></p>
                     <p>مقدار کل مشاهده: {{ tabligh.tedad_click }}</p>
                     <p>مقدار مشاهده باقی مانده: {{ tabligh.subbed }}</p>
                     <p>کاربران فعال: {{ tabligh.all_users.count }}</p>

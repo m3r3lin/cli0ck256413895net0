@@ -73,7 +73,7 @@
         <!-- /.modal-dialog -->
     </div>
 
-{% csrf_token %}
+    {% csrf_token %}
     <!-- /.modal -->
 {% endblock %}
 {% block javascripts %}
@@ -107,14 +107,16 @@
                     if (table.row($(this).closest('tr')).data()[7] === 'فعال')
                         button_text = 'غیرفعال';
                     var aa = $('<a class="btn btn-primary">' + button_text + '</a>')
-                        .css('margin-left',4)
+                        .css('margin-left', 4)
                         .off().click(function (e) {
-                        e.preventDefault();
-                        window.location.href = "{% url "ActivateTablighView" %}"+ "?tabligh=" + table.row($(this).closest('tr')).data()[0]
-                    });
+                            e.preventDefault();
+                            window.location.href = "{% url "ActivateTablighView" %}" + "?tabligh=" + table.row($(this).closest('tr')).data()[0]
+                        });
                     $(b).prepend(aa);
                 });
+
             }
         });
+
     </script>
 {% endblock %}

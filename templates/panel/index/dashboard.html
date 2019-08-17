@@ -19,15 +19,15 @@
                         <h3 class="box-title">اطلاعیه های مدیریت سایت</h3>
                         <!-- tools box -->
                         <div class="pull-left box-tools">
-                            <button type="button" class="btn bg-info btn-sm" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
+                            <button type="button" class="btn bg-info btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
                             </button>
                         </div>
                         <!-- /. tools -->
                     </div>
                     <div class="box-body">
                         {% for pm in queries.all_infopm %}
-                            <h5 style="margin-bottom: 25px;"><b>{{ forloop.counter }}. </b></b>{{ pm.body }}</h5>
+                            <h5 style="margin-bottom: 25px;"><b>{{ forloop.counter }}. </b>{{ pm.body }}</h5>
                         {% endfor %}
                     </div>
                 </div>

@@ -16,19 +16,27 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
 {% setting "least_balance_required" 0 as least_balance_required %}
 {% if request.user.get_kif_kif_pool.current_balance >= least_balance_required %}
     {% for tabligh in tablighs %}
-        <div class="form-group col-sm-12 col-md-6">
+        <div class="form-group col-sm-12 col-md-3">
             <div class="small-box bg-aqua">
                 <div class="inner">
-                    <h3>{{ tabligh.onvan }}</h3>
+                    <h3 class="onvan">{{ tabligh.onvan }}</h3>
                     <p>درآمد از هر مشاهده: <b>{{ tabligh.mablagh_har_click }}</b></p>
                     <p>مقدار کل مشاهده: {{ tabligh.tedad_click }}</p>
                     <p>مقدار مشاهده باقی مانده: {{ tabligh.subbed }}</p>
                     <p>کاربران فعال: {{ tabligh.all_users.count }}</p>
                 </div>
                 <style>
+                    .onvan {
+                        font-size: 25px !important;
+                        overflow: hidden;
+                        line-height: 2;
+                        text-overflow: ellipsis !important;
+                    }
+
                     .small-box-custom-footer > a.small-box-footer {
                         padding-top: 5px;
                         padding-bottom: 5px;
@@ -53,9 +61,9 @@
                         </a>
                     {% endif %}
                 </div>
-                <div class="icon">
-                    <i class="fa fa-shopping-cart"></i>
-                </div>
+                {#                <div class="icon">#}
+                {#                    <i class="fa fa-shopping-cart"></i>#}
+                {#                </div>#}
             </div>
         </div>
         <script type="text/javascript">

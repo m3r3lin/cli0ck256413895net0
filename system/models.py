@@ -66,9 +66,11 @@ class User(AbstractUser):
     name_saheb_hesab = models.CharField(max_length=80, null=True, blank=True)
     name_bank = models.CharField(max_length=80, null=True, blank=True)
     code_posti = models.CharField(max_length=10, null=True, blank=True)
-    # kife_pool = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(9999999999, message='کیف پول نمیتواند بیشتر از 9999999999 باشد. ')])
     kife_daramad = models.FloatField(default=0, validators=[MinValueValidator(0),
-                                                            MaxValueValidator(9999999999, message='کیف درآمد نمیتواند بیشتر از 9999999999 باشد. ')])
+                                                            MaxValueValidator(
+                                                                9999999999,
+                                                                message='کیف درآمد نمیتواند بیشتر از 9999999999 باشد. ')
+                                                            ])
     code_moaref = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, blank=True)
     sath = models.IntegerField(default=1, null=True, blank=True)
     id_telegram = models.CharField(max_length=30, null=True, blank=True)

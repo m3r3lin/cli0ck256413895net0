@@ -7,7 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>داشبرد | کنترل پنل مدیریت</title>
     <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          name="viewport">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="{% static 'dist/css/bootstrap-theme.css' %}">
     <!-- Bootstrap rtl -->
@@ -15,24 +16,32 @@
     <!-- my_index css -->
     <link rel="stylesheet" href="{% static 'dist/my_css/index.css' %}">
     <!-- persian Date Picker -->
-    <link rel="stylesheet" href="{% static 'dist/js/persian-datepicker-0.4.5.min.js' %}">
+    <link rel="stylesheet"
+          href="{% static 'dist/js/persian-datepicker-0.4.5.min.js' %}">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="{% static 'bower_components/Ionicons/css/ionicons.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'bower_components/Ionicons/css/ionicons.min.css' %}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.css' %}">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'dist/css/skins/_all-skins.min.css' %}">
     <!-- Morris chart -->
-    <link rel="stylesheet" href="{% static 'bower_components/morris.js/morris.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'bower_components/morris.js/morris.css' %}">
     <!-- jvectormap -->
-    <link rel="stylesheet" href="{% static 'bower_components/jvectormap/jquery-jvectormap.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'bower_components/jvectormap/jquery-jvectormap.css' %}">
     <!-- Daterange picker -->
-    <link rel="stylesheet" href="{% static 'bower_components/bootstrap-daterangepicker/daterangepicker.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'bower_components/bootstrap-daterangepicker/daterangepicker.css' %}">
     <!-- bootstrap wysihtml5 - text editor -->
-    <link rel="stylesheet" href="{% static 'plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -47,7 +56,7 @@
     {% endblock %}
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
+<div class="wrapper" style="position: inherit;">
     {% if request.user.is_authenticated %}
         <header class="main-header">
             <!-- Logo -->
@@ -60,7 +69,8 @@
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
                 <!-- Sidebar toggle button-->
-                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu"
+                   role="button">
                     <span class="sr-only">Toggle navigation</span>
                 </a>
 
@@ -68,12 +78,15 @@
                     <ul class="nav navbar-nav">
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown messages-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <a href="#" class="dropdown-toggle"
+                               data-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-envelope-o"></i>
                                 <span class="label label-success">{{ count_message_not_read }}</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">{{ count_message_not_read }} پیام خوانده نشده</li>
+                                <li class="header">{{ count_message_not_read }}
+                                    پیام خوانده نشده
+                                </li>
 
                                 <li>
                                     <!-- inner menu: contains the actual data -->
@@ -84,10 +97,12 @@
                                                     <div class="pull-right">
                                                         {% if item.ferestande.avatar %}
                                                             <img src="{{ item.ferestande.avatar.url }}"
-                                                                 class="img-circle" alt="User Image">
+                                                                 class="img-circle"
+                                                                 alt="User Image">
                                                         {% else %}
                                                             <img src="{% static 'img/avatar/avatar.png' %}"
-                                                                 class="img-circle" alt="User Image">
+                                                                 class="img-circle"
+                                                                 alt="User Image">
 
 
                                                         {% endif %}
@@ -105,30 +120,38 @@
                                         {% endfor %}
                                     </ul>
                                 </li>
-                                <li class="footer"><a href="{% url 'MessageList' %}">نمایش تمام پیام ها</a></li>
+                                <li class="footer"><a
+                                        href="{% url 'MessageList' %}">نمایش
+                                    تمام پیام ها</a></li>
                             </ul>
                         </li>
                         {% if not request.user.is_superuser %}
-                            <li class="m-nav__item" style="vertical-align: baseline;height: auto;">
-                                <a href="#" class="header-wallet btn-warning" id="code_moarefi"
+                            <li class="m-nav__item"
+                                style="vertical-align: baseline;height: auto;">
+                                <a href="#" class="header-wallet btn-warning"
+                                   id="code_moarefi"
                                    data-data="code_{{ request.user.id }}">
                                     <span>کد معرفی شما : code_{{ request.user.id }}</span>
                                 </a>
                             </li>
                         {% endif %}
                         {% if not request.user.is_superuser %}
-                            <li class="m-nav__item" style="vertical-align: baseline;height: auto;">
+                            <li class="m-nav__item"
+                                style="vertical-align: baseline;height: auto;">
                                 <a href="#" class="header-wallet btn-danger">
                                     <span>اعتبار : {{ request.user.kife_pool|floatformat:0 }}</span>
                                 </a>
                             </li>
                         {% endif %}
                         <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a href="#" class="dropdown-toggle"
+                               data-toggle="dropdown">
                                 {% if request.user.avatar %}
-                                    <img src="{{ request.user.avatar.url }}" class="user-image" alt="User Image">
+                                    <img src="{{ request.user.avatar.url }}"
+                                         class="user-image" alt="User Image">
                                 {% else %}
-                                    <img src="{% static 'img/avatar/avatar.png' %}" class="user-image" alt="User Image">
+                                    <img src="{% static 'img/avatar/avatar.png' %}"
+                                         class="user-image" alt="User Image">
                                 {% endif %}
                                 <span class="hidden-xs">{{ request.user.get_full_name }}</span>
                             </a>
@@ -136,23 +159,29 @@
                                 <!-- User image -->
                                 <li class="user-header">
                                     {% if request.user.avatar %}
-                                        <img src="{{ request.user.avatar.url }}" class="img-circle" alt="User Image">
+                                        <img src="{{ request.user.avatar.url }}"
+                                             class="img-circle"
+                                             alt="User Image">
                                     {% else %}
-                                        <img src="{% static 'img/avatar/avatar.png' %}" class="img-circle"
+                                        <img src="{% static 'img/avatar/avatar.png' %}"
+                                             class="img-circle"
                                              alt="User Image">
                                     {% endif %}
                                     <p>
                                         {{ request.user.get_full_name }}
-                                        <small>کد معرفی شما : code_{{ request.user.id }}</small>
+                                        <small>کد معرفی شما :
+                                            code_{{ request.user.id }}</small>
                                     </p>
                                 </li>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-right">
-                                        <a href="{% url 'ProfileUser' %}" class="btn btn-default btn-flat">پروفایل</a>
+                                        <a href="{% url 'ProfileUser' %}"
+                                           class="btn btn-default btn-flat">پروفایل</a>
                                     </div>
                                     <div class="pull-left">
-                                        <a href="{% url 'logout' %}" class="btn btn-default btn-flat">خروج</a>
+                                        <a href="{% url 'logout' %}"
+                                           class="btn btn-default btn-flat">خروج</a>
                                     </div>
                                 </li>
                             </ul>
@@ -169,22 +198,27 @@
                 <div class="user-panel">
                     <div class="pull-right image">
                         {% if request.user.avatar %}
-                            <img src="{{ request.user.avatar.url }}" class="img-circle" alt="User Image">
+                            <img src="{{ request.user.avatar.url }}"
+                                 class="img-circle" alt="User Image">
                         {% else %}
-                            <img src="{% static 'img/avatar/avatar.png' %}" class="img-circle" alt="User Image">
+                            <img src="{% static 'img/avatar/avatar.png' %}"
+                                 class="img-circle" alt="User Image">
                         {% endif %}
                     </div>
                     <div class="pull-right info">
                         <p>{{ request.user.get_full_name }}</p>
-                        <a href="#"><i class="fa fa-circle text-success"></i> آنلاین</a>
+                        <a href="#"><i class="fa fa-circle text-success"></i>
+                            آنلاین</a>
                     </div>
                 </div>
                 <!-- search form -->
                 <form action="#" method="get" class="sidebar-form">
                     <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="جستجو">
+                        <input type="text" name="q" class="form-control"
+                               placeholder="جستجو">
                         <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                <button type="submit" name="search" id="search-btn"
+                        class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>
               </span>
                     </div>
@@ -195,7 +229,9 @@
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">منو</li>
 
-                    <li><a href="{% url 'dashboard' %}"><i class="fa fa-tachometer"></i> <span>داشبورد</span></a></li>
+                    <li><a href="{% url 'dashboard' %}"><i
+                            class="fa fa-tachometer"></i> <span>داشبورد</span></a>
+                    </li>
 
                     <li class="treeview">
                         <a href="#">
@@ -212,14 +248,21 @@
                         </a>
                         <ul class="treeview-menu">
                             {% if request.user.is_superuser %}
-                                <li><a href="{% url  'ListUser' %}"><i class="fa fa-list"></i>لیست کاربران</a></li>
-                                <li><a href="{% url 'socialaccount_connections' %}"><i class="fa fa-link"></i>
-                                    <span>اتصال به حساب های کاربری</span></a>
+                                <li><a href="{% url  'ListUser' %}"><i
+                                        class="fa fa-list"></i>لیست کاربران</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'socialaccount_connections' %}"><i
+                                            class="fa fa-link"></i>
+                                        <span>اتصال به حساب های کاربری</span></a>
                                 </li>
                             {% else %}
-                                <li><a href="{% url  'UpdateUser' pk=request.user.id %}"><i class="fa fa-pencil-square-o"></i>ویرایش
-                                    اطلاعات کاربری</a></li>
-                                <li><a href="{% url 'ChangeUserPassword' %}"><i class="fa fa-lock"></i>
+                                <li>
+                                    <a href="{% url  'UpdateUser' pk=request.user.id %}"><i
+                                            class="fa fa-pencil-square-o"></i>ویرایش
+                                        اطلاعات کاربری</a></li>
+                                <li><a href="{% url 'ChangeUserPassword' %}"><i
+                                        class="fa fa-lock"></i>
                                     <span>تغییر رمز</span></a></li>
                             {% endif %}
                         </ul>
@@ -236,8 +279,12 @@
 
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="{% url  'CreatePelan' %}"><i class="fa fa-plus"></i>ایجاد پلن</a></li>
-                                <li><a href="{% url  'ListPelan' %}"><i class="fa fa-list"></i>لیست پلن ها</a></li>
+                                <li><a href="{% url  'CreatePelan' %}"><i
+                                        class="fa fa-plus"></i>ایجاد پلن</a>
+                                </li>
+                                <li><a href="{% url  'ListPelan' %}"><i
+                                        class="fa fa-list"></i>لیست پلن ها</a>
+                                </li>
                             </ul>
                         </li>
                     {% endif %}
@@ -253,15 +300,25 @@
                         </a>
                         <ul class="treeview-menu">
                             {% if not request.user.is_superuser %}
-                                <li><a href="{% url  'CreateTabligh' %}"><i class="fa fa-plus"></i>ایجاد تبلیغ</a></li>
-                                <li><a href="{% url  'ShowTablighs' %}"><i class="fa fa-buysellads"></i>تبلیغات قابل انتشار</a></li>
+                                <li><a href="{% url  'CreateTabligh' %}"><i
+                                        class="fa fa-plus"></i>ایجاد تبلیغ</a>
+                                </li>
+                                <li><a href="{% url  'ShowTablighs' %}"><i
+                                        class="fa fa-buysellads"></i>تبلیغات
+                                    قابل انتشار</a></li>
                             {% endif %}
                             {% if request.user.is_superuser %}
-                                <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-font"></i>همه تبلیغات</a></li>
+                                <li><a href="{% url  'ListTabligh' %}"><i
+                                        class="fa fa-font"></i>همه تبلیغات</a>
+                                </li>
                             {% else %}
-                                <li><a href="{% url  'ListTabligh' %}"><i class="fa fa-amazon"></i>تبلیغات شما</a></li>
+                                <li><a href="{% url  'ListTabligh' %}"><i
+                                        class="fa fa-amazon"></i>تبلیغات
+                                    شما</a></li>
                             {% endif %}
-                            <li><a href="{% url  'Montashshodeha' %}"><i class="fa fa-list"></i>لیست تبلیغات قابل انتشار</a></li>
+                            <li><a href="{% url  'Montashshodeha' %}"><i
+                                    class="fa fa-list"></i>لیست تبلیغات قابل
+                                انتشار</a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -274,11 +331,16 @@
 
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="{% url  'MessageList' %}"><i class="fa fa-paper-plane"></i>پیام ها</a></li>
+                            <li><a href="{% url  'MessageList' %}"><i
+                                    class="fa fa-paper-plane"></i>پیام ها</a>
+                            </li>
                             {% if request.user.is_superuser %}
-                                <li><a href="{% url  'Create_InfoPm' %}"><i class="fa fa-paper-plane"></i>ارسال اطلاعیه</a>
+                                <li><a href="{% url  'Create_InfoPm' %}"><i
+                                        class="fa fa-paper-plane"></i>ارسال
+                                    اطلاعیه</a>
                                 </li>
-                                <li><a href="{% url  'InpopmrListView' %}"><i class="fa fa-list"></i>لیست اطلاعیه ها</a>
+                                <li><a href="{% url  'InpopmrListView' %}"><i
+                                        class="fa fa-list"></i>لیست اطلاعیه ها</a>
                                 </li>
                             {% endif %}
                         </ul>
@@ -295,10 +357,15 @@
                         </a>
                         <ul class="treeview-menu">
                             {% if not request.user.is_superuser %}
-                                <li><a href="{% url 'increase_balance' %}"><i class="fa fa-plus"></i>افزایش اعتبار</a></li>
-                                <li><a href="{% url 'MoveDaramad2Kif' %}"><i class="fa fa-angle-double-up"></i>انتقال به کیف درامد</a></li>
+                                <li><a href="{% url 'increase_balance' %}"><i
+                                        class="fa fa-plus"></i>افزایش
+                                    اعتبار</a></li>
+                                <li><a href="{% url 'MoveDaramad2Kif' %}"><i
+                                        class="fa fa-angle-double-up"></i>انتقال
+                                    به کیف درامد</a></li>
                             {% endif %}
-                            <li><a href="{% url 'HistoryMaliList' %}"><i class="fa fa-list"></i>سابقه مالی</a></li>
+                            <li><a href="{% url 'HistoryMaliList' %}"><i
+                                    class="fa fa-list"></i>سابقه مالی</a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -311,9 +378,13 @@
 
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="{% url 'Parent_Children' %}"><i class="fa fa-users"></i>لیست فرزندان</a></li>
+                            <li><a href="{% url 'Parent_Children' %}"><i
+                                    class="fa fa-users"></i>لیست فرزندان</a>
                             </li>
-                            <li><a href="{% url 'show_click' %}"><i class="fa fa-hand-o-up"></i>کلیک های کاربر</a></li>
+                            </li>
+                            <li><a href="{% url 'show_click' %}"><i
+                                    class="fa fa-hand-o-up"></i>کلیک های کاربر</a>
+                            </li>
                             </li>
                         </ul>
                     </li>
@@ -328,33 +399,63 @@
 
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="{% url 'ActiveCodeMoaref' %}"><i class="fa fa-code"></i>فعال کردن کد
+                                <li><a href="{% url 'ActiveCodeMoaref' %}"><i
+                                        class="fa fa-code"></i>فعال کردن کد
                                     معرف</a></li>
-                                <li><a href="{% url 'SodeModir' %}"><i class="fa fa-percent"></i>درصد سود مدیر</a></li>
-                                {#                            <li><a href="#"><i class="fa fa-list"></i>سطوح شبکه</a></li>#}
-                                <li><a href="{% url 'Languge_site' %}"><i class="fa fa-language"></i>زبان سایت</a></li>
-                                <li><a href="{% url 'Max_Count_Level_networkView' %}"><i class="fa fa-arrow-up"></i>حداکثر
-                                    تعداد سطح شبکه</a></li>
-                                <li><a href="{% url 'Count_Level_networkView' %}"><i class="fa fa-bars"></i>تعیین مقدار سود هر سطح</a></li>
-                                <li><a href="{% url 'Count_kharid_hadaghalView' %}"><i class="fa fa-level-down"></i>حداقل
-                                    تعداد خریر تبلیغ</a></li>
-                                <li><a href="{% url 'LeastBalanceRequired' %}"><i class="fa fa-arrow-down"></i>حداقل
-                                    پول برای نمایش تبلیغ</a></li>
-                                <li><a href="{% url 'Time_kharid_termView' %}"><i class="fa fa-clock-o"></i>مدت زمان
-                                    خرید</a></li>
-                                <li><a href="{% url 'Taien_meghdar_matlabView' %}"><i class="fa fa-text-width"></i>تعیین مقدار
-                                    مطلب </a></li>
-                                <li><a href="{% url 'Show_amar_foruserView' %}"><i class="fa fa-pie-chart"></i>نمایش آمار
-                                    برای کاربران </a></li>
-                                <li><a href="{% url 'Taeid_khodkar_tabligh' %}"><i class="fa fa-font"></i>تایید خودکار
-                                    تبلیغ </a></li>
-                                <li><a href="{% url 'Vahed_poll_site' %}"><i class="fa fa-btc"></i>واحد پول سایت </a>
+                                <li><a href="{% url 'SodeModir' %}"><i
+                                        class="fa fa-percent"></i>درصد سود مدیر</a>
                                 </li>
-                                <li><a href="{% url 'Count_visit_tabligh' %}"><i class="fa fa-star"></i>تعداد دیدن تبلیغ
-                                </a></li>
-                                <li><a href="{% url 'Taein_hadaghal_etbar' %}"><i class="fa fa-sort-desc"></i>تعیین حداقل
+                                {#                            <li><a href="#"><i class="fa fa-list"></i>سطوح شبکه</a></li>#}
+                                <li><a href="{% url 'Languge_site' %}"><i
+                                        class="fa fa-language"></i>زبان
+                                    سایت</a></li>
+                                <li>
+                                    <a href="{% url 'Max_Count_Level_networkView' %}"><i
+                                            class="fa fa-arrow-up"></i>حداکثر
+                                        تعداد سطح شبکه</a></li>
+                                <li>
+                                    <a href="{% url 'Count_Level_networkView' %}"><i
+                                            class="fa fa-bars"></i>تعیین مقدار
+                                        سود هر سطح</a></li>
+                                <li>
+                                    <a href="{% url 'Count_kharid_hadaghalView' %}"><i
+                                            class="fa fa-level-down"></i>حداقل
+                                        تعداد خریر تبلیغ</a></li>
+                                <li><a href="{% url 'LeastBalanceRequired' %}"><i
+                                        class="fa fa-arrow-down"></i>حداقل
+                                    پول برای نمایش تبلیغ</a></li>
+                                <li><a href="{% url 'Time_kharid_termView' %}"><i
+                                        class="fa fa-clock-o"></i>مدت زمان
+                                    خرید</a></li>
+                                <li>
+                                    <a href="{% url 'Taien_meghdar_matlabView' %}"><i
+                                            class="fa fa-text-width"></i>تعیین
+                                        مقدار
+                                        مطلب </a></li>
+                                <li>
+                                    <a href="{% url 'Show_amar_foruserView' %}"><i
+                                            class="fa fa-pie-chart"></i>نمایش
+                                        آمار
+                                        برای کاربران </a></li>
+                                <li>
+                                    <a href="{% url 'Taeid_khodkar_tabligh' %}"><i
+                                            class="fa fa-font"></i>تایید خودکار
+                                        تبلیغ </a></li>
+                                <li><a href="{% url 'Vahed_poll_site' %}"><i
+                                        class="fa fa-btc"></i>واحد پول سایت
+                                </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'Count_visit_tabligh' %}"><i
+                                            class="fa fa-star"></i>تعداد دیدن
+                                        تبلیغ
+                                    </a></li>
+                                <li><a href="{% url 'Taein_hadaghal_etbar' %}"><i
+                                        class="fa fa-sort-desc"></i>تعیین حداقل
                                     اعتبار </a></li>
-                                <li><a href="{% url 'Amar_jaali' %}"><i class="fa fa-line-chart"></i>آمار جعلی </a></li>
+                                <li><a href="{% url 'Amar_jaali' %}"><i
+                                        class="fa fa-line-chart"></i>آمار جعلی
+                                </a></li>
                             </ul>
                         </li>
                     {% endif %}
@@ -377,10 +478,15 @@
             <section class="sidebar">
                 <ul class="sidebar-menu" data-widget="tree">
                     {% if montasher_konande %}
-                        <li><a href="/system/CreateUser/?referer={{ montasher_konande.id }}"><i class="fa fa-address-book"></i> <span>ثبت نام</span></a></li>
+                        <li>
+                            <a href="/system/CreateUser/?referer={{ montasher_konande.id }}"><i
+                                    class="fa fa-address-book"></i> <span>ثبت نام</span></a>
+                        </li>
                     {% else %}
                     {% endif %}
-                    <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i> <span>ورود</span></a></li>
+                    <li><a href="{% url 'login' %}"><i
+                            class="fa fa-sign-in"></i> <span>ورود</span></a>
+                    </li>
                 </ul>
             </section>
             <!-- /.sidebar -->
@@ -450,9 +556,72 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    <footer class="main-footer text-left">
-        <strong>Copyleft &copy; 2019-2020 <a href="#">نام شرکت</a> & <a href="http://hosseinizadeh.ir/adminlte">نام
-            شخص</a></strong>
+    <style>
+        .main-footer  {
+            text-align: center;
+        }
+        .main-footer .info-box-content {
+            margin: 0;
+        }
+        .main-footer .info-box-number {
+            width: 100%;
+        }
+        .main-footer .info-box-text {
+            width: 100%;
+            overflow: visible;
+            text-align: center;
+        }
+    </style>
+    <footer class="main-footer text-left text-center row">
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="info-box-content">
+                    <span class="info-box-text">تعداد کاربران آنلاین</span>
+                    <span class="info-box-number">{{ cpp.count_user_online }}</span>
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="info-box-content">
+                    <span class="info-box-text">کل کاربران</span>
+                    <span class="info-box-number">{{ cpp.all_users }}</span>
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="info-box-content">
+                    <span class="info-box-text">کاربران جدید امروز</span>
+                    <span class="info-box-number">{{ cpp.all_user_today }}</span>
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="info-box-content">
+                    <span class="info-box-text">درآمد پرداخت شده</span>
+                    <span class="info-box-number">{{ cpp.daramad_pardakhtshode }}</span>
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="info-box-content">
+                    <span class="info-box-text">تبلیغ ثبت شده</span>
+                    <span class="info-box-number">{{ cpp.all_tabligh }}</span>
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="info-box-content">
+                    <strong style="margin-top: 100px;">Copyleft &copy; 2019-2020
+                        <a href="#">نام شرکت</a> &
+                        <a href="http://hosseinizadeh.ir/adminlte">نامشخص</a></strong>
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
     </footer>
 
 

@@ -98,6 +98,7 @@
         datatable_simple_show({
             url: "{% url 'UserDatatable' %}",
             real_cols: 12,
+            responsive:true,
             datable_id: '#UserDatatable',
             del_url: "{% url 'DeleteUser' pk=0 %}",
             up_url: "{% url 'UpdateUser' pk=0 %}",

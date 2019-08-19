@@ -600,47 +600,50 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer text-left text-center row">
-        <div class="col-lg-2 col-md-4 col-sm-6">
-            <div class="info-box-content">
-                <span class="info-box-text">تعداد کاربران آنلاین</span>
-                <span class="info-box-number">{{ cpp.count_user_online }}</span>
+        {% setting 'show_amar_for_user' 0 as show_amar_for_user %}
+        {% if show_amar_for_user %}
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="info-box-content">
+                    <span class="info-box-text">تعداد کاربران آنلاین</span>
+                    <span class="info-box-number">{{ cpp.count_user_online }}</span>
+                </div>
+                <!-- /.info-box -->
             </div>
-            <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-lg-2 col-md-4 col-sm-6">
-            <div class="info-box-content">
-                <span class="info-box-text">کل کاربران</span>
-                <span class="info-box-number">{{ cpp.all_users }}</span>
+            <!-- /.col -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="info-box-content">
+                    <span class="info-box-text">کل کاربران</span>
+                    <span class="info-box-number">{{ cpp.all_users }}</span>
+                </div>
+                <!-- /.info-box -->
             </div>
-            <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-lg-2 col-md-4 col-sm-6">
-            <div class="info-box-content">
-                <span class="info-box-text">کاربران جدید امروز</span>
-                <span class="info-box-number">{{ cpp.all_user_today }}</span>
+            <!-- /.col -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="info-box-content">
+                    <span class="info-box-text">کاربران جدید امروز</span>
+                    <span class="info-box-number">{{ cpp.all_user_today }}</span>
+                </div>
+                <!-- /.info-box -->
             </div>
-            <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-lg-2 col-md-4 col-sm-6">
-            <div class="info-box-content">
-                <span class="info-box-text">درآمد پرداخت شده</span>
-                <span class="info-box-number">{{ cpp.daramad_pardakhtshode }}</span>
+            <!-- /.col -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="info-box-content">
+                    <span class="info-box-text">درآمد پرداخت شده</span>
+                    <span class="info-box-number">{{ cpp.daramad_pardakhtshode }}</span>
+                </div>
+                <!-- /.info-box -->
             </div>
-            <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-lg-2 col-md-4 col-sm-6">
-            <div class="info-box-content">
-                <span class="info-box-text">تبلیغ ثبت شده</span>
-                <span class="info-box-number">{{ cpp.all_tabligh }}</span>
+            <!-- /.col -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class="info-box-content">
+                    <span class="info-box-text">تبلیغ ثبت شده</span>
+                    <span class="info-box-number">{{ cpp.all_tabligh }}</span>
+                </div>
+                <!-- /.info-box -->
             </div>
-            <!-- /.info-box -->
-        </div>
+        {% endif %}
         <!-- /.col -->
-        <div class="col-lg-2 col-md-4 col-sm-6">
+        <div class="{% if show_amar_for_user %}col-lg-2 col-md-4 col-sm-6{% else %}col-sm-12 text-center{% endif %}">
             <div class="info-box-content">
                 <strong style="margin-top: 100px;">Copyleft &copy; 2019-2020
                     <a href="#">نام شرکت</a> &

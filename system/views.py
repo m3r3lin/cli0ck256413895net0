@@ -1,13 +1,16 @@
 from datetime import datetime, timedelta
 
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, Count
+from django.db.models.functions import TruncDay, TruncDate
 from django.shortcuts import render
 from django.utils import timezone
 from django.views import View
 
 from Ads_Project.functions import LoginRequiredMixin
-from system.models import User, Tabligh, Click, TablighatMontasherKonande, \
+from system.models import (
+    User, Tabligh, Click, TablighatMontasherKonande,
     Payam, Infopm, TanzimatPaye, HistoryIndirect, SHOW_AMAR_FOR_USER
+)
 
 
 class Dashboard(LoginRequiredMixin, View):
@@ -37,8 +40,8 @@ class Dashboard(LoginRequiredMixin, View):
         indirect_today = HistoryIndirect.objects.filter(parent=user,
                                                         tarikh__year=today.year,
                                                         tarikh__month=today.month,
-                                                        tarikh__day=today.day).aggregate(
-            Sum('mablagh'))
+                                                        tarikh__day=today.day).aggregate(Sum('mablagh'))
+
         if indirect_today['mablagh__sum'] is None:
             indirect_today['mablagh__sum'] = 0
         if direct_today['mablagh_har_click__sum'] is None:
@@ -55,6 +58,19 @@ class Dashboard(LoginRequiredMixin, View):
             if item.onvan == "amar_jaali.count_tabligh_thabti":
                 all_tabligh += int(item.value)
 
+        today_midnight = datetime(today.year, today.month, today.day, 23, 59, 59)
+        last_day_morning = today_midnight - timedelta(days=5, hours=23, minutes=59, seconds=59)
+        past_five_days_click = Click.objects.filter(
+            tarikh__lte=today_midnight,
+            tarikh__gte=last_day_morning,
+        ).annotate(by_day=TruncDate('tarikh')) \
+            .values('by_day').annotate(by_day_count=Count('id')) \
+            .values('by_day', 'by_day_count')
+
+        a = str(past_five_days_click.query)
+        by_country = User.objects.filter(country__isnull=False) \
+            .annotate(count_user_online_country=Count("country")).values('country', 'count_user_online_country')
+
         if not user.is_superuser:
             this_month_clicks['montasher_konande'] = user
             this_month_publishes['montasher_konande'] = user
@@ -66,11 +82,13 @@ class Dashboard(LoginRequiredMixin, View):
             "all_direct_recieve": k.current_recieved_direct,
             "all_indirect_recieve": k.current_recieved_indirect,
             "count_online_user": count_user_online,
+            "count_online_user_by_country": by_country,
             "all_user": all_User,
             "all_User_Today": all_User_Today,
             "all_tabligh": all_tabligh,
             "all_infopm": all_InfoPm,
             "active_show_forosh": active_show_forosh,
+            "past_five_days_click": past_five_days_click,
             "all_recive": k.current_recieved_direct + k.current_recieved_indirect,
             "today_direct": direct_today['mablagh_har_click__sum'],
             "today_indirect": indirect_today['mablagh__sum'],
@@ -87,4 +105,5 @@ class Dashboard(LoginRequiredMixin, View):
         return render(request, 'panel/index/dashboard.html',
                       {'tablighs': tablighs, 'queries': queries,
                        'count_message_not_read': count_message_not_read,
-                       'message_not_read': message_not_read})
+                       'message_not_read': message_not_read
+                       })

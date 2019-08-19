@@ -153,7 +153,7 @@ class UserUpdateForm(ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name',
                   'address', 'code_posti', 'shomare_hesab',
-                  'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'email', 'id_telegram',
+                  'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'email', 'id_telegram', 'country',
                   'image_cart_melli', 'avatar', 'is_active']
         error_messages = {
             'first_name': {
@@ -213,7 +213,7 @@ class UserUpdateForm(ModelForm):
             },
             'avatar': {
                 'required': "آواتار اجباری است!",
-            }
+            },
         }
 
     def __init__(self, *args, **kwargs):
@@ -289,6 +289,10 @@ class UserUpdateForm(ModelForm):
         self.fields['avatar'].label = "آواتار:"
         self.fields['avatar'].required = False
         self.fields['avatar'].widget.attrs.update({'class': 'form-control', 'id': 'avatar'})
+
+        self.fields['country'].label = "کشور:"
+        self.fields['country'].required = False
+        self.fields['country'].widget.attrs.update({'class': 'form-control', 'id': 'avatar'})
 
         self.fields['is_active'].label = "وضعیت فعال یا غیرفعال بودن کاربر:"
         self.fields['is_active'].required = False

@@ -10,7 +10,7 @@ svg {
     touch-action: none;
 }
 
-.jvectormap-tip {
+.jvectormap-label {
     position: absolute;
     display: none;
     border: solid 1px #CDCDCD;

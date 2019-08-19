@@ -97,7 +97,8 @@
 
                                 <div class="form-group col-sm6 col-md-3">
                                     {% if form.father_name.label_tag %}
-                                        <label for="father_name">{{ form.father_name.label_tag }}<span class="red-star">*</span></label>
+                                        <label for="father_name">{{ form.father_name.label_tag }}<span
+                                                class="red-star">*</span></label>
                                     {% endif %}
                                     {{ form.father_name }}
                                     {% if form.father_name.help_text %}
@@ -221,6 +222,16 @@
                                 {% endif %}
 
                                 <div class="form-group col-sm6 col-md-3">
+                                    {% if form.country.label_tag %}
+                                        <label for="avatar">{{ form.country.label_tag }}</label>
+                                    {% endif %}
+                                    {{ form.country }}
+                                    {% if form.country.help_text %}
+                                        <p class="help-block">{{ form.country.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm6 col-md-3">
                                     {% if form.avatar.label_tag %}
                                         <label for="avatar">{{ form.avatar.label_tag }}</label>
                                     {% endif %}
@@ -230,21 +241,15 @@
                                     {% endif %}
                                 </div>
 
-                                <div class="form-group col-sm6 col-md-6">
+                                <div class="form-group col-md-12">
                                     {% if form.address.label_tag %}
-                                        <label for="address">{{ form.address.label_tag }}<span class="red-star">*</span></label>
+                                        <label for="address">{{ form.address.label_tag }}<span
+                                                class="red-star">*</span></label>
                                     {% endif %}
                                     {{ form.address }}
                                     {% if form.address.help_text %}
                                         <p class="help-block">{{ form.address.help_text }}</p>
                                     {% endif %}
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label for="address">اتصال به حساب های کاربری</label>
-                                    <a class="btn btn-google" style="margin-top: 10px;" href="/account/google/login/?process=connect">
-                                        اتصال به گوگل
-                                        <i class="fa fa-google"></i>
-                                    </a>
                                 </div>
                                 <!-- /.box-body -->
                             </div>
@@ -253,6 +258,11 @@
                                         style="background: #418cd9;border-color: #418cd9;">ثبت تغییرات
                                 </button>
                                 <a href="{% url 'ListUser' %}" class="btn btn-danger">انصراف</a>
+                                <a class="btn btn-google" style="margin-top: 10px;"
+                                   href="/account/google/login/?process=connect">
+                                    اتصال به گوگل
+                                    <i class="fa fa-google"></i>
+                                </a>
                             </div>
                         </div>
                     </form>

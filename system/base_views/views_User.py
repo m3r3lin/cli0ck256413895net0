@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from django.views import View
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView, UpdateView, ListView, TemplateView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
@@ -224,14 +224,8 @@ class UserDeleteView(LoginRequiredMixin, View):
         return redirect('ListUser')
 
 
-class UserListView(LoginRequiredMixin, ListView):
-    model = User
+class UserListView(LoginRequiredMixin, TemplateView):
     template_name = 'system/user/List_User.html'
-    form_class = UserCreateForm
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        return context
 
 
 class UserDatatableView(LoginRequiredMixin, BaseDatatableView):

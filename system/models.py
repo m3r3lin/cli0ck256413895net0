@@ -10,6 +10,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
+from django_countries.fields import CountryField
 
 from Ads_Project import settings
 from Ads_Project.settings import MAIN_ADMIN_ID
@@ -83,6 +84,7 @@ class User(AbstractUser):
     list_parent = models.TextField(null=True, blank=True)
     last_logout = models.DateTimeField(blank=True, null=True)
     last_activity = models.DateTimeField(blank=True, null=True)
+    country = CountryField(null=True)
 
     def is_complete(self):
         if self.first_name is not None or \

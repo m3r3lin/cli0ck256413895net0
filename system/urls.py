@@ -2,28 +2,49 @@ from django.urls import path
 
 # from system.base_views import views_Message
 from system.base_views import views_Message
-from system.base_views.view_graph import Chart_2_View,Chart_1_View,ParentChildrenDatatableView,Parent_Children_List_View
+from system.base_views.view_graph import (
+    Chart_2_View, Chart_1_View, ParentChildrenDatatableView,
+    Parent_Children_List_View
+)
 from system.base_views.views_Click import ClickedOnTablighView, ClickDatatableView, ShowClick
-from system.base_views.views_Malli import IncreaseBalanceView, dargah_test_part_1, HistoryMaliDatatableView, \
+from system.base_views.views_Malli import (
+    IncreaseBalanceView, dargah_test_part_1, HistoryMaliDatatableView,
     HistoryMaliListView, MoveDaramad2KifView
+)
 from system.base_views.views_Message import MessageListview, Message_show_view
 from system.base_views.views_Message import NewMessageCreateView
-from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView, PelanDatatableView, PlanReportsView
-from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView, \
-    PublishShowView, TablighPreviewView, PublishTablighView, MotashershodeDatatableView, Montashshodeha, ActivateTablighView
+from system.base_views.views_Pelan import (
+    PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView,
+    PelanDatatableView, PlanReportsView
+)
+from system.base_views.views_Tabligh import (
+    TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView,
+    TablighDatatableView,
+    PublishShowView, TablighPreviewView, PublishTablighView, MotashershodeDatatableView, Montashshodeha,
+    ActivateTablighView
+)
 from system.base_views.views_Tanzimat_Paye import (
     ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel,
     LeastBalanceRequiredView, ClickIsChangeAbleView
 )
-from system.base_views.views_Tanzimat_Paye import Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView, Time_kharid_termView, \
-    Taien_meghdar_matlabView, Show_amar_foruserView, Taeid_khodkar_tablighView,Vahed_poll_siteView,Count_visit_tablighView,Taein_hadaghal_etbarView,\
-    Amar_jaali_View,Count_Level_networkDataTableView,Count_Level_networkDeleteView,Count_Level_networkUpdateView
+from system.base_views.views_Tanzimat_Paye import (
+    Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView,
+    Time_kharid_termView,
+    Taien_meghdar_matlabView, Show_amar_foruserView, Taeid_khodkar_tablighView, Vahed_poll_siteView,
+    Count_visit_tablighView, Taein_hadaghal_etbarView,
+    Amar_jaali_View, Count_Level_networkDataTableView, Count_Level_networkDeleteView, Count_Level_networkUpdateView
+)
 from system.base_views.views_User import RedirectToUserUpdate, ToggleAdminStateView
-from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, ChangeUserPasswordView, \
+from system.base_views.views_User import (
+    UserCreateView, UserUpdateView, login_user, logout_user, UserListView,
+    UserDeleteView, UserDatatableView, ChangeUserPasswordView,
     ProfileUserView
-from system.base_views.views_Moshahedat import MessageListmoshahedeview,Message_show_moshahedeview
-from system.base_views.views_infopm import InfoPm, InpopmDatatableView, InpopmrListView, InfopmDeleteView, \
+)
+from system.base_views.views_Moshahedat import MessageListmoshahedeview, Message_show_moshahedeview
+from system.base_views.views_infopm import (
+    InfoPm, InpopmDatatableView, InpopmrListView, InfopmDeleteView,
     InfopmUpdateView
+)
 from system.views import Dashboard
 
 urlpatterns = [
@@ -65,10 +86,13 @@ urlpatterns = [
     path('TedadSathShabake/', Count_Level_networkView.as_view(), name='TedadSathShabake'),
     path('SodeModir/', SodeModirView.as_view(), name='SodeModir'),
     path('Languge_site/', Languge_siteView.as_view(), name='Languge_site'),
-    #datatable count level network
-    path('Count_Level_networkDataTable/', Count_Level_networkDataTableView.as_view(), name='Count_Level_networkDataTable'),
-    path('Count_Level_networkDelete/<int:pk>', Count_Level_networkDeleteView.as_view(), name='Count_Level_networkDelete'),
-    path('Count_Level_networkUpdate/<int:pk>', Count_Level_networkUpdateView.as_view(), name='Count_Level_networkUpdate'),
+    # datatable count level network
+    path('Count_Level_networkDataTable/', Count_Level_networkDataTableView.as_view(),
+         name='Count_Level_networkDataTable'),
+    path('Count_Level_networkDelete/<int:pk>', Count_Level_networkDeleteView.as_view(),
+         name='Count_Level_networkDelete'),
+    path('Count_Level_networkUpdate/<int:pk>', Count_Level_networkUpdateView.as_view(),
+         name='Count_Level_networkUpdate'),
     path('Count_Level_networkView/', Count_Level_networkView.as_view(), name='Count_Level_networkView'),
     path('Max_Count_Level_networkView/', MaxCountNetworkLevel.as_view(), name='Max_Count_Level_networkView'),
     path('Count_kharid_hadaghalView/', Count_kharid_hadaghalView.as_view(), name='Count_kharid_hadaghalView'),
@@ -95,11 +119,11 @@ urlpatterns = [
     path('move_2_kif/', MoveDaramad2KifView.as_view(), name='MoveDaramad2Kif'),
 
     # ---- Click
-    path('click/<enteshartoken>',ClickedOnTablighView.as_view(),name='clicked_on_tabligh'),
-    path('showclicks/', ShowClick.as_view(),name='show_click'),
+    path('click/<enteshartoken>', ClickedOnTablighView.as_view(), name='clicked_on_tabligh'),
+    path('showclicks/', ShowClick.as_view(), name='show_click'),
     path('clickdatatable/', ClickDatatableView.as_view(), name='clickdatatable'),
 
-    #Moshahedat
+    # Moshahedat
     path('MessageListmoshahede/', MessageListmoshahedeview.as_view(), name='MessageListmoshahede'),
     path('Message_show_moshahede/<int:pk>', Message_show_moshahedeview.as_view(), name='Message_show_moshahede'),
 

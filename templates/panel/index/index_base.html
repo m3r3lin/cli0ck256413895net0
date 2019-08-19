@@ -54,6 +54,74 @@
     <link rel="stylesheet" href="{% static 'dist/my_css/google_font.css' %}">
     {% block css %}
     {% endblock %}
+    <style>
+        .main-footer {
+            text-align: center;
+        }
+
+        .main-footer .info-box-content {
+            margin: 0;
+        }
+
+        .main-footer .info-box-number {
+            width: 100%;
+        }
+
+        .main-footer .info-box-text {
+            width: 100%;
+            overflow: visible;
+            text-align: center;
+        }
+
+        .content-header > h1 {
+            font-size: 25px;
+            display: inline-block;
+            padding-right: 4px;
+            font-weight: 300;
+        <!-- text-shadow: - 4 px 1 px 7 px #000;
+        -->
+        }
+
+        .red-star {
+            color: red;
+        }
+
+        body::-webkit-scrollbar {
+            width: 1em;
+        }
+
+        body::-webkit-scrollbar-track {
+            background-color: #898989;
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background-color: #2a3033;
+            outline: 1px solid slategrey;
+        }
+
+        aside > section > ul > li > a > span:nth-child(2) {
+            text-align: right;
+        }
+
+        .dataTables_wrapper > .row:nth-last-of-type(2) {
+            margin-right: 0;
+            margin-left: 0;
+            overflow: hidden;
+        }
+
+        .dataTables_wrapper > .row:nth-last-of-type(2) > div {
+            overflow-x: scroll;
+        }
+
+        .dataTables_wrapper td, .dataTables_wrapper th {
+            white-space: nowrap;
+        }
+
+        .dataTables_paginate {
+            text-align: center;
+        }
+    </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper" style="position: inherit;">
@@ -500,38 +568,6 @@
                 {% block page_title %}
                 {% endblock %}
             </h1>
-            <style>
-                .content-header > h1 {
-                    font-size: 25px;
-                    display: inline-block;
-                    padding-right: 4px;
-                    font-weight: 300;
-                <!-- text-shadow: - 4 px 1 px 7 px #000;
-                -->
-                }
-
-                .red-star {
-                    color: red;
-                }
-
-                body::-webkit-scrollbar {
-                    width: 1em;
-                }
-
-                body::-webkit-scrollbar-track {
-                    background-color: #898989;
-                    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-                }
-
-                body::-webkit-scrollbar-thumb {
-                    background-color: #2a3033;
-                    outline: 1px solid slategrey;
-                }
-
-                aside > section > ul > li > a > span:nth-child(2) {
-                    text-align: right;
-                }
-            </style>
             <ol class="breadcrumb">
                 {% if request.user.is_authenticated %}
                     <li><a href="/">داشبرد</a></li>
@@ -556,72 +592,56 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    <style>
-        .main-footer  {
-            text-align: center;
-        }
-        .main-footer .info-box-content {
-            margin: 0;
-        }
-        .main-footer .info-box-number {
-            width: 100%;
-        }
-        .main-footer .info-box-text {
-            width: 100%;
-            overflow: visible;
-            text-align: center;
-        }
-    </style>
     <footer class="main-footer text-left text-center row">
-            <div class="col-lg-2 col-md-4 col-sm-6">
-                <div class="info-box-content">
-                    <span class="info-box-text">تعداد کاربران آنلاین</span>
-                    <span class="info-box-number">{{ cpp.count_user_online }}</span>
-                </div>
-                <!-- /.info-box -->
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="info-box-content">
+                <span class="info-box-text">تعداد کاربران آنلاین</span>
+                <span class="info-box-number">{{ cpp.count_user_online }}</span>
             </div>
-            <!-- /.col -->
-            <div class="col-lg-2 col-md-4 col-sm-6">
-                <div class="info-box-content">
-                    <span class="info-box-text">کل کاربران</span>
-                    <span class="info-box-number">{{ cpp.all_users }}</span>
-                </div>
-                <!-- /.info-box -->
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="info-box-content">
+                <span class="info-box-text">کل کاربران</span>
+                <span class="info-box-number">{{ cpp.all_users }}</span>
             </div>
-            <!-- /.col -->
-            <div class="col-lg-2 col-md-4 col-sm-6">
-                <div class="info-box-content">
-                    <span class="info-box-text">کاربران جدید امروز</span>
-                    <span class="info-box-number">{{ cpp.all_user_today }}</span>
-                </div>
-                <!-- /.info-box -->
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="info-box-content">
+                <span class="info-box-text">کاربران جدید امروز</span>
+                <span class="info-box-number">{{ cpp.all_user_today }}</span>
             </div>
-            <!-- /.col -->
-            <div class="col-lg-2 col-md-4 col-sm-6">
-                <div class="info-box-content">
-                    <span class="info-box-text">درآمد پرداخت شده</span>
-                    <span class="info-box-number">{{ cpp.daramad_pardakhtshode }}</span>
-                </div>
-                <!-- /.info-box -->
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="info-box-content">
+                <span class="info-box-text">درآمد پرداخت شده</span>
+                <span class="info-box-number">{{ cpp.daramad_pardakhtshode }}</span>
             </div>
-            <!-- /.col -->
-            <div class="col-lg-2 col-md-4 col-sm-6">
-                <div class="info-box-content">
-                    <span class="info-box-text">تبلیغ ثبت شده</span>
-                    <span class="info-box-number">{{ cpp.all_tabligh }}</span>
-                </div>
-                <!-- /.info-box -->
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="info-box-content">
+                <span class="info-box-text">تبلیغ ثبت شده</span>
+                <span class="info-box-number">{{ cpp.all_tabligh }}</span>
             </div>
-            <!-- /.col -->
-            <div class="col-lg-2 col-md-4 col-sm-6">
-                <div class="info-box-content">
-                    <strong style="margin-top: 100px;">Copyleft &copy; 2019-2020
-                        <a href="#">نام شرکت</a> &
-                        <a href="http://hosseinizadeh.ir/adminlte">نامشخص</a></strong>
-                </div>
-                <!-- /.info-box -->
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="info-box-content">
+                <strong style="margin-top: 100px;">Copyleft &copy; 2019-2020
+                    <a href="#">نام شرکت</a> &
+                    <a href="http://hosseinizadeh.ir/adminlte">نامشخص</a></strong>
             </div>
-            <!-- /.col -->
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
     </footer>
 
 

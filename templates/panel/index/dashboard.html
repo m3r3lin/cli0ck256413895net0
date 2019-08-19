@@ -34,8 +34,13 @@
             </section>
         </div>
     </div>
-
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <style>
+        .dashboard-exception .info-box-text,
+        body > div > div.content-wrapper > section.content > div > div > div > div > span.info-box-text{
+            overflow: visible !important;
+        }
+    </style>
+    <div class="col-md-4 col-sm-6 col-xs-12 dashboard-exception">
         <div class="info-box bg-aqua">
             <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
 
@@ -54,7 +59,7 @@
         </div>
         <!-- /.info-box -->
     </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="info-box bg-green">
             <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
 
@@ -73,7 +78,7 @@
         </div>
         <!-- /.info-box -->
     </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="col-md-4 col-sm-6 col-xs-12">
 
         <div class="info-box bg-yellow">
             <span class="info-box-icon"><i class="fa fa-user-o"></i></span>
@@ -93,7 +98,7 @@
         </div>
         <!-- /.info-box -->
     </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="info-box bg-red">
             <span class="info-box-icon"><i class="fa fa-share-alt"></i></span>
 
@@ -115,7 +120,7 @@
 
     <!--   -->
     {% if queries.active_show_forosh == "1" %}
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-4 col-sm-6 col-xs-12">
             <div class="info-box bg-teal">
                 <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
 
@@ -128,7 +133,7 @@
             </div>
             <!-- /.info-box -->
         </div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-4 col-sm-6 col-xs-12">
             <div class="info-box bg-blue">
                 <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
 
@@ -141,7 +146,7 @@
             </div>
             <!-- /.info-box -->
         </div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-4 col-sm-6 col-xs-12">
             <div class="info-box bg-maroon">
                 <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
 
@@ -154,7 +159,7 @@
             </div>
             <!-- /.info-box -->
         </div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-4 col-sm-6 col-xs-12">
             <div class="info-box bg-olive">
                 <span class="info-box-icon"><i class="fa fa-user-circle"></i></span>
 
@@ -171,7 +176,7 @@
     <!---   --->
 
 
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="info-box bg-red">
             <span class="info-box-icon"><i class="fa fa-money"></i></span>
 
@@ -184,20 +189,21 @@
         </div>
         <!-- /.info-box -->
     </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="info-box bg-yellow">
             <span class="info-box-icon"><i class="fa fa-sun-o"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">درآمد امروز</span>
-                <span class="info-box-number" style="text-align: left;">{{ queries.today_daramad|floatformat:0 }}</span>
+                <span class="info-box-number"
+                      style="text-align: left;">{{ queries.today_daramad|floatformat:0 }}</span>
 
             </div>
             <!-- /.info-box-content -->
         </div>
         <!-- /.info-box -->
     </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="info-box bg-green">
             <span class="info-box-icon"><i class="fa fa-usd"></i></span>
 
@@ -210,13 +216,14 @@
         </div>
         <!-- /.info-box -->
     </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="col-md-4 col-sm-6 col-xs-12">
         <div class="info-box bg-aqua">
             <span class="info-box-icon"><i class="fa fa-link"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">در امد غیر مستقیم امروز</span>
-                <span class="info-box-number" style="text-align: left;">{{ queries.today_indirect|floatformat:0 }}</span>
+                <span class="info-box-number"
+                      style="text-align: left;">{{ queries.today_indirect|floatformat:0 }}</span>
 
             </div>
             <!-- /.info-box-content -->

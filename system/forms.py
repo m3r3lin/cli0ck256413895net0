@@ -113,7 +113,8 @@ class UserCreateForm(TanzimatPayeMiddelware):
         self.fields['username'].label = "نام کاربری:"
         self.fields['username'].required = True
         self.fields['username'].help_text = ''
-        self.fields['username'].widget.attrs.update({'class': 'form-control', 'id': 'username', 'placeholder': 'نام کاربری'})
+        self.fields['username'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'username', 'placeholder': 'نام کاربری'})
 
         self.fields['first_name'].label = "نام:"
         self.fields['first_name'].required = True
@@ -150,8 +151,10 @@ class UserUpdateForm(ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name', 'address', 'code_posti', 'shomare_hesab',
-                  'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'email', 'id_telegram', 'image_cart_melli', 'avatar', 'is_active']
+        fields = ['first_name', 'last_name', 'code_melli', 'tarikh_tavalod', 'mobile', 'gender', 'father_name',
+                  'address', 'code_posti', 'shomare_hesab',
+                  'shomare_cart', 'shomare_shaba', 'name_saheb_hesab', 'name_bank', 'email', 'id_telegram',
+                  'image_cart_melli', 'avatar', 'is_active']
         error_messages = {
             'first_name': {
                 'required': "نام اجباری است!",
@@ -210,7 +213,8 @@ class UserUpdateForm(ModelForm):
             },
             'avatar': {
                 'required': "آواتار اجباری است!",
-            }}
+            }
+        }
 
     def __init__(self, *args, **kwargs):
         super(UserUpdateForm, self).__init__(*args, **kwargs)
@@ -396,7 +400,8 @@ class TablighCreateForm(ModelForm):
 
         self.fields['tedad_click_shode'].label = "تعداد کلیک شده:"
         self.fields['tedad_click_shode'].required = False
-        self.fields['tedad_click_shode'].widget.attrs.update({'class': 'form-control', 'id': 'tedad_click_shode', 'min': 0})
+        self.fields['tedad_click_shode'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'tedad_click_shode', 'min': 0})
 
         self.fields['vazeyat'].label = "وضعیت:"
         self.fields['vazeyat'].required = False
@@ -416,6 +421,25 @@ class ActiveCodeMoarefForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ActiveCodeMoarefForm, self).__init__(*args, **kwargs)
+
+        self.fields['value'].label = "فعال / غیرفعال:"
+        self.fields['value'].required = True
+        self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+
+class ClickIsChangeAbleForm(ModelForm):
+    VAZEYAT_CHOICES = (
+        ('1', 'فعال'),
+        ('0', 'غیرفعال'),
+    )
+    value = forms.ChoiceField(choices=VAZEYAT_CHOICES)
+
+    class Meta:
+        model = TanzimatPaye
+        fields = ['value']
+
+    def __init__(self, *args, **kwargs):
+        super(ClickIsChangeAbleForm, self).__init__(*args, **kwargs)
 
         self.fields['value'].label = "فعال / غیرفعال:"
         self.fields['value'].required = True
@@ -715,15 +739,18 @@ class Amar_jaali_Form(Form):
 
         self.fields['count_user_new_today'].label = "تعداد کاربران جدید امروز:"
         self.fields['count_user_new_today'].required = True
-        self.fields['count_user_new_today'].widget.attrs.update({'class': 'form-control', 'id': 'count_user_new_today'})
+        self.fields['count_user_new_today'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'count_user_new_today'})
 
         self.fields['meghdar_daramad_pardahkti'].label = "مقدار در امد پرداخت شده:"
         self.fields['meghdar_daramad_pardahkti'].required = True
-        self.fields['meghdar_daramad_pardahkti'].widget.attrs.update({'class': 'form-control', 'id': 'meghdar_daramad_pardahkti'})
+        self.fields['meghdar_daramad_pardahkti'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'meghdar_daramad_pardahkti'})
 
         self.fields['count_tabligh_thabti'].label = "تعداد تبلیغات ثبت شده:"
         self.fields['count_tabligh_thabti'].required = True
-        self.fields['count_tabligh_thabti'].widget.attrs.update({'class': 'form-control', 'id': 'count_tabligh_thabti'})
+        self.fields['count_tabligh_thabti'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'count_tabligh_thabti'})
 
 
 class IncreaseBalanceFrom(forms.Form):

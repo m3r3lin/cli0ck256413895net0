@@ -14,6 +14,7 @@ from django.views.generic import CreateView, UpdateView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
+from Ads_Project.settings import MAIN_ADMIN_ID
 from system.forms import UserCreateForm, UserUpdateForm, ChangeUserPasswordForm
 from system.models import User, TanzimatPaye, ACTIV_MOAREF, COUNT_LEVEL_NETWORK
 from system.templatetags.app_filters import date_jalali
@@ -124,7 +125,8 @@ def login_user(request):
                     else:
                         return redirect('dashboard')
                 else:
-                    return render(request, "system/user/login.html", {'error': 'دسترسی شما به سامانه غیر فعال شده است !'})
+                    return render(request, "system/user/login.html",
+                                  {'error': 'دسترسی شما به سامانه غیر فعال شده است !'})
             else:
                 return render(request, "system/user/login.html", {'error': 'نام کاربری یا پسورد شما اشتباه است !'})
         else:
@@ -234,8 +236,9 @@ class UserListView(LoginRequiredMixin, ListView):
 
 class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = User
-    columns = ['id', 'username', 'first_name', 'last_name', 'code_melli', 'date_joined', 'tarikh_tavalod', 'mobile', 'gender', 'father_name',
-               'is_active', 'online']
+    columns = ['id', 'username', 'first_name', 'last_name', 'code_melli', 'date_joined', 'tarikh_tavalod', 'mobile',
+               'gender', 'father_name',
+               'is_active', 'online', 'is_superuser']
 
     def render_column(self, row, column):
         if column == 'tarikh_tavalod':
@@ -244,12 +247,15 @@ class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
             return date_jalali(row.date_joined, 3)
         if column == 'online':
             return row.user_status
+        if column == 'is_superuser':
+            return 1 if row.is_superuser else 0
         return super().render_column(row, column)
 
     def filter_queryset(self, qs):
         search = self.request.GET.get('search[value]', None)
         if search:
-            qs = qs.filter(Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search))
+            qs = qs.filter(
+                Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search))
         return qs
 
 
@@ -270,5 +276,27 @@ class ProfileUserView(LoginRequiredMixin, View):
         user.tarikh_tavalod = date_jalali(user.tarikh_tavalod, 3)
         return render(request, 'system/user/Profile_User.html', {'user': user})
 
-class ConnectView(ConnectionsView):
-    pass
+
+class ToggleAdminStateView(LoginRequiredMixin, View):
+    def get(self, request, id):
+        if not request.user.is_superuser:
+            messages.error(request, "شما اجازه دسترسی ندارید")
+            return redirect("dashboard")
+        if request.user.id != MAIN_ADMIN_ID:
+            messages.error(request, "فقط ادمین اصلی میتواند این کار را انتجام دهد")
+            return redirect("ListUser")
+        elif request.user.id == MAIN_ADMIN_ID:
+            messages.error(request, "این کار امکان پذیر نیست")
+            return redirect("ListUser")
+        try:
+            user = User.objects.get(id=id)
+            user.is_superuser = not user.is_superuser
+            user.save()
+            if user.is_superuser:
+                messages.success(request, "کاربر با موفقیت به کاربر ادمین تغییر کرد")
+            else:
+                messages.success(request, "کاربر با موفقیت به کاربر ساده تغییر کرد")
+            return redirect("ListUser")
+        except:
+            messages.error(request, "کاربر مورد نظر شما موجود نمیباشد")
+            return redirect("ListUser")

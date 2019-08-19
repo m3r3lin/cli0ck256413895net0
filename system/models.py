@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from Ads_Project import settings
+from Ads_Project.settings import MAIN_ADMIN_ID
 from system.functions import upload_avatar_path, upload_cart_melli_path
 
 INCREASE_BALANCE_ORDER = 12
@@ -167,6 +168,10 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    def delete(self, using=None, keep_parents=False):
+        if self.id != MAIN_ADMIN_ID:
+            return super().delete(using, keep_parents)
+
 
 class KifPool(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -270,21 +275,22 @@ class Payam(Model):
     save_date = models.DateTimeField(default=timezone.now, blank=True, null=True)
 
 
-ACTIV_MOAREF = 'active_moaref'
-LANGUGE_SITE = 'languge_site'
-COUNT_LEVEL_NETWORK = 'count_level_network'
-COUNT_KHARI_HADAGHAL = 'count_kharid_hadaghl'
-TIME_KHARID_TERM = 'time_kharid_term'
-TAIEN_MEGHDAR_MATLAB = 'taien_meghdar_matlab'
-SHOW_AMAR_FOR_USER = 'show_amar_for_user'
-TAIED_KHODKAR_TABLIGH = 'taied_khodkar_tabligh'
-TEDAD_SATH_SHABAKE = 'tedad_sath_shabake'
-VAHED_POLL_SITE = 'vahed_poll_site'
-COUNT_VISIT_TABLIGH = 'count_visit_tabligh'
-TAEIN_HADAGHAL_ETBAR = 'taein_hadaghal_etbar'
-LEAST_BALANCE_REQUIRED = 'least_balance_required'
-SODE_MODIR = 'sode_modir'
 SATH = 'sath.'
+SODE_MODIR = 'sode_modir'
+LANGUGE_SITE = 'languge_site'
+ACTIV_MOAREF = 'active_moaref'
+VAHED_POLL_SITE = 'vahed_poll_site'
+TIME_KHARID_TERM = 'time_kharid_term'
+TEDAD_SATH_SHABAKE = 'tedad_sath_shabake'
+SHOW_AMAR_FOR_USER = 'show_amar_for_user'
+COUNT_VISIT_TABLIGH = 'count_visit_tabligh'
+COUNT_LEVEL_NETWORK = 'count_level_network'
+TAEIN_HADAGHAL_ETBAR = 'taein_hadaghal_etbar'
+COUNT_KHARI_HADAGHAL = 'count_kharid_hadaghl'
+TAIEN_MEGHDAR_MATLAB = 'taien_meghdar_matlab'
+TAIED_KHODKAR_TABLIGH = 'taied_khodkar_tabligh'
+LEAST_BALANCE_REQUIRED = 'least_balance_required'
+CLICK_IS_CHANGEABLE = 'click_is_change_able'
 
 
 class TanzimatPaye(Model):

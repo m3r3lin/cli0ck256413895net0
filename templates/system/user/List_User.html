@@ -1,5 +1,6 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load app_filters %}
 {% block css %}
     <style>
         td {
@@ -28,7 +29,8 @@
                         {% include "errors.html" %}
                         {% include "messages.html" %}
                         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-                            <table id="UserDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
+                            <table id="UserDatatable"
+                                   class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
                                     <th class="text-center">کد کاربر</th>
@@ -43,6 +45,7 @@
                                     <th class="text-center">نام پدر</th>
                                     <th class="text-center">وضعیت</th>
                                     <th class="text-center">آنلاین/آفلاین</th>
+                                    <th class="text-center">ادمین/ساده</th>
                                     <th class="text-center">عملیات</th>
                                 </tr>
                                 </thead>
@@ -74,6 +77,25 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+
+    <!-- /.modal -->
+    <div class="modal fade" id="toggle-user-state-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class=" text-black">x</span></button>
+                    <h4 class="modal-title"><b>آیا تمایش دارید که این کاربر رابه یک ادمین تغییر دهید ؟</b></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">خیر</button>
+                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">بلی</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
     <!-- /.modal -->
 {% endblock %}
 {% block javascripts %}
@@ -84,24 +106,43 @@
     <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
     <script>
         window.data_table_cool_options["rowCallback"] = function (row, data) {
-            if (data[10]=="True") {
-                    $('td:eq(10)', row).addClass("text-center").html('<span class="bg-green color-palette col-md-12">فعال</span>');
-                } else {
-                    $('td:eq(10)', row).addClass("text-center").html('<span class="bg-red color-palette col-md-12">غیرفعال</span>');
-                }
-                if (data[11]) {
-                    $('td:eq(11)', row).addClass("text-center").html('<span class="bg-green color-palette col-md-12">آنلاین</span>');
-                } else {
-                    $('td:eq(11)', row).addClass("text-center").html('<span class="bg-red color-palette col-md-12">آفلاین</span>');
-                }
-            };
+            if (data[10] == "True") {
+                $('td:eq(10)', row).addClass("text-center").html('<span class="bg-green color-palette col-md-12">فعال</span>');
+            } else {
+                $('td:eq(10)', row).addClass("text-center").html('<span class="bg-red color-palette col-md-12">غیرفعال</span>');
+            }
+            if (data[11]) {
+                $('td:eq(11)', row).addClass("text-center").html('<span class="bg-green color-palette col-md-12">آنلاین</span>');
+            } else {
+                $('td:eq(11)', row).addClass("text-center").html('<span class="bg-red color-palette col-md-12">آفلاین</span>');
+            }
+            if (data[12]) {
+                $('td:eq(12)', row).addClass("text-center toggle-user-state").html('<a class="btn btn-primary  ' +
+                    'col-md-12">کاربر ساده شود</a>');
+            } else {
+                $('td:eq(12)', row).addClass("text-center toggle-user-state").html('<a class="btn btn-danger col-md-12">ادمین شود</a>');
+            }
+        };
+        var where_to_edit = "{% url "ToggleAdminState" 0 %}";
+        where_to_edit = where_to_edit.substr(0, where_to_edit.length - 1);
         datatable_simple_show({
             url: "{% url 'UserDatatable' %}",
-            real_cols: 12,
+            real_cols: 13,
             datable_id: '#UserDatatable',
             del_url: "{% url 'DeleteUser' pk=0 %}",
             up_url: "{% url 'UpdateUser' pk=0 %}",
-            modal_id: "#confirm_modal"
+            modal_id: "#confirm_modal",
+            do_after_initializing: function (table) {
+                $('.toggle-user-state').click(function () {
+                    var row_clicked = $(this);
+                    $('#toggle-user-state-modal').modal('toggle');
+                    $('#toggle-user-state-modal .yes_button').click(function () {
+                        window.location.href = where_to_edit + getId(table, row_clicked);
+                        $('#toggle-user-state-modal').modal('toggle');
+                    });
+                    console.log(getId(table, $(this)));
+                });
+            }
         });
     </script>
 {% endblock %}

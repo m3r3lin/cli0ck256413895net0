@@ -6,12 +6,19 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
-from system.forms import ActiveCodeMoarefForm, SodeModirForm, \
-    Languge_siteForm, Count_level_networkForm, Count_kharid_hadaghalForm, Time_kharid_termForm, \
-    Taien_meghdar_matlabForm, Show_amarforuserForm, Taied_khodkar_tablighForm, Vahed_poll_siteForm, \
-    Count_visit_tabligh_Form, Taien_hadaghal_etbarForm, Amar_jaali_Form, MaxNetworkCountForm, LeastBalanceRequiredForm
+from system.forms import (
+    ActiveCodeMoarefForm, SodeModirForm,
+    Languge_siteForm, Count_level_networkForm, Count_kharid_hadaghalForm, Time_kharid_termForm,
+    Taien_meghdar_matlabForm, Show_amarforuserForm, Taied_khodkar_tablighForm, Vahed_poll_siteForm,
+    Count_visit_tabligh_Form, Taien_hadaghal_etbarForm, Amar_jaali_Form, MaxNetworkCountForm, LeastBalanceRequiredForm,
+    ClickIsChangeAbleForm
+)
 
-from system.models import TanzimatPaye, ACTIV_MOAREF, VAHED_POLL_SITE, COUNT_LEVEL_NETWORK, SODE_MODIR, SHOW_AMAR_FOR_USER, SATH, LEAST_BALANCE_REQUIRED, COUNT_KHARI_HADAGHAL
+from system.models import (
+    TanzimatPaye, ACTIV_MOAREF, VAHED_POLL_SITE, COUNT_LEVEL_NETWORK, SODE_MODIR,
+    SHOW_AMAR_FOR_USER, SATH, LEAST_BALANCE_REQUIRED, COUNT_KHARI_HADAGHAL,
+    CLICK_IS_CHANGEABLE
+)
 from system.forms import ActiveCodeMoarefForm, SodeModirForm
 from system.models import TanzimatPaye, ACTIV_MOAREF, TEDAD_SATH_SHABAKE
 
@@ -34,6 +41,26 @@ class ActiveCodeMoarefView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('ActiveCodeMoaref')
+
+
+class ClickIsChangeAbleView(LoginRequiredMixin, UpdateView):
+    model = TanzimatPaye
+    template_name = 'system/TanzimatPaye/click_is_changeable.html'
+    form_class = ClickIsChangeAbleForm
+
+    def get_object(self, queryset=None):
+        obj, cre = TanzimatPaye.objects.get_or_create(onvan=CLICK_IS_CHANGEABLE, defaults={
+            "onvan": CLICK_IS_CHANGEABLE,
+            'value': 0,
+        })
+        return obj
+
+    def form_valid(self, form):
+        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        return super(ClickIsChangeAbleView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('ClickIsChangeAble')
 
 
 class LeastBalanceRequiredView(LoginRequiredMixin, UpdateView):
@@ -412,19 +439,21 @@ class Amar_jaali_View(LoginRequiredMixin, View):
             "onvan": 'amar_jaali.count_all_user',
             'value': 0,
         })
-        count_user_new_today, _ = TanzimatPaye.objects.get_or_create(onvan='amar_jaali.count_user_new_today', defaults={
-            "onvan": 'amar_jaali.count_user_new_today',
-            'value': 0,
-        })
+        count_user_new_today, _ = TanzimatPaye.objects.get_or_create(onvan='amar_jaali.count_user_new_today',
+                                                                     defaults={
+                                                                         "onvan": 'amar_jaali.count_user_new_today',
+                                                                         'value': 0,
+                                                                     })
         meghdar_daramad_pardahkti, _ = TanzimatPaye.objects.get_or_create(onvan='amar_jaali.meghdar_daramad_pardahkti',
                                                                           defaults={
                                                                               "onvan": 'amar_jaali.meghdar_daramad_pardahkti',
                                                                               'value': 0,
                                                                           })
-        count_tabligh_thabti, _ = TanzimatPaye.objects.get_or_create(onvan='amar_jaali.count_tabligh_thabti', defaults={
-            "onvan": 'amar_jaali.count_tabligh_thabti',
-            'value': 0,
-        })
+        count_tabligh_thabti, _ = TanzimatPaye.objects.get_or_create(onvan='amar_jaali.count_tabligh_thabti',
+                                                                     defaults={
+                                                                         "onvan": 'amar_jaali.count_tabligh_thabti',
+                                                                         'value': 0,
+                                                                     })
         form = Amar_jaali_Form(data={
             'count_user_online': count_user_online.value,
             'count_all_user': count_all_user.value,
@@ -447,18 +476,21 @@ class Amar_jaali_View(LoginRequiredMixin, View):
             "onvan": 'amar_jaali.count_all_user',
             'value': 0,
         })
-        count_user_new_today, _ = TanzimatPaye.objects.get_or_create(onvan='amar_jaali.count_user_new_today', defaults={
-            "onvan": 'amar_jaali.count_user_new_today',
-            'value': 0,
-        })
-        meghdar_daramad_pardahkti, _ = TanzimatPaye.objects.get_or_create(onvan='amar_jaali.meghdar_daramad_pardahkti', defaults={
-            "onvan": 'amar_jaali.meghdar_daramad_pardahkti',
-            'value': 0,
-        })
-        count_tabligh_thabti, _ = TanzimatPaye.objects.get_or_create(onvan='amar_jaali.count_tabligh_thabti', defaults={
-            "onvan": 'amar_jaali.count_tabligh_thabti',
-            'value': 0,
-        })
+        count_user_new_today, _ = TanzimatPaye.objects.get_or_create(onvan='amar_jaali.count_user_new_today',
+                                                                     defaults={
+                                                                         "onvan": 'amar_jaali.count_user_new_today',
+                                                                         'value': 0,
+                                                                     })
+        meghdar_daramad_pardahkti, _ = TanzimatPaye.objects.get_or_create(onvan='amar_jaali.meghdar_daramad_pardahkti',
+                                                                          defaults={
+                                                                              "onvan": 'amar_jaali.meghdar_daramad_pardahkti',
+                                                                              'value': 0,
+                                                                          })
+        count_tabligh_thabti, _ = TanzimatPaye.objects.get_or_create(onvan='amar_jaali.count_tabligh_thabti',
+                                                                     defaults={
+                                                                         "onvan": 'amar_jaali.count_tabligh_thabti',
+                                                                         'value': 0,
+                                                                     })
         form = Amar_jaali_Form(data={
             'count_user_online': count_user_online.value,
             'count_all_user': count_all_user.value,

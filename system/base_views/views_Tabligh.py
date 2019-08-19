@@ -12,8 +12,11 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
 from system.forms import TablighCreateForm
-from system.models import Tabligh, TanzimatPaye, TAIED_KHODKAR_TABLIGH, TAIEN_MEGHDAR_MATLAB, Click, TablighatMontasherKonande, SATH, SoodeTabligh, \
-    COUNT_LEVEL_NETWORK, SODE_MODIR, User, LEAST_BALANCE_REQUIRED
+from system.models import (
+    Tabligh, TanzimatPaye, TAIED_KHODKAR_TABLIGH, TAIEN_MEGHDAR_MATLAB, Click,
+    TablighatMontasherKonande, SATH, SoodeTabligh,
+    COUNT_LEVEL_NETWORK, SODE_MODIR, User, LEAST_BALANCE_REQUIRED, CLICK_IS_CHANGEABLE
+)
 from system.templatetags.app_filters import date_jalali
 
 
@@ -34,6 +37,7 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.code_tabligh_gozaar_id = self.request.user.id
         t = form.instance.text.__len__()
+
         max_t = int(TanzimatPaye.get_settings(TAIEN_MEGHDAR_MATLAB, False))
         if t > max_t:
             messages.error(self.request, 'طول تبلیغ بیش از حد مجاز است')
@@ -50,7 +54,11 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
             messages.error(self.request, 'شما اعتبار کافی ندارید')
             return super(TablighCreateView, self).form_invalid(form)
 
-        form.instance.mablagh_har_click = form.instance.code_pelan.gheymat / form.instance.tedad_click
+        if not TanzimatPaye.get_settings(CLICK_IS_CHANGEABLE, 0):
+            form.instance.mablagh_har_click = form.instance.code_pelan.gheymat / form.instance.code_pelan.tedad_click
+            form.instance.tedad_click = form.instance.code_pelan.tedad_click
+        else:
+            form.instance.mablagh_har_click = form.instance.code_pelan.gheymat / form.instance.tedad_click
 
         form.instance.mablagh_tabligh = form.instance.code_pelan.gheymat
 
@@ -127,6 +135,8 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
         form = super().get_form(form_class)
         if not self.request.user.is_superuser:
             form.fields['code_tabligh_gozaar'].required = False
+        if not TanzimatPaye.get_settings(CLICK_IS_CHANGEABLE, 0):
+            del form.fields['tedad_click']
         return form
 
 
@@ -187,7 +197,8 @@ class TablighDeleteView(LoginRequiredMixin, View):
         try:
             tabligh = get_object_or_404(Tabligh, pk=pk)
             if tabligh.tedad_click_shode > 0 or Click.objects.filter(tabligh=tabligh).exists():
-                messages.error(self.request, 'تبلیغ مورد نظر شما نمی تواند حذف شود شما می توانید این تبلیغ را غیر فعال کنید')
+                messages.error(self.request,
+                               'تبلیغ مورد نظر شما نمی تواند حذف شود شما می توانید این تبلیغ را غیر فعال کنید')
                 return redirect('ListTabligh')
             tabligh.code_tabligh_gozaar.add_to_kif_pool(tabligh.mablagh_tabligh)
             sode_modir = TanzimatPaye.get_settings(SODE_MODIR)
@@ -215,7 +226,8 @@ class TablighListView(LoginRequiredMixin, ListView):
 
 class TablighDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = Tabligh
-    columns = ['id', 'onvan', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode', 'vazeyat', 'random_url']
+    columns = ['id', 'onvan', 'code_tabligh_gozaar', 'tarikh_ijad', 'code_pelan', 'tedad_click', 'tedad_click_shode',
+               'vazeyat', 'random_url']
 
     def render_column(self, row, column):
         if column == 'tarikh_ijad':
@@ -289,7 +301,8 @@ class PublishTablighView(LoginRequiredMixin, View):
             return redirect(reverse('dashboard'))
         else:
             tabligh = get_object_or_404(Tabligh, random_url=tabligh_token)
-            tabligh_montasher, _ = TablighatMontasherKonande.objects.get_or_create(montasher_konande=request.user, tabligh=tabligh,
+            tabligh_montasher, _ = TablighatMontasherKonande.objects.get_or_create(montasher_konande=request.user,
+                                                                                   tabligh=tabligh,
                                                                                    defaults={
                                                                                        'montasher_konande': request.user,
                                                                                        'tabligh': tabligh

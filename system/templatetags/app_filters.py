@@ -2,6 +2,7 @@ from django import template
 from django.urls import reverse
 
 from Ads_Project.functions import gregorian_to_jalali
+from Ads_Project.settings import MAIN_ADMIN_ID
 from system.models import TanzimatPaye, TablighatMontasherKonande, User
 
 register = template.Library()
@@ -65,6 +66,11 @@ def is_publishing(tabligh, user):
 @register.simple_tag
 def r(data):
     return data
+
+
+@register.simple_tag
+def is_main_admin(user):
+    return user.id == MAIN_ADMIN_ID
 
 
 @register.filter(name='generate_publish_url')

@@ -11,11 +11,14 @@ from system.base_views.views_Message import NewMessageCreateView
 from system.base_views.views_Pelan import PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView, PelanDatatableView, PlanReportsView
 from system.base_views.views_Tabligh import TablighCreateView, TablighUpdateView, TablighDeleteView, TablighListView, TablighDatatableView, \
     PublishShowView, TablighPreviewView, PublishTablighView, MotashershodeDatatableView, Montashshodeha, ActivateTablighView
-from system.base_views.views_Tanzimat_Paye import ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel, LeastBalanceRequiredView
+from system.base_views.views_Tanzimat_Paye import (
+    ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel,
+    LeastBalanceRequiredView, ClickIsChangeAbleView
+)
 from system.base_views.views_Tanzimat_Paye import Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView, Time_kharid_termView, \
     Taien_meghdar_matlabView, Show_amar_foruserView, Taeid_khodkar_tablighView,Vahed_poll_siteView,Count_visit_tablighView,Taein_hadaghal_etbarView,\
     Amar_jaali_View,Count_Level_networkDataTableView,Count_Level_networkDeleteView,Count_Level_networkUpdateView
-from system.base_views.views_User import RedirectToUserUpdate
+from system.base_views.views_User import RedirectToUserUpdate, ToggleAdminStateView
 from system.base_views.views_User import UserCreateView, UserUpdateView, login_user, logout_user, UserListView, UserDeleteView, UserDatatableView, ChangeUserPasswordView, \
     ProfileUserView
 from system.base_views.views_Moshahedat import MessageListmoshahedeview,Message_show_moshahedeview
@@ -35,6 +38,7 @@ urlpatterns = [
     path('UserDatatable/', UserDatatableView.as_view(), name='UserDatatable'),
     path('ChangeUserPassword/', ChangeUserPasswordView.as_view(), name='ChangeUserPassword'),
     path('ProfileUser/', ProfileUserView.as_view(), name='ProfileUser'),
+    path('ToggleAdminState/<int:id>', ToggleAdminStateView.as_view(), name='ToggleAdminState'),
     # ---- Pelan
     path('CreatePelan/', PelanCreateView.as_view(), name='CreatePelan'),
     path('UpdatePelan/<int:pk>', PelanUpdateView.as_view(), name='UpdatePelan'),
@@ -56,6 +60,7 @@ urlpatterns = [
     path('Montashshodeha/', Montashshodeha.as_view(), name='Montashshodeha'),
     # ---- TanzimatPaye
     path('ActiveCodeMoaref/', ActiveCodeMoarefView.as_view(), name='ActiveCodeMoaref'),
+    path('ClickIsChangeAble/', ClickIsChangeAbleView.as_view(), name='ClickIsChangeAble'),
     path('LeastBalanceRequired/', LeastBalanceRequiredView.as_view(), name='LeastBalanceRequired'),
     path('TedadSathShabake/', Count_Level_networkView.as_view(), name='TedadSathShabake'),
     path('SodeModir/', SodeModirView.as_view(), name='SodeModir'),

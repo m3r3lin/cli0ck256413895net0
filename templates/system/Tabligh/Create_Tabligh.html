@@ -29,7 +29,8 @@
                             <div class="row">
                                 <div class="form-group` col-sm6 col-md-3">
                                     {% if form.onvan.label_tag %}
-                                        <label for="onvan">{{ form.onvan.label_tag }}<span class="red-star">*</span></label>
+                                        <label for="onvan">{{ form.onvan.label_tag }}<span
+                                                class="red-star">*</span></label>
                                     {% endif %}
                                     {{ form.onvan }}
                                     {% if form.onvan.help_text %}
@@ -40,7 +41,8 @@
                                 {% if request.user.is_superuser %}
                                     <div class="form-group col-sm6 col-md-3">
                                         {% if form.code_tabligh_gozaar.label_tag %}
-                                            <label for="code_tabligh_gozaar">{{ form.code_tabligh_gozaar.label_tag }}<span class="red-star">*</span></label>
+                                            <label for="code_tabligh_gozaar">{{ form.code_tabligh_gozaar.label_tag }}<span
+                                                    class="red-star">*</span></label>
                                         {% endif %}
                                         {{ form.code_tabligh_gozaar }}
                                         {% if form.code_tabligh_gozaar.help_text %}
@@ -51,35 +53,46 @@
 
                                 <div class="form-group col-sm6 col-md-3">
                                     {% if form.code_pelan.label_tag %}
-                                        <label for="code_pelan">{{ form.code_pelan.label_tag }}<span class="red-star">*</span></label>
+                                        <label for="code_pelan">{{ form.code_pelan.label_tag }}<span
+                                                class="red-star">*</span></label>
                                     {% endif %}
                                     {{ form.code_pelan }}
                                     {% if form.code_pelan.help_text %}
                                         <p class="help-block">{{ form.code_pelan.help_text }}</p>
                                     {% endif %}
                                 </div>
+                                {% if form.tedad_click %}
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.tedad_click.label_tag %}
+                                            <label for="tedad_click">{{ form.tedad_click.label_tag }}<span
+                                                    class="red-star">*</span></label>
+                                        {% endif %}
+                                        {{ form.tedad_click }}
+                                        {% if form.tedad_click.help_text %}
+                                            <p class="help-block">{{ form.tedad_click.help_text }}</p>
+                                        {% endif %}
+                                    </div>
 
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.tedad_click.label_tag %}
-                                        <label for="tedad_click">{{ form.tedad_click.label_tag }}<span class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.tedad_click }}
-                                    {% if form.tedad_click.help_text %}
+                                    <div class="form-group col-sm6 col-md-3">
+                                        {% if form.tedad_click.label_tag %}
+                                            <label for="mablagh_ha_click"><label for="tedad_click">مبلغ هر
+                                                کلیک:</label></label>
+                                        {% endif %}
+                                        <input class="form-control" id="mablagh_ha_click" readonly="readonly" min="0"/>
+                                    </div>
+                                {% else %}
+                                    <div class="form-group col-sm6 col-md-3">
+                                        <label for="tedad_click">{{ form.tedad_click.label_tag }}<span
+                                                class="red-star">*</span></label>
+                                        <input type="text" id="tedad_click" class="form-control" readonly="readonly"/>
                                         <p class="help-block">{{ form.tedad_click.help_text }}</p>
-                                    {% endif %}
-                                </div>
-
-                                <div class="form-group col-sm6 col-md-3">
-                                    {% if form.tedad_click.label_tag %}
-                                        <label for="mablagh_ha_click"><label for="tedad_click">مبلغ هر کلیک:</label></label>
-                                    {% endif %}
-                                    <input class="form-control" id="mablagh_ha_click" readonly="readonly" min="0"/>
-                                </div>
-
+                                    </div>
+                                {% endif %}
                                 {% if request.user.is_superuser %}
                                     <div class="form-group col-sm6 col-md-3">
                                         {% if form.vazeyat.label_tag %}
-                                            <label for="vazeyat">{{ form.vazeyat.label_tag }}<span class="red-star">*</span></label>
+                                            <label for="vazeyat">{{ form.vazeyat.label_tag }}<span
+                                                    class="red-star">*</span></label>
                                         {% endif %}
                                         {{ form.vazeyat }}
                                         {% if form.vazeyat.help_text %}
@@ -90,7 +103,8 @@
 
                                 <div class="form-group col-sm6 col-md-12">
                                     {% if form.text.label_tag %}
-                                        <label for="text">{{ form.text.label_tag }}<span class="red-star">*</span></label>
+                                        <label for="text">{{ form.text.label_tag }}<span
+                                                class="red-star">*</span></label>
                                     {% endif %}
                                     {{ form.text }}
                                     {% if form.text.help_text %}
@@ -140,6 +154,7 @@
                 }
             };
             var obtain_data = function (force_click) {
+                console.log("gherer");
                 if ($('#code_pelan').val()) {
                     $.ajax('{% url 'PelanReportDatatable' %}', {
                         method: 'post',
@@ -154,6 +169,8 @@
                             $('#tedad_click').val(e.data['click_count']);
                         calculate();
                     });
+                } else {
+                    $('#tedad_click').val('');
                 }
             };
             obtain_data(false);

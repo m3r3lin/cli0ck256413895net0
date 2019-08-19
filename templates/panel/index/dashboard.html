@@ -238,7 +238,7 @@
         <div class="col-md-4 col-sm-6 col-xs-12">
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <h3 class="box-title">خطی</h3>
+                    <h3 class="box-title">تعداد کلیک های پنج روز گذشته</h3>
                 </div>
                 <div class="box-body chart-responsive">
                     <div class="chart" id="line-chart" style="height: 300px;"></div>
@@ -252,7 +252,7 @@
                     <i class="fa fa-map-marker"></i>
 
                     <h3 class="box-title">
-                        آنلاین ها
+                        تعداد کاربران آنلاین بر اساس کشور
                     </h3>
                 </div>
                 <div class="box-body">
@@ -302,7 +302,7 @@
                     regions: [
                         {
                             values: visitorsData,
-                            scale: ['#92c1dc', '#ebf4f9'],
+                            scale: ['#8141dc', '#83a5a6'],
                             normalizeFunction: 'polynomial'
                         }
                     ]
@@ -317,15 +317,19 @@
                 element: 'line-chart',
                 resize: true,
                 data: [
-                    {% autoescape off %}
-                        {% for one_of_days in queries.past_five_days_click %}
-                            {y: "{{ one_of_days.by_day|date_jalali:3 }}", item1: {{one_of_days.by_day_count}}},
-                        {% endfor %}
-                    {% endautoescape %}
+                    {% if queries.past_five_days_click.count > 0 %}
+                        {% autoescape off %}
+                            {% for one_of_days in queries.past_five_days_click %}
+                                {y: "{{ one_of_days.by_day|date_jalali:3 }}", item1: {{one_of_days.by_day_count}}},
+                            {% endfor %}
+                        {% endautoescape %}
+                    {% else %}
+                        {y: "{{ queries.todaynow|date_jalali:3 }}", item1: 0},
+                    {% endif %}
                 ],
                 xkey: 'y',
                 ykeys: ['item1'],
-                labels: ['Item 1'],
+                labels: ['تعداد کلیک'],
                 lineColors: ['#3c8dbc'],
                 hideHover: 'auto'
             });

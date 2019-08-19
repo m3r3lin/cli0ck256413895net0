@@ -87,6 +87,7 @@ class Dashboard(LoginRequiredMixin, View):
             "all_User_Today": all_User_Today,
             "all_tabligh": all_tabligh,
             "all_infopm": all_InfoPm,
+            "todaynow": datetime.now(),
             "active_show_forosh": active_show_forosh,
             "past_five_days_click": past_five_days_click,
             "all_recive": k.current_recieved_direct + k.current_recieved_indirect,

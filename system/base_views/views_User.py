@@ -8,10 +8,10 @@ from django.db.models import ProtectedError, Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.generic import CreateView, UpdateView, TemplateView
 from django_datatables_view.base_datatable_view import BaseDatatableView
-
 from Ads_Project.functions import LoginRequiredMixin
 from Ads_Project.settings import MAIN_ADMIN_ID
 from system.forms import UserCreateForm, UserUpdateForm, ChangeUserPasswordForm

@@ -98,7 +98,7 @@ class HistoryMaliDatatableView(LoginRequiredMixin, BaseDatatableView):
                     qs = qs.filter(Q(type=0) | Q(meghdar__icontains=search) | Q(user__username__icontains=search))
                 elif search in _("withdraw"):
                     qs = qs.filter(Q(type=1) | Q(meghdar__icontains=search | Q(user__username__icontains=search)))
-                elif search in _("transfer from income money to pocket money"):
+                elif search in _("Transfer from income money to pocket money"):
                     qs = qs.filter(Q(type=2) | Q(meghdar__icontains=search) | Q(user__username__icontains=search))
                 else:
                     qs = qs.filter(Q(meghdar__icontains=search) | Q(user__username__icontains=search))
@@ -108,7 +108,7 @@ class HistoryMaliDatatableView(LoginRequiredMixin, BaseDatatableView):
                     qs = qs.filter(Q(type=0) | Q(meghdar__icontains=search))
                 elif search in _("withdraw"):
                     qs = qs.filter(Q(type=1) | Q(meghdar__icontains=search))
-                elif search in _("transfer from income money to pocket money"):
+                elif search in _("Transfer from income money to pocket money"):
                     qs = qs.filter(Q(type=2) | Q(meghdar__icontains=search))
                 else:
                     qs = qs.filter(Q(meghdar__icontains=search))

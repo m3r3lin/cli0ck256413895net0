@@ -1,5 +1,6 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% block css %}
     <style>
         td {
@@ -12,10 +13,10 @@
     </style>
 {% endblock %}
 {% block page_title %}
-    لیست تبلیغات
+    {% trans "Referrals List" %}
 {% endblock %}
 {% block dashboard %}
-    <li>لیست تبلیغات</li>
+    <li>{% trans "Referrals List" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -32,9 +33,9 @@
                             <table id="networkdatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">نام و نام خانوادگی</th>
-                                    <th class="text-center">سطح</th>
-                                    <th class="text-center">درامد</th>
+                                    <th class="text-center">{% trans "Full Name" %}</th>
+                                    <th class="text-center">{% trans "Level" %}</th>
+                                    <th class="text-center">{% trans "Income" %}</th>
                                 </tr>
                                 </thead>
                                 <tbody>

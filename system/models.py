@@ -10,6 +10,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
 
 from Ads_Project import settings
@@ -19,30 +20,30 @@ from system.functions import upload_avatar_path, upload_cart_melli_path
 INCREASE_BALANCE_ORDER = 12
 
 VAZEYAT_CHOICES = (
-    (0, 'غیرفعال'),
-    (1, 'فعال'),
+    (0, _('activate')),
+    (1, _('deactivate')),
 )
 VAZEYAT_Tabligh = (
-    (0, 'غیرفعال'),
-    (1, 'فعال'),
-    (2, 'لغو شده'),
-    (3, 'در انتظار تایید'),
-    (4, 'به اتمام رسیده'),
+    (0, _('deactivate')),
+    (1, _('activate')),
+    (2, _('canceled')),
+    (3, _('waiting')),
+    (4, _('finished')),
 )
 GENDER_CHOICES = (
-    (0, 'زن'),
-    (1, 'مرد'),
-    (2, 'نا مشخص'),
+    (0, _("woman")),
+    (1, _("man")),
+    (2, _("not specified")),
 )
 NOOE_CHOICES = (
-    (0, 'تبلیغ گذار'),
-    (1, 'منتشر کننده'),
-    (2, 'هر دو'),
+    (0, _("Ad Maker")),
+    (1, _("Ad Publisher")),
+    (2, _("Both")),
 )
 VAZEYAT_PAYAM = (
-    (0, 'خوانده شده'),
-    (1, 'خوانده نشده'),
-    (2, 'ارسال شده'),
+    (0, _('read')),
+    (1, _('unread')),
+    (2, _('sent')),
 )
 
 
@@ -71,7 +72,7 @@ class User(AbstractUser):
     kife_daramad = models.FloatField(default=0, validators=[MinValueValidator(0),
                                                             MaxValueValidator(
                                                                 9999999999,
-                                                                message='کیف درآمد نمیتواند بیشتر از 9999999999 باشد. ')
+                                                                message=_('Income Pocket cant be greater than 9999999999'))
                                                             ])
     code_moaref = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, blank=True)
     sath = models.IntegerField(default=1, null=True, blank=True)
@@ -193,9 +194,9 @@ class KifDarAmad(models.Model):
 class History(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     type = models.SmallIntegerField(choices=(
-        (0, 'واریز'),
-        (1, 'برداشت'),
-        (2, 'انتقال از کیف درآمد به کیف پول'),
+        (0, _("deposit") ),
+        (1, _("withdraw")),
+        (2, _("Income to Pocket money")),
     ))
     meghdar = models.IntegerField()
     created_at = models.DateField(auto_now_add=True)
@@ -210,20 +211,6 @@ class Pelan(Model):
 
     def __str__(self):
         return self.onvan
-
-
-# class ClickStrategy:
-#     @staticmethod
-#     def show(tabligh: "Tabligh"):
-#         return ''
-#
-#     @staticmethod
-#     def click(tabligh: "Tabligh", user: User):
-#         return ''
-#
-#     @staticmethod
-#     def publish(tabligh: "Tabligh"):
-#         return ''
 
 
 class Tabligh(Model):
@@ -328,7 +315,7 @@ class TablighatMontasherKonande(Model):
 
 class Order(Model):
     type = models.IntegerField(choices=(
-        (INCREASE_BALANCE_ORDER, 'افزایش اعتبار'),
+        (INCREASE_BALANCE_ORDER, _("Increase balance")),
     ))
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     data = models.TextField(default='')

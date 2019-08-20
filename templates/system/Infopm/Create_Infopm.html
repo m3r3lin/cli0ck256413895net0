@@ -1,5 +1,6 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% block css %}
     <style>
         textarea {
@@ -8,10 +9,10 @@
     </style>
 {% endblock %}
 {% block page_title %}
-    افزایش اعتبار
+    {% trans "Send Notification" %}
 {% endblock %}
 {% block dashboard %}
-    <li> افزایش اعتبار</li>
+    <li>{% trans "Send Notification" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -22,7 +23,7 @@
                 <!-- general form elements -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">ارسال اطلاعیه به کاربران</h3>
+                        <h3 class="box-title">{% trans "Send Notification to users" %}</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -58,7 +59,7 @@
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">ثبت</button>
+                                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
                             </div>
                         </div>
                     </form>

@@ -1,4 +1,5 @@
 {% load app_filters %}
+{% load i18n %}
 <div class="modal fade" id="confirm_modal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -7,14 +8,15 @@
                         aria-label="Close">
                     <span aria-hidden="true" class=" text-black">x</span>
                 </button>
-                <h4 class="modal-title"><b>آیا تمایل دارید این تبلیغ را انتشار
-                    دهید؟</b></h4>
+                <h4 class="modal-title"><b>
+                    {% trans "Do you want to publish this Ad ?" %}
+                </b></h4>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger no_button"
-                        data-dismiss="modal">خیر
+                        data-dismiss="modal">{% trans "Yes" %}
                 </button>
-                <a class="btn btn-primary yes_button">بلی</a>
+                <a class="btn btn-primary yes_button">{% trans "No" %}</a>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -40,55 +42,63 @@
         }
     </style>
     <div style="clear: both;"></div>
-    {% for tabligh in tablighs %}
-        <div class="form-group col-sm-12 col-md-3">
-            <div class="small-box bg-aqua">
-                <div class="inner">
-                    <h3 class="onvan">{{ tabligh.onvan }}</h3>
-                    <p>درآمد از هر مشاهده:
-                        <b>{{ tabligh.mablagh_har_click|floatformat:0 }}</b>
-                    </p>
-                    <p>مقدار کل مشاهده: {{ tabligh.tedad_click }}</p>
-                    <p>مقدار مشاهده باقی مانده: {{ tabligh.subbed }}</p>
-                    <p>کاربران فعال: {{ tabligh.all_users.count }}</p>
-                </div>
-                <div class="small-box-custom-footer" style="display: flex;">
-                    {% is_publishing tabligh request.user as user_publishes %}
-                    <a href="{{ tabligh.show_url }}"
-                       class="small-box-footer btn btn-danger text-center show_tabligh"
-                       style="{% if request.user.is_superuser %}width: 100%;{% else %}width: 50%;{% endif %}">
-                        مشاهده آنلاین تبلیغ <i
-                            class="fa fa-arrow-circle-right"></i>
-                    </a>
-
-                    {% if user_publishes.exists %}
-                        <a href="{% url 'clicked_on_tabligh' enteshartoken=tabligh.random_url|generate_publish_url:request.user %}"
-                           class="small-box-footer btn btn-warning text-center copy_link"
-                           style="width: 50%;">
-                            کپی لینک انتشار <i
+    {% if tablighs.count > 0 %}
+        {% for tabligh in tablighs %}
+            <div class="form-group col-sm-12 col-md-3">
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 class="onvan">{{ tabligh.onvan }}</h3>
+                        <p>{% trans "Income per click" %}:
+                            <b>{{ tabligh.mablagh_har_click|floatformat:0 }}</b>
+                        </p>
+                        <p>{% trans "All Ad visits" %}: {{ tabligh.tedad_click }}</p>
+                        <p>{% trans "Remained clicks" %}: {{ tabligh.subbed }}</p>
+                        <p>{% trans "Active users" %}: {{ tabligh.all_users.count }}</p>
+                    </div>
+                    <div class="small-box-custom-footer" style="display: flex;">
+                        {% is_publishing tabligh request.user as user_publishes %}
+                        <a href="{{ tabligh.show_url }}"
+                           class="small-box-footer btn btn-danger text-center show_tabligh"
+                           style="{% if request.user.is_superuser %}width: 100%;{% else %}width: 50%;{% endif %}">
+                            {% trans "Visit Online" %} <i
                                 class="fa fa-arrow-circle-right"></i>
                         </a>
-                    {% elif request.user.is_superuser %}
-                    {% else %}
-                        <a href="#"
-                           class="small-box-footer btn btn-warning text-center publish_tabligh"
-                           data-data="{{ tabligh.random_url }}"
-                           style="width: 50%;">
-                            انتشار <i class="fa fa-arrow-circle-right"></i>
-                        </a>
-                    {% endif %}
+
+                        {% if user_publishes.exists %}
+                            <a href="{% url 'clicked_on_tabligh' enteshartoken=tabligh.random_url|generate_publish_url:request.user %}"
+                               class="small-box-footer btn btn-warning text-center copy_link"
+                               style="width: 50%;">
+                                {% trans "Copy Link" %} <i
+                                    class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        {% elif request.user.is_superuser %}
+                        {% else %}
+                            <a href="#"
+                               class="small-box-footer btn btn-warning text-center publish_tabligh"
+                               data-data="{{ tabligh.random_url }}"
+                               style="width: 50%;">
+                                {% trans "Publish" %} <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                    {#                <div class="icon">#}
+                    {#                    <i class="fa fa-shopping-cart"></i>#}
+                    {#                </div>#}
                 </div>
-                {#                <div class="icon">#}
-                {#                    <i class="fa fa-shopping-cart"></i>#}
-                {#                </div>#}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-md-12">
+            <div class="alert alert-warning">
+                {% trans "There is no Ad to show" %}
             </div>
         </div>
-    {% endfor %}
+    {% endif %}
     <script type="text/javascript">
         window.where_to_publish = "{% url 'PublishTabligh' tabligh_token='0' %}";
         window.where_to_publish = window.where_to_publish.substr(0, window.where_to_publish.length - 1);
         console.log(window.where_to_publish)
     </script>
 {% else %}
-    <h2>شما باید حداقل {{ least_balance_required }} در کیف پول خود </h2>
+    <h2>{% trans "Your Balance should at least be" %} {{ least_balance_required }} {% trans "if you want to see publishable ads" %} </h2>
 {% endif %}

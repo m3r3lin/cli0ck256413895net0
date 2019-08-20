@@ -1,12 +1,13 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% block css %}
 {% endblock %}
 {% block page_title %}
-    انتشار تبلیغ
+    {% trans "Publish Ad" %}
 {% endblock %}
 {% block dashboard %}
-    <li>انتشار تبلیغ</li>
+    <li>{% trans "Publish Ad" %}</li>
 {% endblock %}
 {% block main_content %}
 

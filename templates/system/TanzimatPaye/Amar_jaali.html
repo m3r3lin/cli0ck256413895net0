@@ -1,10 +1,11 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% block page_title %}
-    بروزرسانی آمار جعلی
+    {% trans "Update Fake Info" %}
 {% endblock %}
 {% block dashboard %}
-    <li>بروزرسانی آمار جعلی</li>
+    <li>{% trans "Update Fake Info" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -15,7 +16,7 @@
                 <!-- general form elements -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">جهت بروزرسانی آمار جعلی، فرم زیر را پر کنید.</h3>
+                        <h3 class="box-title">{% trans "Update Fake Info" %}</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -30,21 +31,21 @@
                                     {% if form.count_user_online.label_tag %}
                                         <label for="value">{{ form.count_user_online.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
-                                    {{ form.count_user_online  }}
+                                    {{ form.count_user_online }}
                                     {% if form.count_user_online.help_text %}
                                         <p class="help-block">{{ form.count_user_online.help_text }}</p>
                                     {% endif %}
                                 </div>
-                            <div class="form-group col-sm-6 col-md-3">
+                                <div class="form-group col-sm-6 col-md-3">
                                     {% if form.count_all_user.label_tag %}
                                         <label for="value">{{ form.count_all_user.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
-                                    {{ form.count_all_user  }}
+                                    {{ form.count_all_user }}
                                     {% if form.count_all_user.help_text %}
                                         <p class="help-block">{{ form.count_all_user.help_text }}</p>
                                     {% endif %}
                                 </div>
-                            <div class="form-group col-sm-6 col-md-3">
+                                <div class="form-group col-sm-6 col-md-3">
                                     {% if form.count_user_new_today.label_tag %}
                                         <label for="value">{{ form.count_user_new_today.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
@@ -62,7 +63,7 @@
                                         <p class="help-block">{{ form.meghdar_daramad_pardahkti.help_text }}</p>
                                     {% endif %}
                                 </div>
-                               <div class="form-group col-sm-6 col-md-3">
+                                <div class="form-group col-sm-6 col-md-3">
                                     {% if form.count_tabligh_thabti.label_tag %}
                                         <label for="value">{{ form.count_tabligh_thabti.label_tag }}<span class="red-star">*</span></label>
                                     {% endif %}
@@ -74,7 +75,7 @@
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">ثبت تنظیمات</button>
+                                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
                             </div>
                         </div>
                     </form>
@@ -84,18 +85,4 @@
         </div>
     </section>
     <!-- /.modal -->
-{% endblock %}
-{% block javascripts %}
-    <!-- CK Editor -->
-    <script src="{% static 'bower_components/ckeditor/ckeditor.js' %}"></script>
-
-    <script>
-        $(function () {
-            // Replace the <textarea id="editor1"> with a CKEditor
-            // instance, using default configuration.
-            CKEDITOR.replace('text')
-            //bootstrap WYSIHTML5 - text editor
-            $('.textarea').wysihtml5()
-        })
-    </script>
 {% endblock %}

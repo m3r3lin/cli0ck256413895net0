@@ -1,14 +1,15 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% load app_filters %}
 {% block css %}
     <link rel="stylesheet" href="{% static 'dist/css/persian-datepicker.min.css' %}">
 {% endblock %}
 {% block page_title %}
-    بروزرسانی کاربر
+    {% trans "Update user" %}
 {% endblock %}
 {% block dashboard %}
-    <li>بروزرسانی کاربر</li>
+    <li>{% trans "Update user" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -19,7 +20,7 @@
                 <!-- general form elements -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">جهت بروزرسانی کاربر، فرم زیر را پر کنید.</h3>
+                        <h3 class="box-title">{% trans "Update user" %}</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -255,12 +256,12 @@
                             </div>
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary"
-                                        style="background: #418cd9;border-color: #418cd9;">ثبت تغییرات
+                                        style="background: #418cd9;border-color: #418cd9;">{% trans "Save" %}
                                 </button>
-                                <a href="{% url 'ListUser' %}" class="btn btn-danger">انصراف</a>
+                                <a href="{% url 'ListUser' %}" class="btn btn-danger">{% trans "Cancle" %}</a>
                                 <a class="btn btn-google" style="margin-top: 10px;"
                                    href="/account/google/login/?process=connect">
-                                    اتصال به گوگل
+                                    {% trans "Connect to google" %}
                                     <i class="fa fa-google"></i>
                                 </a>
                             </div>

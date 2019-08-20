@@ -1,5 +1,6 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% block css %}
     <style>
         td {
@@ -12,10 +13,10 @@
     </style>
 {% endblock %}
 {% block page_title %}
-    لیست پلن ها
+    {% trans "Ad Plan List" %}
 {% endblock %}
 {% block dashboard %}
-    <li>لیست پلن ها</li>
+    <li>{% trans "Ad Plan List" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -31,13 +32,13 @@
                             <table id="PelanDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">کد پلن</th>
-                                    <th class="text-center">عنوان</th>
-                                    <th class="text-center">قیمت</th>
-                                    <th class="text-center">تاریخ ایجاد</th>
-                                    <th class="text-center">تعداد کلیک</th>
-                                    <th class="text-center">وضعیت</th>
-                                    <th class="text-center">عملیات</th>
+                                    <th class="text-center">{% trans "Ad Plan ID" %}</th>
+                                    <th class="text-center">{% trans "Title" %}</th>
+                                    <th class="text-center">{% trans "Price" %}</th>
+                                    <th class="text-center">{% trans "Creation Date" %}</th>
+                                    <th class="text-center">{% trans "Click Mount" %}</th>
+                                    <th class="text-center">{% trans "Status" %}</th>
+                                    <th class="text-center">{% trans "Actions" %}</th>
                                 </tr>
                                 </thead>
                                 <tbody>

@@ -1,10 +1,11 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% block page_title %}
-    لیست کلیک ها
+    {% trans "Clicks List" %}
 {% endblock %}
 {% block dashboard %}
-    <li>لیست کلیک ها</li>
+    <li>{% trans "Clicks List" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -21,12 +22,12 @@
                             <table id="networkdatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">شناسه</th>
-                                    <th class="text-center">کاربر</th>
-                                    <th class="text-center">ساعت کلیک</th>
-                                    <th class="text-center">تبلیغ</th>
-                                    <th class="text-center">مبلغ هر کلیک</th>
-                                    <th class="text-center">آیی پی</th>
+                                    <th class="text-center">{% trans "ID" %}</th>
+                                    <th class="text-center">{% trans "User" %}</th>
+                                    <th class="text-center">{% trans "Date" %}</th>
+                                    <th class="text-center">{% trans "Title" %}</th>
+                                    <th class="text-center">{% trans "Per Click cost" %}</th>
+                                    <th class="text-center">{% trans "IP" %}</th>
                                 </tr>
                                 </thead>
                                 <tbody>

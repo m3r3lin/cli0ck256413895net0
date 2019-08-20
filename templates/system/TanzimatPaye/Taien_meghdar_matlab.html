@@ -1,10 +1,11 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% block page_title %}
-    بروزرسانی تعیین مقدار مطلب
+    {% trans "Update Ad Text Length" %}
 {% endblock %}
 {% block dashboard %}
-    <li>بروزرسانیتعیین مقدار مطلب</li>
+    <li>{% trans "Update Ad Text Length" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -15,7 +16,7 @@
                 <!-- general form elements -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">جهت بروزرسانی تعیین مقدار مطلب، فرم زیر را پر کنید.</h3>
+                        <h3 class="box-title">{% trans "Update Ad Text Length" %}</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -38,7 +39,7 @@
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">ثبت تنظیمات</button>
+                                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
                             </div>
                         </div>
                     </form>
@@ -48,18 +49,4 @@
         </div>
     </section>
     <!-- /.modal -->
-{% endblock %}
-{% block javascripts %}
-    <!-- CK Editor -->
-    <script src="{% static 'bower_components/ckeditor/ckeditor.js' %}"></script>
-
-    <script>
-        $(function () {
-            // Replace the <textarea id="editor1"> with a CKEditor
-            // instance, using default configuration.
-            CKEDITOR.replace('text')
-            //bootstrap WYSIHTML5 - text editor
-            $('.textarea').wysihtml5()
-        })
-    </script>
 {% endblock %}

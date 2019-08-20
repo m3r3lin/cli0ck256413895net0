@@ -1,5 +1,6 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% block css %}
     <style>
         td {
@@ -12,10 +13,10 @@
     </style>
 {% endblock %}
 {% block page_title %}
-    لیست اطلاعیه ها
+    {% trans "Notifications List" %}
 {% endblock %}
 {% block dashboard %}
-    <li>لیست اطلاعیه ها</li>
+    <li>{% trans "Notifications List" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -31,10 +32,10 @@
                             <table id="UserDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">شناسه</th>
-                                    <th class="text-center">متن پیام</th>
-                                    <th class="text-center">وضعیت</th>
-                                    <th class="text-center">عملیات</th>
+                                    <th class="text-center">{% trans "ID" %}</th>
+                                    <th class="text-center">{% trans "Message Text" %}</th>
+                                    <th class="text-center">{% trans "Status" %}</th>
+                                    <th class="text-center">{% trans "Action" %}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -54,11 +55,11 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class=" text-black">x</span></button>
-                    <h4 class="modal-title"><b>آیا تمایل دارید این اطلاعیه را حذف کنید؟</b></h4>
+                    <h4 class="modal-title"><b>{% trans "Do You want to delete this notification ?" %}</b></h4>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">خیر</button>
-                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">بلی</button>
+                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">{% trans "Yes" %}</button>
+                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">{% trans "No" %}</button>
                 </div>
             </div>
             <!-- /.modal-content -->

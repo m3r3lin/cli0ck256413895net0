@@ -1,10 +1,11 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% block page_title %}
-    بروزرسانی سطح شبکه و سود
+    {% trans "Update Income and Level" %}
 {% endblock %}
 {% block dashboard %}
-    <li>بروزرسانی سطح شبکه و سود</li>
+    <li>{% trans "Update Income and Level" %}</li>
 {% endblock %}
 {% block css %}
     <style>
@@ -26,7 +27,7 @@
                 <!-- general form elements -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">جهت بروزرسانی سطح شبکه و سود، فرم زیر را پر کنید.</h3>
+                        <h3 class="box-title">{% trans "Update Income and Level" %}</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -58,7 +59,7 @@
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">ثبت تنظیمات</button>
+                                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
                             </div>
                         </div>
                     </form>
@@ -77,10 +78,10 @@
                             <table id="countlevelDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">شناسه</th>
-                                    <th class="text-center">سطح</th>
-                                    <th class="text-center">مقدار</th>
-                                    <th class="text-center">عملیات</th>
+                                    <th class="text-center">{% trans "ID" %}</th>
+                                    <th class="text-center">{% trans "Level" %}</th>
+                                    <th class="text-center">{% trans "Mount" %}</th>
+                                    <th class="text-center">{% trans "Action" %}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -102,11 +103,11 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class=" text-black">x</span></button>
-                    <h4 class="modal-title"><b>آیا تمایل دارید این سطح را حذف کنید؟</b></h4>
+                    <h4 class="modal-title"><b>{% trans "Do you wan to delete this Level ?" %}</b></h4>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">خیر</button>
-                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">بلی</button>
+                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">{% trans "No" %}</button>
+                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">{% trans "Yes" %}</button>
                 </div>
             </div>
             <!-- /.modal-content -->

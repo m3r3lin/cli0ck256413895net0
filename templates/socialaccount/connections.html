@@ -1,15 +1,16 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% load socialaccount %}
 {% load app_filters %}
 {% block css %}
     <link rel="stylesheet" href="{% static 'dist/css/persian-datepicker.min.css' %}">
 {% endblock %}
 {% block page_title %}
-    بروزرسانی کاربر
+    {% trans "Connect to social accounts" %}
 {% endblock %}
 {% block dashboard %}
-    <li>بروزرسانی کاربر</li>
+    <li>{% trans "Connect to social accounts" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -20,7 +21,7 @@
                 <!-- general form elements -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">اتصالات به اگانت های مختلف</h3>
+                        <h3 class="box-title">{% trans "Connect to social accounts" %}</h3>
                     </div>
                     <div class="box-body">
 
@@ -30,8 +31,8 @@
                         </div>
                         {% if form.accounts.exists %}
                             <div class="col-md-12" style="margin-bottom: 20px;">
-                                <p>شما میتوانید از تمام اکانت های زیر برای ورود به حساب کاربری خود استفاده کیند</p>
-                                <p class="small">با انتخاب کردن هر کدام از اکانت ها شما میتوانید از آن اکانت جداشوید</p>
+                                <p>{% trans "You can use any of following accounts to login to your account" %}</p>
+                                <p class="small">{% trans "By chssing any account you can disconnect from that account" %}</p>
                                 <form method="post" action="{% url 'socialaccount_connections' %}">
                                     {% csrf_token %}
                                     <fieldset>
@@ -47,16 +48,16 @@
                                             {% endwith %}
                                         {% endfor %}
                                     </fieldset>
-                                    <button type="submit" class="btn btn-default">حذف</button>
+                                    <button type="submit" class="btn btn-default">{% trans "Delete" %}</button>
                                 </form>
                             </div>
                         {% else %}
                             <div class="col-md-12">
-                                <p class="alert alert-warning">شما هنوز به هیچ اکانتی متصل نیستید</p>
+                                <p class="alert alert-warning">{% trans "You are not connected to any account yet" %}</p>
                             </div>
                         {% endif %}
                         <div class="col-md-12">
-                            <p>اتصال به اکانت جدید:</p>
+                            <p>{% trans "Connect to a new account" %}:</p>
                             {% get_providers as socialaccount_providers %}
 
                             {% for provider in socialaccount_providers %}

@@ -13,7 +13,7 @@ from system.forms import Create_Infopm
 from system.models import Infopm
 
 
-class InfoPm(CreateView):
+class InfoPm(LoginRequiredMixin,CreateView):
     template_name = 'system/Infopm/Create_Infopm.html'
     model = Infopm
     form_class = Create_Infopm

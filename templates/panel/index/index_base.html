@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-{% load static %}
-{% load i18n %}
-{% load app_filters %}
-{% get_current_language as LANGUAGE_CODE %}
-<html>
+<!DOCTYPE html>{% load static %}{% load i18n %}{% load app_filters %}{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'fa' %}rtl{% else %}ltr{% endif %}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -295,7 +291,7 @@
             <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar">
                 <!-- Sidebar user panel -->
-                <div class="user-panel">
+                <div class="user-panel" style="min-height: 80px">
                     <div class="pull-right image">
                         {% if request.user.avatar %}
                             <img src="{{ request.user.avatar.url }}"
@@ -312,22 +308,9 @@
                     </div>
                 </div>
                 <!-- search form -->
-                <form action="#" method="get" class="sidebar-form">
-                    <div class="input-group">
-                        <input type="text" name="q" class="form-control"
-                               placeholder="{% trans "Search" %}">
-                        <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn"
-                        class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-                    </div>
-                </form>
                 <!-- /.search form -->
                 <!-- sidebar menu: : style can be found in sidebar.less -->
-
                 <ul class="sidebar-menu" data-widget="tree">
-                    <li class="header">{% trans "Menu" %}</li>
 
                     <li><a href="{% url 'dashboard' %}"><i
                             class="fa fa-tachometer"></i> <span>{% trans "Dashboard" %}</span></a>
@@ -405,7 +388,7 @@
                                 </li>
                                 <li><a href="{% url  'ShowTablighs' %}"><i
                                         class="fa fa-buysellads"></i>
-                                    {% trans "Publishable Ads" %}
+                                    {% trans "Published Ads" %}
                                 </a></li>
                             {% endif %}
                             {% if request.user.is_superuser %}
@@ -420,16 +403,16 @@
                                     {% trans "Your Ads" %}
                                 </a></li>
                             {% endif %}
-                            <li><a href="{% url  'Montashshodeha' %}"><i
+                            <li><a href="{% url 'Montashshodeha' %}"><i
                                     class="fa fa-list"></i>
-                                لیست تبلیغات قابل انتشار
+                                {% trans "Publishable Ads" %}
                             </a></li>
                         </ul>
                     </li>
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-weixin"></i>
-                            <span>پیام ها</span>
+                            <span>{% trans "Messages" %}</span>
                             <span class="pull-left-container">
                             <i class="fa fa-angle-right pull-left"></i>
                         </span>
@@ -437,15 +420,16 @@
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="{% url  'MessageList' %}"><i
-                                    class="fa fa-paper-plane"></i>پیام ها</a>
+                                    class="fa fa-paper-plane"></i>{% trans "Messages" %}</a>
                             </li>
                             {% if request.user.is_superuser %}
                                 <li><a href="{% url  'Create_InfoPm' %}"><i
-                                        class="fa fa-paper-plane"></i>ارسال
-                                    اطلاعیه</a>
+                                        class="fa fa-paper-plane"></i>
+                                    {% trans "Send Notification" %}
+                                </a>
                                 </li>
                                 <li><a href="{% url  'InpopmrListView' %}"><i
-                                        class="fa fa-list"></i>لیست اطلاعیه ها</a>
+                                        class="fa fa-list"></i>{% trans "Notifications List" %}</a>
                                 </li>
                             {% endif %}
                         </ul>
@@ -454,7 +438,7 @@
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-usd"></i>
-                            <span>مالی</span>
+                            <span>{% trans "Financial" %}</span>
                             <span class="pull-left-container">
                             <i class="fa fa-angle-right pull-left"></i>
                         </span>
@@ -463,20 +447,24 @@
                         <ul class="treeview-menu">
                             {% if not request.user.is_superuser %}
                                 <li><a href="{% url 'increase_balance' %}"><i
-                                        class="fa fa-plus"></i>افزایش
-                                    اعتبار</a></li>
+                                        class="fa fa-plus"></i>
+                                    {% trans "Increase Balance" %}
+                                </a></li>
                                 <li><a href="{% url 'MoveDaramad2Kif' %}"><i
-                                        class="fa fa-angle-double-up"></i>انتقال
-                                    به کیف درامد</a></li>
+                                        class="fa fa-angle-double-up"></i>
+                                    {% trans "Transfer to Pocket Money" %}
+                                </a></li>
                             {% endif %}
                             <li><a href="{% url 'HistoryMaliList' %}"><i
-                                    class="fa fa-list"></i>سابقه مالی</a></li>
+                                    class="fa fa-list"></i>
+                                {% trans "Financial history" %}
+                            </a></li>
                         </ul>
                     </li>
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-television"></i>
-                            <span>مشاهدات</span>
+                            <span>{% trans "View Things" %}</span>
                             <span class="pull-left-container">
                             <i class="fa fa-angle-right pull-left"></i>
                         </span>
@@ -484,12 +472,12 @@
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="{% url 'Parent_Children' %}"><i
-                                    class="fa fa-users"></i>لیست فرزندان</a>
-                            </li>
+                                    class="fa fa-users"></i>
+                                {% trans "Ref List" %}
+                            </a>
                             </li>
                             <li><a href="{% url 'show_click' %}"><i
-                                    class="fa fa-hand-o-up"></i>کلیک های کاربر</a>
-                            </li>
+                                    class="fa fa-hand-o-up"></i>{% trans "User clicks" %}</a>
                             </li>
                         </ul>
                     </li>
@@ -497,7 +485,7 @@
                         <li class="treeview">
                             <a href="#">
                                 <i class="fa fa-sliders"></i>
-                                <span>تنظیمات اولیه</span>
+                                <span>{% trans "Settings" %}</span>
                                 <span class="pull-left-container">
                             <i class="fa fa-angle-right pull-left"></i>
                         </span>
@@ -507,76 +495,83 @@
                                 <li>
                                     <a href="{% url 'ActiveCodeMoaref' %}">
                                         <i class="fa fa-code"></i>
-                                        فعال کردن کد معرف
+                                        {% trans "Activate Ref Code" %}
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{% url 'ClickIsChangeAble' %}">
                                         <i class="fa fa-code"></i>
-                                        تغییر تعداد کلیک
+                                        {% trans "Change Number Of clicks" %}
                                     </a>
                                 </li>
                                 <li><a href="{% url 'SodeModir' %}"><i
-                                        class="fa fa-percent"></i>درصد سود مدیر</a>
+                                        class="fa fa-percent"></i>
+                                    {% trans "Admins interest rate" %}
+                                </a>
                                 </li>
                                 {#                            <li><a href="#"><i class="fa fa-list"></i>سطوح شبکه</a></li>#}
                                 <li><a href="{% url 'Languge_site' %}"><i
-                                        class="fa fa-language"></i>زبان
-                                    سایت</a></li>
+                                        class="fa fa-language"></i>
+                                    {% trans "Default website language" %}
+                                </a></li>
                                 <li>
                                     <a href="{% url 'Max_Count_Level_networkView' %}"><i
-                                            class="fa fa-arrow-up"></i>حداکثر
-                                        تعداد سطح شبکه</a></li>
+                                            class="fa fa-arrow-up"></i>
+                                        {% trans "Max network levels" %}
+                                    </a></li>
                                 <li>
                                     <a href="{% url 'Count_Level_networkView' %}"><i
-                                            class="fa fa-bars"></i>تعیین مقدار
-                                        سود هر سطح</a></li>
+                                            class="fa fa-bars"></i>
+                                        {% trans "Each level intereset" %}
+                                    </a></li>
                                 <li>
                                     <a href="{% url 'Count_kharid_hadaghalView' %}"><i
-                                            class="fa fa-level-down"></i>حداقل
-                                        تعداد خریر تبلیغ</a></li>
+                                            class="fa fa-level-down"></i>
+                                        {% trans "Least must buy Ads" %}
+                                    </a></li>
                                 <li><a href="{% url 'LeastBalanceRequired' %}"><i
-                                        class="fa fa-arrow-down"></i>حداقل
-                                    پول برای نمایش تبلیغ</a></li>
-                                <li><a href="{% url 'Time_kharid_termView' %}"><i
-                                        class="fa fa-clock-o"></i>مدت زمان
-                                    خرید</a></li>
+                                        class="fa fa-arrow-down"></i>
+                                    {% trans "Least Balance to publish" %}
+                                </a></li>
                                 <li>
                                     <a href="{% url 'Taien_meghdar_matlabView' %}"><i
-                                            class="fa fa-text-width"></i>تعیین
-                                        مقدار
-                                        مطلب </a></li>
+                                            class="fa fa-text-width"></i>
+                                        {% trans "Max Add text len" %}
+                                    </a></li>
                                 <li>
                                     <a href="{% url 'Show_amar_foruserView' %}"><i
-                                            class="fa fa-pie-chart"></i>نمایش
-                                        آمار
-                                        برای کاربران </a></li>
+                                            class="fa fa-pie-chart"></i>
+                                        {% trans "Show Status to users" %}
+                                    </a></li>
                                 <li>
                                     <a href="{% url 'Taeid_khodkar_tabligh' %}"><i
                                             class="fa fa-font"></i>
-                                        تایید خودکار تبلیغ
+                                        {% trans "Auto Check Ads" %}
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{% url 'WebsiteTitle' %}"><i
                                             class="fa fa-font"></i>
-                                        تغییر موضوعات
+                                        {% trans "Chanage Titles" %}
                                     </a>
                                 </li>
                                 <li><a href="{% url 'Vahed_poll_site' %}"><i
-                                        class="fa fa-btc"></i>واحد پول سایت
+                                        class="fa fa-btc"></i>
+                                    {% trans "Site Currency" %}
                                 </a>
                                 </li>
-                                <li>
-                                    <a href="{% url 'Count_visit_tabligh' %}"><i
-                                            class="fa fa-star"></i>تعداد دیدن
-                                        تبلیغ
-                                    </a></li>
-                                <li><a href="{% url 'Taein_hadaghal_etbar' %}"><i
-                                        class="fa fa-sort-desc"></i>تعیین حداقل
-                                    اعتبار </a></li>
+                                {#                                <li>#}
+                                {#                                    <a href="{% url 'Count_visit_tabligh' %}"><i#}
+                                {#                                            class="fa fa-star"></i>#}
+                                {#                                        تعداد دیدن تبلیغ#}
+                                {#                                    </a></li>#}
+                                {#                                <li><a href="{% url 'Taein_hadaghal_etbar' %}"><i#}
+                                {#                                        class="fa fa-sort-desc"></i>#}
+                                {#                                    #}
+                                {#                                </a></li>#}
                                 <li><a href="{% url 'Amar_jaali' %}"><i
-                                        class="fa fa-line-chart"></i>آمار جعلی
+                                        class="fa fa-line-chart"></i>
+                                    {% trans "Fake Data" %}
                                 </a></li>
                             </ul>
                         </li>
@@ -590,8 +585,8 @@
         <header class="main-header">
             <!-- Logo -->
             <a href="/" class="logo">
-                <span class="logo-mini">نمایش تبلیغ</span>
-                <span class="logo-lg"><b>کنترل پنل میهمان</b></span>
+                <span class="logo-mini">{% trans "Showing Ad" %}</span>
+                <span class="logo-lg"><b>{% trans "Guest Panel" %}</b></span>
             </a>
         </header>
         <!-- right side column. contains the logo and sidebar -->
@@ -602,12 +597,12 @@
                     {% if montasher_konande %}
                         <li>
                             <a href="/system/CreateUser/?referer={{ montasher_konande.id }}"><i
-                                    class="fa fa-address-book"></i> <span>ثبت نام</span></a>
+                                    class="fa fa-address-book"></i> <span>{% trans "Register" %}</span></a>
                         </li>
                     {% else %}
                     {% endif %}
                     <li><a href="{% url 'login' %}"><i
-                            class="fa fa-sign-in"></i> <span>ورود</span></a>
+                            class="fa fa-sign-in"></i> <span>{% trans "Login" %}</span></a>
                     </li>
                 </ul>
             </section>
@@ -624,7 +619,7 @@
             </h1>
             <ol class="breadcrumb">
                 {% if request.user.is_authenticated %}
-                    <li><a href="/">داشبرد</a></li>
+                    <li><a href="/">{% trans "Dashboard" %}</a></li>
                 {% endif %}
                 {% block dashboard %}
                 {% endblock %}
@@ -651,7 +646,7 @@
         {% if show_amar_for_user %}
             <div class="col-lg-2 col-md-4 col-sm-6">
                 <div class="info-box-content">
-                    <span class="info-box-text">تعداد کاربران آنلاین</span>
+                    <span class="info-box-text">{% trans "Number of online users" %}</span>
                     <span class="info-box-number">{{ cpp.count_user_online }}</span>
                 </div>
                 <!-- /.info-box -->
@@ -659,7 +654,7 @@
             <!-- /.col -->
             <div class="col-lg-2 col-md-4 col-sm-6">
                 <div class="info-box-content">
-                    <span class="info-box-text">کل کاربران</span>
+                    <span class="info-box-text">{% trans "Number of users" %}</span>
                     <span class="info-box-number">{{ cpp.all_users }}</span>
                 </div>
                 <!-- /.info-box -->
@@ -667,7 +662,7 @@
             <!-- /.col -->
             <div class="col-lg-2 col-md-4 col-sm-6">
                 <div class="info-box-content">
-                    <span class="info-box-text">کاربران جدید امروز</span>
+                    <span class="info-box-text">{% trans "Today's new users count" %}</span>
                     <span class="info-box-number">{{ cpp.all_user_today }}</span>
                 </div>
                 <!-- /.info-box -->
@@ -675,7 +670,7 @@
             <!-- /.col -->
             <div class="col-lg-2 col-md-4 col-sm-6">
                 <div class="info-box-content">
-                    <span class="info-box-text">درآمد پرداخت شده</span>
+                    <span class="info-box-text">{% trans "Paid Income" %}</span>
                     <span class="info-box-number">{{ cpp.daramad_pardakhtshode }}</span>
                 </div>
                 <!-- /.info-box -->
@@ -683,7 +678,7 @@
             <!-- /.col -->
             <div class="col-lg-2 col-md-4 col-sm-6">
                 <div class="info-box-content">
-                    <span class="info-box-text">تبلیغ ثبت شده</span>
+                    <span class="info-box-text">{% trans "All Created Ads" %}</span>
                     <span class="info-box-number">{{ cpp.all_tabligh }}</span>
                 </div>
                 <!-- /.info-box -->

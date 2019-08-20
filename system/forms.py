@@ -648,8 +648,18 @@ class ChangeUserPasswordForm(PasswordChangeForm):
 
     def __init__(self, *args, **kwargs):
         super(ChangeUserPasswordForm, self).__init__(*args, **kwargs)
-        self.fields['new_password1'].label = _("Password") + ':'
+
+        self.fields['old_password'].label = _("Password") + ':'
+        self.fields['old_password'].help_text = ''
+        self.fields['old_password'].widget.attrs.update({'class': 'form-control', 'id': 'Password'})
+
+        self.fields['new_password1'].label = _("New Password") + ':'
         self.fields['new_password1'].help_text = ''
+        self.fields['new_password1'].widget.attrs.update({'class': 'form-control', 'id': 'Password'})
+
+        self.fields['new_password2'].label = _("Confirm New Password") + ':'
+        self.fields['new_password2'].help_text = ''
+        self.fields['new_password2'].widget.attrs.update({'class': 'form-control', 'id': 'Password'})
 
 
 class NewMessageCreateForm(ModelForm):

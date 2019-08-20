@@ -1,5 +1,6 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% block css %}
     <style>
         td {
@@ -12,10 +13,10 @@
     </style>
 {% endblock %}
 {% block page_title %}
-    تاریخچه مالی
+    {% trans "Financial history" %}
 {% endblock %}
 {% block dashboard %}
-    <li>تاریخچه مالی</li>
+    <li>{% trans "Financial history" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -31,11 +32,11 @@
                             <table id="UserDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">شناسه</th>
-                                    <th class="text-center">نام و نام خانوادگی</th>
-                                    <th class="text-center">نوع درخواست</th>
-                                    <th class="text-center">مقدار</th>
-                                    <th class="text-center">تاریخ</th>
+                                    <th class="text-center">{% trans "ID" %}</th>
+                                    <th class="text-center">{% trans "Full Name" %}</th>
+                                    <th class="text-center">{% trans "Request Type" %}</th>
+                                    <th class="text-center">{% trans "Mount" %}</th>
+                                    <th class="text-center">{% trans "Date" %}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -49,23 +50,6 @@
             </div>
         </div>
     </section>
-    <div class="modal fade" id="confirm_modal">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" class=" text-black">x</span></button>
-                    <h4 class="modal-title"><b>آیا تمایل دارید این اطلاعیه را حذف کنید؟</b></h4>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">خیر</button>
-                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">بلی</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
     <!-- /.modal -->
 {% endblock %}
 {% block javascripts %}

@@ -1,12 +1,13 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% block css %}
 {% endblock %}
 {% block page_title %}
-    ایجاد تبلیغ
+    {% trans "Create Ad" %}
 {% endblock %}
 {% block dashboard %}
-    <li>ایجاد تبلیغ</li>
+    <li>{% trans "Create Ad" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -17,7 +18,7 @@
                 <!-- general form elements -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">جهت ایجاد تبلیغ، فرم زیر را پر کنید.</h3>
+                        <h3 class="box-title">{% trans "Create Ad" %}</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -76,7 +77,7 @@
                                     <div class="form-group col-sm-6 col-md-3">
                                         {% if form.tedad_click.label_tag %}
                                             <label for="mablagh_ha_click"><label for="tedad_click">مبلغ هر
-                                                کلیک:</label></label>
+                                                {% trans "Click" %}:</label></label>
                                         {% endif %}
                                         <input class="form-control" id="mablagh_ha_click" readonly="readonly" min="0"/>
                                     </div>
@@ -115,7 +116,7 @@
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">ثبت تبلیغ</button>
+                                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
                             </div>
                         </div>
                     </form>

@@ -3,12 +3,12 @@ from django.db.models import ProtectedError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 from django.views import View
+from django.views.generic import CreateView, UpdateView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
-from django.views.generic import CreateView, UpdateView, ListView
-
 from system.forms import PelanCreateForm
 from system.models import Pelan
 from system.templatetags.app_filters import date_jalali
@@ -19,11 +19,10 @@ class PelanCreateView(LoginRequiredMixin, CreateView):
     form_class = PelanCreateForm
 
     def form_valid(self, form):
-        messages.success(self.request, 'پلن مورد نظر با موفقیت ثبت شد.')
+        messages.success(self.request, _("Ad Plan created successfully"))
         return super(PelanCreateView, self).form_valid(form)
 
     def form_invalid(self, form):
-        print(self.request.POST)
         return super(PelanCreateView, self).form_invalid(form)
 
     def get_success_url(self):
@@ -36,8 +35,7 @@ class PelanUpdateView(LoginRequiredMixin, UpdateView):
     form_class = PelanCreateForm
 
     def form_valid(self, form):
-        pelan = form.save(commit=False)
-        messages.success(self.request, 'پلن مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Ad Plan Updated successfully"))
         return super(PelanUpdateView, self).form_valid(form)
 
     def get_success_url(self):
@@ -50,9 +48,9 @@ class PelanDeleteView(LoginRequiredMixin, View):
             pelan = get_object_or_404(Pelan, pk=pk)
             pelan.delete()
         except ProtectedError:
-            messages.error(self.request, 'از این نوع پلن قبلا استفاده شده است و قابل حذف نمیباشد.')
+            messages.error(self.request, _("Can't delete this plan cause this plan is used by some of you ads"))
             return redirect('ListPelan')
-        messages.success(self.request, 'پلن موردنظر با موفقیت حذف شد')
+        messages.success(self.request, _("Plan deleted successfully"))
         return redirect('ListPelan')
 
 
@@ -63,7 +61,6 @@ class PelanListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        # context = super().get_context_data(object_list=Pelan.objects.order_by('-onvan'), **kwargs)
         return context
 
 

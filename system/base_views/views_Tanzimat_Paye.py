@@ -1,26 +1,25 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.views.generic import UpdateView, View, FormView, CreateView
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic import UpdateView, View, CreateView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
+from system.forms import ActiveCodeMoarefForm, SodeModirForm
 from system.forms import (
-    ActiveCodeMoarefForm, SodeModirForm,
     Languge_siteForm, Count_level_networkForm, Count_kharid_hadaghalForm, Time_kharid_termForm,
     Taien_meghdar_matlabForm, Show_amarforuserForm, Taied_khodkar_tablighForm, Vahed_poll_siteForm,
     Count_visit_tabligh_Form, Taien_hadaghal_etbarForm, Amar_jaali_Form, MaxNetworkCountForm, LeastBalanceRequiredForm,
     ClickIsChangeAbleForm
 )
-
+from system.models import TanzimatPaye, ACTIV_MOAREF, LANGUGE_SITE
 from system.models import (
-    TanzimatPaye, ACTIV_MOAREF, VAHED_POLL_SITE, COUNT_LEVEL_NETWORK, SODE_MODIR,
+    VAHED_POLL_SITE, COUNT_LEVEL_NETWORK, SODE_MODIR,
     SHOW_AMAR_FOR_USER, SATH, LEAST_BALANCE_REQUIRED, COUNT_KHARI_HADAGHAL,
     CLICK_IS_CHANGEABLE
 )
-from system.forms import ActiveCodeMoarefForm, SodeModirForm
-from system.models import TanzimatPaye, ACTIV_MOAREF, TEDAD_SATH_SHABAKE
 
 
 class ActiveCodeMoarefView(LoginRequiredMixin, UpdateView):
@@ -36,11 +35,30 @@ class ActiveCodeMoarefView(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(ActiveCodeMoarefView, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('ActiveCodeMoaref')
+
+
+class ChangeTitlesView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'system/TanzimatPaye/ChangeTitles.html')
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            messages.error(request, "فقط کاربر ادمین اجازه دارد")
+            return redirect(reverse('dashboard'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request):
+        for key, data in request.POST.items():
+            TanzimatPaye.objects.update_or_create(onvan=key, defaults={
+                "onvan": key,
+                'value': data,
+            })
+        return redirect(reverse('WebsiteTitle'))
 
 
 class ClickIsChangeAbleView(LoginRequiredMixin, UpdateView):
@@ -56,7 +74,7 @@ class ClickIsChangeAbleView(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(ClickIsChangeAbleView, self).form_valid(form)
 
     def get_success_url(self):
@@ -76,7 +94,7 @@ class LeastBalanceRequiredView(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -96,7 +114,7 @@ class SodeModirView(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(SodeModirView, self).form_valid(form)
 
     def get_success_url(self):
@@ -109,14 +127,14 @@ class Languge_siteView(LoginRequiredMixin, UpdateView):
     form_class = Languge_siteForm
 
     def get_object(self, queryset=None):
-        obj, cre = TanzimatPaye.objects.get_or_create(onvan='languge_site', defaults={
-            "onvan": 'languge_site',
+        obj, cre = TanzimatPaye.objects.get_or_create(onvan=LANGUGE_SITE, defaults={
+            "onvan": LANGUGE_SITE,
             'value': 0,
         })
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(Languge_siteView, self).form_valid(form)
 
     def get_success_url(self):
@@ -131,11 +149,11 @@ class Count_Level_networkView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         if int(form.instance.onvan) > int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, 0)):
-            messages.error(self.request, 'سطحی که شما مشخص کرده اید بیشتر از حد اکثر سطح است')
+            messages.error(self.request, _("Level you exceeds max level"))
             return super(Count_Level_networkView, self).form_invalid(form)
 
         form.instance.onvan = Count_Level_networkView.starts_with + str(int(form.instance.onvan))
-        messages.success(self.request, 'سطح موردنظر ثبت شد')
+        messages.success(self.request, _("Level is created"))
         t = TanzimatPaye.objects.filter(onvan=form.instance.onvan).first()  # type:TanzimatPaye
         if t:
             t.value = form.instance.value
@@ -191,7 +209,7 @@ class Count_Level_networkUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         count_level_network = form.save(commit=False)
 
-        messages.success(self.request, 'سطح مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(Count_Level_networkUpdateView, self).form_valid(form)
 
     def get_success_url(self):
@@ -211,7 +229,7 @@ class Count_Level_networkUpdateView(LoginRequiredMixin, UpdateView):
 #         return obj
 #
 #     def form_valid(self, form):
-#         messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+#         messages.success(self.request, _("Settings were updated successfully"))
 #         return super(Count_Level_networkView, self).form_valid(form)
 #
 #     def get_success_url(self):
@@ -230,7 +248,7 @@ class Count_kharid_hadaghalView(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(Count_kharid_hadaghalView, self).form_valid(form)
 
     def get_success_url(self):
@@ -250,7 +268,7 @@ class Time_kharid_termView(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(Time_kharid_termView, self).form_valid(form)
 
     def get_success_url(self):
@@ -270,7 +288,7 @@ class Taien_meghdar_matlabView(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(Taien_meghdar_matlabView, self).form_valid(form)
 
     def get_success_url(self):
@@ -290,7 +308,7 @@ class Show_amar_foruserView(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(Show_amar_foruserView, self).form_valid(form)
 
     def get_success_url(self):
@@ -310,7 +328,7 @@ class Taeid_khodkar_tablighView(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(Taeid_khodkar_tablighView, self).form_valid(form)
 
     def get_success_url(self):
@@ -330,7 +348,7 @@ class Vahed_poll_siteView(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(Vahed_poll_siteView, self).form_valid(form)
 
     def get_success_url(self):
@@ -350,7 +368,7 @@ class MaxCountNetworkLevel(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(MaxCountNetworkLevel, self).form_valid(form)
 
     def get_success_url(self):
@@ -370,7 +388,7 @@ class Count_visit_tablighView(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(Count_visit_tablighView, self).form_valid(form)
 
     def get_success_url(self):
@@ -390,7 +408,7 @@ class Taein_hadaghal_etbarView(LoginRequiredMixin, UpdateView):
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
         return super(Taein_hadaghal_etbarView, self).form_valid(form)
 
     def get_success_url(self):
@@ -461,7 +479,7 @@ class Amar_jaali_View(LoginRequiredMixin, View):
             'meghdar_daramad_pardahkti': meghdar_daramad_pardahkti.value,
             'count_tabligh_thabti': count_tabligh_thabti.value
         })
-        messages.success(self.request, 'تنظیمات مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Settings were updated successfully"))
 
         return render(request, 'system/TanzimatPaye/Amar_jaali.html', {'form': form})
 

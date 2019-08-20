@@ -1,5 +1,4 @@
 import simplejson as json
-from allauth.socialaccount.views import ConnectionsView
 from django.contrib import auth, messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -10,7 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from django.views import View
-from django.views.generic import CreateView, UpdateView, ListView, TemplateView
+from django.views.generic import CreateView, UpdateView, TemplateView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
@@ -28,10 +27,10 @@ class UserCreateView(CreateView):
         accept = self.request.POST.get("accept", False)
         if not accept or accept == 'on':
             if not accept:
-                messages.error(self.request, 'لطفاْ قوانین را قبول کنید')
+                messages.error(self.request, _("Please accept the rules"))
                 return super(UserCreateView, self).form_invalid(form)
         else:
-            messages.error(self.request, 'مقدار وارد شده برای قوانین اشتباه است')
+            messages.error(self.request, _("Wrong input"))
             return super(UserCreateView, self).form_invalid(form)
 
         form.instance.vazeyat = 1
@@ -42,7 +41,7 @@ class UserCreateView(CreateView):
             max_level = int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, False))
             if user is not None:
                 if int(user.sath) + 1 > max_level:
-                    messages.error(self.request, 'تعداد سطوح بیش از مقدار تعیین شده است')
+                    messages.error(self.request, _("Level you exceeds max level"))
                     return super(UserCreateView, self).form_invalid(form)
                 form.instance.sath = user.sath + 1
                 if user.list_parent is not None:
@@ -61,7 +60,7 @@ class UserCreateView(CreateView):
                     new_user.list_parent = json_parent
                     new_user.save()
             else:
-                messages.error(self.request, 'کد معرف وارد شده نا معتبر است')
+                messages.error(self.request, _("Referral Code is wrong"))
                 return super(UserCreateView, self).form_invalid(form)
         else:
             if form.instance.code_moaref is not None:
@@ -70,7 +69,7 @@ class UserCreateView(CreateView):
                 max_level = int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, False))
                 if user is not None:
                     if int(user.sath) + 1 > max_level:
-                        messages.error(self.request, 'تعداد سطوح بیش از مقدار تعیین شده است')
+                        messages.error(self.request, _("Level you exceeds max level"))
                         return super(UserCreateView, self).form_invalid(form)
                     form.instance.sath = user.sath + 1
                     if user.list_parent is not None:
@@ -89,7 +88,7 @@ class UserCreateView(CreateView):
                         new_user.list_parent = json_parent
                         new_user.save()
                 else:
-                    messages.error(self.request, 'کد معرف وارد شده نا معتبر است')
+                    messages.error(self.request, _("Referral Code is wrong"))
                     return super(UserCreateView, self).form_invalid(form)
             else:
                 form.instance.sath = 1
@@ -126,9 +125,10 @@ def login_user(request):
                         return redirect('dashboard')
                 else:
                     return render(request, "system/user/login.html",
-                                  {'error': 'دسترسی شما به سامانه غیر فعال شده است !'})
+                                  {'error': _("You are not allowed to access")})
             else:
-                return render(request, "system/user/login.html", {'error': 'نام کاربری یا پسورد شما اشتباه است !'})
+                return render(request, "system/user/login.html",
+                              {'error': _("Username or Password you entered is wrong")})
         else:
             return render(request, "system/user/login.html")
 
@@ -153,20 +153,20 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UserUpdateForm
 
     def form_valid(self, form):
-        messages.success(self.request, 'تغییرات شما یا موفقیت ثبت شد')
+        messages.success(self.request, _("Your changes are committed successfully"))
         return super(UserUpdateView, self).form_valid(form)
 
     def get(self, request, *args, **kwargs):
         if 'pk' not in kwargs:
             kwargs['pk'] = request.user.id
         if not request.user.is_superuser and request.user.id != kwargs['pk']:
-            messages.error(self.request, 'شما اجازه دسترسی ندارید')
+            messages.error(self.request, _("Your not allowed here"))
             return redirect(reverse('UpdateUser', kwargs={'pk': request.user.id}))
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_superuser and request.user.id != kwargs['pk']:
-            messages.error(self.request, 'شما اجازه دسترسی ندارید')
+            messages.error(self.request, _("Your not allowed here"))
             return redirect(reverse('UpdateUser', kwargs={'pk': request.user.id}))
         return super().post(request, *args, **kwargs)
 
@@ -211,16 +211,16 @@ class UserDeleteView(LoginRequiredMixin, View):
         try:
             user = get_object_or_404(User, pk=pk)
             if user.tabligh_set.exists():
-                messages.error(request, 'کاربر دارای تبلیغ می باشد')
+                messages.error(request, _("This user has Ads"))
                 return redirect('ListUser')
             elif User.objects.filter(code_moaref=user).exists():
-                messages.error(request, 'کاربر دارای زیر مجموعه می باشد')
+                messages.error(request, _("This user has referrals"))
                 return redirect('ListUser')
             user.delete()
         except ProtectedError:
-            messages.error(self.request, 'از این نوع کاربر قبلا استفاده شده است و قابل حذف نمی باشد.')
+            messages.error(self.request, _("This is not possible"))
             return redirect('ListUser')
-        messages.success(self.request, 'کاربر موردنظر با موفقیت حذف شد')
+        messages.success(self.request, _("User deleted successfully"))
         return redirect('ListUser')
 
 
@@ -274,23 +274,23 @@ class ProfileUserView(LoginRequiredMixin, View):
 class ToggleAdminStateView(LoginRequiredMixin, View):
     def get(self, request, id):
         if not request.user.is_superuser:
-            messages.error(request, "شما اجازه دسترسی ندارید")
+            messages.error(request, _("You are not allowed to access"))
             return redirect("dashboard")
         if request.user.id != MAIN_ADMIN_ID:
-            messages.error(request, "فقط ادمین اصلی میتواند این کار را انتجام دهد")
+            messages.error(request, _("You are not allowed to access"))
             return redirect("ListUser")
         elif request.user.id == MAIN_ADMIN_ID:
-            messages.error(request, "این کار امکان پذیر نیست")
+            messages.error(request, _("This is not possible"))
             return redirect("ListUser")
         try:
             user = User.objects.get(id=id)
             user.is_superuser = not user.is_superuser
             user.save()
             if user.is_superuser:
-                messages.success(request, "کاربر با موفقیت به کاربر ادمین تغییر کرد")
+                messages.success(request, _("The user is now an admin"))
             else:
-                messages.success(request, "کاربر با موفقیت به کاربر ساده تغییر کرد")
+                messages.success(request, "")
             return redirect("ListUser")
         except:
-            messages.error(request, "کاربر مورد نظر شما موجود نمیباشد")
+            messages.error(request, _("User does not exists"))
             return redirect("ListUser")

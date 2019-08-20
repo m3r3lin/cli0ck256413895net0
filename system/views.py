@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from django.db.models import Q, Sum, Count
-from django.db.models.functions import TruncDay, TruncDate
+from django.db.models.functions import TruncDate
 from django.shortcuts import render
 from django.utils import timezone
 from django.views import View
@@ -15,7 +15,6 @@ from system.models import (
 
 class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
-        k = request.user.get_kif_daramad()
         user = request.user
         this_month_clicks = dict(tarikh__month=datetime.now().month)
         this_month_publishes = dict(tarikh__month=datetime.now().month)
@@ -53,8 +52,6 @@ class Dashboard(LoginRequiredMixin, View):
                 all_User += int(item.value)
             if item.onvan == "amar_jaali.count_user_new_today":
                 all_User_Today += int(item.value)
-            # if item.onvan == "amar_jaali.meghdar_daramad_pardahkti":
-            #     count_user_online+=int(item.value)
             if item.onvan == "amar_jaali.count_tabligh_thabti":
                 all_tabligh += int(item.value)
 
@@ -74,13 +71,16 @@ class Dashboard(LoginRequiredMixin, View):
         if not user.is_superuser:
             this_month_clicks['montasher_konande'] = user
             this_month_publishes['montasher_konande'] = user
+
+        income_pocket = request.user.get_kif_daramad()
+
         queries = {
             "this_month_clicks": Click.objects.filter(
                 **this_month_clicks).count(),
             "this_month_publishes": TablighatMontasherKonande.objects.filter(
                 **this_month_publishes).count(),
-            "all_direct_recieve": k.current_recieved_direct,
-            "all_indirect_recieve": k.current_recieved_indirect,
+            "all_direct_recieve": income_pocket.current_recieved_direct,
+            "all_indirect_recieve": income_pocket.current_recieved_indirect,
             "count_online_user": count_user_online,
             "count_online_user_by_country": by_country,
             "all_user": all_User,
@@ -90,7 +90,7 @@ class Dashboard(LoginRequiredMixin, View):
             "todaynow": datetime.now(),
             "active_show_forosh": active_show_forosh,
             "past_five_days_click": past_five_days_click,
-            "all_recive": k.current_recieved_direct + k.current_recieved_indirect,
+            "all_recive": income_pocket.current_recieved_direct + income_pocket.current_recieved_indirect,
             "today_direct": direct_today['mablagh_har_click__sum'],
             "today_indirect": indirect_today['mablagh__sum'],
             "today_daramad": direct_today['mablagh_har_click__sum'] +

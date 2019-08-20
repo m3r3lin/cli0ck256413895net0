@@ -1,0 +1,90 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% load app_filters %}
+{% block page_title %}
+    تغییر title ها
+{% endblock %}
+{% block dashboard %}
+    <li>تغییر title ها</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">جهت بروزرسانی تغییر title ها، فرم زیر را پر کنید.</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="box-body">
+                            {% include "errors.html" %}
+                            {% include "messages.html" %}
+                            <div class="row">
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label for="value">موضوع وبسایت (فارسی)</label>
+                                    <input type="text" class="form-control" name="website_title_fa"
+                                           value="{% setting 'website_title_fa' 'no-title' %}"/>
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label for="value">موضوع وبسایت (انگلیسی)</label>
+                                    <input type="text" class="form-control" name="website_title_en"
+                                           value="{% setting 'website_title_en' 'no-title' %}"/>
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label for="value">توضیحات وبسایت (فارسی)</label>
+                                    <input type="text" class="form-control" name="website_description_fa"
+                                           value="{% setting 'website_description_fa' 'no-description' %}"/>
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label for="value">توضیحات وبسایت (انگلیسی)</label>
+                                    <input type="text" class="form-control" name="website_description_en"
+                                           value="{% setting 'website_description_en' 'no-description' %}"/>
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label for="value">موضوع پنل (فارسی)</label>
+                                    <input type="text" class="form-control" name="panel_title_fa"
+                                           value="{% setting 'panel_title_fa' 'no-description' %}"/>
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label for="value">موضوع پنل (انگلیسی)</label>
+                                    <input type="text" class="form-control" name="panel_title_en"
+                                           value="{% setting 'panel_title_en' 'no-description' %}"/>
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label for="value">موضوع کوچک پنل (فارسی)</label>
+                                    <input type="text" class="form-control" name="panel_title_mini_fa"
+                                           value="{% setting 'panel_title_mini_fa' 'n-title' %}"/>
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label for="value">موضوع کوچک پنل (انگلیسی)</label>
+                                    <input type="text" class="form-control" name="panel_title_mini_en"
+                                           value="{% setting 'panel_title_mini_en' 'n-title' %}"/>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">ثبت تنظیمات</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}

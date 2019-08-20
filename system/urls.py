@@ -25,7 +25,8 @@ from system.base_views.views_Tabligh import (
 )
 from system.base_views.views_Tanzimat_Paye import (
     ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel,
-    LeastBalanceRequiredView, ClickIsChangeAbleView
+    LeastBalanceRequiredView, ClickIsChangeAbleView,
+    ChangeTitlesView
 )
 from system.base_views.views_Tanzimat_Paye import (
     Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView,
@@ -86,6 +87,7 @@ urlpatterns = [
     path('TedadSathShabake/', Count_Level_networkView.as_view(), name='TedadSathShabake'),
     path('SodeModir/', SodeModirView.as_view(), name='SodeModir'),
     path('Languge_site/', Languge_siteView.as_view(), name='Languge_site'),
+    path('WebsiteTitle/', ChangeTitlesView.as_view(), name='WebsiteTitle'),
     # datatable count level network
     path('Count_Level_networkDataTable/', Count_Level_networkDataTableView.as_view(),
          name='Count_Level_networkDataTable'),

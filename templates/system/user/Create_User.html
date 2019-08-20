@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 {% load static %}
+{% load i18n %}
 {% load app_filters %}
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>ثبت نام | کنترل پنل</title>
+    <title>{% trans "Register" %}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -38,12 +39,12 @@
 <!-- /.register-box -->
 <div class="register-box">
     <div class="register-logo">
-        <a href="#"><b>ثبت نام در سامانه</b></a>
+        <a href="#"><b>{% trans "Register" %}</b></a>
     </div>
     <div class="register-box-body">
         {% include "errors.html" %}
         {% include "messages.html" %}
-        <p class="login-box-msg">ثبت نام کاربر جدید</p>
+        <p class="login-box-msg">{% trans "Register new user" %}</p>
         {% if label %}
             <p class=" alert alert-danger">{{ label }}</p>
         {% endif %}
@@ -88,13 +89,13 @@
                 <div class="col-xs-12">
                     <div class="checkbox icheck">
                         <label>
-                            <input type="checkbox" name="accept"> من <a href="#">قوانین و شرایط</a> را قبول میکنم.
-                        </label>
+                            <input type="checkbox" name="accept">
+                            {% trans "I Accept" %} <a href="#"> {% trans "rules" %}</a></label>
                     </div>
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-12">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">ثبت نام</button>
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">{% trans "Register" %}</button>
                 </div>
                 <!-- /.col -->
             </div>
@@ -106,7 +107,8 @@
         {#            <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> ثبت نام با گوگل</a>#}
         {#        </div>#}
 
-        <a href="{% url 'login' %}" class="text-center">من قبلا ثبت نام کرده ام</a>
+        <a href="{% url 'login' %}" class="text-center">{% trans "I have already registered" %}</a>
+
     </div>
     <!-- /.form-box -->
 </div>

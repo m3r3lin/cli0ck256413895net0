@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 {% load static %}
+{% load i18n %}
 {% load app_filters %}
+{% get_current_language as LANGUAGE_CODE %}
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>داشبرد | کنترل پنل مدیریت</title>
+    {% if LANGUAGE_CODE %}
+        <title>{% trans "Dashboard" %} | {% setting 'website_title_fa' 'no-title' %}</title>
+    {% else %}
+        <title>{% trans "Dashboard" %} | {% setting 'website_title_en' 'no-title' %}</title>
+    {% endif %}
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
           name="viewport">
@@ -42,7 +48,7 @@
     <!-- bootstrap wysihtml5 - text editor -->
     <link rel="stylesheet"
           href="{% static 'plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}">
-
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -129,9 +135,17 @@
             <!-- Logo -->
             <a href="/" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini">پنل</span>
+                {% if LANGUAGE_CODE == 'fa' %}
+                    <span class="logo-mini">{% setting 'panel_title_mini_fa' 'n-title' %}</span>
+                {% else %}
+                    <span class="logo-mini">{% setting 'panel_title_mini_en' 'n-title' %}</span>
+                {% endif %}
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>کنترل پنل مدیریت</b></span>
+                {% if LANGUAGE_CODE == 'fa' %}
+                    <span class="logo-lg"><b>{% setting 'panel_title_fa' 'no-title' %}</b></span>
+                {% else %}
+                    <span class="logo-lg"><b>{% setting 'panel_title_en' 'no-title' %}</b></span>
+                {% endif %}
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
@@ -140,10 +154,24 @@
                    role="button">
                     <span class="sr-only">Toggle navigation</span>
                 </a>
-
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
                         <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown messages-menu">
+                            <a href="#" class="dropdown-toggle"
+                               data-toggle="dropdown" aria-expanded="false">
+                                {% trans "Change Language" %}
+                                <span class="label label-success">{{ count_message_not_read }}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header" id="persian-lang">
+                                    {% trans "Persian" %}
+                                </li>
+                                <li class="header" id="english-lang">
+                                    {% trans "English" %}
+                                </li>
+                            </ul>
+                        </li>
                         <li class="dropdown messages-menu">
                             <a href="#" class="dropdown-toggle"
                                data-toggle="dropdown" aria-expanded="false">
@@ -152,7 +180,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="header">{{ count_message_not_read }}
-                                    پیام خوانده نشده
+                                    {% trans "Unread Messages" %}
                                 </li>
 
                                 <li>
@@ -187,9 +215,11 @@
                                         {% endfor %}
                                     </ul>
                                 </li>
-                                <li class="footer"><a
-                                        href="{% url 'MessageList' %}">نمایش
-                                    تمام پیام ها</a></li>
+                                <li class="footer">
+                                    <a href="{% url 'MessageList' %}">
+                                        {% trans "Show all messages" %}
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         {% if not request.user.is_superuser %}
@@ -198,7 +228,7 @@
                                 <a href="#" class="header-wallet btn-warning"
                                    id="code_moarefi"
                                    data-data="code_{{ request.user.id }}">
-                                    <span>کد معرفی شما : code_{{ request.user.id }}</span>
+                                    <span>{% trans "Your Referral Code" %} : code_{{ request.user.id }}</span>
                                 </a>
                             </li>
                         {% endif %}
@@ -206,7 +236,7 @@
                             <li class="m-nav__item"
                                 style="vertical-align: baseline;height: auto;">
                                 <a href="#" class="header-wallet btn-danger">
-                                    <span>اعتبار : {{ request.user.kife_pool|floatformat:0 }}</span>
+                                    <span>{% trans "Balance" %} : {{ request.user.kife_pool|floatformat:0 }}</span>
                                 </a>
                             </li>
                         {% endif %}
@@ -236,7 +266,7 @@
                                     {% endif %}
                                     <p>
                                         {{ request.user.get_full_name }}
-                                        <small>کد معرفی شما :
+                                        <small>{% trans "Your Referral Code" %}:
                                             code_{{ request.user.id }}</small>
                                     </p>
                                 </li>
@@ -244,11 +274,14 @@
                                 <li class="user-footer">
                                     <div class="pull-right">
                                         <a href="{% url 'ProfileUser' %}"
-                                           class="btn btn-default btn-flat">پروفایل</a>
+                                           class="btn btn-default btn-flat">
+                                            {% trans "Profile" %}
+                                        </a>
                                     </div>
                                     <div class="pull-left">
-                                        <a href="{% url 'logout' %}"
-                                           class="btn btn-default btn-flat">خروج</a>
+                                        <a href="{% url 'logout' %}" class="btn btn-default btn-flat">
+                                            {% trans "Logout" %}
+                                        </a>
                                     </div>
                                 </li>
                             </ul>
@@ -275,14 +308,14 @@
                     <div class="pull-right info">
                         <p>{{ request.user.get_full_name }}</p>
                         <a href="#"><i class="fa fa-circle text-success"></i>
-                            آنلاین</a>
+                            {% trans "Online" %}</a>
                     </div>
                 </div>
                 <!-- search form -->
                 <form action="#" method="get" class="sidebar-form">
                     <div class="input-group">
                         <input type="text" name="q" class="form-control"
-                               placeholder="جستجو">
+                               placeholder="{% trans "Search" %}">
                         <span class="input-group-btn">
                 <button type="submit" name="search" id="search-btn"
                         class="btn btn-flat"><i class="fa fa-search"></i>
@@ -294,19 +327,19 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
 
                 <ul class="sidebar-menu" data-widget="tree">
-                    <li class="header">منو</li>
+                    <li class="header">{% trans "Menu" %}</li>
 
                     <li><a href="{% url 'dashboard' %}"><i
-                            class="fa fa-tachometer"></i> <span>داشبورد</span></a>
+                            class="fa fa-tachometer"></i> <span>{% trans "Dashboard" %}</span></a>
                     </li>
 
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-users"></i>
                             {% if request.user.is_superuser %}
-                                <span>کاربران</span>
+                                <span>{% trans "Users" %}</span>
                             {% else %}
-                                <span>مشخصات شما</span>
+                                <span>{% trans "Your Account" %}</span>
                             {% endif %}
                             <span class="pull-left-container">
                         <i class="fa fa-angle-right pull-left"></i>
@@ -316,21 +349,22 @@
                         <ul class="treeview-menu">
                             {% if request.user.is_superuser %}
                                 <li><a href="{% url  'ListUser' %}"><i
-                                        class="fa fa-list"></i>لیست کاربران</a>
+                                        class="fa fa-list"></i>{% trans "Users List" %}</a>
                                 </li>
                                 <li>
                                     <a href="{% url 'socialaccount_connections' %}"><i
                                             class="fa fa-link"></i>
-                                        <span>اتصال به حساب های کاربری</span></a>
+                                        <span>{% trans "Connect to social accounts" %}</span></a>
                                 </li>
                             {% endif %}
                             <li>
                                 <a href="{% url  'UpdateUser' pk=request.user.id %}"><i
-                                        class="fa fa-pencil-square-o"></i>ویرایش
-                                    اطلاعات کاربری</a></li>
+                                        class="fa fa-pencil-square-o"></i>
+                                    {% trans "Change User Information" %}
+                                </a></li>
                             <li><a href="{% url 'ChangeUserPassword' %}"><i
                                     class="fa fa-lock"></i>
-                                <span>تغییر رمز</span></a></li>
+                                <span>{% trans "Edit Password" %}</span></a></li>
                         </ul>
                     </li>
 
@@ -338,7 +372,7 @@
                         <li class="treeview">
                             <a href="#">
                                 <i class="fa fa-paper-plane"></i>
-                                <span>پلن</span>
+                                <span>{% trans "Ad Plan" %}</span>
                                 <span class="pull-left-container">
                             <i class="fa fa-angle-right pull-left"></i>
                         </span>
@@ -346,10 +380,10 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li><a href="{% url  'CreatePelan' %}"><i
-                                        class="fa fa-plus"></i>ایجاد پلن</a>
+                                        class="fa fa-plus"></i>{% trans "Create Ad Plan" %}</a>
                                 </li>
                                 <li><a href="{% url  'ListPelan' %}"><i
-                                        class="fa fa-list"></i>لیست پلن ها</a>
+                                        class="fa fa-list"></i>{% trans "List Ad Plan" %}</a>
                                 </li>
                             </ul>
                         </li>
@@ -358,7 +392,7 @@
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-bullhorn"></i>
-                            <span>تبلیغ</span>
+                            <span>{% trans "Ad" %}</span>
                             <span class="pull-left-container">
                             <i class="fa fa-angle-right pull-left"></i>
                         </span>
@@ -367,24 +401,29 @@
                         <ul class="treeview-menu">
                             {% if not request.user.is_superuser %}
                                 <li><a href="{% url  'CreateTabligh' %}"><i
-                                        class="fa fa-plus"></i>ایجاد تبلیغ</a>
+                                        class="fa fa-plus"></i>{% trans "Create Ad" %}</a>
                                 </li>
                                 <li><a href="{% url  'ShowTablighs' %}"><i
-                                        class="fa fa-buysellads"></i>تبلیغات
-                                    قابل انتشار</a></li>
+                                        class="fa fa-buysellads"></i>
+                                    {% trans "Publishable Ads" %}
+                                </a></li>
                             {% endif %}
                             {% if request.user.is_superuser %}
                                 <li><a href="{% url  'ListTabligh' %}"><i
-                                        class="fa fa-font"></i>همه تبلیغات</a>
+                                        class="fa fa-font"></i>
+                                    {% trans "List Ads" %}
+                                </a>
                                 </li>
                             {% else %}
                                 <li><a href="{% url  'ListTabligh' %}"><i
-                                        class="fa fa-amazon"></i>تبلیغات
-                                    شما</a></li>
+                                        class="fa fa-amazon"></i>
+                                    {% trans "Your Ads" %}
+                                </a></li>
                             {% endif %}
                             <li><a href="{% url  'Montashshodeha' %}"><i
-                                    class="fa fa-list"></i>لیست تبلیغات قابل
-                                انتشار</a></li>
+                                    class="fa fa-list"></i>
+                                لیست تبلیغات قابل انتشار
+                            </a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -514,8 +553,16 @@
                                         برای کاربران </a></li>
                                 <li>
                                     <a href="{% url 'Taeid_khodkar_tabligh' %}"><i
-                                            class="fa fa-font"></i>تایید خودکار
-                                        تبلیغ </a></li>
+                                            class="fa fa-font"></i>
+                                        تایید خودکار تبلیغ
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'WebsiteTitle' %}"><i
+                                            class="fa fa-font"></i>
+                                        تغییر موضوعات
+                                    </a>
+                                </li>
                                 <li><a href="{% url 'Vahed_poll_site' %}"><i
                                         class="fa fa-btc"></i>واحد پول سایت
                                 </a>
@@ -725,11 +772,29 @@
         });
     }
 
+    function addParameterToUrl(url, key, value) {
+        if (url.search(/\?/) > -1)
+            url += "&" + key + "=" + value;
+        else
+            url += "?" + key + "=" + value;
+        return url;
+    }
+
+    function changelanguage() {
+        $("#persian-lang").click(function () {
+            window.location.href = addParameterToUrl(window.location.href, 'lang', 'fa')
+        });
+        $("#english-lang").click(function () {
+            window.location.href = addParameterToUrl(window.location.href, 'lang', 'en')
+        });
+    }
+
     $(document).ready(function () {
         $('#code_moarefi').click(function (e) {
             e.preventDefault();
             copyTextToClipboard(this.getAttribute('data-data'));
         });
+        changelanguage();
     });
 </script>
 {% block javascripts %}

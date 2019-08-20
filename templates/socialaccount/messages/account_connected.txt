@@ -1,2 +1,0 @@
-{% load i18n %}
-{% blocktrans %}اکانت شما باموفقیت متصل شد{% endblocktrans %}

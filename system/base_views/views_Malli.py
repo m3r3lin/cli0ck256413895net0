@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
@@ -34,7 +35,7 @@ class IncreaseBalanceView(LoginRequiredMixin, FormView):
 
     def get(self, request, *args, **kwargs):
         if request.GET.get('balance_increased'):
-            messages.success(request, 'اعتبار شما افزایش پیدا کرد')
+            messages.success(request, _("Your balance increased"))
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -42,7 +43,7 @@ class IncreaseBalanceView(LoginRequiredMixin, FormView):
         if user_id and (isinstance(user_id, int) or (isinstance(user_id, str) and user_id.isdigit())):
             user_id = int(user_id)
             if User.objects.filter(pk=user_id).exists():
-                messages.error(self.request, 'کاربر مورد نظر شما برای افزایش اعتبار موجود نمی باشد')
+                messages.error(self.request, _("User does not exist"))
                 return super().form_invalid(form)
 
         else:
@@ -93,21 +94,21 @@ class HistoryMaliDatatableView(LoginRequiredMixin, BaseDatatableView):
         search = self.request.GET.get('search[value]', None)
         if self.request.user.is_superuser:
             if search:
-                if search in "واریز":
+                if search in _("deposit"):
                     qs = qs.filter(Q(type=0) | Q(meghdar__icontains=search) | Q(user__username__icontains=search))
-                elif search in "برداشت":
+                elif search in _("withdraw"):
                     qs = qs.filter(Q(type=1) | Q(meghdar__icontains=search | Q(user__username__icontains=search)))
-                elif search in "انتقال از کیف درآمد به کیف پول":
+                elif search in _("transfer from income money to pocket money"):
                     qs = qs.filter(Q(type=2) | Q(meghdar__icontains=search) | Q(user__username__icontains=search))
                 else:
                     qs = qs.filter(Q(meghdar__icontains=search) | Q(user__username__icontains=search))
         else:
             if search:
-                if search in "واریز":
+                if search in _("deposit"):
                     qs = qs.filter(Q(type=0) | Q(meghdar__icontains=search))
-                elif search in "برداشت":
+                elif search in _("withdraw"):
                     qs = qs.filter(Q(type=1) | Q(meghdar__icontains=search))
-                elif search in "انتقال از کیف درآمد به کیف پول":
+                elif search in _("transfer from income money to pocket money"):
                     qs = qs.filter(Q(type=2) | Q(meghdar__icontains=search))
                 else:
                     qs = qs.filter(Q(meghdar__icontains=search))
@@ -121,7 +122,7 @@ class MoveDaramad2KifView(LoginRequiredMixin, FormView):
 
     def get(self, request, *args, **kwargs):
         if request.GET.get('balance_increased'):
-            messages.success(request, 'اعتبار شما افزایش پیدا کرد')
+            messages.success(request, _("Your balance increased"))
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -155,7 +156,7 @@ class MoveDaramad2KifView(LoginRequiredMixin, FormView):
 
             else:
                 if get_value > kif_daramad.current_recieved_direct:
-                    messages.error(self.request, 'مقدار وارد شده ار درآمد در دسترس شما بیشتر است.')
+                    messages.error(self.request, _("Selected mount exceeds the withdrawable mount"))
                     return super(MoveDaramad2KifView, self).form_invalid(form)
                 else:
                     kif_daramad.current_recieved_direct -= get_value
@@ -165,10 +166,10 @@ class MoveDaramad2KifView(LoginRequiredMixin, FormView):
             kif_pol.current_balance += int(get_value)
             kif_pol.save()
             History.objects.create(user=user, type='2', meghdar=int(form.cleaned_data['how_much']))
-            messages.success(self.request, 'مبلغ درخواستی شما با موفقیت به کیف پول منتقل شد.')
+            messages.success(self.request, _("Selected mount is moved to your pocket money"))
             return super(MoveDaramad2KifView, self).form_valid(form)
         else:
-            messages.error(self.request, 'مقدار وارد شده ار درآمد کسب شده بیشتر میباشد.')
+            messages.error(self.request, _("Selected mount exceeds the withdrawable mount"))
             return super(MoveDaramad2KifView, self).form_invalid(form)
 
     def form_invalid(self, form):

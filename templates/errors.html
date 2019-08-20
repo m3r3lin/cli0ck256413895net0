@@ -1,24 +1,24 @@
-{%block css%}
-<style>
-    ul.errorlist li {
-        list-style-type: none;
-        margin-bottom: 15px;
-    }
+{% block css %}
+    <style>
+        ul.errorlist li {
+            list-style-type: none;
+            margin-bottom: 15px;
+        }
 
-    ul.errorlist:last-of-type
-    li:last-child {
-        list-style-type: none;
-        margin-bottom: 0;
-    }
-</style>
-{%endblock%}
+        ul.errorlist:last-of-type
+        li:last-child {
+            list-style-type: none;
+            margin-bottom: 0;
+        }
+    </style>
+{% endblock %}
 {% if form.errors %}
-<h5 class="text-danger alert alert-danger alert-dismissible">
-    <button type="button" class="close pull-left" data-dismiss="alert" aria-hidden="true">×</button>
-    {% for field in form %}
-    {% if field.errors%}
-    {{field.errors}}
-    {% endif %}
-    {% endfor %}
-</h5>
+    <h5 class="text-danger alert alert-danger alert-dismissible">
+        <button type="button" class="close pull-left" data-dismiss="alert" aria-hidden="true">×</button>
+        {% for field in form %}
+            {% if field.errors %}
+                {{ field.errors }}
+            {% endif %}
+        {% endfor %}
+    </h5>
 {% endif %}

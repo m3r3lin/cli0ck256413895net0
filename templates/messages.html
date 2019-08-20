@@ -9,7 +9,8 @@
 {% endblock %}
 {% if messages %}
     {% for message in messages %}
-        <div class="alert {% if message.tags %} {{ message.tags }} {% else %} alert-danger {% endif %} alert-dismissible" role="alert">
+        <div class="alert {% if message.tags %} {{ message.tags }} {% else %} alert-danger {% endif %} alert-dismissible"
+             role="alert">
             <a href="#" class="close pull-left" data-dismiss="alert" aria-label="close">&times;</a>
             {{ message }}
         </div>

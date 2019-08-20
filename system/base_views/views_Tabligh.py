@@ -1,11 +1,11 @@
 import random
-import random
 import string
 
 from django.contrib import messages
 from django.db.models import ProtectedError, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView, TemplateView
 from django_datatables_view.base_datatable_view import BaseDatatableView
@@ -30,7 +30,7 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            messages.error(request, 'کاربر ادمین نمیتواند تبلیغ ایجاد کند')
+            messages.error(request, _("Admin can't create Ad"))
             return redirect(reverse('dashboard'))
         return super().dispatch(request, *args, **kwargs)
 
@@ -40,7 +40,7 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
 
         max_t = int(TanzimatPaye.get_settings(TAIEN_MEGHDAR_MATLAB, False))
         if t > max_t:
-            messages.error(self.request, 'طول تبلیغ بیش از حد مجاز است')
+            messages.error(self.request, _("Ad text is too long"))
             return super(TablighCreateView, self).form_invalid(form)
 
         if TanzimatPaye.get_settings(TAIED_KHODKAR_TABLIGH, False) == '1':
@@ -51,7 +51,7 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
         kife_pool = self.request.user.get_kif_kif_pool()
         pool = kife_pool.current_balance
         if pool < r:
-            messages.error(self.request, 'شما اعتبار کافی ندارید')
+            messages.error(self.request, _("Your balance is too low"))
             return super(TablighCreateView, self).form_invalid(form)
 
         if not TanzimatPaye.get_settings(CLICK_IS_CHANGEABLE, 0):
@@ -74,7 +74,7 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
         except Exception as e:
             # todo make sure balance is reduced
             print(e)
-            messages.error(self.request, 'مشکلی در ایجاد تبلیغ شما اتفاق افتاده است لطفاً دوباره تلاش کنید')
+            messages.error(self.request, _("While creating the Ad some problem occurred"))
             return super(TablighCreateView, self).form_invalid(form)
         tedad_sath_shabake = TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, 0)
         sode_modir = TanzimatPaye.get_settings(SODE_MODIR, 0)
@@ -121,7 +121,7 @@ class TablighCreateView(LoginRequiredMixin, CreateView):
                 })
                 sum += settings_sood
 
-        messages.success(self.request, 'تبلیغ مورد نظر با موفقیت ثبت شد.')
+        messages.success(self.request, _("Your Ad is created"))
         return form
 
     def form_invalid(self, form):
@@ -154,13 +154,13 @@ class TablighUpdateView(LoginRequiredMixin, UpdateView):
             t = form.instance.text.__len__()
             max_t = int(TanzimatPaye.get_settings(TAIEN_MEGHDAR_MATLAB, False))
             if t > max_t:
-                messages.error(self.request, 'طول تبلیغ بیش از حد مجاز است')
+                messages.error(self.request, _("Ad text is too long"))
                 return super(TablighCreateView, self).form_invalid(form)
 
             try:
                 obj = Tabligh.objects.get(pk=self.object.pk)
             except:
-                messages.error(self.request, 'مشکلی پیش آمده با مدیر تماس بگیرید')
+                messages.error(self.request, _("While updating the Ad some problem occurred"))
                 return self.form_invalid(form)
             form.instance.code_tabligh_gozaar_id = self.request.user.id
 
@@ -173,18 +173,17 @@ class TablighUpdateView(LoginRequiredMixin, UpdateView):
             form.instance.tedad_click = obj.tedad_click
             form.instance.tedad_click_shode = obj.tedad_click_shode
 
-        messages.success(self.request, 'تبلیغ مورد نظر ویرایش شد.')
+        messages.success(self.request, _("Your Ad is updated"))
         return super(TablighUpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        # return reverse('UpdateTabligh', kwargs={'pk': self.object.pk})
         return reverse('ListTabligh')
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         if not self.request.user.is_superuser:
             form.fields['code_tabligh_gozaar'].required = False
-            form.fields['vazeyat'].choices = ((0, 'غیرفعال'), (1, 'فعال'))
+            form.fields['vazeyat'].choices = ((0, _("activate")), (1, _("deactivate")))
             form.fields['code_pelan'].required = False
             form.fields['tedad_click'].required = False
             form.fields['tedad_click_shode'].required = False
@@ -197,20 +196,18 @@ class TablighDeleteView(LoginRequiredMixin, View):
         try:
             tabligh = get_object_or_404(Tabligh, pk=pk)
             if tabligh.tedad_click_shode > 0 or Click.objects.filter(tabligh=tabligh).exists():
-                messages.error(self.request,
-                               'تبلیغ مورد نظر شما نمی تواند حذف شود شما می توانید این تبلیغ را غیر فعال کنید')
+                messages.error(self.request, _("This Ad can't be deleted you can disable it"))
                 return redirect('ListTabligh')
             tabligh.code_tabligh_gozaar.add_to_kif_pool(tabligh.mablagh_tabligh)
-            sode_modir = TanzimatPaye.get_settings(SODE_MODIR)
             SoodeTabligh.objects.filter(sath=0, tabligh=tabligh)
             first_soode_tabligh = SoodeTabligh.objects.filter(sath=0, tabligh=tabligh).first()
             User.objects.filter(is_superuser=True).first().sub_from_kif_pool(
                 first_soode_tabligh.soode_mostaghim if first_soode_tabligh else 0)
             tabligh.delete()
         except ProtectedError:
-            messages.error(self.request, 'از این نوع تبلیغ قبلا استفاده شده است و قابل حذف نمیباشد.')
+            messages.error(self.request, _("This Ad can't be deleted you can disable it"))
             return redirect('ListTabligh')
-        messages.success(self.request, 'تبلیغ موردنظر با موفقیت حذف شد')
+        messages.success(self.request, _("Ad is deleted successfully and the balance is ba to your account"))
         return redirect('ListTabligh')
 
 
@@ -294,10 +291,10 @@ class PublishTablighView(LoginRequiredMixin, View):
             return self.least_balance
 
         if request.user.is_superuser:
-            messages.error(request, 'ادمین نمیتواند منتشر کننده باشد')
+            messages.error(request, _("Admin can't be a publisher"))
             return redirect(reverse('dashboard'))
         elif request.user.get_kif_kif_pool().current_balance <= get_least_balance():
-            messages.error(request, 'حداقل مبلغ مورد نیاز برای ثبت و نمایش تبلیغات {} است'.format(get_least_balance()))
+            messages.error(request, _("Least balance required to add or see Ads is {}").format(get_least_balance()))
             return redirect(reverse('dashboard'))
         else:
             tabligh = get_object_or_404(Tabligh, random_url=tabligh_token)
@@ -307,7 +304,7 @@ class PublishTablighView(LoginRequiredMixin, View):
                                                                                        'montasher_konande': request.user,
                                                                                        'tabligh': tabligh
                                                                                    })
-            messages.success(request, 'درخواست شما با موفقیت ثبت شد.')
+            messages.success(request, _("You have published one Ad"))
         if ref == 'dashboard':
             return redirect(reverse('dashboard'))
         else:
@@ -333,26 +330,26 @@ class ShowTablighView(TemplateView):
 class ActivateTablighView(LoginRequiredMixin, View):
     def get(self, request):
         if not request.user.is_superuser:
-            messages.error(request, 'شما اجاره دسترسی ندارید')
+            messages.error(request, _("Your not allowed here"))
             return redirect(reverse('ListTabligh'))
         try:
             tabligh = int(request.GET.get('tabligh'))
         except:
-            messages.error(request, 'ورودی اشتباه')
+            messages.error(request, _("Wrong input"))
             return redirect(reverse('ListTabligh'))
 
         if not tabligh:
-            messages.error(request, 'ورودی اشتباه')
+            messages.error(request, _("Wrong input"))
             return redirect(reverse('ListTabligh'))
         try:
             tabligh = Tabligh.objects.get(pk=tabligh)
         except:
-            messages.error(request, 'ورودی اشتباه')
+            messages.error(request, _("Wrong input"))
             return redirect(reverse('ListTabligh'))
         if tabligh.vazeyat == 1:
             tabligh.vazeyat = 0
         else:
             tabligh.vazeyat = 1
         tabligh.save()
-        messages.success(request, 'عملیات با موفقیت انجام شد')
+        messages.success(request, _("You have published one Ad"))
         return redirect(reverse('ListTabligh'))

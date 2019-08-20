@@ -1,79 +1,22 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 {% block css %}
 {% endblock %}
 {% block page_title %}
-    افزایش اعتبار
+    {% trans "404 Error Page" %}
 {% endblock %}
 {% block dashboard %}
-    <li>صفحه مورد نظر یافت نشد</li>
+    <li>{% trans "404 Error Page" %}</li>
 {% endblock %}
 {% block main_content %}
-
     <section class="content-header">
         <h1>
-            404 Error Page
+            {% trans "404 Error Page" %}
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="#">Examples</a></li>
-            <li class="active">404 error</li>
+            <li><a href="/"><i class="fa fa-dashboard"></i>خانه</a></li>
         </ol>
     </section>
-
-    <section class="content">
-        <div class="error-page">
-            <h2 class="headline text-yellow"> 404</h2>
-            <div class="error-content">
-                <h3><i class="fa fa-warning text-yellow"></i> Oops! Page not found.</h3>
-                <p>
-                    We could not find the page you were looking for.
-                    Meanwhile, you may <a href="../../index.html">return to dashboard</a> or try using the search form.
-                </p>
-                <form class="search-form">
-                    <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Search">
-                        <div class="input-group-btn">
-                            <button type="submit" name="submit" class="btn btn-warning btn-flat"><i class="fa fa-search"></i></button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- /.modal -->
 {% endblock %}
-{% block javascripts %}
-    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
-    <script src="{% static 'dist/my_js/datatable.js' %}"></script>
-    <!-- my fontawesom -->
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var calculate = function () {
-                if ($('#gheymat').length && $('#tedad_click').length) {
-                    var cost = $('#gheymat').val();
-                    if (isNaN(cost)) {
-                        $('#mablagh_ha_click').val(0);
-                        return;
-                    }
-                    var click_count = $('#tedad_click').val();
-                    if (isNaN(click_count)) {
-                        $('#mablagh_ha_click').val(0);
-                        return;
-                    }
-                    click_count = Number(click_count);
-                    cost = Number(cost)
-                    if (click_count <= 0 || cost <= 0) {
-                        $('#mablagh_ha_click').val(0);
-                        return;
-                    }
-                    $('#mablagh_ha_click').val(Math.trunc(cost / click_count));
-                }
-            };
-            $('#tedad_click,#mablagh_ha_click').keyup(calculate);
-        });
-    </script>
-    {#    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>#}
-{% endblock %}
+

@@ -1,3 +1,5 @@
+import os
+
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
@@ -7,6 +9,7 @@ from django.views.generic import UpdateView, View, CreateView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
+from Ads_Project.settings import BASE_DIR
 from system.forms import ActiveCodeMoarefForm, SodeModirForm
 from system.forms import (
     Languge_siteForm, Count_level_networkForm, Count_kharid_hadaghalForm, Time_kharid_termForm,
@@ -58,6 +61,14 @@ class ChangeTitlesView(LoginRequiredMixin, View):
                 "onvan": key,
                 'value': data,
             })
+        if 'website_icon' in request.FILES:
+            file = request.FILES.get('website_icon')
+            if file.content_type == 'image/png' and file.size < (250 * 1024):
+                with open(os.path.join(BASE_DIR, 'static', 'favicon.png'), 'wb+') as opened:
+                    opened.write(file.file.read())
+            else:
+                messages.error(request, _("File type or File size is not right"))
+
         return redirect(reverse('WebsiteTitle'))
 
 

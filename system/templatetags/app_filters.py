@@ -1,8 +1,10 @@
-from django import template
-from django.urls import reverse
+import os
 
+from django import template
+
+from Ads_Project import settings
 from Ads_Project.functions import gregorian_to_jalali
-from Ads_Project.settings import MAIN_ADMIN_ID
+from Ads_Project.settings import MAIN_ADMIN_ID, BASE_DIR
 from system.models import TanzimatPaye, TablighatMontasherKonande, User
 
 register = template.Library()
@@ -76,3 +78,8 @@ def is_main_admin(user):
 @register.filter(name='generate_publish_url')
 def generate_publish_url(value, user: User):
     return value + '--' + str(user.id)
+
+
+@register.simple_tag
+def favicon_exists():
+    return os.path.exists(os.path.join(settings.FAVICON_ADDRESS))

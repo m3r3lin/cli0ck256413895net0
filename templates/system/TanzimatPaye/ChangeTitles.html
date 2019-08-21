@@ -75,6 +75,15 @@
                                     <input type="text" class="form-control" name="panel_title_mini_en"
                                            value="{% setting 'panel_title_mini_en' 'n-title' %}"/>
                                 </div>
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label for="value">{% trans "Website Icon (PNG Only)" %}</label>
+                                    <input type="file" class="form-control" name="website_icon"/>
+                                    {% favicon_exists as fe %}
+                                    {% if fe %}
+                                        <img width="100%" src="{% static "favicon.png" %}" alt="">
+                                    {% endif %}
+                                </div>
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">

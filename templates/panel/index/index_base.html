@@ -1,5 +1,5 @@
 <!DOCTYPE html>{% load static %}{% load i18n %}{% load app_filters %}{% get_current_language as LANGUAGE_CODE %}
-<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'fa' %}rtl{% else %}ltr{% endif %}">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -44,7 +44,7 @@
     <!-- bootstrap wysihtml5 - text editor -->
     <link rel="stylesheet"
           href="{% static 'plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}">
-    <link rel="shortcut icon" href="{% static 'favicon.ico' %}"/>
+    <link rel="shortcut icon" href="{% static 'favicon.png' %}"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>

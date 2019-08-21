@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
+
+from Ads_Project import settings
 
 
 def jalali_to_gregorian(jy, jm, jd):

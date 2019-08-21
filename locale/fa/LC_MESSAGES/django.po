@@ -2340,3 +2340,9 @@ msgstr "بروزرسانی آمار جعلی"
 msgid "Actions"
 msgstr "عملیات"
 
+msgid "Website Icon (PNG Only)"
+msgstr "آیکن وبسایت (فقط PNG)"
+
+msgid "File type or File size is not right"
+msgstr "نوع فایل و یا سایز فایل اشتباه است"
+

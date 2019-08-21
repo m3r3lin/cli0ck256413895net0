@@ -4,7 +4,7 @@ from datetime import timedelta
 from allauth.account import signals
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.db import models
 from django.db.models import Model, Q
 from django.db.models.signals import pre_save
@@ -46,6 +46,10 @@ VAZEYAT_PAYAM = (
     (1, _('unread')),
     (2, _('sent')),
 )
+
+alpha = RegexValidator(r'^[\u0600-\u06FF\sa-zA-Z]*$', 'Only alpha characters are allowed.')
+numeric = RegexValidator(r'^[0-9]*$', 'Only numeric characters are allowed.')
+alphanumeric = RegexValidator(r'^[0-9\u0600-\u06FF\sa-zA-Z]*$', 'Only alphanumeric characters are allowed.')
 
 
 class Role(models.Model):

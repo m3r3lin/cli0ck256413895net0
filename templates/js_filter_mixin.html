@@ -1,0 +1,36 @@
+<script type="text/javascript">
+    function lettersOnly() {
+        var charCode = event.keyCode;
+        console.log(charCode)
+        if ((charCode > 64 && charCode < 91) ||
+            (charCode > 96 && charCode < 123) ||
+            (charCode >= 1575 && charCode <= 1740) ||
+            charCode === 8 || charCode === 32)
+
+            return true;
+        else
+            return false;
+    }
+
+    function numbersOnly() {
+        var charCode = event.keyCode;
+
+        if (charCode >= 48 && charCode <= 57 || charCode === 9)
+            return true;
+        else
+            return false;
+    }
+
+    function emailOnly() {
+        var charCode = event.keyCode;
+
+        if ((charCode > 64 && charCode < 91) ||
+            (charCode > 96 && charCode < 123) ||
+            (charCode >= 48 && charCode <= 57) ||
+            charCode === 9 || charCode === 64 ||
+            charCode === 95 || charCode === 46)
+            return true;
+        else
+            return false;
+    }
+</script>

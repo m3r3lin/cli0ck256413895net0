@@ -5,6 +5,7 @@ from captcha.widgets import ReCaptchaV2Checkbox
 from django import forms
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.forms import ModelForm, FileInput, Form
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -81,10 +82,10 @@ class UserCreateForm(TanzimatPayeMiddelware):
     recaptcha = ReCaptchaField(widget=ReCaptchaV2Checkbox(), required=True, error_messages={
         "required": _("Invalid Captcha Error")
     })
-    first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("First Name")}))
-    last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("Last Name")}))
-    mobile = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("Mobile")}))
-    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder': _("Email")}))
+    first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("First Name"), 'onkeypress': 'return lettersOnly(event)'}))
+    last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("Last Name"), 'onkeypress': 'return lettersOnly(event)'}))
+    mobile = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("Mobile"), 'onkeypress': 'return numbersOnly(event)'}))
+    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder': _("Email"), 'onkeypress': 'return emailOnly(event)'}))
     password = forms.CharField(widget=forms.PasswordInput(), error_messages={'required': _("Password is Required")})
     code_moaref = forms.CharField(widget=forms.TextInput(attrs={'placeholder': _("Referral")}))
 
@@ -123,22 +124,19 @@ class UserCreateForm(TanzimatPayeMiddelware):
         self.fields['username'].label = _("Username") + ":"
         self.fields['username'].required = True
         self.fields['username'].help_text = ''
-        self.fields['username'].widget.attrs.update(
-            {'class': 'form-control', 'id': 'username'})
+        self.fields['username'].widget.attrs.update({'class': 'form-control', 'id': 'username', 'onkeypress': 'return emailOnly(event)'})
 
         self.fields['first_name'].label = _("First Name") + ":"
         self.fields['first_name'].required = True
-        self.fields['first_name'].widget.attrs.update(
-            {'class': 'form-control', 'id': 'full_name'})
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'id': 'full_name'})
 
         self.fields['last_name'].label = _("Last Name") + ":"
         self.fields['last_name'].required = True
-        self.fields['last_name'].widget.attrs.update(
-            {'class': 'form-control', 'id': 'full_name'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'id': 'full_name'})
 
         self.fields['mobile'].label = _("Mobile") + ":"
         self.fields['mobile'].required = True
-        self.fields['mobile'].widget.attrs.update({'class': 'form-control', 'id': 'password'})
+        self.fields['mobile'].widget.attrs.update({'class': 'form-control', 'id': 'mobile'})
 
         self.fields['email'].label = _("Email") + ":"
         self.fields['email'].required = True
@@ -232,15 +230,15 @@ class UserUpdateForm(ModelForm):
         super(UserUpdateForm, self).__init__(*args, **kwargs)
         self.fields['first_name'].label = _("First Name") + ":"
         self.fields['first_name'].required = True
-        self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'id': 'full_name'})
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'id': 'full_name', 'onkeypress': 'return lettersOnly(event)'})
 
         self.fields['last_name'].label = _("Last Name") + ":"
         self.fields['last_name'].required = True
-        self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'id': 'full_name'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'id': 'full_name', 'onkeypress': 'return lettersOnly(event)'})
 
         self.fields['code_melli'].label = _("Id number") + ":"
         self.fields['code_melli'].required = True
-        self.fields['code_melli'].widget.attrs.update({'class': 'form-control', 'id': 'code_melli'})
+        self.fields['code_melli'].widget.attrs.update({'class': 'form-control', 'id': 'code_melli', 'onkeypress': 'return numbersOnly(event)'})
 
         self.fields['tarikh_tavalod'].label = _("BirthDate") + ":"
         self.fields['tarikh_tavalod'].required = True
@@ -248,7 +246,7 @@ class UserUpdateForm(ModelForm):
 
         self.fields['mobile'].label = _("Mobile") + ":"
         self.fields['mobile'].required = True
-        self.fields['mobile'].widget.attrs.update({'class': 'form-control', 'id': 'mobile'})
+        self.fields['mobile'].widget.attrs.update({'class': 'form-control', 'id': 'mobile', 'onkeypress': 'return numbersOnly(event)'})
 
         self.fields['gender'].label = _("Gender") + ":"
         self.fields['gender'].required = True
@@ -256,7 +254,7 @@ class UserUpdateForm(ModelForm):
 
         self.fields['father_name'].label = _("Father Name") + ":"
         self.fields['father_name'].required = True
-        self.fields['father_name'].widget.attrs.update({'class': 'form-control', 'id': 'father_name'})
+        self.fields['father_name'].widget.attrs.update({'class': 'form-control', 'id': 'father_name', 'onkeypress': 'return lettersOnly(event)'})
 
         self.fields['address'].label = _("Address") + ":"
         self.fields['address'].required = True
@@ -264,31 +262,31 @@ class UserUpdateForm(ModelForm):
 
         self.fields['code_posti'].label = _("Postal Code") + ":"
         self.fields['code_posti'].required = True
-        self.fields['code_posti'].widget.attrs.update({'class': 'form-control', 'id': 'code_posti'})
+        self.fields['code_posti'].widget.attrs.update({'class': 'form-control', 'id': 'code_posti', 'onkeypress': 'return numbersOnly(event)'})
 
         self.fields['shomare_hesab'].label = _("Bank Account Number") + ":"
         self.fields['shomare_hesab'].required = True
-        self.fields['shomare_hesab'].widget.attrs.update({'class': 'form-control', 'id': 'shomare_hesab'})
+        self.fields['shomare_hesab'].widget.attrs.update({'class': 'form-control', 'id': 'shomare_hesab', 'onkeypress': 'return numbersOnly(event)'})
 
         self.fields['shomare_cart'].label = _("Credit Card Number") + ":"
         self.fields['shomare_cart'].required = True
-        self.fields['shomare_cart'].widget.attrs.update({'class': 'form-control', 'id': 'shomare_cart'})
+        self.fields['shomare_cart'].widget.attrs.update({'class': 'form-control', 'id': 'shomare_cart', 'onkeypress': 'return numbersOnly(event)'})
 
         self.fields['shomare_shaba'].label = _("IBAN") + ":"
         self.fields['shomare_shaba'].required = True
-        self.fields['shomare_shaba'].widget.attrs.update({'class': 'form-control', 'id': 'shomare_shaba'})
+        self.fields['shomare_shaba'].widget.attrs.update({'class': 'form-control', 'id': 'shomare_shaba', 'onkeypress': 'return numbersOnly(event)'})
 
         self.fields['name_saheb_hesab'].label = _("Bank Account Owner") + ":"
         self.fields['name_saheb_hesab'].required = True
-        self.fields['name_saheb_hesab'].widget.attrs.update({'class': 'form-control', 'id': 'name_saheb_hesab'})
+        self.fields['name_saheb_hesab'].widget.attrs.update({'class': 'form-control', 'id': 'name_saheb_hesab', 'onkeypress': 'return lettersOnly(event)'})
 
         self.fields['name_bank'].label = _("Bank Name") + ":"
         self.fields['name_bank'].required = True
-        self.fields['name_bank'].widget.attrs.update({'class': 'form-control', 'id': 'name_bank'})
+        self.fields['name_bank'].widget.attrs.update({'class': 'form-control', 'id': 'name_bank', 'onkeypress': 'return lettersOnly(event)'})
 
         self.fields['email'].label = _("Email") + ":"
         self.fields['email'].required = True
-        self.fields['email'].widget.attrs.update({'class': 'form-control', 'id': 'email'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control', 'id': 'email', 'onkeypress': 'return emailOnly(event)'})
 
         self.fields['id_telegram'].label = _("Telegram ID") + ":"
         self.fields['id_telegram'].required = False
@@ -304,7 +302,7 @@ class UserUpdateForm(ModelForm):
 
         self.fields['country'].label = _("Country") + ":"
         self.fields['country'].required = False
-        self.fields['country'].widget.attrs.update({'class': 'form-control', 'id': 'avatar'})
+        self.fields['country'].widget.attrs.update({'class': 'form-control', 'id': 'avatar', 'onkeypress': 'return lettersOnly(event)'})
 
         self.fields['is_active'].label = _("User State (Activate/Deactivate)") + ":"
         self.fields['is_active'].required = False

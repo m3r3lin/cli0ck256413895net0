@@ -2191,7 +2191,7 @@ msgid "woman"
 msgstr "زن"
 
 msgid "man"
-msgstr "مزد"
+msgstr "مرد"
 
 msgid "not specified"
 msgstr "مشخص نشده"
@@ -2354,3 +2354,12 @@ msgstr "کپچا نامعتبر است"
 
 msgid "Error verifying reCAPTCHA, please try again."
 msgstr "کپچا نامعتبر است"
+
+msgid "Create Ad Plan"
+msgstr "ایجاد پلن"
+
+msgid "Update Max Income and Level"
+msgstr "حداکثر تعداد سطح شبکه"
+
+msgid "Update Auto Check Ads"
+msgstr "تایید خودکار تبلیغات"

@@ -293,12 +293,12 @@ class PublishTablighView(LoginRequiredMixin, View):
         if request.user.is_superuser:
             messages.error(request, _("Admin can't be a publisher"))
             return redirect(reverse('dashboard'))
-        elif request.user.get_kif_kif_pool().current_balance <= get_least_balance():
+        elif request.user.get_kif_kif_pool().current_balance < get_least_balance():
             messages.error(request, _("Least balance required to add or see Ads is {}").format(get_least_balance()))
             return redirect(reverse('dashboard'))
         else:
             tabligh = get_object_or_404(Tabligh, random_url=tabligh_token)
-            tabligh_montasher, _ = TablighatMontasherKonande.objects.get_or_create(montasher_konande=request.user,
+            tabligh_montasher, d = TablighatMontasherKonande.objects.get_or_create(montasher_konande=request.user,
                                                                                    tabligh=tabligh,
                                                                                    defaults={
                                                                                        'montasher_konande': request.user,

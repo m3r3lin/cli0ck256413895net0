@@ -1919,6 +1919,9 @@ msgstr "پروفایل"
 msgid "Online"
 msgstr "آنلاین"
 
+msgid "Offline"
+msgstr "آفلاین"
+
 msgid "Search"
 msgstr "جستجو"
 
@@ -1958,7 +1961,7 @@ msgstr "تبلیغ"
 msgid "Create Ad"
 msgstr "ایجاد تبلیغ"
 
-msgid "Published Ads"
+msgid "Published Ads List"
 msgstr "لیست تبلیغات منتشرشده"
 
 msgid "List Ads"

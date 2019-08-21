@@ -237,18 +237,25 @@
             </div>
         </div>
     </div>
-    {% if request.user.is_superuser %}
-        <div class="col-md-4 col-sm-6 col-xs-12">
-            <div class="box box-info">
-                <div class="box-header with-border">
-                    <h3 class="box-title">{% trans "Last five days clicks" %}</h3>
-                </div>
-                <div class="box-body chart-responsive">
-                    <div class="chart" id="line-chart" style="height: 300px;"></div>
-                </div>
-                <!-- /.box-body -->
+
+    <div class="row"><!-- Main content -->
+        {% if not request.user.is_superuser %}
+            {% include 'system/Tabligh/show_tabligh_part.html' %}
+        {% endif %}
+        <!-- /.content --></div>
+
+    <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">{% trans "Last five days clicks" %}</h3>
             </div>
+            <div class="box-body chart-responsive">
+                <div class="chart" id="line-chart" style="height: 300px;"></div>
+            </div>
+            <!-- /.box-body -->
         </div>
+    </div>
+    {% if request.user.is_superuser %}
         <div class="col-md-4 col-sm-6 col-xs-12">
             <div class="box box-solid bg-light-blue-gradient">
                 <div class="box-header">
@@ -264,31 +271,24 @@
             </div>
         </div>
     {% endif %}
-
-
-    <!-- Main content -->
-    {% if not request.user.is_superuser %}
-        {% include 'system/Tabligh/show_tabligh_part.html' %}
-    {% endif %}
-    <!-- /.content -->
 {% endblock %}
 
 {% block javascripts %}
     <script src="{% static 'dist/my_js/show_tabligh.js' %}"></script>
-    {% if request.user.is_superuser %}
-        <script src="{% static "plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" %}"></script>
-        <script src="{% static "plugins/jvectormap/jquery-jvectormap-world-mill-en.js" %}"></script>
-        <script src="{% static 'bower_components/jquery-sparkline/dist/jquery.sparkline.min.js' %}"></script>
-        <script type="text/javascript">
-            // jvectormap data
-            var visitorsData = {
-                {% autoescape off %}
-                    {% for u_coutnry in queries.count_online_user_by_country %}
-                        "{{ u_coutnry.country }}": {{ u_coutnry.count_user_online_country }},
-                    {% endfor %}
-                {% endautoescape %}
-            };
-            // World map by jvectormap
+    <script src="{% static "plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" %}"></script>
+    <script src="{% static "plugins/jvectormap/jquery-jvectormap-world-mill-en.js" %}"></script>
+    <script src="{% static 'bower_components/jquery-sparkline/dist/jquery.sparkline.min.js' %}"></script>
+    <script type="text/javascript">
+        // jvectormap data
+        var visitorsData = {
+            {% autoescape off %}
+                {% for u_coutnry in queries.count_online_user_by_country %}
+                    "{{ u_coutnry.country }}": {{ u_coutnry.count_user_online_country }},
+                {% endfor %}
+            {% endautoescape %}
+        };
+        // World map by jvectormap
+        {% if request.user.is_superuser %}
             $('#world-map').vectorMap({
                 map: 'world_mill_en',
                 backgroundColor: 'transparent',
@@ -315,27 +315,27 @@
                         el.html(el.html() + ': ' + visitorsData[code]);
                 }
             });
+        {% endif %}
 
-            var line = new Morris.Line({
-                element: 'line-chart',
-                resize: true,
-                data: [
-                    {% if queries.past_five_days_click.count > 0 %}
-                        {% autoescape off %}
-                            {% for one_of_days in queries.past_five_days_click %}
-                                {y: "{{ one_of_days.by_day|date_jalali:3 }}", item1: {{one_of_days.by_day_count}}},
-                            {% endfor %}
-                        {% endautoescape %}
-                    {% else %}
-                        {y: "{{ queries.todaynow|date_jalali:3 }}", item1: 0},
-                    {% endif %}
-                ],
-                xkey: 'y',
-                ykeys: ['item1'],
-                labels: ['{% trans "Count of Clicks" %}'],
-                lineColors: ['#3c8dbc'],
-                hideHover: 'auto'
-            });
-        </script>
-    {% endif %}
+        var line = new Morris.Line({
+            element: 'line-chart',
+            resize: true,
+            data: [
+                {% if queries.past_five_days_click.count > 0 %}
+                    {% autoescape off %}
+                        {% for one_of_days in queries.past_five_days_click %}
+                            {y: "{{ one_of_days.by_day|date_jalali:3 }}", item1: {{one_of_days.by_day_count}}},
+                        {% endfor %}
+                    {% endautoescape %}
+                {% else %}
+                    {y: "{{ queries.todaynow|date_jalali:3 }}", item1: 0},
+                {% endif %}
+            ],
+            xkey: 'y',
+            ykeys: ['item1'],
+            labels: ['{% trans "Count of Clicks" %}'],
+            lineColors: ['#3c8dbc'],
+            hideHover: 'auto'
+        });
+    </script>
 {% endblock %}

@@ -77,26 +77,20 @@ class MessageListview(LoginRequiredMixin, ListView):
         list_girande = []
         newlist = []
         user_message1 = Payam.objects.filter(Q(ferestande=self.request.user) | Q(girande=self.request.user))
-        print("user_message1", user_message1)
-        user_message = Payam.objects.filter(
-            Q(ferestande=self.request.user) | Q(girande=self.request.user)).distinct().last()
 
         for i in user_message1:
-            # last_item=Payam.objects.filter(ferestande=self.request.user,girande=i.girande).distinct().last()
             last_item = Payam.objects.filter(
                 Q(ferestande=self.request.user, girande=i.girande) | Q(ferestande=i.ferestande,
                                                                        girande=self.request.user)).last()
-
             try:
                 list_girande.append(last_item.id)
+                break
             except:
                 pass
-        print("list_girande", list_girande)
         # delte item tekrari in list
         for i in list_girande:
             if i not in newlist:
                 newlist.append(i)
-        print("newlist", newlist)
 
         user_message = Payam.objects.filter(id__in=newlist)
 

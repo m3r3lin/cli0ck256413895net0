@@ -215,6 +215,10 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
             form.fields['id_telegram'].required = False
             form.fields['code_posti'].required = False
             form.fields['address'].required = False
+        else:
+            del form.fields['is_active']
+            if self.object.image_cart_melli is not None:
+                form.fields['image_cart_melli'].required = False
 
         return form
 

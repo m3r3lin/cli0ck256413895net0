@@ -30,6 +30,7 @@
     <script src="{% static 'dist/my_js/html5shiv.min.js' %}"></script>
     <script src="{% static 'dist/my_js/respond.min.js' %}"></script>
     <![endif]-->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <!-- Google Font -->
     <link rel="stylesheet" href="{% static 'dist/my_css/google_font.css' %}">
@@ -58,6 +59,7 @@
                 <input type="password" class="form-control" required="required" name="password" placeholder="{% trans "Password" %}">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
+            {{ recaptcha }}
             <div class="row">
                 <div class="col-xs-12">
                     <div class="checkbox icheck">

@@ -1,3 +1,4 @@
+import math
 from datetime import timedelta
 
 from allauth.account import signals
@@ -194,7 +195,7 @@ class KifDarAmad(models.Model):
 class History(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     type = models.SmallIntegerField(choices=(
-        (0, _("deposit") ),
+        (0, _("deposit")),
         (1, _("withdraw")),
         (2, _("Income to Pocket money")),
     ))
@@ -210,7 +211,7 @@ class Pelan(Model):
     vazeyat = models.IntegerField(choices=VAZEYAT_CHOICES)
 
     def __str__(self):
-        return self.onvan
+        return '{} - {}'.format(self.onvan, str(math.trunc(self.gheymat) if self.gheymat > 0 else '0'))
 
 
 class Tabligh(Model):

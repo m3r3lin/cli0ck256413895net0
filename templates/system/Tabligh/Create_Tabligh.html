@@ -76,17 +76,20 @@
 
                                     <div class="form-group col-sm-6 col-md-3">
                                         {% if form.tedad_click.label_tag %}
-                                            <label for="mablagh_ha_click"><label for="tedad_click">مبلغ هر
+                                            <label for="mablagh_ha_click"><label for="tedad_click">{% trans "Per Click cost" %}
                                                 {% trans "Click" %}:</label></label>
                                         {% endif %}
                                         <input class="form-control" id="mablagh_ha_click" readonly="readonly" min="0"/>
                                     </div>
                                 {% else %}
                                     <div class="form-group col-sm-6 col-md-3">
-                                        <label for="tedad_click">{{ form.tedad_click.label_tag }}<span
-                                                class="red-star">*</span></label>
+                                        <label for="tedad_click"><label>{% trans "Count of Clicks" %}</label></label>
                                         <input type="text" id="tedad_click" class="form-control" readonly="readonly"/>
-                                        <p class="help-block">{{ form.tedad_click.help_text }}</p>
+                                    </div>
+
+                                    <div class="form-group col-sm-6 col-md-3">
+                                        <label for="mablagh_ha_click"><label for="tedad_click">{% trans "Per Click cost" %}:</label></label>
+                                        <input class="form-control" id="mablagh_ha_click" readonly="readonly" min="0"/>
                                     </div>
                                 {% endif %}
                                 {% if request.user.is_superuser %}
@@ -172,6 +175,7 @@
                     });
                 } else {
                     $('#tedad_click').val('');
+                    $('#mablagh_ha_click').val('');
                 }
             };
             obtain_data(false);

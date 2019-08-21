@@ -2346,3 +2346,11 @@ msgstr "آیکن وبسایت (فقط PNG)"
 msgid "File type or File size is not right"
 msgstr "نوع فایل و یا سایز فایل اشتباه است"
 
+msgid "Updates Titles"
+msgstr "تغییر موضوعات"
+
+msgid "Invalid Captcha Error"
+msgstr "کپچا نامعتبر است"
+
+msgid "Error verifying reCAPTCHA, please try again."
+msgstr "کپچا نامعتبر است"

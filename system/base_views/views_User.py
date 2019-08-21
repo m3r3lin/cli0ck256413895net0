@@ -1,4 +1,6 @@
 import simplejson as json
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 from django.contrib import auth, messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -114,7 +116,15 @@ def login_user(request):
             return redirect(request.POST.get('next'))
         return redirect('dashboard')
     else:
+        a = ReCaptchaField(widget=ReCaptchaV2Checkbox())
         if request.method == "POST":
+            if 'g-recaptcha-response' in request.POST:
+                try:
+                    a.validate(request.POST.get('g-recaptcha-response'))
+                except:
+                    return render(request, "system/user/login.html",
+                                  {'error': _("Invalid Captcha Error"),
+                                   "recaptcha": a.widget.render('recaptcha', '')})
             user = auth.authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
             if user is not None:
                 if user.is_active:
@@ -125,13 +135,17 @@ def login_user(request):
                         return redirect('dashboard')
                 else:
                     return render(request, "system/user/login.html",
-                                  {'error': _("You are not allowed to access")})
+                                  {'error': _("You are not allowed to access"),
+                                   "recaptcha": a.widget.render('recaptcha', '')})
             else:
                 return render(request, "system/user/login.html",
-                              {'error': _("Username or Password you entered is wrong")})
+                              {'error': _("Username or Password you entered is wrong"),
+                               "recaptcha": a.widget.render('recaptcha', '')})
         else:
-            return render(request, "system/user/login.html")
 
+            return render(request, "system/user/login.html", context={
+                "recaptcha": a.widget.render('recaptcha', '')
+            })
 
 @login_required
 def logout_user(request):
@@ -145,7 +159,6 @@ def logout_user(request):
 class RedirectToUserUpdate(LoginRequiredMixin, View):
     def get(self, request):
         return redirect(reverse('UpdateUser', args=[request.user.id]))
-
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
@@ -205,7 +218,6 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
         return form
 
-
 class UserDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
         try:
@@ -223,10 +235,8 @@ class UserDeleteView(LoginRequiredMixin, View):
         messages.success(self.request, _("User deleted successfully"))
         return redirect('ListUser')
 
-
 class UserListView(LoginRequiredMixin, TemplateView):
     template_name = 'system/user/List_User.html'
-
 
 class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = User
@@ -252,7 +262,6 @@ class UserDatatableView(LoginRequiredMixin, BaseDatatableView):
                 Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search))
         return qs
 
-
 class ChangeUserPasswordView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'system/user/Change_User_Password.html'
     form_class = ChangeUserPasswordForm
@@ -263,13 +272,11 @@ class ChangeUserPasswordView(LoginRequiredMixin, PasswordChangeView):
     def get_success_url(self):
         return reverse('ChangeUserPassword')
 
-
 class ProfileUserView(LoginRequiredMixin, View):
     def get(self, request):
         user = User.objects.get(username=request.user.username)
         user.tarikh_tavalod = date_jalali(user.tarikh_tavalod, 3)
         return render(request, 'system/user/Profile_User.html', {'user': user})
-
 
 class ToggleAdminStateView(LoginRequiredMixin, View):
     def get(self, request, id):

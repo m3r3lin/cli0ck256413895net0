@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'system.apps.SystemConfig',
+    'captcha',
 ]
 
 AUTH_USER_MODEL = 'system.User'
@@ -174,3 +175,7 @@ LOGIN_URL = reverse_lazy('login')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 FAVICON_ADDRESS = os.path.join(BASE_DIR, 'static', 'favicon.png')
+
+
+RECAPTCHA_PUBLIC_KEY = '6LdXG7QUAAAAAGqmfbz9tcf9IpKdCGKo57gnk1fL'
+RECAPTCHA_PRIVATE_KEY = '6LdXG7QUAAAAAM4UXDeuLgMvGLSmCv-e3y3779KY'

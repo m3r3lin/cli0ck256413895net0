@@ -30,6 +30,7 @@
     <script src="{% static 'dist/my_js/html5shiv.min.js' %}"></script>
     <script src="{% static 'dist/my_js/respond.min.js' %}"></script>
     <![endif]-->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <!-- Google Font -->
     <link rel="stylesheet" href="{% static '/dist/my_css/google_font.css' %}">
@@ -76,15 +77,11 @@
                 {{ form.password }}
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
-
-            {#            {% setting 'active_moaref' 0 as test %}#}
-            {#            {% if test == '1' %}#}
+            {{ form.recaptcha }}
             <div class="form-group has-feedback">
                 {{ form.code_moaref }}
                 <span class="glyphicon fa fa-user-o form-control-feedback"></span>
             </div>
-            {#            {% endif %}#}
-
             <div class="row">
                 <div class="col-xs-12">
                     <div class="checkbox icheck">

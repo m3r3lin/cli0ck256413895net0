@@ -157,7 +157,6 @@
                             <a href="#" class="dropdown-toggle"
                                data-toggle="dropdown" aria-expanded="false">
                                 {% trans "Change Language" %}
-                                <span class="label label-success">{{ count_message_not_read }}</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="header" id="persian-lang">
@@ -646,6 +645,7 @@
         {% if show_amar_for_user %}
             <div class="col-lg-2 col-md-4 col-sm-6">
                 <div class="info-box-content">
+                    <p><img class="icon_class" src="{% static 'img/icons/online.png' %}"></p>
                     <span class="info-box-text">{% trans "Number of online users" %}</span>
                     <span class="info-box-number">{{ cpp.count_user_online }}</span>
                 </div>
@@ -654,6 +654,7 @@
             <!-- /.col -->
             <div class="col-lg-2 col-md-4 col-sm-6">
                 <div class="info-box-content">
+                    <p><img class="icon_class" src="{% static 'img/icons/users.png' %}"></p>
                     <span class="info-box-text">{% trans "Number of users" %}</span>
                     <span class="info-box-number">{{ cpp.all_users }}</span>
                 </div>
@@ -662,6 +663,7 @@
             <!-- /.col -->
             <div class="col-lg-2 col-md-4 col-sm-6">
                 <div class="info-box-content">
+                    <p><img class="icon_class" src="{% static 'img/icons/user_add.png' %}"></p>
                     <span class="info-box-text">{% trans "Today's new users count" %}</span>
                     <span class="info-box-number">{{ cpp.all_user_today }}</span>
                 </div>
@@ -670,6 +672,7 @@
             <!-- /.col -->
             <div class="col-lg-2 col-md-4 col-sm-6">
                 <div class="info-box-content">
+                    <p><img class="icon_class" src="{% static 'img/icons/money.png' %}"></p>
                     <span class="info-box-text">{% trans "Paid Income" %}</span>
                     <span class="info-box-number">{{ cpp.daramad_pardakhtshode }}</span>
                 </div>
@@ -678,6 +681,7 @@
             <!-- /.col -->
             <div class="col-lg-2 col-md-4 col-sm-6">
                 <div class="info-box-content">
+                    <p><img class="icon_class" src="{% static 'img/icons/labels.png' %}"></p>
                     <span class="info-box-text">{% trans "All Created Ads" %}</span>
                     <span class="info-box-number">{{ cpp.all_tabligh }}</span>
                 </div>

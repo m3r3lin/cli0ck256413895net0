@@ -1,5 +1,7 @@
 import re
 
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 from django import forms
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ValidationError
@@ -76,6 +78,9 @@ class TanzimatPayeMiddelware(ModelForm):
 
 
 class UserCreateForm(TanzimatPayeMiddelware):
+    recaptcha = ReCaptchaField(widget=ReCaptchaV2Checkbox(), required=True, error_messages={
+        "required": _("Invalid Captcha Error")
+    })
     first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("First Name")}))
     last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("Last Name")}))
     mobile = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("Mobile")}))

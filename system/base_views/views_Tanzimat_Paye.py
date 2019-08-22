@@ -1,13 +1,15 @@
 import os
 
 from django.contrib import messages
+from django.contrib.admindocs.views import TemplateDetailView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import UpdateView, View, CreateView
+from django.views.generic import UpdateView, View, CreateView , FormView
 from django_datatables_view.base_datatable_view import BaseDatatableView
-
+from django import forms
+from django.forms import Form, CharField
 from Ads_Project.functions import LoginRequiredMixin
 from Ads_Project.settings import BASE_DIR
 from system.forms import ActiveCodeMoarefForm, SodeModirForm
@@ -15,9 +17,9 @@ from system.forms import (
     Languge_siteForm, Count_level_networkForm, Count_kharid_hadaghalForm, Time_kharid_termForm,
     Taien_meghdar_matlabForm, Show_amarforuserForm, Taied_khodkar_tablighForm, Vahed_poll_siteForm,
     Count_visit_tabligh_Form, Taien_hadaghal_etbarForm, Amar_jaali_Form, MaxNetworkCountForm, LeastBalanceRequiredForm,
-    ClickIsChangeAbleForm
+    ClickIsChangeAbleForm,PerfectMoneyFormSetting
 )
-from system.models import TanzimatPaye, ACTIV_MOAREF, LANGUGE_SITE
+from system.models import TanzimatPaye, ACTIV_MOAREF, LANGUGE_SITE,PERFECT_USER_ID,PERFECT_TITLE,PERFECT_PASSPHRASE
 from system.models import (
     VAHED_POLL_SITE, COUNT_LEVEL_NETWORK, SODE_MODIR,
     SHOW_AMAR_FOR_USER, SATH, LEAST_BALANCE_REQUIRED, COUNT_KHARI_HADAGHAL,
@@ -534,3 +536,42 @@ class Amar_jaali_View(LoginRequiredMixin, View):
 
     def get_success_url(self):
         return reverse('Amar_jaali')
+
+
+class UpdatePerfectMoneyField(LoginRequiredMixin, FormView):
+    model = TanzimatPaye
+    template_name = 'system/TanzimatPaye/UpdatePerfectMoneyField.html'
+    form_class = PerfectMoneyFormSetting
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        PERFECT_USER_ID_VALUE = TanzimatPaye.get_settings(PERFECT_USER_ID, 0)
+        PERFECT_TITLE_VALUE = TanzimatPaye.get_settings(PERFECT_TITLE, 0)
+        PERFECT_PASSPHRASE_VALUE = TanzimatPaye.get_settings(PERFECT_PASSPHRASE, 0)
+        context['form'].fields['PERFECT_USER_ID'].initial=PERFECT_USER_ID_VALUE
+        context['form'].fields['PAYEE_NAME'].initial=PERFECT_TITLE_VALUE
+        context['form'].fields['Passphrase'].initial=PERFECT_PASSPHRASE_VALUE
+        return context
+
+    def form_valid(self, form):
+
+        PERFECT_USER_ID_object, e = TanzimatPaye.objects.update_or_create(onvan=PERFECT_USER_ID, defaults={
+                "onvan": PERFECT_USER_ID,
+                'value': self.request.POST.get('PERFECT_USER_ID'),
+            })
+        print(e)
+        PERFECT_TITLE_object, e = TanzimatPaye.objects.update_or_create(onvan=PERFECT_TITLE, defaults={
+                "onvan": PERFECT_TITLE,
+                'value': self.request.POST.get('PAYEE_NAME'),
+            })
+        print(e)
+        PERFECT_PASSPHRASE_object, e = TanzimatPaye.objects.update_or_create(onvan=PERFECT_PASSPHRASE, defaults={
+                "onvan": PERFECT_PASSPHRASE,
+                'value': self.request.POST.get('Passphrase'),
+            })
+        print(e)
+        messages.success(self.request, _("Settings were updated successfully"))
+        return super(UpdatePerfectMoneyField, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('UpdatePerfectMoneyField')

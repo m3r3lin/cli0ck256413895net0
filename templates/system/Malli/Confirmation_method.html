@@ -18,43 +18,37 @@
                 <!-- general form elements -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">{% trans "Increase Balance" %}</h3>
+                        <h3 class="box-title">{% trans "Confirm Balance" %}</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form role="form" method="POST" action="" enctype="multipart/form-data">
+
+                    <form role="form" method="POST" action="{{ action_url }}" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="box-body">
                             {% include "errors.html" %}
                             {% include "messages.html" %}
                             <div class="row">
-
                                 <div class="form-group col-sm-6 col-md-3">
-                                    {% if form.dargah_type.label_tag %}
-                                        <label for="vazeyat">{{ form.dargah_type.label_tag }}<span
-                                                class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.dargah_type }}
-                                    {% if form.dargah_type.help_text %}
-                                        <p class="help-block">{{ form.dargah_type.help_text }}</p>
-                                    {% endif %}
+                                        <label for="vazeyat">مبلغ : {{ how_much }}</label>
                                 </div>
-
                                 <div class="form-group col-sm-6 col-md-3">
-                                    {% if form.how_much.label_tag %}
-                                        <label for="vazeyat">{{ form.how_much.label_tag }}<span
-                                                class="red-star">*</span></label>
-                                    {% endif %}
-                                    {{ form.how_much }}
-                                    {% if form.how_much.help_text %}
-                                        <p class="help-block">{{ form.how_much.help_text }}</p>
-                                    {% endif %}
+                                        <label for="vazeyat">درگاه پرداخت : {{ dargah_type }}</label>
                                 </div>
-
+                                {{ form.PAYEE_ACCOUNT }}
+                                {{ form.PAYEE_NAME }}
+                                {{ form.PAYMENT_ID }}
+                                {{ form.PAYMENT_AMOUNT }}
+                                {{ form.PAYMENT_UNITS }}
+                                {{ form.STATUS_URL }}
+                                {{ form.PAYMENT_URL }}
+                                {{ form.PAYMENT_URL_METHOD }}
+                                {{ form.NOPAYMENT_URL }}
+                                {{ form.NOPAYMENT_URL_METHOD }}
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">{% trans "Increase Balance" %}</button>
+                                <button type="submit" class="btn btn-primary" name="{{ submit_name }}">{% trans "Confirm Balance" %}</button>
                             </div>
                         </div>
                     </form>

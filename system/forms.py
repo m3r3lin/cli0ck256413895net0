@@ -766,12 +766,23 @@ class Amar_jaali_Form(Form):
 
 class IncreaseBalanceFrom(forms.Form):
     how_much = forms.IntegerField()
+    CHOICES = (
+        ('1','PerfectMoney'),
+        ( '2','NextPay'),
+        ('3','ZarinPal'),
+    )
+    dargah_type = forms.CharField(widget=forms.Select(choices=CHOICES))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         field_name = 'how_much'
         self.fields[field_name].label = _("Enter In Toman") + ":"
+        self.fields[field_name].required = True
+        self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
+
+        field_name = 'dargah_type'
+        self.fields[field_name].label = _("Select Pyment Method") + ":"
         self.fields[field_name].required = True
         self.fields[field_name].widget.attrs.update({'class': 'form-control', 'id': field_name})
 
@@ -797,3 +808,25 @@ class Create_Infopm(ModelForm):
 
         self.fields['is_active'].label = _("Activate / Deactivate") + ":"
         self.fields['is_active'].required = False
+
+
+class PerfectMoneyFormSetting(Form):
+    PERFECT_USER_ID = forms.CharField()
+    PAYEE_NAME = forms.CharField()
+    Passphrase = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        super(PerfectMoneyFormSetting, self).__init__(*args, **kwargs)
+
+        self.fields['PERFECT_USER_ID'].label = "USER_ID"
+        self.fields['PERFECT_USER_ID'].required = True
+        self.fields['PERFECT_USER_ID'].widget.attrs.update({'class': 'form-control', 'id': 'PERFECT_USER_ID'})
+
+        self.fields['PAYEE_NAME'].label = _("peyment title") + ":"
+        self.fields['PAYEE_NAME'].required = True
+        self.fields['PAYEE_NAME'].widget.attrs.update({'class': 'form-control', 'id': 'PAYEE_NAME'})
+
+        self.fields['Passphrase'].label = "Alternate Passphrase"
+        self.fields['Passphrase'].required = True
+        self.fields['Passphrase'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'Passphrase'})

@@ -4,13 +4,16 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import FormView, ListView
+from django.views.generic import FormView, ListView,View,TemplateView
 from django_datatables_view.base_datatable_view import BaseDatatableView
-
+from django import forms
+from django.forms import Form, CharField
 from Ads_Project.functions import LoginRequiredMixin
 from system.forms import IncreaseBalanceFrom
-from system.models import Order, User, INCREASE_BALANCE_ORDER, History, Tabligh, COUNT_KHARI_HADAGHAL, TanzimatPaye
+from system.models import Order, User, INCREASE_BALANCE_ORDER, History, Tabligh, COUNT_KHARI_HADAGHAL, TanzimatPaye ,PERFECT_USER_ID,PERFECT_TITLE,PERFECT_PASSPHRASE
 from system.templatetags.app_filters import date_jalali
+import hashlib
+from datetime import datetime
 
 
 def dargah_test_part_1(request):
@@ -31,7 +34,7 @@ def dargah_test_part_2(request):
 class IncreaseBalanceView(LoginRequiredMixin, FormView):
     template_name = 'system/Malli/Increase_Balance.html'
     form_class = IncreaseBalanceFrom
-    success_url = reverse_lazy('increase_balance')
+    success_url = reverse_lazy('ConfirmBalanceView')
 
     def get(self, request, *args, **kwargs):
         if request.GET.get('balance_increased'):
@@ -39,7 +42,15 @@ class IncreaseBalanceView(LoginRequiredMixin, FormView):
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
-        user_id = self.request.POST.get('user', None)
+        dargah_type = form.cleaned_data['dargah_type']
+        how_much = form.cleaned_data['how_much']
+        self.request.session['dargah_type'] = dargah_type
+        self.request.session['how_much'] = how_much
+        my_str=str(self.request.user.id)+' '+self.request.user.username+' '+ str(datetime.now())
+        payment_id=hashlib.sha1(my_str.encode("UTF-8")).hexdigest()
+        self.request.session['payment_id'] = payment_id
+        Order.objects.create(type=INCREASE_BALANCE_ORDER,user=self.request.user,mablagh=float(how_much),payment_id=payment_id,status=0)
+        '''user_id = self.request.POST.get('user', None)
         if user_id and (isinstance(user_id, int) or (isinstance(user_id, str) and user_id.isdigit())):
             user_id = int(user_id)
             if User.objects.filter(pk=user_id).exists():
@@ -50,19 +61,73 @@ class IncreaseBalanceView(LoginRequiredMixin, FormView):
             user_id = self.request.user.id
         user = get_object_or_404(User, pk=int(user_id))
         user.add_to_kif_pool(form.cleaned_data['how_much'])
-        History.objects.create(user=user, type='0', meghdar=int(form.cleaned_data['how_much']))
+        History.objects.create(user=user, type='0', meghdar=int(form.cleaned_data['how_much']))'''
 
         return super(IncreaseBalanceView, self).form_valid(form)
-        # TODO what should we do with other orders ?
-        order = Order.objects.create(user_id=user_id, type=INCREASE_BALANCE_ORDER, data=dict(
-            mount=form.cleaned_data['how_much']
-        ))
-        url = 'http://127.0.0.1:8000/system/increase_balance/'
-        return redirect(f'/system/virtual_bank_verification1/?order_id={order.id}&redirect')
 
     def form_invalid(self, form):
         return super().form_invalid(form)
 
+
+class ConfirmBalanceView(LoginRequiredMixin, TemplateView):
+    template_name = 'system/Malli/Confirmation_method.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        if self.request.session.get('dargah_type')=='1':
+            form = Form()
+            form.fields = {}
+            action_url="https://perfectmoney.is/api/step1.asp"
+            how_much=self.request.session.get("how_much")
+            submit_name="PAYMENT_METHOD"
+            dargah_type="Perfect Money"
+            PERFECT_USER_ID_VALUE=TanzimatPaye.get_settings(PERFECT_USER_ID,0)
+            PUI = forms.CharField(initial=PERFECT_USER_ID_VALUE, widget=forms.HiddenInput())
+            form.fields["PAYEE_ACCOUNT"] = PUI
+            PAYMENT_ID = forms.CharField(initial=self.request.session.get('payment_id'), widget=forms.HiddenInput())
+            form.fields["PAYMENT_ID"] = PAYMENT_ID
+            PERFECT_TITLE_VALUE=TanzimatPaye.get_settings(PERFECT_TITLE,0)
+            PT = forms.CharField(initial=PERFECT_TITLE_VALUE, widget=forms.HiddenInput())
+            form.fields["PAYEE_NAME"] = PT
+            PAYMENT_AMOUNT = forms.CharField(initial=self.request.session.get("how_much"), widget=forms.HiddenInput())
+            form.fields["PAYMENT_AMOUNT"] = PAYMENT_AMOUNT
+            PAYMENT_UNITS = forms.CharField(initial="USD", widget=forms.HiddenInput())
+            form.fields["PAYMENT_UNITS"] = PAYMENT_UNITS
+            STATUS_URL = forms.CharField(initial="http://9ed79c3b.ngrok.io/system/perfectpaymentstatus", widget=forms.HiddenInput())
+            form.fields["STATUS_URL"] = STATUS_URL
+            PAYMENT_URL = forms.CharField(initial="http://9ed79c3b.ngrok.io/system/perfectpaymentsuccess", widget=forms.HiddenInput())
+            form.fields["PAYMENT_URL"] = PAYMENT_URL
+            PAYMENT_URL_METHOD = forms.CharField(initial="GET", widget=forms.HiddenInput())
+            form.fields["PAYMENT_URL_METHOD"] = PAYMENT_URL_METHOD
+            NOPAYMENT_URL = forms.CharField(initial="http://9ed79c3b.ngrok.io/system/perfect_money_F", widget=forms.HiddenInput())
+            form.fields["NOPAYMENT_URL"] = NOPAYMENT_URL
+            NOPAYMENT_URL_METHOD = forms.CharField(initial="GET", widget=forms.HiddenInput())
+            form.fields["NOPAYMENT_URL_METHOD"] = NOPAYMENT_URL_METHOD
+            context["form"]=form
+            context["action_url"]=action_url
+            context["how_much"]=how_much
+            context["submit_name"]=submit_name
+            context["dargah_type"]=dargah_type
+        return context
+
+    def get(self, request, *args, **kwargs):
+        if "payment_id" in request.session:
+            return super().get(request, *args, **kwargs)
+        else:
+            messages.error(request, "فاکتور دریافتی اشتباه است.")
+            return redirect(reverse_lazy('increase_balance'))
+
+class PerfectMoneyFailed(View):
+    def get(self, request, *args, **kwargs):
+        if "payment_id" in request.session:
+            print(request.session.get('payment_id'))
+            print(request.GET)
+            del request.session['payment_id']
+            messages.error(request, "پرداخت شما موفقیت آمیز نبود.")
+        else:
+            messages.error(request, "فاکتور دریافتی اشتباه است.")
+
+        return redirect(reverse_lazy('increase_balance'))
 
 class HistoryMaliListView(LoginRequiredMixin, ListView):
     model = History
@@ -174,3 +239,4 @@ class MoveDaramad2KifView(LoginRequiredMixin, FormView):
 
     def form_invalid(self, form):
         return super().form_invalid(form)
+

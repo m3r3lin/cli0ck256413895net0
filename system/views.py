@@ -62,8 +62,8 @@ class Dashboard(LoginRequiredMixin, View):
             tarikh__gte=last_day_morning,
         )
         if not request.user.is_superuser:
-            last_day_morning = past_five_days_click.filter(montasher_konande=request.user)
-        past_five_days_click = last_day_morning.annotate(by_day=TruncDate('tarikh')) \
+            past_five_days_click = past_five_days_click.filter(montasher_konande=request.user)
+        past_five_days_click = past_five_days_click.annotate(by_day=TruncDate('tarikh')) \
             .values('by_day').annotate(by_day_count=Count('id')) \
             .values('by_day', 'by_day_count')
 

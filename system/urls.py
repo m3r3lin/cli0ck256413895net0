@@ -9,7 +9,7 @@ from system.base_views.view_graph import (
 from system.base_views.views_Click import ClickedOnTablighView, ClickDatatableView, ShowClick
 from system.base_views.views_Malli import (
     IncreaseBalanceView, dargah_test_part_1, HistoryMaliDatatableView,
-    HistoryMaliListView, MoveDaramad2KifView
+    HistoryMaliListView, MoveDaramad2KifView,PerfectMoneyFailed,ConfirmBalanceView
 )
 from system.base_views.views_Message import MessageListview, Message_show_view
 from system.base_views.views_Message import NewMessageCreateView
@@ -26,7 +26,7 @@ from system.base_views.views_Tabligh import (
 from system.base_views.views_Tanzimat_Paye import (
     ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel,
     LeastBalanceRequiredView, ClickIsChangeAbleView,
-    ChangeTitlesView
+    ChangeTitlesView,UpdatePerfectMoneyField
 )
 from system.base_views.views_Tanzimat_Paye import (
     Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView,
@@ -88,6 +88,7 @@ urlpatterns = [
     path('SodeModir/', SodeModirView.as_view(), name='SodeModir'),
     path('Languge_site/', Languge_siteView.as_view(), name='Languge_site'),
     path('WebsiteTitle/', ChangeTitlesView.as_view(), name='WebsiteTitle'),
+    path('updateperfectmoneyfield/', UpdatePerfectMoneyField.as_view(), name='UpdatePerfectMoneyField'),
     # datatable count level network
     path('Count_Level_networkDataTable/', Count_Level_networkDataTableView.as_view(),
          name='Count_Level_networkDataTable'),
@@ -119,7 +120,8 @@ urlpatterns = [
     path('HistoryMali/', HistoryMaliListView.as_view(), name='HistoryMaliList'),
     path('HistoryMaliDatatable/', HistoryMaliDatatableView.as_view(), name='HistoryMaliDatatable'),
     path('move_2_kif/', MoveDaramad2KifView.as_view(), name='MoveDaramad2Kif'),
-
+    path('perfect_money_F',PerfectMoneyFailed.as_view(),name="PerfectMoneyF"),
+    path('ConfirmBalanceView',ConfirmBalanceView.as_view(),name="ConfirmBalanceView"),
     # ---- Click
     path('click/<enteshartoken>', ClickedOnTablighView.as_view(), name='clicked_on_tabligh'),
     path('showclicks/', ShowClick.as_view(), name='show_click'),

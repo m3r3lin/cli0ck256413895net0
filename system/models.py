@@ -285,7 +285,9 @@ TAIEN_MEGHDAR_MATLAB = 'taien_meghdar_matlab'
 TAIED_KHODKAR_TABLIGH = 'taied_khodkar_tabligh'
 LEAST_BALANCE_REQUIRED = 'least_balance_required'
 CLICK_IS_CHANGEABLE = 'click_is_change_able'
-
+PERFECT_USER_ID = 'perfect_user_id'
+PERFECT_TITLE = 'perfect_title'
+PERFECT_PASSPHRASE = 'perfect_passphrase'
 
 class TanzimatPaye(Model):
     onvan = models.CharField(max_length=250, unique=True)
@@ -323,9 +325,13 @@ class Order(Model):
         (INCREASE_BALANCE_ORDER, _("Increase balance")),
     ))
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    mablagh = models.FloatField()
+    payment_id = models.CharField(max_length=255,blank=True, null=True)
+    status = models.SmallIntegerField(choices=(
+        (0, _("failed")),
+        (1, _("success")),
+    ))
     data = models.TextField(default='')
-
-
 if not settings.CREATING_SUPER_USER:
     @receiver(pre_save, sender=User)
     def set_new_user_inactive(sender, instance, **kwargs):

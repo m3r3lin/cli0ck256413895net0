@@ -2366,3 +2366,13 @@ msgstr "حداکثر تعداد سطح شبکه"
 
 msgid "Update Auto Check Ads"
 msgstr "تایید خودکار تبلیغات"
+
+msgid "Confirm Balance"
+msgstr "تایید فاکتور"
+
+msgid "Update PerfectMoney Field"
+msgstr "بروزرسانی اطلاعات PerfectMoney"
+
+msgid "peyment title"
+msgstr "عنوان درگاه خرید"
+

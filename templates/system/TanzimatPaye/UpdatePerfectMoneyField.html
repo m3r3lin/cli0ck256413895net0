@@ -1,0 +1,64 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% load i18n %}
+{% block page_title %}
+    {% trans "Update PerfectMoney Field" %}
+{% endblock %}
+{% block dashboard %}
+    <li>{% trans "Update PerfectMoney Field" %}</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{% trans "Update PerfectMoney Field" %}</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="box-body">
+                            {% include "errors.html" %}
+                            {% include "messages.html" %}
+                            <div class="row">
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    {% if form.PERFECT_USER_ID.label_tag %}
+                                        <label for="value">{{ form.PERFECT_USER_ID.label_tag }}<span
+                                                class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.PERFECT_USER_ID }}
+                                </div>
+                                <div class="form-group col-sm-6 col-md-3">
+                                    {% if form.PAYEE_NAME.label_tag %}
+                                        <label for="value">{{ form.PAYEE_NAME.label_tag }}<span
+                                                class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.PAYEE_NAME }}
+                                </div>
+                                <div class="form-group col-sm-6 col-md-3">
+                                    {% if form.Passphrase.label_tag %}
+                                        <label for="value">{{ form.Passphrase.label_tag }}<span
+                                                class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.Passphrase }}
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">{% trans "save" %}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}

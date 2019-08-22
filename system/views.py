@@ -16,6 +16,42 @@ from system.models import (
 class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
+
+        # All Queries
+        prev_thirty_days = datetime.now() - timedelta(days=30)
+        # تعداد کل کلیکهای انجام شده در سامانه بر اساس روز
+        prev_thirty_days_clicks = Click.objects.filter(tarikh__lte=datetime.now(), tarikh__gte=prev_thirty_days)
+        if not request.user.is_superuser:
+            prev_thirty_days_clicks.filter(montasher_konande=request.user)
+        prev_thirty_days_clicks_count = prev_thirty_days_clicks.count()
+
+        prev_thirty_days_clicks = prev_thirty_days_clicks.annotate(by_date=TruncDate('tarikh'),
+                                                                   by_day_count=Count('id')) \
+            .values('by_date', 'by_day_count')
+        # تعداد کل هزینه های دریافتی بابت کلیک اعضا بر اساس روز
+        prev_thirty_days_income = HistoryIndirect.objects.filter(tarikh__lte=datetime.now(),
+                                                                 tarikh__gte=prev_thirty_days)
+        if not request.user.is_superuser:
+            prev_thirty_days_income.filter(montasher_konande=request.user)
+        prev_thirty_days_income_count = prev_thirty_days_income.aggregate(all_sum=Sum('mablagh'))
+
+        prev_thirty_days_income = prev_thirty_days_income.annotate(by_date=TruncDate('tarikh'),
+                                                                   by_day_count=Sum('mablagh')) \
+            .values('by_date', 'by_day_count')
+        # تعداد تبلیغات اخذ شده توسط سامانه بر اساس روز
+        prev_thirty_days_ads = TablighatMontasherKonande.objects.filter(tarikh__lte=datetime.now(),
+                                                                 tarikh__gte=prev_thirty_days)
+        if not request.user.is_superuser:
+            prev_thirty_days_ads.filter(montasher_konande=request.user)
+        prev_thirty_days_ads_count = prev_thirty_days_ads.count()
+
+        prev_thirty_days_ads = prev_thirty_days_ads.annotate(by_date=TruncDate('tarikh'),
+                                                                   by_day_count=Count('id')) \
+            .values('by_date', 'by_day_count')
+
+        # User Queries
+
+        # Admin queries
         this_month_clicks = dict(tarikh__month=datetime.now().month)
         this_month_publishes = dict(tarikh__month=datetime.now().month)
         online_time_limite = timezone.now() - timedelta(seconds=600)

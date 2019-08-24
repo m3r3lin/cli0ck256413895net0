@@ -1,0 +1,125 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% load app_filters %}
+{% load i18n %}
+{% block css %}
+    <style>
+        td {
+            text-align: center;
+        }
+
+        th:nth-child(11), td:nth-child(11) {
+            white-space: nowrap;
+        }
+    </style>
+{% endblock %}
+{% block page_title %}
+    لیست تیکت ها
+{% endblock %}
+{% block dashboard %}
+    <li>لیست تیکت ها</li>
+{% endblock %}
+{% block main_content %}
+    <!-- row -->
+    <div class="col-md-12">
+        <!-- The time line -->
+        <ul class="timeline">
+            <!-- timeline time label -->
+            {% for date , details in  ticket_messages.items %}
+                <li class="time-label">
+                  <span class="bg-red">
+                    {{ date|date:"Y-m-d"|date_jalali:2 }}
+                  </span>
+                </li>
+                <!-- /.timeline-label -->
+                <!-- timeline item -->
+                {% for detail in details %}
+                    <li>
+                        {% if detail.creator__username == user.username and user.is_superuser %}
+                            <i class="fa fa-envelope bg-blue"></i>
+                        {% else %}
+                            <i class="fa fa-comments bg-yellow"></i>
+                        {% endif %}
+                        <div class="timeline-item">
+                            <span class="time"> <i class="fa fa-clock-o"></i> {{ detail.date__time|date:"H:i" }} </span>
+                            {% if detail.creator__username == user.username and user.is_superuser %}
+                                <h3 class="timeline-header"><a href="#">تیم پشتیبانی</a></h3>
+                            {% elif user.is_superuser %}
+                                <h3 class="timeline-header"><a href="#">پیام ارسالی {{ detail.creator__username }}</a>
+                                </h3>
+                            {% else %}
+                                <h3 class="timeline-header"><a href="#">پیام ارسالی شما</a>
+                                </h3>
+
+                            {% endif %}
+                            <div class="timeline-body">{{ detail.body }}</div>
+                            {% if detail.file %}
+                                <div class="timeline-footer">
+                                    <a href="/media/{{ detail.file }}" download><i style="font-size: 20px;"
+                                                                                   class="fa fa-fw fa-paperclip"></i>دانلود
+                                        پیوست</a>
+
+                                </div>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+                <!-- END timeline item -->
+            {% endfor %}
+            <li>
+                <i class="fa fa-clock-o bg-gray"></i>
+            </li>
+        </ul>
+    <br>
+    </div>
+
+    <div class="col-md-12">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">ارسال پیام جدید</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" method="POST" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="box-body">
+                    {% include "errors.html" %}
+                    {% include "messages.html" %}
+
+                        {{ form.ticket_id }}
+                    <div class="form-group">
+                        {% if form.message.label_tag %}
+                            <label for="full_name">{{ form.message.label_tag }}<span
+                                    class="red-star">*</span></label>
+                        {% endif %}
+                        {{ form.message }}
+                    </div>
+                    <div class="form-group">
+                        {% if form.file.label_tag %}
+                            <label for="full_name">{{ form.file.label_tag }}</label>
+                        {% endif %}
+                        {{ form.file }}
+                    </div>
+
+
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">ارسال پیام</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /.col -->
+    <!-- /.row -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'dist/my_js/datatable.js' %}"></script>
+    <!-- my fontawesom -->
+    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
+
+{% endblock %}

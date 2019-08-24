@@ -480,6 +480,24 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-bullhorn"></i>
+                            <span>پشتیبانی</span>
+                            <span class="pull-left-container">
+                            <i class="fa fa-angle-right pull-left"></i>
+                        </span>
+
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="{% url  'NewTicketCreate' %}"><i
+                                    class="fa fa-plus"></i>ارسال تیکت جدید</a>
+                            </li>
+                            <li><a href="{% url  'TicketListView' %}"><i
+                                    class="fa fa-plus"></i>لیست تیکت ها</a>
+                            </li>
+                        </ul>
+                    </li>
                     {% if request.user.is_superuser %}
                         <li class="treeview">
                             <a href="#">

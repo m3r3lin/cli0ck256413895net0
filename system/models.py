@@ -16,7 +16,7 @@ from django_countries.fields import CountryField
 
 from Ads_Project import settings
 from Ads_Project.settings import MAIN_ADMIN_ID
-from system.functions import upload_avatar_path, upload_cart_melli_path
+from system.functions import upload_avatar_path, upload_cart_melli_path, upload_ticket_path
 
 INCREASE_BALANCE_ORDER = 12
 
@@ -366,3 +366,17 @@ class SoodeTabligh(Model):
     sath = models.IntegerField()
     soode_mostaghim = models.FloatField()
     soode_gheire_mostaghim = models.FloatField(default=0)
+
+class Ticket(Model):
+    title = models.CharField(max_length=255,blank=True,null=True)
+    date = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tickets", null=True)
+    status = models.BooleanField(default=True)
+
+class TicketMessages(Model):
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name="messages", null=True)
+    body = models.TextField()
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ticketmessages", null=True)
+    date = models.DateTimeField(auto_now_add=True)
+    file = models.FileField(upload_to=upload_ticket_path)
+    seen = models.BooleanField(default=False)

@@ -1,5 +1,7 @@
 import re
 
+import magic
+from django.forms import ClearableFileInput
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django import forms
@@ -830,3 +832,38 @@ class PerfectMoneyFormSetting(Form):
         self.fields['Passphrase'].required = True
         self.fields['Passphrase'].widget.attrs.update(
             {'class': 'form-control', 'id': 'Passphrase'})
+
+
+class MyClearableFileInput(ClearableFileInput):
+    initial_text = "فایل فعلی"
+    input_text = 'عوض کردن'
+    clear_checkbox_label = 'پاک کردن'
+
+
+class CreateTicketForm(Form):
+    title = forms.CharField(error_messages={'required': ("عنوان تیکت اجباری است.")})
+    message = forms.CharField(widget=forms.Textarea(),error_messages={'required': ("متن پیام اجباری است.")})
+    file = forms.FileField(required=False, widget=MyClearableFileInput)
+
+    def __init__(self, *args, **kwargs):
+        super(CreateTicketForm, self).__init__(*args, **kwargs)
+
+        self.fields['title'].label = "عنوان تیکت"
+        self.fields['title'].required = True
+        self.fields['title'].widget.attrs.update({'class': 'form-control', 'id': 'title'})
+
+        self.fields['message'].label = "متن پیام"
+        self.fields['message'].required = True
+        self.fields['message'].widget.attrs.update({'class': 'form-control', 'id': 'message'})
+
+        self.fields['file'].label = "پیوست"
+        self.fields['file'].required = False
+        self.fields['file'].widget.attrs.update({'class': 'form-control', 'id': 'file'})
+
+    def clean_file(self):
+        file = self.cleaned_data.get("file", False)
+        filetype = magic.from_buffer(file.read())
+        list_format=['PNG','JPEG','JPG','text','Word','Excel']
+        if not any(ext in filetype for ext in list_format):
+            raise ValidationError(" فایل تنها میتواند عکس یا متن باشد.")
+        return file

@@ -9,9 +9,12 @@ from system.base_views.view_graph import (
 from system.base_views.views_Click import ClickedOnTablighView, ClickDatatableView, ShowClick
 from system.base_views.views_Malli import (
     IncreaseBalanceView, dargah_test_part_1, HistoryMaliDatatableView,
-    HistoryMaliListView, MoveDaramad2KifView,PerfectMoneyFailed,ConfirmBalanceView
+    HistoryMaliListView, MoveDaramad2KifView, PerfectMoneyFailed, ConfirmBalanceView
 )
-from system.base_views.views_Message import MessageListview, Message_show_view
+from system.base_views.views_Message import \
+    (
+    MessageListview, Message_show_view, NewTicketCreateView,
+    TicketDatatableView, TicketListView, ToggleTicketStateView, ListTicketMessaesView)
 from system.base_views.views_Message import NewMessageCreateView
 from system.base_views.views_Pelan import (
     PelanCreateView, PelanUpdateView, PelanDeleteView, PelanListView,
@@ -26,7 +29,7 @@ from system.base_views.views_Tabligh import (
 from system.base_views.views_Tanzimat_Paye import (
     ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel,
     LeastBalanceRequiredView, ClickIsChangeAbleView,
-    ChangeTitlesView,UpdatePerfectMoneyField
+    ChangeTitlesView, UpdatePerfectMoneyField
 )
 from system.base_views.views_Tanzimat_Paye import (
     Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView,
@@ -112,6 +115,12 @@ urlpatterns = [
     path('MessageList/', MessageListview.as_view(), name='MessageList'),
     path('Message_show_view/<int:pk>', Message_show_view.as_view(), name='Message_show_view'),
     path('NewMessageCreate/', NewMessageCreateView.as_view(), name='NewMessageCreate'),
+    # ---- tickets
+    path('NewTicketCreate/', NewTicketCreateView.as_view(), name='NewTicketCreate'),
+    path('ListTickets/', TicketListView.as_view(), name='TicketListView'),
+    path('ListTicketMessaes/<int:id>', ListTicketMessaesView.as_view(), name='ListTicketMessaes'),
+    path('ListTicketsDataTable/', TicketDatatableView.as_view(), name='ListTicketsDataTable'),
+    path('ToggleTicketState/<int:id>', ToggleTicketStateView.as_view(), name='ToggleTicketState'),
     # ---- ajax
     path('save_message/', views_Message.save_message, name='save_message'),
     # ---- MALLI
@@ -120,8 +129,8 @@ urlpatterns = [
     path('HistoryMali/', HistoryMaliListView.as_view(), name='HistoryMaliList'),
     path('HistoryMaliDatatable/', HistoryMaliDatatableView.as_view(), name='HistoryMaliDatatable'),
     path('move_2_kif/', MoveDaramad2KifView.as_view(), name='MoveDaramad2Kif'),
-    path('perfect_money_F',PerfectMoneyFailed.as_view(),name="PerfectMoneyF"),
-    path('ConfirmBalanceView',ConfirmBalanceView.as_view(),name="ConfirmBalanceView"),
+    path('perfect_money_F', PerfectMoneyFailed.as_view(), name="PerfectMoneyF"),
+    path('ConfirmBalanceView', ConfirmBalanceView.as_view(), name="ConfirmBalanceView"),
     # ---- Click
     path('click/<enteshartoken>', ClickedOnTablighView.as_view(), name='clicked_on_tabligh'),
     path('showclicks/', ShowClick.as_view(), name='show_click'),

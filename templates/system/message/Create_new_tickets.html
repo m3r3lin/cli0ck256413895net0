@@ -1,0 +1,75 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+
+{% block page_title %}
+    ایجاد پیام جدید
+{% endblock %}
+{% block dashboard %}
+    <li>پیام</li>
+    <li>ایجادپیام جدید</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">جهت ایجاد تیکت جدید، فرم زیر را پر کنید.</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="box-body">
+                            {% include "errors.html" %}
+                            {% include "messages.html" %}
+
+
+                            <div class="form-group">
+                                {% if form.title.label_tag %}
+                                    <label for="full_name">{{ form.title.label_tag }}<span
+                                            class="red-star">*</span></label>
+                                {% endif %}
+                                {{ form.title }}
+                            </div>
+                            <div class="form-group">
+                                {% if form.message.label_tag %}
+                                    <label for="full_name">{{ form.message.label_tag }}<span
+                                            class="red-star">*</span></label>
+                                {% endif %}
+                                {{ form.message }}
+                            </div>
+                            <div class="form-group">
+                                {% if form.file.label_tag %}
+                                    <label for="full_name">{{ form.file.label_tag }}<span
+                                            class="red-star">*</span></label>
+                                {% endif %}
+                                {{ form.file }}
+                            </div>
+
+
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">ثبت تیکت جدید</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    {#<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>#}
+    {#<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>#}
+    {#<script src="{% static 'dist/my_js/datatable.js' %}"></script>#}
+    {#<!-- my fontawesom -->#}
+    {#<script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>#}
+{% endblock %}

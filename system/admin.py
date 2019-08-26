@@ -1,5 +1,5 @@
 from django.contrib import admin
-from system.models import User, Pelan, Tabligh, Click, Payam, TanzimatPaye, KifPool, TablighatMontasherKonande, Role, SoodeTabligh, HistoryIndirect, KifDarAmad
+from system.models import TicketMessages, User, Pelan, Tabligh, Click, Payam, TanzimatPaye, KifPool, TablighatMontasherKonande, Role, SoodeTabligh, HistoryIndirect, KifDarAmad
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -55,3 +55,4 @@ admin.site.register(TablighatMontasherKonande, TablighatMontasherKonandeAdmin)
 admin.site.register(SoodeTabligh, SoodeTablighAdmin)
 admin.site.register(HistoryIndirect, HistoryIndirectAdmin)
 admin.site.register(KifDarAmad)
+admin.site.register(TicketMessages)

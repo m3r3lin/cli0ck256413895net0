@@ -35,22 +35,18 @@
                 <!-- timeline item -->
                 {% for detail in details %}
                     <li>
-                        {% if detail.creator__username == user.username and user.is_superuser %}
-                            <i class="fa fa-envelope bg-blue"></i>
-                        {% else %}
+                        {% if detail.creator__username == user.username %}
                             <i class="fa fa-comments bg-yellow"></i>
+                        {% else %}
+                            <i class="fa fa-envelope bg-blue"></i>
+
                         {% endif %}
                         <div class="timeline-item">
                             <span class="time"> <i class="fa fa-clock-o"></i> {{ detail.date__time|date:"H:i" }} </span>
-                            {% if detail.creator__username == user.username and user.is_superuser %}
-                                <h3 class="timeline-header"><a href="#">تیم پشتیبانی</a></h3>
-                            {% elif user.is_superuser %}
-                                <h3 class="timeline-header"><a href="#">پیام ارسالی {{ detail.creator__username }}</a>
-                                </h3>
+                            {% if detail.creator__username == user.username %}
+                                <h3 class="timeline-header"><a href="#">پیام ارسالی شما</a></h3>
                             {% else %}
-                                <h3 class="timeline-header"><a href="#">پیام ارسالی شما</a>
-                                </h3>
-
+                                <h3 class="timeline-header"><a href="#">پیام ارسالی {{ detail.creator__username }}</a></h3>
                             {% endif %}
                             <div class="timeline-body">{{ detail.body }}</div>
                             {% if detail.file %}
@@ -70,9 +66,9 @@
                 <i class="fa fa-clock-o bg-gray"></i>
             </li>
         </ul>
-    <br>
+        <br>
     </div>
-
+    {% if ticket_status %}
     <div class="col-md-12">
         <div class="box box-info">
             <div class="box-header with-border">
@@ -87,7 +83,7 @@
                     {% include "errors.html" %}
                     {% include "messages.html" %}
 
-                        {{ form.ticket_id }}
+                    {{ form.ticket_id }}
                     <div class="form-group">
                         {% if form.message.label_tag %}
                             <label for="full_name">{{ form.message.label_tag }}<span
@@ -112,6 +108,7 @@
             </form>
         </div>
     </div>
+    {% endif %}
     <!-- /.col -->
     <!-- /.row -->
 {% endblock %}

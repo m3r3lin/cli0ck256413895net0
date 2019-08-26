@@ -14,10 +14,10 @@
     </style>
 {% endblock %}
 {% block page_title %}
-    لیست تیکت ها
+    لیست بنرها
 {% endblock %}
 {% block dashboard %}
-    <li>لیست تیکت ها</li>
+    <li>لیست بنر ها</li>
 {% endblock %}
 {% block main_content %}
 
@@ -35,11 +35,9 @@
                                 <thead>
                                 <tr>
                                     <th class="text-center">شماره</th>
-                                    <th class="text-center">عنوان</th>
-                                    <th class="text-center">سازنده تیکت</th>
-                                    <th class="text-center">تاریخ</th>
-                                    <th class="text-center">وضعیت</th>
-                                    <th class="text-center">پیام جدید</th>
+                                    <th class="text-center">تصویر بنر</th>
+                                    <th class="text-center">توضیحات</th>
+                                    <th class="text-center">اندازه</th>
                                     <th class="text-center">عملیات</th>
                                 </tr>
                                 </thead>
@@ -56,18 +54,17 @@
     </section>
 
 
-    <!-- /.modal -->
-    <div class="modal fade" id="toggle-user-state-modal">
+    <div class="modal fade" id="confirm_modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class=" text-black">x</span></button>
-                    <h4 class="modal-title"><b>وضعیت تیکت تغییر کند؟</b></h4>
+                    <h4 class="modal-title"><b>آیا تمایل دارید این بنر را حذف کنید؟</b></h4>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">{% trans "No" %}</button>
-                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">{% trans "Yes" %}</button>
+                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">خیر</button>
+                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">بلی</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -84,36 +81,19 @@
     <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
     <script>
         window.data_table_cool_options["rowCallback"] = function (row, data) {
-            if (data[4] == "True") {
-                $('td:eq(4)', row).addClass("text-center").html('<span class="bg-green color-palette col-md-12">باز</span>');
-            } else {
-                $('td:eq(4)', row).addClass("text-center").html('<span class="bg-red color-palette col-md-12">بسته</span>');
+            if (data[1]) {
+                $('td:eq(1)', row).addClass("text-center").html('<img class="icon_class" src="/media/'+data[1]+'">');
             }
-            if (data[5] >0 ) {
-                $('td:eq(5)', row).addClass("text-center").html('<span class="bg-yellow color-palette col-md-12">'+data[5]+'</span>');
-            }
-            var seen_message = "{% url "ListTicketMessaes" 0 %}";
-            seen_message = seen_message.substr(0, where_to_edit.length - 1);
-            $(row).append('<td class="text-center"><a href="'+seen_message+'/'+data[0]+'" class="btn btn-primary" style="margin-left:5px;">لیست پیام ها</a>{% if user.is_superuser %}<a class="btn btn-danger toggle-user-state">تغییر وضعیت</a></td>{% endif %}')
         };
         var where_to_edit = "{% url "ToggleTicketState" 0 %}";
         where_to_edit = where_to_edit.substr(0, where_to_edit.length - 1);
         datatable_simple_show({
-            url: "{% url 'ListTicketsDataTable' %}",
-            no_action_nutton:true,
-            real_cols: 6,
+            url: "{% url 'List_Banner_Datatable' %}",
+            real_cols: 4,
             datable_id: '#UserDatatable',
-            do_after_initializing: function (table) {
-                $('.toggle-user-state').click(function () {
-                    var row_clicked = $(this);
-                    $('#toggle-user-state-modal').modal('toggle');
-                    $('#toggle-user-state-modal .yes_button').click(function () {
-                        window.location.href = where_to_edit + getId(table, row_clicked);
-                        $('#toggle-user-state-modal').modal('toggle');
-                    });
-                    console.log(getId(table, $(this)));
-                });
-            }
+            del_url: "{% url 'DeleteBanner' pk=0 %}",
+            up_url: "{% url 'UpdateBanner' pk=0 %}",
+            modal_id: "#confirm_modal"
         });
     </script>
 {% endblock %}

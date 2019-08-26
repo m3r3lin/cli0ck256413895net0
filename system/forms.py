@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from unidecode import unidecode
 
 from system.functions import change_date_to_english
-from system.models import Payam, Infopm
+from system.models import Payam, Infopm ,BannerSingup
 from system.models import User, Pelan, Tabligh, TanzimatPaye, ACTIV_MOAREF
 
 fullmatch_compiled = re.compile('^code_(\d{1,9})')
@@ -867,3 +867,24 @@ class CreateTicketForm(Form):
         if not any(ext in filetype for ext in list_format):
             raise ValidationError(" فایل تنها میتواند عکس یا متن باشد.")
         return file
+
+class Create_Banner(ModelForm):
+    pic = forms.ImageField(required=False, widget=MyClearableFileInput)
+    class Meta:
+        model = BannerSingup
+        fields = ['pic', 'description','size']
+
+    def __init__(self, *args, **kwargs):
+        super(Create_Banner, self).__init__(*args, **kwargs)
+
+        self.fields['pic'].label = 'تصویر بنر:'
+        self.fields['pic'].required = True
+        self.fields['pic'].widget.attrs.update({'class': 'form-control', 'id': 'pic'})
+
+        self.fields['description'].label = "توضیحات:"
+        self.fields['description'].required = True
+        self.fields['description'].widget.attrs.update({'class': 'form-control', 'id': 'description'})
+
+        self.fields['size'].label = "اندازه بنر:"
+        self.fields['size'].required = True
+        self.fields['size'].widget.attrs.update({'class': 'form-control', 'id': 'size'})

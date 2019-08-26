@@ -190,21 +190,21 @@ class TicketListView(LoginRequiredMixin, TemplateView):
 
 class TicketDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = Ticket
-    columns = ['id', 'title','date','status','unread_message']
+    columns = ['id', 'title','creator','date','status','unread_message']
 
     def get_initial_queryset(self):
         user = self.request.user
         qs = super().get_initial_queryset()
         if user.is_superuser:
-            return qs
+            return qs.order_by('-id')
         qs = qs.filter(creator=user)
-        return qs
+        return qs.order_by('-id')
 
     def render_column(self, row, column):
         if column == 'date':
             return date_jalali(row.date, 3)
         elif column =='unread_message':
-            return TicketMessages.objects.filter(ticket=row,seen=False).count()
+            return TicketMessages.objects.filter(ticket=row,seen=False).exclude(creator=self.request.user).count()
         return super().render_column(row, column)
 
     def filter_queryset(self, qs):
@@ -245,11 +245,13 @@ class ListTicketMessaesView(LoginRequiredMixin, View):
             ticket=Ticket.objects.filter(id=id).first()
         if ticket is None:
             return redirect(reverse_lazy("TicketListView"))
-        messages = TicketMessages.objects.filter(ticket=ticket).update(seen=True)
+        ticket_status=ticket.status
+        messages = TicketMessages.objects.filter(ticket=ticket).exclude(creator=request.user).update(seen=True)
         messages=TicketMessages.objects.filter(ticket=ticket).values('body', 'creator__username','file', 'date__date', 'date__time')
         logs = rows = groupby(messages, itemgetter('date__date'))
         messages= {c_title: list(items) for c_title, items in rows}
-        return render(request,'system/message/List_TicketMessages.html',{'ticket_messages':messages,'form':form})
+        return render(request,'system/message/List_TicketMessages.html',{'ticket_messages':messages,'form':form,'ticket_status':ticket_status})
+
     def post(self,request,id):
         ticket_id=request.POST.get('ticket_id')
         print(ticket_id)
@@ -265,14 +267,18 @@ class ListTicketMessaesView(LoginRequiredMixin, View):
                 if ticket is None:
                     return redirect(reverse_lazy("TicketListView"))
                 else:
-                    ticket_message = TicketMessages()
-                    ticket_message.ticket = ticket
-                    ticket_message.body = request.POST.get('message')
-                    ticket_message.creator = self.request.user
-                    if "file" in self.request.FILES:
-                        file = self.request.FILES.get('file')
-                        ticket_message.file = file
-                    ticket_message.save()
+                    if ticket.status:
+                        ticket_message = TicketMessages()
+                        ticket_message.ticket = ticket
+                        ticket_message.body = request.POST.get('message')
+                        ticket_message.creator = self.request.user
+                        if "file" in self.request.FILES:
+                            file = self.request.FILES.get('file')
+                            ticket_message.file = file
+                        ticket_message.save()
+                    else:
+                        messages.error(request, _("You are not allowed to access"))
+                        return redirect("dashboard")
         else:
             messages.error(request, _("You are not allowed to access"))
             return redirect("dashboard")

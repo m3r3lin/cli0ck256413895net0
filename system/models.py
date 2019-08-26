@@ -16,7 +16,7 @@ from django_countries.fields import CountryField
 
 from Ads_Project import settings
 from Ads_Project.settings import MAIN_ADMIN_ID
-from system.functions import upload_avatar_path, upload_cart_melli_path, upload_ticket_path
+from system.functions import upload_avatar_path, upload_cart_melli_path, upload_ticket_path, upload_banner_path
 
 INCREASE_BALANCE_ORDER = 12
 
@@ -380,3 +380,8 @@ class TicketMessages(Model):
     date = models.DateTimeField(auto_now_add=True)
     file = models.FileField(upload_to=upload_ticket_path)
     seen = models.BooleanField(default=False)
+
+class BannerSingup(Model):
+    pic =  models.ImageField(upload_to=upload_banner_path)
+    description =  models.CharField(max_length=255,blank=True,null=True)
+    size =  models.CharField(max_length=255,blank=True,null=True)

@@ -1,0 +1,98 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% load i18n %}
+{% block css %}
+{% endblock %}
+{% block page_title %}
+     ساخت بنر عضوگیری
+{% endblock %}
+{% block dashboard %}
+    <li>ایجاد بنر</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{% trans "Create Plan" %}</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="box-body">
+                            {% include "errors.html" %}
+                            {% include "messages.html" %}
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-md-12">
+                                    {% if form.pic.label_tag %}
+                                        <label for="onvan">{{ form.pic.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.pic }}
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-12">
+                                    {% if form.description.label_tag %}
+                                        <label for="gheymat">{{ form.description.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.description }}
+                                </div>
+                                <div class="form-group col-sm-6 col-md-12">
+                                    {% if form.size.label_tag %}
+                                        <label for="tedad_click">{{ form.size.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.size }}
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'dist/my_js/datatable.js' %}"></script>
+    <!-- my fontawesom -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var calculate = function () {
+                if ($('#gheymat').length && $('#tedad_click').length) {
+                    var cost = $('#gheymat').val();
+                    if (isNaN(cost)) {
+                        $('#mablagh_ha_click').val(0);
+                        return;
+                    }
+                    var click_count = $('#tedad_click').val();
+                    if (isNaN(click_count)) {
+                        $('#mablagh_ha_click').val(0);
+                        return;
+                    }
+                    click_count = Number(click_count);
+                    cost = Number(cost)
+                    if (click_count <= 0 || cost <= 0) {
+                        $('#mablagh_ha_click').val(0);
+                        return;
+                    }
+                    $('#mablagh_ha_click').val(Math.trunc(cost / click_count));
+                }
+            };
+            $('#tedad_click,#gheymat').keyup(calculate).change(calculate);
+            if ($('#gheymat').val() != null && $('#tedad_click').val() != null) {
+                calculate()
+            }
+        });
+    </script>
+{% endblock %}

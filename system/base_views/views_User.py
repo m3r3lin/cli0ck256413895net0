@@ -104,6 +104,7 @@ class UserCreateView(CreateView):
         referer = self.request.GET.get('referer', None)
         if 'code_moaref' in form.fields and referer:
             form.fields['code_moaref'].widget.attrs['value'] = f"code_{referer}"
+            form.fields['code_moaref'].widget.attrs['readonly'] ='readonly'
         return form
 
     def get_success_url(self):

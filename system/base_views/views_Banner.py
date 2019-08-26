@@ -24,6 +24,10 @@ class BannerCreateView(LoginRequiredMixin, CreateView):
     template_name = 'system/BannerSignup/Create_Banner.html'
     form_class = Create_Banner
 
+    def form_valid(self, form):
+        messages.success(self.request, "بنر با موفقیت ایجاد شد.")
+        return super().form_valid(form)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
@@ -67,3 +71,11 @@ class BannerDeleteView(LoginRequiredMixin, View):
             return redirect('List_Banner')
         messages.success(self.request,"بنر با موفقیت حذف شد")
         return redirect('List_Banner')
+
+class List_Banner_show_View(LoginRequiredMixin,ListView):
+    model = BannerSingup
+    template_name = 'system/BannerSignup/List_Show_Banner.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        return context

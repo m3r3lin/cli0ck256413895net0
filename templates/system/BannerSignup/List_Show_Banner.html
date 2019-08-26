@@ -1,0 +1,106 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% load app_filters %}
+{% load i18n %}
+{% block css %}
+    <style>
+        td {
+            text-align: center;
+        }
+
+        th:nth-child(11), td:nth-child(11) {
+            white-space: nowrap;
+        }
+
+        textarea {
+            display: block;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
+{% block page_title %}
+    بنرهای زیرمجموعه گیری
+{% endblock %}
+{% block dashboard %}
+    <li>بنرهای زیرمجموعه گیری</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            {% for object in object_list %}
+                <section class="col-lg-4 col-md-4">
+                    <div class="box box-info">
+                        <div class="box-header">
+                            <i class="fa fa-info-circle"></i>
+                            <h3 class="box-title">
+                                بنر {{ forloop.counter }}
+                            </h3>
+                            <!-- tools box -->
+                            <div class="pull-left box-tools">
+                                <button type="button" class="btn bg-info btn-sm" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <!-- /. tools -->
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12" style="margin: 0 auto; text-align: center; ">
+                                    <p><img src="{{ object.pic.url }}" style="margin: 0 auto; max-width: 100%;">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <b>توضیحات : </b>
+                                    <div style="direction: ltr; text-align: right; display: inline-block;"> {{ object.description }}</div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <br>
+                                    <b>سایز :</b>
+                                    <div style="direction: ltr; text-align: right; display: inline-block;"> {{ object.size }}</div>
+                                </div>
+                                <div class="col-md-12">
+                                    <br>
+                                    <b>برای جاسازی این نوشته ، این کد را در سایت خود قرار بدهید:</b>
+                                    <textarea style="width:100%; direction: ltr;text-align: left;  " readonly><a href="{% url 'CreateUser'%}?referer={{ user.id }}" target="_blank"><img src="{{ object.pic.url }}"></a></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            {% endfor %}
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'dist/my_js/datatable.js' %}"></script>
+    <!-- my fontawesom -->
+    <script src="{% static 'bower_components/fontawesom/js/all.js' %} "></script>
+    <script>
+        window.data_table_cool_options["rowCallback"] = function (row, data) {
+            if (data[1]) {
+                $('td:eq(1)', row).addClass("text-center").html('<img class="icon_class" src="/media/' + data[1] + '">');
+            }
+        };
+        var where_to_edit = "{% url "ToggleTicketState" 0 %}";
+        where_to_edit = where_to_edit.substr(0, where_to_edit.length - 1);
+        datatable_simple_show({
+            url: "{% url 'List_Banner_Datatable' %}",
+            real_cols: 4,
+            datable_id: '#UserDatatable',
+            del_url: "{% url 'DeleteBanner' pk=0 %}",
+            up_url: "{% url 'UpdateBanner' pk=0 %}",
+            modal_id: "#confirm_modal"
+        });
+    </script>
+{% endblock %}

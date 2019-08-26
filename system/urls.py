@@ -7,7 +7,7 @@ from system.base_views.view_graph import (
     Parent_Children_List_View
 )
 from system.base_views.views_Banner import BannerCreateView, BannerListView, BannerDatatableView, BannerUpdateView, \
-    BannerDeleteView
+    BannerDeleteView, List_Banner_show_View
 from system.base_views.views_Click import ClickedOnTablighView, ClickDatatableView, ShowClick
 from system.base_views.views_Malli import (
     IncreaseBalanceView, dargah_test_part_1, HistoryMaliDatatableView,
@@ -159,4 +159,6 @@ urlpatterns = [
     path('List_Banner_Datatable/', BannerDatatableView.as_view(), name='List_Banner_Datatable'),
     path('UpdateBanner/<int:pk>', BannerUpdateView.as_view(), name='UpdateBanner'),
     path('DeleteBanner/<int:pk>', BannerDeleteView.as_view(), name='DeleteBanner'),
+    path('List_Banner_show/', List_Banner_show_View.as_view(), name='List_Banner_show'),
+
 ]

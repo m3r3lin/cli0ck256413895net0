@@ -498,6 +498,21 @@
                             </li>
                         </ul>
                     </li>
+                <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-bullhorn"></i>
+                            <span>بنرهای زیرمجموعه گیری</span>
+                            <span class="pull-left-container">
+                            <i class="fa fa-angle-right pull-left"></i>
+                        </span>
+
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="{% url  'List_Banner_show' %}"><i
+                                    class="fa fa-plus"></i>مشاهده بنرها</a>
+                            </li>
+                        </ul>
+                    </li>
                     {% if request.user.is_superuser %}
                         <li class="treeview">
                             <a href="#">

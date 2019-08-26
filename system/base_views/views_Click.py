@@ -8,8 +8,10 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from Ads_Project.functions import LoginRequiredMixin
 from system.functions import get_client_ip
-from system.models import User, Tabligh, Click, SODE_MODIR, TanzimatPaye, \
+from system.models import (
+    User, Tabligh, Click, SODE_MODIR, TanzimatPaye,
     COUNT_LEVEL_NETWORK, HistoryIndirect, SoodeTabligh
+)
 from system.templatetags.app_filters import date_jalali
 
 
@@ -37,8 +39,8 @@ class ClickedOnTablighView(View):
         click.tabligh = tabligh
         click.montasher_konande = user
         click.ip = get_client_ip(request)
-        sode_modir = TanzimatPaye.get_settings(SODE_MODIR)
-        max_sath_sod = TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK)
+        sode_modir = TanzimatPaye.get_settings(SODE_MODIR, 0)
+        max_sath_sod = TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, 0)
 
         # get sath user
         tabligh_first_sath = SoodeTabligh.objects.filter(Q(sath__lte=user.sath) & ~Q(sath=0)).order_by('-sath').first()
@@ -59,7 +61,8 @@ class ClickedOnTablighView(View):
                         parent_user = User.objects.filter(id=parent[0]).first()
                         if parent_user.sath < tabligh_first_sath:
                             if parent_user is not None:
-                                soode_sath = SoodeTabligh.objects.filter(sath=parent_user.sath, tabligh=tabligh).first()
+                                soode_sath = SoodeTabligh.objects.filter(sath=parent_user.sath,
+                                                                         tabligh=tabligh).first()
                                 if soode_sath:
                                     parent_user.add_to_kif_daramad(soode_sath.soode_gheire_mostaghim, direct=False)
                                     HistoryIndirect.objects.create(montasher_konande=user, parent=parent_user,
@@ -77,7 +80,7 @@ class ClickedOnTablighView(View):
 
         return render(request, 'system/Tabligh/Show_Tabligh.html', context={
             "tabligh": tabligh,
-            "montasher_konande":user,
+            "montasher_konande": user,
         })
 
 

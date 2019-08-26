@@ -16,39 +16,131 @@ from system.models import (
 class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
+        today = datetime.today()
 
         # All Queries
         prev_thirty_days = datetime.now() - timedelta(days=30)
-        # تعداد کل کلیکهای انجام شده در سامانه بر اساس روز
+        # تعداد کل کلیکهای انجام شده در سامانه بر اساس روز نمودار
         prev_thirty_days_clicks = Click.objects.filter(tarikh__lte=datetime.now(), tarikh__gte=prev_thirty_days)
         if not request.user.is_superuser:
             prev_thirty_days_clicks.filter(montasher_konande=request.user)
-        prev_thirty_days_clicks_count = prev_thirty_days_clicks.count()
+        prev_thirty_days_clicks = prev_thirty_days_clicks \
+            .values('tarikh') \
+            .annotate(by_date=TruncDate('tarikh')).values('by_date') \
+            .annotate(by_day_count=Count('tarikh')).values('by_date', 'by_day_count')
 
-        prev_thirty_days_clicks = prev_thirty_days_clicks.annotate(by_date=TruncDate('tarikh'),
-                                                                   by_day_count=Count('id')) \
-            .values('by_date', 'by_day_count')
-        # تعداد کل هزینه های دریافتی بابت کلیک اعضا بر اساس روز
+        # تعداد کل کلیک های امروز
+        today_clicks_count = Click.objects.filter(tarikh__year=today.year,
+                                                  tarikh__month=today.month,
+                                                  tarikh__day=today.day)
+        if not request.user.is_superuser:
+            today_clicks_count = today_clicks_count.filter(montasher_konande=request.user)
+        today_clicks_count = today_clicks_count.count()
+
+        #  تعداد کلیک های دیروز
+        prev_day = today - timedelta(days=1)
+        prev_day = prev_day
+        prev_day_clicks_count = Click.objects.filter(tarikh__year=prev_day.year,
+                                                     tarikh__month=prev_day.month,
+                                                     tarikh__day=prev_day.day)
+        if not request.user.is_superuser:
+            prev_day_clicks_count = prev_day_clicks_count.filter(montasher_konande=request.user)
+        prev_day_clicks_count = prev_day_clicks_count.count()
+
+        # تعداد کل کلیک ها
+        all_clicks_count = Click.objects.all()
+        if not request.user.is_superuser:
+            all_clicks_count = all_clicks_count.filter(montasher_konande=request.user)
+        all_clicks_count = all_clicks_count.count()
+
+        # تعداد کل هزینه های دریافتی بابت کلیک اعضا بر اساس روز نمودار
         prev_thirty_days_income = HistoryIndirect.objects.filter(tarikh__lte=datetime.now(),
                                                                  tarikh__gte=prev_thirty_days)
         if not request.user.is_superuser:
-            prev_thirty_days_income.filter(montasher_konande=request.user)
-        prev_thirty_days_income_count = prev_thirty_days_income.aggregate(all_sum=Sum('mablagh'))
-
-        prev_thirty_days_income = prev_thirty_days_income.annotate(by_date=TruncDate('tarikh'),
-                                                                   by_day_count=Sum('mablagh')) \
-            .values('by_date', 'by_day_count')
-        # تعداد تبلیغات اخذ شده توسط سامانه بر اساس روز
-        prev_thirty_days_ads = TablighatMontasherKonande.objects.filter(tarikh__lte=datetime.now(),
-                                                                 tarikh__gte=prev_thirty_days)
+            prev_thirty_days_income = prev_thirty_days_income.filter(montasher_konande=request.user)
+        prev_thirty_days_income = prev_thirty_days_income.values('tarikh') \
+            .annotate(by_date=TruncDate('tarikh')).values('by_date') \
+            .annotate(by_day_count=Sum('mablagh')).values('by_date', 'by_day_count')
+        # تعداد کل تبلیغات ایجادا شده امروز
+        today_payed_sum = HistoryIndirect.objects.filter(tarikh__year=today.year,
+                                                         tarikh__month=today.month,
+                                                         tarikh__day=today.day)
         if not request.user.is_superuser:
-            prev_thirty_days_ads.filter(montasher_konande=request.user)
-        prev_thirty_days_ads_count = prev_thirty_days_ads.count()
+            today_payed_sum = today_payed_sum.filter(montasher_konande=request.user)
+        today_payed_sum = today_payed_sum.aggregate(summed=Sum('mablagh'))['summed']
+        today_payed_sum = today_payed_sum if today_payed_sum else 0
 
-        prev_thirty_days_ads = prev_thirty_days_ads.annotate(by_date=TruncDate('tarikh'),
-                                                                   by_day_count=Count('id')) \
-            .values('by_date', 'by_day_count')
+        # تعداد کل تبلیغات ایجاد شده دیروز
+        prev_day_payed_sum = HistoryIndirect.objects.filter(tarikh__year=prev_day.year,
+                                                            tarikh__month=prev_day.month,
+                                                            tarikh__day=prev_day.day)
+        if not request.user.is_superuser:
+            prev_day_payed_sum = prev_day_payed_sum.filter(montasher_konande=request.user)
+        prev_day_payed_sum = prev_day_payed_sum.aggregate(summed=Sum('mablagh'))['summed']
+        prev_day_payed_sum = prev_day_payed_sum if prev_day_payed_sum else 0
 
+        # تعداد کل تبلیغات ایجاد شده
+        all_payed_sum = HistoryIndirect.objects.all()
+        if not request.user.is_superuser:
+            all_payed_sum = all_payed_sum.filter(montasher_konande=request.user)
+        all_payed_sum = all_payed_sum.aggregate(summed=Sum('mablagh'))['summed']
+        all_payed_sum = all_payed_sum if all_payed_sum else 0
+
+        # تعداد تبلیغات اخذ شده توسط سامانه بر اساس روز
+        prev_thirty_days_ads = Tabligh.objects.filter(tarikh_ijad__lte=datetime.now(),
+                                                      tarikh_ijad__gte=prev_thirty_days)
+
+        today_all_ads = Tabligh.objects.filter(tarikh_ijad__year=today.year,
+                                               tarikh_ijad__month=today.month,
+                                               tarikh_ijad__day=today.day).count()
+
+        prev_day_all_ads = Tabligh.objects.filter(tarikh_ijad__year=prev_day.year,
+                                                  tarikh_ijad__month=prev_day.month,
+                                                  tarikh_ijad__day=prev_day.day).count()
+        all_ads_count = Tabligh.objects.count()
+
+        prev_thirty_days_ads = prev_thirty_days_ads.values('tarikh_ijad') \
+            .annotate(by_date=TruncDate('tarikh_ijad')).values('by_date') \
+            .annotate(by_day_count=Count('tarikh_ijad')).values('by_date', 'by_day_count')
+
+        # تعداد زیر مجموعه ها بر اساس سطح نمودار
+        all_referrals = User.objects \
+            .filter(date_joined__lte=datetime.now(), date_joined__gte=prev_thirty_days) \
+            .filter(list_parent__contains=f'[{request.user.id}]').values("sath") \
+            .annotate(tedad_sath=Count("sath"), date_joined_dated=TruncDate("date_joined")) \
+            .values('tedad_sath', "date_joined_dated", "sath")
+        # این بخش بری تبدیل داده ها بشکلی است که
+        # بتوان آنهارا در نمودار های استفاده کرد
+        leveled_referrals = {}
+
+        def convert_to_readable(dasdate):
+            return f'{dasdate.year}' \
+                   f'-{dasdate.month if dasdate.month > 10 else f"0{dasdate.month}"}' \
+                   f'-{dasdate.day if dasdate.day > 10 else f"0{dasdate.day}"}'
+
+        for referrals in all_referrals:
+            converted = convert_to_readable(referrals['date_joined_dated'])
+            if converted in leveled_referrals:
+                leveled_referrals[converted][f'level_{referrals["sath"]}'] = referrals["tedad_sath"]
+            else:
+                leveled_referrals[converted] = {
+                    f'level_{referrals["sath"]}': referrals["tedad_sath"]
+                }
+        # تعداد زیر مجموعه ها امروز
+        today_all_referrals = User.objects \
+            .filter(date_joined__year=today.year,
+                    date_joined__month=today.month,
+                    date_joined__day=today.day) \
+            .filter(list_parent__contains=f'[{request.user.id}]').count()
+        # تعداد زیر مجموعه ها دیروز
+        prev_day_all_referrals = User.objects \
+            .filter(date_joined__year=prev_day.year,
+                    date_joined__month=prev_day.month,
+                    date_joined__day=prev_day.day) \
+            .filter(list_parent__contains=f'[{request.user.id}]').count()
+        # تعداد کل زیر مجموعه ها
+        all_referrals_count = User.objects \
+            .filter(list_parent__contains=f'[{request.user.id}]').count()
         # User Queries
 
         # Admin queries
@@ -58,7 +150,6 @@ class Dashboard(LoginRequiredMixin, View):
         count_user_online = User.objects.filter(
             last_activity__gte=online_time_limite).count()
         all_User = User.objects.count()
-        today = datetime.today()
         all_User_Today = User.objects.filter(date_joined__year=today.year,
                                              date_joined__month=today.month,
                                              date_joined__day=today.day).count()
@@ -112,7 +203,6 @@ class Dashboard(LoginRequiredMixin, View):
             this_month_publishes['montasher_konande'] = user
 
         income_pocket = request.user.get_kif_daramad()
-
         queries = {
             "this_month_clicks": Click.objects.filter(
                 **this_month_clicks).count(),
@@ -134,6 +224,31 @@ class Dashboard(LoginRequiredMixin, View):
             "today_indirect": indirect_today['mablagh__sum'],
             "today_daramad": direct_today['mablagh_har_click__sum'] +
                              indirect_today['mablagh__sum']
+            ,
+            "clicks": {
+                "prev_thirty_days_clicks": prev_thirty_days_clicks,
+                "today_clicks_count": today_clicks_count,
+                "prev_day_clicks_count": prev_day_clicks_count,
+                "all_clicks_count": all_clicks_count,
+            },
+            "payed": {
+                "prev_thirty_days_income": prev_thirty_days_income,
+                "today_payed_sum": today_payed_sum,
+                "prev_day_payed_sum": prev_day_payed_sum,
+                "all_payed_sum": all_payed_sum,
+            },
+            "ads": {
+                "prev_thirty_days_ads": prev_thirty_days_ads,
+                "today_all_ads": today_all_ads,
+                "prev_day_all_ads": prev_day_all_ads,
+                "all_ads_count": all_ads_count,
+            },
+            "refs": {
+                "all_referrals": leveled_referrals,
+                "today_all_referrals": today_all_referrals,
+                "prev_day_all_referrals": prev_day_all_referrals,
+                "all_referrals_count": all_referrals_count,
+            },
         }
 
         tablighs = Tabligh.objects.filter(vazeyat=1).order_by('-id')[:10]

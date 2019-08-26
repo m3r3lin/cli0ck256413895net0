@@ -2376,3 +2376,43 @@ msgstr "بروزرسانی اطلاعات PerfectMoney"
 msgid "peyment title"
 msgstr "عنوان درگاه خرید"
 
+msgid "Click of last 30 Days"
+msgstr "تعداد کل کلیکهای انجام شده"
+
+msgid "Ads of last 30 Days"
+msgstr "تعداد تبلیغات ایجاد شده توسط سامانه"
+
+msgid "Last 30 days Referrals"
+msgstr "تعداد زیر مجموعه بر اساس سطح"
+
+msgid "Last 30 days payments"
+msgstr "تعداد کل هزینه های دریافتی بابت کلیک اعضا"
+
+
+msgid "Today Referrals"
+msgstr "زیرمجموعه های امروز"
+
+msgid "Yesterday Referrals"
+msgstr "زیر مجموعه های دیروز"
+
+msgid "All"
+msgstr "مجموع"
+
+msgid "Yesterday Ads"
+msgstr "تبلیغات دیروز"
+
+msgid "Today Ads"
+msgstr "تبلیغات امروز"
+
+msgid "Yesterday Clicks"
+msgstr "کل کلیک های دیروز"
+
+msgid "Today Clicks"
+msgstr "کل کلیک های امروز"
+
+msgid "Today Payments"
+msgstr "دریافتی های امروز"
+
+msgid "Yesterday Payments"
+msgstr "دریافتی های دیروز"
+

@@ -4,6 +4,7 @@
 {% load app_filters %}
 {% block css %}
     <link rel="stylesheet" href="{% static "bower_components/jvectormap/jquery-jvectormap.css" %}">
+    <link rel="stylesheet" href="{% static "bower_components/morris.js/morris.css" %}">
 {% endblock %}
 {% block page_title %}
     {% trans "Dashboard" %}
@@ -243,19 +244,8 @@
             {% include 'system/Tabligh/show_tabligh_part.html' %}
         {% endif %}
         <!-- /.content --></div>
-
-    <div class="col-md-4 col-sm-6 col-xs-12">
-        <div class="box box-info">
-            <div class="box-header with-border">
-                <h3 class="box-title">{% trans "Last five days clicks" %}</h3>
-            </div>
-            <div class="box-body chart-responsive">
-                <div class="chart" id="line-chart" style="height: 300px;"></div>
-            </div>
-            <!-- /.box-body -->
-        </div>
-    </div>
     {% if request.user.is_superuser %}
+        <!-- MAP -->
         <div class="col-md-4 col-sm-6 col-xs-12">
             <div class="box box-solid bg-light-blue-gradient">
                 <div class="box-header">
@@ -270,7 +260,166 @@
                 </div>
             </div>
         </div>
+        <!-- Ads -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="box box-solid bg-teal-gradient">
+                <div class="box-header">
+                    <i class="fa fa-th"></i>
+
+                    <h3 class="box-title">{% trans "Ads of last 30 Days" %}</h3>
+                </div>
+                <div class="box-body border-radius-none">
+                    <div class="chart" id="all-ads-in-a-month" style="height: 250px;"></div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer no-border">
+                    <div class="row">
+                        <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
+
+                            <h4 class="text-black">{{ queries.ads.today_all_ads }}</h4>
+
+                            <div class="knob-label">{% trans "Today Ads" %}</div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
+
+                            <h4 class="text-black">{{ queries.ads.prev_day_all_ads }}</h4>
+
+                            <div class="knob-label">{% trans "Yesterday Ads" %}</div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-xs-4 text-center">
+                            <h4 class="text-black">{{ queries.ads.all_ads_count }}</h4>
+                            <div class="knob-label">{% trans "All" %}</div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.box-footer -->
+            </div>
+        </div>
+    {% else %}
+
+        <!-- Referrals -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="box box-solid bg-teal-gradient">
+                <div class="box-header">
+                    <i class="fa fa-th"></i>
+
+                    <h3 class="box-title">{% trans "Last 30 days Referrals" %}</h3>
+                </div>
+                <div class="box-body border-radius-none">
+                    <div class="chart" id="all-refs-in-a-month" style="height: 250px;"></div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer no-border">
+                    <div class="row">
+                        <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
+
+                            <h4 class="text-black">{{ queries.refs.today_all_referrals }}</h4>
+
+                            <div class="knob-label">{% trans "Today Referrals" %}</div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
+
+                            <h4 class="text-black">{{ queries.refs.prev_day_all_referrals }}</h4>
+
+                            <div class="knob-label">{% trans "Yesterday Referrals" %}</div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-xs-4 text-center">
+                            <h4 class="text-black">{{ queries.refs.all_referrals_count }}</h4>
+                            <div class="knob-label">{% trans "All" %}</div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.box-footer -->
+            </div>
+        </div>
     {% endif %}
+    <!-- Clicks -->
+    <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="box box-solid bg-teal-gradient">
+            <div class="box-header">
+                <i class="fa fa-th"></i>
+
+                <h3 class="box-title">{% trans "Click of last 30 days" %}</h3>
+            </div>
+            <div class="box-body border-radius-none">
+                <div class="chart" id="all-clicks-in-a-month" style="height: 250px;"></div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer no-border">
+                <div class="row">
+                    <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
+
+                        <h4 class="text-black">{{ queries.clicks.today_clicks_count }}</h4>
+
+                        <div class="knob-label">{% trans "Today Clicks" %}</div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
+
+                        <h4 class="text-black">{{ queries.clicks.prev_day_clicks_count }}</h4>
+
+                        <div class="knob-label">{% trans "Yesterday Clicks" %}</div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-xs-4 text-center">
+                        <h4 class="text-black">{{ queries.clicks.all_clicks_count }}</h4>
+                        <div class="knob-label">{% trans "All" %}</div>
+                    </div>
+                    <!-- ./col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.box-footer -->
+        </div>
+    </div>
+    <!-- Payments -->
+    <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="box box-solid bg-teal-gradient">
+            <div class="box-header">
+                <i class="fa fa-th"></i>
+
+                <h3 class="box-title">{% trans "Last 30 days payments" %}</h3>
+            </div>
+            <div class="box-body border-radius-none">
+                <div class="chart" id="all-payed-in-a-month" style="height: 250px;"></div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer no-border">
+                <div class="row">
+                    <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
+
+                        <h4 class="text-black">{{ queries.payed.today_payed_sum }}</h4>
+
+                        <div class="knob-label">{% trans "Today Payments" %}</div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
+
+                        <h4 class="text-black">{{ queries.payed.prev_day_payed_sum }}</h4>
+
+                        <div class="knob-label">{% trans "Yesterday Payments" %}</div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-xs-4 text-center">
+                        <h4 class="text-black">{{ queries.payed.all_payed_sum }}</h4>
+                        <div class="knob-label">{% trans "All" %}</div>
+                    </div>
+                    <!-- ./col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.box-footer -->
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -278,64 +427,290 @@
     <script src="{% static "plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" %}"></script>
     <script src="{% static "plugins/jvectormap/jquery-jvectormap-world-mill-en.js" %}"></script>
     <script src="{% static 'bower_components/jquery-sparkline/dist/jquery.sparkline.min.js' %}"></script>
+    <script src="{% static 'bower_components/jquery-sparkline/dist/jquery.sparkline.min.js' %}"></script>
     <script type="text/javascript">
-        // jvectormap data
-        var visitorsData = {
-            {% autoescape off %}
-                {% for u_coutnry in queries.count_online_user_by_country %}
-                    "{{ u_coutnry.country }}": {{ u_coutnry.count_user_online_country }},
-                {% endfor %}
-            {% endautoescape %}
-        };
-        // World map by jvectormap
-        {% if request.user.is_superuser %}
-            $('#world-map').vectorMap({
-                map: 'world_mill_en',
-                backgroundColor: 'transparent',
-                regionStyle: {
-                    initial: {
-                        fill: '#e4e4e4',
-                        'fill-opacity': 1,
-                        stroke: 'none',
-                        'stroke-width': 0,
-                        'stroke-opacity': 1
-                    }
-                },
-                series: {
-                    regions: [
-                        {
-                            values: visitorsData,
-                            scale: ['#8141dc', '#83a5a6'],
-                            normalizeFunction: 'polynomial'
-                        }
-                    ]
-                },
-                onRegionLabelShow: function (e, el, code) {
-                    if (typeof visitorsData[code] != 'undefined')
-                        el.html(el.html() + ': ' + visitorsData[code]);
-                }
-            });
-        {% endif %}
 
-        var line = new Morris.Line({
-            element: 'line-chart',
-            resize: true,
-            data: [
-                {% if queries.past_five_days_click.count > 0 %}
-                    {% autoescape off %}
-                        {% for one_of_days in queries.past_five_days_click %}
-                            {y: "{{ one_of_days.by_day|date_jalali:3 }}", item1: {{one_of_days.by_day_count}}},
-                        {% endfor %}
-                    {% endautoescape %}
-                {% else %}
-                    {y: "{{ queries.todaynow|date_jalali:3 }}", item1: 0},
-                {% endif %}
-            ],
-            xkey: 'y',
-            ykeys: ['item1'],
-            labels: ['{% trans "Count of Clicks" %}'],
-            lineColors: ['#3c8dbc'],
-            hideHover: 'auto'
+        /** Gregorian & Jalali (Hijri_Shamsi,Solar) Date Converter Functions
+         Author: JDF.SCR.IR =>> Download Full Version : http://jdf.scr.ir/jdf
+         License: GNU/LGPL _ Open Source & Free _ Version: 2.73 : [2019=1398]
+         --------------------------------------------------------------------
+         1461 = 365*4 + 4/4   &  146097 = 365*400 + 400/4 - 400/100 + 400/400
+         12053 = 365*33 + 32/4    &    36524 = 365*100 + 100/4 - 100/100   */
+
+
+        function gregorian_to_jalali(gy, gm, gd) {
+            var g_d_m, jy, jm, jd, gy2, days;
+            g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+            if (gy > 1600) {
+                jy = 979;
+                gy -= 1600;
+            } else {
+                jy = 0;
+                gy -= 621;
+            }
+            gy2 = (gm > 2) ? (gy + 1) : gy;
+            days = (365 * gy) + (parseInt((gy2 + 3) / 4)) - (parseInt((gy2 + 99) / 100)) + (parseInt((gy2 + 399) / 400)) - 80 + gd + g_d_m[gm - 1];
+            jy += 33 * (parseInt(days / 12053));
+            days %= 12053;
+            jy += 4 * (parseInt(days / 1461));
+            days %= 1461;
+            if (days > 365) {
+                jy += parseInt((days - 1) / 365);
+                days = (days - 1) % 365;
+            }
+            jm = (days < 186) ? 1 + parseInt(days / 31) : 7 + parseInt((days - 186) / 30);
+            jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+            return [jy, jm, jd];
+        }
+
+        function jalali_to_gregorian(jy, jm, jd) {
+            var sal_a, gy, gm, gd, days, v;
+            if (jy > 979) {
+                gy = 1600;
+                jy -= 979;
+            } else {
+                gy = 621;
+            }
+            days = (365 * jy) + ((parseInt(jy / 33)) * 8) + (parseInt(((jy % 33) + 3) / 4)) + 78 + jd + ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+            gy += 400 * (parseInt(days / 146097));
+            days %= 146097;
+            if (days > 36524) {
+                gy += 100 * (parseInt(--days / 36524));
+                days %= 36524;
+                if (days >= 365) days++;
+            }
+            gy += 4 * (parseInt(days / 1461));
+            days %= 1461;
+            if (days > 365) {
+                gy += parseInt((days - 1) / 365);
+                days = (days - 1) % 365;
+            }
+            gd = days + 1;
+            sal_a = [0, 31, ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            for (gm = 0; gm < 13; gm++) {
+                v = sal_a[gm];
+                if (gd <= v) break;
+                gd -= v;
+            }
+            return [gy, gm, gd];
+        }
+
+        $(document).ready(function () {
+            // jvectormap data
+            var visitorsData = {
+                {% autoescape off %}
+                    {% for u_coutnry in queries.count_online_user_by_country %}
+                        "{{ u_coutnry.country }}": {{ u_coutnry.count_user_online_country }},
+                    {% endfor %}
+                {% endautoescape %}
+            };
+            {% if request.user.is_superuser %}
+                // World map by jvectormap
+                $('#world-map').vectorMap({
+                    map: 'world_mill_en',
+                    backgroundColor: 'transparent',
+                    regionStyle: {
+                        initial: {
+                            fill: '#e4e4e4',
+                            'fill-opacity': 1,
+                            stroke: 'none',
+                            'stroke-width': 0,
+                            'stroke-opacity': 1
+                        }
+                    },
+                    series: {
+                        regions: [
+                            {
+                                values: visitorsData,
+                                scale: ['#8141dc', '#83a5a6'],
+                                normalizeFunction: 'polynomial'
+                            }
+                        ]
+                    },
+                    onRegionLabelShow: function (e, el, code) {
+                        if (typeof visitorsData[code] != 'undefined')
+                            el.html(el.html() + ': ' + visitorsData[code]);
+                    }
+                });
+                $("#all-ads-in-a-month").css('direction', 'ltr');
+                new Morris.Line({
+                    element: 'all-ads-in-a-month',
+                    resize: true,
+                    data: [
+                        {% if queries.ads.prev_thirty_days_ads.count > 0 %}
+                            {% autoescape off %}
+                                {% for one_of_days in queries.ads.prev_thirty_days_ads %}
+                                    {y: "{{ one_of_days.by_date.isoformat }}", item1: {{one_of_days.by_day_count}}},
+                                {% endfor %}
+                            {% endautoescape %}
+                        {% else %}
+                            {y: "{{ queries.todaynow.isoformat }}", item1: 0},
+                        {% endif %}
+                    ],
+                    xkey: 'y',
+                    dateFormat: function (d) {
+                        var date = new Date(d);
+                        return gregorian_to_jalali(date.getFullYear(), date.getMonth(), date.getDay()).join('/');
+                    },
+                    xLabelFormat: function (d) {
+                        return '';
+                    },
+                    hoverCallback: function (index, options, content, row) {
+                        var date = new Date(row.y);
+                        content = $(content)
+                            .text(gregorian_to_jalali(date.getFullYear(), date.getMonth(), date.getDay()).join('/'))
+                            .html();
+                        return content;
+                    },
+                    ykeys: ['item1'],
+                    labels: ['Item'],
+                    lineColors: ['#efefef'],
+                    hideHover: 'auto',
+                    gridTextColor: '#fff',
+                    pointStrokeColors: ['#efefef'],
+                    gridLineColor: '#efefef',
+                });
+            {% else %}
+                $("#all-refs-in-a-month").css('direction', 'ltr');
+                new Morris.Line({
+                    element: 'all-refs-in-a-month',
+                    resize: true,
+                    data: [
+                        {% if queries.refs.all_referrals|length > 0 %}
+                            {% autoescape off %}
+                                {% for key,value in queries.refs.all_referrals.items %}
+                                    {
+                                        y: "{{ key}}",
+                                        {% for key_level,value_level in value.items %}
+                                            "{{ key_level }}":{{ value_level }},
+                                        {% endfor %}
+                                    },
+                                {% endfor %}
+                            {% endautoescape %}
+                        {% else %}
+                            {y: "{{ queries.todaynow.isoformat }}", item1: 0},
+                        {% endif %}
+                    ],
+                    xkey: 'y',
+                    dateFormat: function (d) {
+                        var date = new Date(d);
+                        return gregorian_to_jalali(date.getFullYear(), date.getMonth(), date.getDay()).join('/');
+                    },
+                    xLabelFormat: function (d) {
+                        return ''
+                    },
+                    hoverCallback: function (index, options, content, row) {
+                        var date = new Date(row.y);
+                        content = $(content)
+                            .text(gregorian_to_jalali(date.getFullYear(), date.getMonth(), date.getDay()).join('/'))
+                            .html();
+                        return content;
+                    },
+                    ykeys: [
+                        {% if queries.refs.all_referrals|length > 0 %}
+                            {% for key,value in queries.refs.all_referrals.items %}
+                                {% for key_level,value_level in value.items %}
+                                    "{{ key_level }}",
+                                {% endfor %}
+                            {% endfor %}
+                        {% else %}
+                            "item1"
+                        {% endif %}
+                    ],
+                    labels: [
+                        {% if queries.refs.all_referrals|length > 0 %}
+                            {% for key,value in queries.refs.all_referrals.items %}
+                                {% for key_level,value_level in value.items %}
+                                    "{{ key_level }}",
+                                {% endfor %}
+                            {% endfor %}
+                        {% else %}
+                            "item1"
+                        {% endif %}
+                    ],
+                    lineColors: ['#efefef', '#4f25ef', '#0defbf', '#ef4d5c', '#efefef', '#efefef'],
+                    hideHover: 'auto',
+                    gridTextColor: '#fff',
+                    pointStrokeColors: ['#efefef'],
+                    gridLineColor: '#efefef',
+                });
+            {% endif %}
+            $("#all-clicks-in-a-month").css('direction', 'ltr');
+            new Morris.Line({
+                element: 'all-clicks-in-a-month',
+                resize: true,
+                data: [
+                    {% if queries.clicks.prev_thirty_days_clicks.count > 0 %}
+                        {% autoescape off %}
+                            {% for one_of_days in queries.clicks.prev_thirty_days_clicks %}
+                                {y: "{{ one_of_days.by_date.isoformat }}", item1: {{one_of_days.by_day_count}}},
+                            {% endfor %}
+                        {% endautoescape %}
+                    {% else %}
+                        {y: "{{ queries.todaynow.isoformat }}", item1: 0},
+                    {% endif %}
+                ],
+                xkey: 'y',
+                dateFormat: function (d) {
+                    var date = new Date(d);
+                    return gregorian_to_jalali(date.getFullYear(), date.getMonth(), date.getDay()).join('/');
+                },
+                xLabelFormat: function (d) {
+                    return '';
+                },
+                hoverCallback: function (index, options, content, row) {
+                    var date = new Date(row.y);
+                    content = $(content)
+                        .text(gregorian_to_jalali(date.getFullYear(), date.getMonth(), date.getDay()).join('/'))
+                        .html();
+                    return content;
+                },
+                ykeys: ['item1'],
+                labels: ['Item'],
+                lineColors: ['#efefef'],
+                hideHover: 'auto',
+                gridTextColor: '#fff',
+                pointStrokeColors: ['#efefef'],
+                gridLineColor: '#efefef',
+            });
+            $("#all-payed-in-a-month").css('direction', 'ltr');
+            new Morris.Line({
+                element: 'all-payed-in-a-month',
+                resize: true,
+                data: [
+                    {% if queries.payed.prev_thirty_days_income.count > 0 %}
+                        {% autoescape off %}
+                            {% for one_of_days in queries.payed.prev_thirty_days_income %}
+                                {y: "{{ one_of_days.by_date.isoformat }}", item1: {{one_of_days.by_day_count}}},
+                            {% endfor %}
+                        {% endautoescape %}
+                    {% else %}
+                        {y: "{{ queries.todaynow.isoformat }}", item1: 0},
+                    {% endif %}
+                ],
+                xkey: 'y',
+                dateFormat: function (d) {
+                    var date = new Date(d);
+                    return gregorian_to_jalali(date.getFullYear(), date.getMonth(), date.getDay()).join('/');
+                },
+                xLabelFormat: function (d) {
+                    return ''
+                },
+                hoverCallback: function (index, options, content, row) {
+                    var date = new Date(row.y);
+                    content = $(content)
+                        .text(gregorian_to_jalali(date.getFullYear(), date.getMonth(), date.getDay()).join('/'))
+                        .html();
+                    return content;
+                },
+                ykeys: ['item1'],
+                labels: ['Item'],
+                lineColors: ['#efefef'],
+                hideHover: 'auto',
+                gridTextColor: '#fff',
+                pointStrokeColors: ['#efefef'],
+                gridLineColor: '#efefef',
+            });
         });
     </script>
 {% endblock %}

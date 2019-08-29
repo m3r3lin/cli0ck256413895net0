@@ -31,8 +31,8 @@ from system.base_views.views_Tabligh import (
 from system.base_views.views_Tanzimat_Paye import (
     ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel,
     LeastBalanceRequiredView, ClickIsChangeAbleView,
-    ChangeTitlesView, UpdatePerfectMoneyField
-)
+    ChangeTitlesView, UpdatePerfectMoneyField,
+    some_of_tanzimatpaye_view)
 from system.base_views.views_Tanzimat_Paye import (
     Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView,
     Time_kharid_termView,
@@ -87,7 +87,8 @@ urlpatterns = [
     path('Montashshodeha/', Montashshodeha.as_view(), name='Montashshodeha'),
     # ---- TanzimatPaye
     path('ActiveCodeMoaref/', ActiveCodeMoarefView.as_view(), name='ActiveCodeMoaref'),
-    path('ClickIsChangeAble/', ClickIsChangeAbleView.as_view(), name='ClickIsChangeAble'),
+    #path('ClickIsChangeAble/', ClickIsChangeAbleView.as_view(), name='ClickIsChangeAble'),
+    path('ClickIsChangeAble/', some_of_tanzimatpaye_view.as_view(), name='ClickIsChangeAble'),
     path('LeastBalanceRequired/', LeastBalanceRequiredView.as_view(), name='LeastBalanceRequired'),
     path('TedadSathShabake/', Count_Level_networkView.as_view(), name='TedadSathShabake'),
     path('SodeModir/', SodeModirView.as_view(), name='SodeModir'),

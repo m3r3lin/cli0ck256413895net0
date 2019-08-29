@@ -239,10 +239,10 @@
         </div>
     </div>
 
+    {% if not request.user.is_superuser %}
+        {% include 'system/Tabligh/show_tabligh_part.html' %}
+    {% endif %}
     <div class="row"><!-- Main content -->
-        {% if not request.user.is_superuser %}
-            {% include 'system/Tabligh/show_tabligh_part.html' %}
-        {% endif %}
         <!-- /.content --></div>
     {% if request.user.is_superuser %}
         <!-- MAP -->

@@ -68,8 +68,13 @@
                                 </div>
                                 <div class="col-md-12">
                                     <br>
+                                    <b>نشانی هدف :</b>
+                                    <div style="direction: ltr; text-align: right; display: inline-block;">http://{{ request.META.HTTP_HOST }}{% url 'CreateUser'%}?referer={{ user.id }}</div>
+                                </div>
+                                <div class="col-md-12">
+                                    <br>
                                     <b>برای جاسازی این نوشته ، این کد را در سایت خود قرار بدهید:</b>
-                                    <textarea style="width:100%; direction: ltr;text-align: left;  " readonly><a href="{% url 'CreateUser'%}?referer={{ user.id }}" target="_blank"><img src="{{ object.pic.url }}"></a></textarea>
+                                    <textarea style="width:100%; direction: ltr;text-align: left;  " readonly><a href="http://{{ request.META.HTTP_HOST }}{% url 'CreateUser'%}?referer={{ user.id }}" target="_blank"><img src="{{ object.pic.url }}"></a></textarea>
                                 </div>
                             </div>
                         </div>

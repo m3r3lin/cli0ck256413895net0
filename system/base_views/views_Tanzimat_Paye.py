@@ -6,13 +6,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import UpdateView, View, CreateView , FormView
+from django.views.generic import UpdateView, View, CreateView , FormView,TemplateView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django import forms
 from django.forms import Form, CharField
 from Ads_Project.functions import LoginRequiredMixin
 from Ads_Project.settings import BASE_DIR
-from system.forms import ActiveCodeMoarefForm, SodeModirForm
+from system.forms import ActiveCodeMoarefForm, SodeModirForm, sod_modir_max_count_level_FormSetting, \
+    some_of_tanzimatpaye_form
 from system.forms import (
     Languge_siteForm, Count_level_networkForm, Count_kharid_hadaghalForm, Time_kharid_termForm,
     Taien_meghdar_matlabForm, Show_amarforuserForm, Taied_khodkar_tablighForm, Vahed_poll_siteForm,
@@ -154,28 +155,84 @@ class Languge_siteView(LoginRequiredMixin, UpdateView):
         return reverse('Languge_site')
 
 
-class Count_Level_networkView(LoginRequiredMixin, CreateView):
+class Count_Level_networkView2(LoginRequiredMixin, CreateView):
     model = TanzimatPaye
     template_name = 'system/TanzimatPaye/Count_level_network.html'
     form_class = Count_level_networkForm
     starts_with = SATH
 
     def form_valid(self, form):
-        if int(form.instance.onvan) > int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, 0)):
-            messages.error(self.request, _("Level you exceeds max level"))
-            return super(Count_Level_networkView, self).form_invalid(form)
+        if "update_sath_network" in self.request.POST:
+            if int(form.instance.onvan) > int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, 0)):
+                messages.error(self.request, _("Level you exceeds max level"))
+                return super(Count_Level_networkView, self).form_invalid(form)
 
-        form.instance.onvan = Count_Level_networkView.starts_with + str(int(form.instance.onvan))
-        messages.success(self.request, _("Level is created"))
-        t = TanzimatPaye.objects.filter(onvan=form.instance.onvan).first()  # type:TanzimatPaye
-        if t:
-            t.value = form.instance.value
-            t.save()
-            return HttpResponseRedirect(self.get_success_url())
+            form.instance.onvan = Count_Level_networkView.starts_with + str(int(form.instance.onvan))
+            messages.success(self.request, _("Level is created"))
+            t = TanzimatPaye.objects.filter(onvan=form.instance.onvan).first()  # type:TanzimatPaye
+            if t:
+                t.value = form.instance.value
+                t.save()
+                return HttpResponseRedirect(self.get_success_url())
         return super(Count_Level_networkView, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('Count_Level_networkView')
+
+
+class Count_Level_networkView(LoginRequiredMixin, View):
+    starts_with = SATH
+    def get(self,request):
+        sode_modir, cre = TanzimatPaye.objects.get_or_create(onvan=SODE_MODIR, defaults={
+            "onvan": SODE_MODIR,
+            'value': 0,
+        })
+        max_count_level_network, cre = TanzimatPaye.objects.get_or_create(onvan=COUNT_LEVEL_NETWORK, defaults={
+            "onvan": COUNT_LEVEL_NETWORK,
+            'value': 5,
+        })
+        sod_form = sod_modir_max_count_level_FormSetting(data={
+            "sode_modir":sode_modir.value,
+            "had_aksar_count_level":max_count_level_network.value
+        })
+        levelnetwork_form=Count_level_networkForm
+        return render(request, 'system/TanzimatPaye/Count_level_network.html', {'sod_form': sod_form,'form':levelnetwork_form})
+
+    def post(self,request):
+        sode_modir, cre = TanzimatPaye.objects.get_or_create(onvan=SODE_MODIR, defaults={
+            "onvan": SODE_MODIR,
+            'value': 0,
+        })
+        max_count_level_network, cre = TanzimatPaye.objects.get_or_create(onvan=COUNT_LEVEL_NETWORK, defaults={
+            "onvan": COUNT_LEVEL_NETWORK,
+            'value': 5,
+        })
+
+        if "levelnetwork_form" in self.request.POST:
+            form = Count_level_networkForm(request.POST)
+            if int(request.POST.get("onvan")) > int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, 0)):
+                messages.error(self.request, _("Level you exceeds max level"))
+                return self.get(request)
+            onvan=request.POST.get("onvan")
+            onvan = Count_Level_networkView.starts_with + str(int(onvan))
+            messages.success(self.request, _("Level is created"))
+            t =  TanzimatPaye.objects.update_or_create(onvan=onvan, defaults={
+                "onvan": onvan,
+                'value': request.POST.get("value"),
+            })
+        elif "sod_form" in request.POST:
+            sode_modir.value=request.POST.get("sode_modir")
+            sode_modir.save()
+            max_count_level_network.value=request.POST.get("had_aksar_count_level")
+            max_count_level_network.save()
+            messages.success(self.request,"بروزرسانی سود مدیر و حداکثر سطح با موفقیت انجام شد.")
+        sod_form = sod_modir_max_count_level_FormSetting(data={
+            "sode_modir": sode_modir.value,
+            "had_aksar_count_level": max_count_level_network.value
+        })
+        levelnetwork_form = Count_level_networkForm
+        return render(request, 'system/TanzimatPaye/Count_level_network.html',
+                      {'sod_form': sod_form, 'form': levelnetwork_form})
 
 
 class Count_Level_networkDataTableView(LoginRequiredMixin, BaseDatatableView):
@@ -575,3 +632,68 @@ class UpdatePerfectMoneyField(LoginRequiredMixin, FormView):
 
     def get_success_url(self):
         return reverse('UpdatePerfectMoneyField')
+
+
+class some_of_tanzimatpaye_view(LoginRequiredMixin, View):
+    def get(self,request):
+
+        click_is_change, cre = TanzimatPaye.objects.get_or_create(onvan=CLICK_IS_CHANGEABLE, defaults={
+            "onvan": CLICK_IS_CHANGEABLE,
+            'value': 0,
+        })
+
+        count_hadaghal_kharid, cre = TanzimatPaye.objects.get_or_create(onvan=COUNT_KHARI_HADAGHAL, defaults={
+            "onvan": COUNT_KHARI_HADAGHAL,
+            'value': 0,
+        })
+
+        hadaghal_meghdar_mojodi, cre = TanzimatPaye.objects.get_or_create(onvan=LEAST_BALANCE_REQUIRED, defaults={
+            "onvan": LEAST_BALANCE_REQUIRED,
+            'value': 0,
+        })
+
+        Taien_Meghdar_Matlab, cre = TanzimatPaye.objects.get_or_create(onvan='taien_meghdar_matlab', defaults={
+            "onvan": 'taien_meghdar_matlab',
+            'value': 0,
+        })
+
+        Taied_Khodkar_Tabligh, cre = TanzimatPaye.objects.get_or_create(onvan='taied_khodkar_tabligh', defaults={
+            "onvan": 'taied_khodkar_tabligh',
+            'value': 0,
+        })
+        form = some_of_tanzimatpaye_form(data={
+            'taghier_teadad_click':click_is_change.value,
+            'hadaghal_teadad_kharid_tabligh':count_hadaghal_kharid.value,
+            'hadaghal_meghdar_mojodi':hadaghal_meghdar_mojodi.value,
+            'meghdar_matlab':Taien_Meghdar_Matlab.value,
+            'taeed_khodkar_tabligh':Taied_Khodkar_Tabligh.value
+        })
+        return render(request, 'system/TanzimatPaye/some_of_tanzimat_update.html',{'form':form})
+
+    def post(self,request):
+        print(request.POST)
+        click_is_change, cre = TanzimatPaye.objects.update_or_create(onvan=CLICK_IS_CHANGEABLE, defaults={
+            "onvan": CLICK_IS_CHANGEABLE,
+            'value': request.POST.get("taghier_teadad_click"),
+        })
+
+        count_hadaghal_kharid, cre = TanzimatPaye.objects.update_or_create(onvan=COUNT_KHARI_HADAGHAL, defaults={
+            "onvan": COUNT_KHARI_HADAGHAL,
+            'value': request.POST.get("hadaghal_teadad_kharid_tabligh"),
+        })
+
+        hadaghal_meghdar_mojodi, cre = TanzimatPaye.objects.update_or_create(onvan=LEAST_BALANCE_REQUIRED, defaults={
+            "onvan": LEAST_BALANCE_REQUIRED,
+            'value': request.POST.get("hadaghal_meghdar_mojodi"),
+        })
+
+        Taien_Meghdar_Matlab, cre = TanzimatPaye.objects.update_or_create(onvan='taien_meghdar_matlab', defaults={
+            "onvan": 'taien_meghdar_matlab',
+            'value': request.POST.get("meghdar_matlab"),
+        })
+
+        Taied_Khodkar_Tabligh, cre = TanzimatPaye.objects.update_or_create(onvan='taied_khodkar_tabligh', defaults={
+            "onvan": 'taied_khodkar_tabligh',
+            'value': request.POST.get("taeed_khodkar_tabligh"),
+        })
+        return self.get(request)

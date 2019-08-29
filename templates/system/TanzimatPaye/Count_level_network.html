@@ -22,6 +22,52 @@
 
     <section class="content">
         <div class="row">
+        <div class="col-md-12">
+            {% include "errors.html" %}
+            {% include "messages.html" %}
+        </div>
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">بروزرسانی سود مدیر و حداکثر سطح</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="box-body">
+
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-md-3">
+                                    {% if sod_form.sode_modir.label_tag %}
+                                        <label for="value">{{ sod_form.sode_modir.label_tag }}<span
+                                                class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ sod_form.sode_modir }}
+
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    {% if sod_form.had_aksar_count_level.label_tag %}
+                                        <label for="value">{{ sod_form.had_aksar_count_level.label_tag }}<span
+                                                class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ sod_form.had_aksar_count_level }}
+
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" name="sod_form"
+                                        class="btn btn-primary">{% trans "Save" %}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+
             <!-- left column -->
             <div class="col-md-12">
                 <!-- general form elements -->
@@ -34,12 +80,11 @@
                     <form role="form" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="box-body">
-                            {% include "errors.html" %}
-                            {% include "messages.html" %}
                             <div class="row">
                                 <div class="form-group col-sm-6 col-md-3">
                                     {% if form.onvan.label_tag %}
-                                        <label for="value">{{ form.onvan.label_tag }}<span class="red-star">*</span></label>
+                                        <label for="value">{{ form.onvan.label_tag }}<span
+                                                class="red-star">*</span></label>
                                     {% endif %}
                                     {{ form.onvan }}
                                     {% if form.onvan.help_text %}
@@ -49,7 +94,8 @@
 
                                 <div class="form-group col-sm-6 col-md-3">
                                     {% if form.value.label_tag %}
-                                        <label for="value">{{ form.value.label_tag }}<span class="red-star">*</span></label>
+                                        <label for="value">{{ form.value.label_tag }}<span
+                                                class="red-star">*</span></label>
                                     {% endif %}
                                     {{ form.value }}
                                     {% if form.value.help_text %}
@@ -59,7 +105,8 @@
                                 <!-- /.box-body -->
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+                                <button type="submit" name="levelnetwork_form"
+                                        class="btn btn-primary">{% trans "Save" %}</button>
                             </div>
                         </div>
                     </form>
@@ -75,7 +122,8 @@
                     <!-- /.box-header -->
                     <div class="box-body">
                         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-                            <table id="countlevelDatatable" class="table table-bordered table-striped table-centered vertical-middle-align">
+                            <table id="countlevelDatatable"
+                                   class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
                                     <th class="text-center">{% trans "ID" %}</th>
@@ -106,8 +154,10 @@
                     <h4 class="modal-title"><b>{% trans "Do you wan to delete this Level ?" %}</b></h4>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger no_button" data-dismiss="modal">{% trans "No" %}</button>
-                    <button type="button" class="btn btn-primary yes_button" data-dismiss="modal">{% trans "Yes" %}</button>
+                    <button type="button" class="btn btn-danger no_button"
+                            data-dismiss="modal">{% trans "No" %}</button>
+                    <button type="button" class="btn btn-primary yes_button"
+                            data-dismiss="modal">{% trans "Yes" %}</button>
                 </div>
             </div>
             <!-- /.modal-content -->

@@ -888,3 +888,53 @@ class Create_Banner(ModelForm):
         self.fields['size'].label = "اندازه بنر:"
         self.fields['size'].required = True
         self.fields['size'].widget.attrs.update({'class': 'form-control', 'id': 'size'})
+
+class sod_modir_max_count_level_FormSetting(Form):
+
+    sode_modir = forms.CharField()
+    had_aksar_count_level = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        super(sod_modir_max_count_level_FormSetting, self).__init__(*args, **kwargs)
+
+        self.fields['sode_modir'].label = "سود مدیر:"
+        self.fields['sode_modir'].required = True
+        self.fields['sode_modir'].widget.attrs.update({'class': 'form-control', 'id': 'sode_modir'})
+
+        self.fields['had_aksar_count_level'].label = "حداکثر تعداد سطح"
+        self.fields['had_aksar_count_level'].required = True
+        self.fields['had_aksar_count_level'].widget.attrs.update({'class': 'form-control', 'id': 'had_aksar_count_level'})
+
+class some_of_tanzimatpaye_form(Form):
+    VAZEYAT_CHOICES = (
+        ('1', _("activate")),
+        ('0', _("deactivate")),
+    )
+    taghier_teadad_click=forms.ChoiceField(choices=VAZEYAT_CHOICES)
+    hadaghal_teadad_kharid_tabligh = forms.CharField()
+    hadaghal_meghdar_mojodi = forms.CharField()
+    meghdar_matlab = forms.CharField()
+    taeed_khodkar_tabligh = taghier_teadad_click=forms.ChoiceField(choices=VAZEYAT_CHOICES)
+    def __init__(self, *args, **kwargs):
+        super(some_of_tanzimatpaye_form, self).__init__(*args, **kwargs)
+
+        self.fields['taghier_teadad_click'].label = "تغییر تعداد کلیک"
+        self.fields['taghier_teadad_click'].required = True
+        self.fields['taghier_teadad_click'].widget.attrs.update({'class': 'form-control', 'id': 'sode_modir'})
+
+        self.fields['hadaghal_teadad_kharid_tabligh'].label = "حداقل تعداد خرید "
+        self.fields['hadaghal_teadad_kharid_tabligh'].required = True
+        self.fields['hadaghal_teadad_kharid_tabligh'].widget.attrs.update({'class': 'form-control', 'id': 'hadaghal_teadad_kharid_tabligh'})
+
+        self.fields['hadaghal_meghdar_mojodi'].label = "حداقل مقدار موجودی "
+        self.fields['hadaghal_meghdar_mojodi'].required = True
+        self.fields['hadaghal_meghdar_mojodi'].widget.attrs.update({'class': 'form-control', 'id': 'hadaghal_meghdar_mojodi'})
+
+        self.fields['meghdar_matlab'].label = "مقدار مطلب تبلیغ"
+        self.fields['meghdar_matlab'].required = True
+        self.fields['meghdar_matlab'].widget.attrs.update({'class': 'form-control', 'id': 'meghdar_matlab'})
+
+        self.fields['taeed_khodkar_tabligh'].label = "تایید خودکار تبلیغ"
+        self.fields['taeed_khodkar_tabligh'].required = True
+        self.fields['taeed_khodkar_tabligh'].widget.attrs.update({'class': 'form-control', 'id': 'taeed_khodkar_tabligh'})
+

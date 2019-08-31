@@ -1625,6 +1625,9 @@ msgstr "قیمت"
 msgid "Click Mount"
 msgstr "تعداد کلیک"
 
+msgid "Editable Click Mount"
+msgstr "تعداد کلیک تغییر کند"
+
 msgid "Status"
 msgstr "وضعیت"
 

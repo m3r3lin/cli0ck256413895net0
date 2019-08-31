@@ -940,12 +940,12 @@ class some_of_tanzimatpaye_form(Form):
     hadaghal_teadad_kharid_tabligh = forms.CharField()
     hadaghal_meghdar_mojodi = forms.CharField()
     meghdar_matlab = forms.CharField()
-    taeed_khodkar_tabligh = taghier_teadad_click = forms.ChoiceField(choices=VAZEYAT_CHOICES)
+    taeed_khodkar_tabligh = forms.ChoiceField(choices=VAZEYAT_CHOICES)
 
     def __init__(self, *args, **kwargs):
         super(some_of_tanzimatpaye_form, self).__init__(*args, **kwargs)
 
-        self.fields['taghier_teadad_click'].label = _("Click Mount") + ":"
+        self.fields['taghier_teadad_click'].label = _("Editable Click Mount") + ":"
         self.fields['taghier_teadad_click'].required = True
         self.fields['taghier_teadad_click'].widget.attrs.update({'class': 'form-control', 'id': 'sode_modir'})
 

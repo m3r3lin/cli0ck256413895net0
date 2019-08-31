@@ -256,105 +256,9 @@
     {% endif %}
     <div class="row"><!-- Main content -->
         <!-- /.content --></div>
-    {% if request.user.is_superuser %}
-        <!-- MAP -->
-        <div class="col-md-6 col-sm-12 col-xs-12">
-            <div class="box box-solid bg-light-blue-gradient">
-                <div class="box-header">
-                    <i class="fa fa-map-marker"></i>
 
-                    <h3 class="box-title">
-                        {% trans "Online users base on country" %}
-                    </h3>
-                </div>
-                <div class="box-body">
-                    <div id="world-map" style="height: 250px; width: 100%;"></div>
-                </div>
-            </div>
-        </div>
-        <!-- Ads -->
-        <div class="col-md-6 col-sm-12  col-xs-12">
-            <div class="box box-solid bg-teal-gradient">
-                <div class="box-header">
-                    <i class="fa fa-th"></i>
-
-                    <h3 class="box-title">{% trans "Ads of last 30 Days" %}</h3>
-                </div>
-                <div class="box-body border-radius-none">
-                    <div class="chart" id="all-ads-in-a-month" style="height: 250px;"></div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer no-border">
-                    <div class="row">
-                        <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
-
-                            <h4 class="text-black">{{ queries.ads.today_all_ads }}</h4>
-
-                            <div class="knob-label">{% trans "Today Ads" %}</div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
-
-                            <h4 class="text-black">{{ queries.ads.prev_day_all_ads }}</h4>
-
-                            <div class="knob-label">{% trans "Yesterday Ads" %}</div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-xs-4 text-center">
-                            <h4 class="text-black">{{ queries.ads.all_ads_count }}</h4>
-                            <div class="knob-label">{% trans "All" %}</div>
-                        </div>
-                        <!-- ./col -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <!-- /.box-footer -->
-            </div>
-        </div>
-    {% else %}
-
-        <!-- Referrals -->
-        <div class="col-md-6 col-sm-12  col-xs-12">
-            <div class="box box-solid bg-teal-gradient">
-                <div class="box-header">
-                    <i class="fa fa-th"></i>
-
-                    <h3 class="box-title">{% trans "Last 30 days Referrals" %}</h3>
-                </div>
-                <div class="box-body border-radius-none">
-                    <div class="chart" id="all-refs-in-a-month" style="height: 250px;"></div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer no-border">
-                    <div class="row">
-                        <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
-
-                            <h4 class="text-black">{{ queries.refs.today_all_referrals }}</h4>
-
-                            <div class="knob-label">{% trans "Today Referrals" %}</div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
-
-                            <h4 class="text-black">{{ queries.refs.prev_day_all_referrals }}</h4>
-
-                            <div class="knob-label">{% trans "Yesterday Referrals" %}</div>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-xs-4 text-center">
-                            <h4 class="text-black">{{ queries.refs.all_referrals_count }}</h4>
-                            <div class="knob-label">{% trans "All" %}</div>
-                        </div>
-                        <!-- ./col -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <!-- /.box-footer -->
-            </div>
-        </div>
-    {% endif %}
     <!-- Clicks -->
-    <div class="col-md-6 col-sm-12  col-xs-12">
+    <div class="col-md-4 col-sm-12  col-xs-12">
         <div class="box box-solid bg-teal-gradient">
             <div class="box-header">
                 <i class="fa fa-th"></i>
@@ -393,7 +297,7 @@
         </div>
     </div>
     <!-- Payments -->
-    <div class="col-md-6 col-sm-12  col-xs-12">
+    <div class="col-md-4 col-sm-12  col-xs-12">
         <div class="box box-solid bg-teal-gradient">
             <div class="box-header">
                 <i class="fa fa-th"></i>
@@ -431,7 +335,109 @@
             <!-- /.box-footer -->
         </div>
     </div>
+    {% if request.user.is_superuser %}
 
+        <!-- Ads -->
+        <div class="col-md-4 col-sm-12  col-xs-12">
+            <div class="box box-solid bg-teal-gradient">
+                <div class="box-header">
+                    <i class="fa fa-th"></i>
+
+                    <h3 class="box-title">{% trans "Ads of last 30 Days" %}</h3>
+                </div>
+                <div class="box-body border-radius-none">
+                    <div class="chart" id="all-ads-in-a-month" style="height: 250px;"></div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer no-border">
+                    <div class="row">
+                        <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
+
+                            <h4 class="text-black">{{ queries.ads.today_all_ads }}</h4>
+
+                            <div class="knob-label">{% trans "Today Ads" %}</div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
+
+                            <h4 class="text-black">{{ queries.ads.prev_day_all_ads }}</h4>
+
+                            <div class="knob-label">{% trans "Yesterday Ads" %}</div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-xs-4 text-center">
+                            <h4 class="text-black">{{ queries.ads.all_ads_count }}</h4>
+                            <div class="knob-label">{% trans "All" %}</div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.box-footer -->
+            </div>
+        </div>
+        <!-- MAP -->
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <div class="box box-solid bg-light-blue-gradient">
+                        <div class="box-header">
+                            <i class="fa fa-map-marker"></i>
+
+                            <h3 class="box-title">
+                                {% trans "Online users base on country" %}
+                            </h3>
+                        </div>
+                        <div class="box-body">
+                            <div id="world-map" style="height: 250px; width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+
+        <!-- Referrals -->
+        <div class="col-md-4 col-sm-12  col-xs-12">
+            <div class="box box-solid bg-teal-gradient">
+                <div class="box-header">
+                    <i class="fa fa-th"></i>
+
+                    <h3 class="box-title">{% trans "Last 30 days Referrals" %}</h3>
+                </div>
+                <div class="box-body border-radius-none">
+                    <div class="chart" id="all-refs-in-a-month" style="height: 250px;"></div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer no-border">
+                    <div class="row">
+                        <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
+
+                            <h4 class="text-black">{{ queries.refs.today_all_referrals }}</h4>
+
+                            <div class="knob-label">{% trans "Today Referrals" %}</div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-xs-4 text-center" style="border-left: 1px solid #f4f4f4">
+
+                            <h4 class="text-black">{{ queries.refs.prev_day_all_referrals }}</h4>
+
+                            <div class="knob-label">{% trans "Yesterday Referrals" %}</div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-xs-4 text-center">
+                            <h4 class="text-black">{{ queries.refs.all_referrals_count }}</h4>
+                            <div class="knob-label">{% trans "All" %}</div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.box-footer -->
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}

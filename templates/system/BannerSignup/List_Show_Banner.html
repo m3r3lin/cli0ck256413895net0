@@ -19,6 +19,7 @@
             -moz-box-sizing: border-box;
             box-sizing: border-box;
             margin-top: 10px;
+            resize: none;
         }
     </style>
 {% endblock %}
@@ -66,13 +67,13 @@
                                     <b>{% trans "Size" %} :</b>
                                     <div style="direction: ltr; text-align: right; display: inline-block;"> {{ object.size }}</div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-12" style="overflow-wrap: break-word;">
                                     <br>
                                     <b>{% trans "Endpoint Link" %} :</b>
-                                    <div style="direction: ltr; text-align: right; display: inline-block;"><a
+                                    <a
                                             href="http://{{ request.META.HTTP_HOST }}{% url 'CreateUser'%}?referer={{ user.id }}">
                                         http://{{ request.META.HTTP_HOST }}{% url 'CreateUser'%}?referer={{ user.id }}
-                                    </a></div>
+                                    </a>
                                 </div>
                                 <div class="col-md-12">
                                     <br>

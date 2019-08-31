@@ -2416,3 +2416,30 @@ msgstr "دریافتی های امروز"
 msgid "Yesterday Payments"
 msgstr "دریافتی های دیروز"
 
+msgid "Referral Banner"
+msgstr "بنر های زیرمجموعه گیری"
+
+msgid "Support"
+msgstr "پشتیبانی"
+
+msgid "Send new ticket"
+msgstr "ارسال تیکت جدید"
+
+msgid "List tickets"
+msgstr "لیست تیکت ها"
+
+msgid "View Banners"
+msgstr "مشاهده بنرها"
+
+msgid "Ads Settings"
+msgstr "تنظیمات تبلیغ"
+
+msgid "Interests and levels"
+msgstr "تعیین سطح سود و شبکه"
+
+msgid "Create Banner"
+msgstr "ایجاد بنر"
+
+msgid "Banners List"
+msgstr "لیست بنرها"
+

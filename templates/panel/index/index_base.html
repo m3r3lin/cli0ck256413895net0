@@ -483,7 +483,7 @@
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-bullhorn"></i>
-                            <span>پشتیبانی</span>
+                            <span>{% trans "Support" %}</span>
                             <span class="pull-left-container">
                             <i class="fa fa-angle-right pull-left"></i>
                         </span>
@@ -491,17 +491,17 @@
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="{% url  'NewTicketCreate' %}"><i
-                                    class="fa fa-plus"></i>ارسال تیکت جدید</a>
+                                    class="fa fa-plus"></i>{% trans "Send new ticket" %}</a>
                             </li>
                             <li><a href="{% url  'TicketListView' %}"><i
-                                    class="fa fa-plus"></i>لیست تیکت ها</a>
+                                    class="fa fa-plus"></i>{% trans "List tickets" %}</a>
                             </li>
                         </ul>
                     </li>
                 <li class="treeview">
                         <a href="#">
                             <i class="fa fa-bullhorn"></i>
-                            <span>بنرهای زیرمجموعه گیری</span>
+                            <span>{% trans "Referral Banner" %}</span>
                             <span class="pull-left-container">
                             <i class="fa fa-angle-right pull-left"></i>
                         </span>
@@ -509,7 +509,7 @@
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="{% url  'List_Banner_show' %}"><i
-                                    class="fa fa-plus"></i>مشاهده بنرها</a>
+                                    class="fa fa-plus"></i>{% trans "View Banners" %}</a>
                             </li>
                         </ul>
                     </li>
@@ -532,7 +532,7 @@
                                 </li>
                                 <li>
                                     <a href="{% url 'ClickIsChangeAble' %}">
-                                        <i class="fa fa-code"></i>تنظیمات تبلیغ
+                                        <i class="fa fa-code"></i>{% trans "Ads Settings" %}
                                     </a>
                                 </li>
 {#                                <li><a href="{% url 'SodeModir' %}"><i#}
@@ -553,7 +553,7 @@
                                 <li>
                                     <a href="{% url 'Count_Level_networkView' %}"><i
                                             class="fa fa-bars"></i>
-                                        تعیین سطح سود و شبکه
+                                        {% trans "Interests and levels" %}
                                     </a></li>
 {#                                <li>#}
 {#                                    <a href="{% url 'Count_kharid_hadaghalView' %}"><i#}
@@ -603,11 +603,11 @@
                                 </a></li>
                                 <li><a href="{% url 'Create_Banner' %}"><i
                                         class="fa fa-line-chart"></i>
-                                    ایجاد بنر
+                                    {% trans "Create Banner" %}
                                 </a></li>
                                 <li><a href="{% url 'List_Banner' %}"><i
                                         class="fa fa-line-chart"></i>
-                                    لیست بنرها
+                                    {% trans "Banners List" %}
                                 </a></li>
                             </ul>
                         </li>

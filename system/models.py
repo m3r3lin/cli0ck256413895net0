@@ -77,7 +77,8 @@ class User(AbstractUser):
     kife_daramad = models.FloatField(default=0, validators=[MinValueValidator(0),
                                                             MaxValueValidator(
                                                                 9999999999,
-                                                                message=_('Income Pocket cant be greater than 9999999999'))
+                                                                message=_(
+                                                                    'Income Pocket cant be greater than 9999999999'))
                                                             ])
     code_moaref = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, blank=True)
     sath = models.IntegerField(default=1, null=True, blank=True)
@@ -289,6 +290,7 @@ PERFECT_USER_ID = 'perfect_user_id'
 PERFECT_TITLE = 'perfect_title'
 PERFECT_PASSPHRASE = 'perfect_passphrase'
 
+
 class TanzimatPaye(Model):
     onvan = models.CharField(max_length=250, unique=True)
     value = models.CharField(max_length=250)
@@ -326,12 +328,14 @@ class Order(Model):
     ))
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     mablagh = models.FloatField()
-    payment_id = models.CharField(max_length=255,blank=True, null=True)
+    payment_id = models.CharField(max_length=255, blank=True, null=True)
     status = models.SmallIntegerField(choices=(
         (0, _("failed")),
         (1, _("success")),
     ))
     data = models.TextField(default='')
+
+
 if not settings.CREATING_SUPER_USER:
     @receiver(pre_save, sender=User)
     def set_new_user_inactive(sender, instance, **kwargs):
@@ -367,11 +371,13 @@ class SoodeTabligh(Model):
     soode_mostaghim = models.FloatField()
     soode_gheire_mostaghim = models.FloatField(default=0)
 
+
 class Ticket(Model):
-    title = models.CharField(max_length=255,blank=True,null=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tickets", null=True)
     status = models.BooleanField(default=True)
+
 
 class TicketMessages(Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name="messages", null=True)
@@ -381,7 +387,8 @@ class TicketMessages(Model):
     file = models.FileField(upload_to=upload_ticket_path)
     seen = models.BooleanField(default=False)
 
+
 class BannerSingup(Model):
-    pic =  models.ImageField(upload_to=upload_banner_path)
-    description =  models.CharField(max_length=255,blank=True,null=True)
-    size =  models.CharField(max_length=255,blank=True,null=True)
+    pic = models.ImageField(upload_to=upload_banner_path)
+    description = models.CharField(max_length=255, blank=True, null=True)
+    size = models.CharField(max_length=255, blank=True, null=True)

@@ -129,6 +129,12 @@ def login_user(request):
             user = auth.authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
             if user is not None:
                 if user.is_active:
+                    if user.is_superuser:
+                        if 'canloginasadmin' not in request.session or not request.session['canloginasadmin']:
+                            return render(request, "system/user/login.html",
+                                          {'error': _("You are not allowed to access"),
+                                           "recaptcha": a.widget.render('recaptcha', '')})
+                        del request.session['canloginasadmin']
                     auth.login(request, user)
                     if request.GET.get('next') is not None:
                         return redirect(request.GET.get('next'))

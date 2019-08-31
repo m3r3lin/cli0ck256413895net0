@@ -13,18 +13,30 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import path, include, reverse
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import Http404
 
+
+from Ads_Project.settings import ADMIN_PANEL_URL
 from system.base_views.views_User import login_user
+
+def check_login_admin(request):
+    if request.path==ADMIN_PANEL_URL:
+        request.session['canloginasadmin'] = True
+        return redirect(reverse('login'))
+    raise Http404
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', login_user, name='login'),
     path('system/', include('system.urls')),
-    path('account/', include('allauth.urls'))
+    path('account/', include('allauth.urls')),
+    url(r'^.*$', check_login_admin)
     # path('test/',lambda r:redirect('http://127.0.0.1/system/dashboard/?token=fqwfjqwohfqwifhuqwifuw'))
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

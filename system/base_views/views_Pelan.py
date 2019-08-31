@@ -15,7 +15,7 @@ from system.templatetags.app_filters import date_jalali
 
 
 class PelanCreateView(LoginRequiredMixin, CreateView):
-    template_name = 'system/Pelan/create_pelan.html'
+    template_name = 'system/Pelan/Create_Pelan.html'
     form_class = PelanCreateForm
 
     def form_valid(self, form):
@@ -56,7 +56,7 @@ class PelanDeleteView(LoginRequiredMixin, View):
 
 class PelanListView(LoginRequiredMixin, ListView):
     model = Pelan
-    template_name = 'system/Pelan/list_pelan.html'
+    template_name = 'system/Pelan/List_Pelan.html'
     form_class = PelanCreateForm
 
     def get_context_data(self, *, object_list=None, **kwargs):

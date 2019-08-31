@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from unidecode import unidecode
 
 from system.functions import change_date_to_english
-from system.models import Payam, Infopm ,BannerSingup
+from system.models import Payam, Infopm, BannerSingup
 from system.models import User, Pelan, Tabligh, TanzimatPaye, ACTIV_MOAREF
 
 fullmatch_compiled = re.compile('^code_(\d{1,9})')
@@ -84,10 +84,14 @@ class UserCreateForm(TanzimatPayeMiddelware):
     recaptcha = ReCaptchaField(widget=ReCaptchaV2Checkbox(), required=True, error_messages={
         "required": _("Invalid Captcha Error")
     })
-    first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("First Name"), 'onkeypress': 'return lettersOnly(event)'}))
-    last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("Last Name"), 'onkeypress': 'return lettersOnly(event)'}))
-    mobile = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': _("Mobile"), 'onkeypress': 'return numbersOnly(event)'}))
-    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder': _("Email"), 'onkeypress': 'return emailOnly(event)'}))
+    first_name = forms.CharField(required=True, widget=forms.TextInput(
+        attrs={'placeholder': _("First Name"), 'onkeypress': 'return lettersOnly(event)'}))
+    last_name = forms.CharField(required=True, widget=forms.TextInput(
+        attrs={'placeholder': _("Last Name"), 'onkeypress': 'return lettersOnly(event)'}))
+    mobile = forms.CharField(required=True, widget=forms.TextInput(
+        attrs={'placeholder': _("Mobile"), 'onkeypress': 'return numbersOnly(event)'}))
+    email = forms.EmailField(required=True, widget=forms.EmailInput(
+        attrs={'placeholder': _("Email"), 'onkeypress': 'return emailOnly(event)'}))
     password = forms.CharField(widget=forms.PasswordInput(), error_messages={'required': _("Password is Required")})
     code_moaref = forms.CharField(widget=forms.TextInput(attrs={'placeholder': _("Referral")}))
 
@@ -126,7 +130,8 @@ class UserCreateForm(TanzimatPayeMiddelware):
         self.fields['username'].label = _("Username") + ":"
         self.fields['username'].required = True
         self.fields['username'].help_text = ''
-        self.fields['username'].widget.attrs.update({'class': 'form-control', 'id': 'username', 'onkeypress': 'return emailOnly(event)'})
+        self.fields['username'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'username', 'onkeypress': 'return emailOnly(event)'})
 
         self.fields['first_name'].label = _("First Name") + ":"
         self.fields['first_name'].required = True
@@ -232,15 +237,18 @@ class UserUpdateForm(ModelForm):
         super(UserUpdateForm, self).__init__(*args, **kwargs)
         self.fields['first_name'].label = _("First Name") + ":"
         self.fields['first_name'].required = True
-        self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'id': 'full_name', 'onkeypress': 'return lettersOnly(event)'})
+        self.fields['first_name'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'full_name', 'onkeypress': 'return lettersOnly(event)'})
 
         self.fields['last_name'].label = _("Last Name") + ":"
         self.fields['last_name'].required = True
-        self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'id': 'full_name', 'onkeypress': 'return lettersOnly(event)'})
+        self.fields['last_name'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'full_name', 'onkeypress': 'return lettersOnly(event)'})
 
         self.fields['code_melli'].label = _("Id number") + ":"
         self.fields['code_melli'].required = True
-        self.fields['code_melli'].widget.attrs.update({'class': 'form-control', 'id': 'code_melli', 'onkeypress': 'return numbersOnly(event)'})
+        self.fields['code_melli'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'code_melli', 'onkeypress': 'return numbersOnly(event)'})
 
         self.fields['tarikh_tavalod'].label = _("BirthDate") + ":"
         self.fields['tarikh_tavalod'].required = True
@@ -248,7 +256,8 @@ class UserUpdateForm(ModelForm):
 
         self.fields['mobile'].label = _("Mobile") + ":"
         self.fields['mobile'].required = True
-        self.fields['mobile'].widget.attrs.update({'class': 'form-control', 'id': 'mobile', 'onkeypress': 'return numbersOnly(event)'})
+        self.fields['mobile'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'mobile', 'onkeypress': 'return numbersOnly(event)'})
 
         self.fields['gender'].label = _("Gender") + ":"
         self.fields['gender'].required = True
@@ -256,7 +265,8 @@ class UserUpdateForm(ModelForm):
 
         self.fields['father_name'].label = _("Father Name") + ":"
         self.fields['father_name'].required = True
-        self.fields['father_name'].widget.attrs.update({'class': 'form-control', 'id': 'father_name', 'onkeypress': 'return lettersOnly(event)'})
+        self.fields['father_name'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'father_name', 'onkeypress': 'return lettersOnly(event)'})
 
         self.fields['address'].label = _("Address") + ":"
         self.fields['address'].required = True
@@ -264,31 +274,38 @@ class UserUpdateForm(ModelForm):
 
         self.fields['code_posti'].label = _("Postal Code") + ":"
         self.fields['code_posti'].required = True
-        self.fields['code_posti'].widget.attrs.update({'class': 'form-control', 'id': 'code_posti', 'onkeypress': 'return numbersOnly(event)'})
+        self.fields['code_posti'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'code_posti', 'onkeypress': 'return numbersOnly(event)'})
 
         self.fields['shomare_hesab'].label = _("Bank Account Number") + ":"
         self.fields['shomare_hesab'].required = True
-        self.fields['shomare_hesab'].widget.attrs.update({'class': 'form-control', 'id': 'shomare_hesab', 'onkeypress': 'return numbersOnly(event)'})
+        self.fields['shomare_hesab'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'shomare_hesab', 'onkeypress': 'return numbersOnly(event)'})
 
         self.fields['shomare_cart'].label = _("Credit Card Number") + ":"
         self.fields['shomare_cart'].required = True
-        self.fields['shomare_cart'].widget.attrs.update({'class': 'form-control', 'id': 'shomare_cart', 'onkeypress': 'return numbersOnly(event)'})
+        self.fields['shomare_cart'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'shomare_cart', 'onkeypress': 'return numbersOnly(event)'})
 
         self.fields['shomare_shaba'].label = _("IBAN") + ":"
         self.fields['shomare_shaba'].required = True
-        self.fields['shomare_shaba'].widget.attrs.update({'class': 'form-control', 'id': 'shomare_shaba', 'onkeypress': 'return numbersOnly(event)'})
+        self.fields['shomare_shaba'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'shomare_shaba', 'onkeypress': 'return numbersOnly(event)'})
 
         self.fields['name_saheb_hesab'].label = _("Bank Account Owner") + ":"
         self.fields['name_saheb_hesab'].required = True
-        self.fields['name_saheb_hesab'].widget.attrs.update({'class': 'form-control', 'id': 'name_saheb_hesab', 'onkeypress': 'return lettersOnly(event)'})
+        self.fields['name_saheb_hesab'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'name_saheb_hesab', 'onkeypress': 'return lettersOnly(event)'})
 
         self.fields['name_bank'].label = _("Bank Name") + ":"
         self.fields['name_bank'].required = True
-        self.fields['name_bank'].widget.attrs.update({'class': 'form-control', 'id': 'name_bank', 'onkeypress': 'return lettersOnly(event)'})
+        self.fields['name_bank'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'name_bank', 'onkeypress': 'return lettersOnly(event)'})
 
         self.fields['email'].label = _("Email") + ":"
         self.fields['email'].required = True
-        self.fields['email'].widget.attrs.update({'class': 'form-control', 'id': 'email', 'onkeypress': 'return emailOnly(event)'})
+        self.fields['email'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'email', 'onkeypress': 'return emailOnly(event)'})
 
         self.fields['id_telegram'].label = _("Telegram ID") + ":"
         self.fields['id_telegram'].required = False
@@ -304,7 +321,8 @@ class UserUpdateForm(ModelForm):
 
         self.fields['country'].label = _("Country") + ":"
         self.fields['country'].required = False
-        self.fields['country'].widget.attrs.update({'class': 'form-control', 'id': 'avatar', 'onkeypress': 'return lettersOnly(event)'})
+        self.fields['country'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'avatar', 'onkeypress': 'return lettersOnly(event)'})
 
         self.fields['is_active'].label = _("User State (Activate/Deactivate)") + ":"
         self.fields['is_active'].required = False
@@ -528,7 +546,7 @@ class Count_level_networkForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(Count_level_networkForm, self).__init__(*args, **kwargs)
 
-        self.fields['value'].label = _("Value") + "مقدار:"
+        self.fields['value'].label = _("Value") + ":"
         self.fields['value'].required = True
         self.fields['value'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
 
@@ -769,9 +787,9 @@ class Amar_jaali_Form(Form):
 class IncreaseBalanceFrom(forms.Form):
     how_much = forms.IntegerField()
     CHOICES = (
-        ('1','PerfectMoney'),
-        ( '2','NextPay'),
-        ('3','ZarinPal'),
+        ('1', 'PerfectMoney'),
+        ('2', 'NextPay'),
+        ('3', 'ZarinPal'),
     )
     dargah_type = forms.CharField(widget=forms.Select(choices=CHOICES))
 
@@ -835,106 +853,117 @@ class PerfectMoneyFormSetting(Form):
 
 
 class MyClearableFileInput(ClearableFileInput):
-    initial_text = "فایل فعلی"
-    input_text = 'عوض کردن'
-    clear_checkbox_label = 'پاک کردن'
+    initial_text = _('Current File')
+    input_text = _('Change')
+    clear_checkbox_label = _('Remove')
 
 
 class CreateTicketForm(Form):
-    title = forms.CharField(error_messages={'required': ("عنوان تیکت اجباری است.")})
-    message = forms.CharField(widget=forms.Textarea(),error_messages={'required': ("متن پیام اجباری است.")})
+    title = forms.CharField(error_messages={
+        'required': _("You must fill ticket title")
+    })
+    message = forms.CharField(widget=forms.Textarea(), error_messages={
+        'required': _("You must fill message")
+    })
     file = forms.FileField(required=False, widget=MyClearableFileInput)
 
     def __init__(self, *args, **kwargs):
         super(CreateTicketForm, self).__init__(*args, **kwargs)
 
-        self.fields['title'].label = "عنوان تیکت"
+        self.fields['title'].label = _("Ticket title")
         self.fields['title'].required = True
         self.fields['title'].widget.attrs.update({'class': 'form-control', 'id': 'title'})
 
-        self.fields['message'].label = "متن پیام"
+        self.fields['message'].label = _("Ticket message")
         self.fields['message'].required = True
         self.fields['message'].widget.attrs.update({'class': 'form-control', 'id': 'message'})
 
-        self.fields['file'].label = "پیوست"
+        self.fields['file'].label = _("Attachment")
         self.fields['file'].required = False
         self.fields['file'].widget.attrs.update({'class': 'form-control', 'id': 'file'})
 
     def clean_file(self):
         file = self.cleaned_data.get("file", False)
         filetype = magic.from_buffer(file.read())
-        list_format=['PNG','JPEG','JPG','text','Word','Excel']
+        list_format = ['PNG', 'JPEG', 'JPG', 'text', 'Word', 'Excel']
         if not any(ext in filetype for ext in list_format):
-            raise ValidationError(" فایل تنها میتواند عکس یا متن باشد.")
+            raise ValidationError(_('Just image or office docs are accepted'))
         return file
+
 
 class Create_Banner(ModelForm):
     pic = forms.ImageField(required=False, widget=MyClearableFileInput)
+
     class Meta:
         model = BannerSingup
-        fields = ['pic', 'description','size']
+        fields = ['pic', 'description', 'size']
 
     def __init__(self, *args, **kwargs):
         super(Create_Banner, self).__init__(*args, **kwargs)
 
-        self.fields['pic'].label = 'تصویر بنر:'
+        self.fields['pic'].label = _('Banner Image') + ':'
         self.fields['pic'].required = True
         self.fields['pic'].widget.attrs.update({'class': 'form-control', 'id': 'pic'})
 
-        self.fields['description'].label = "توضیحات:"
+        self.fields['description'].label = _("Description") + ":"
         self.fields['description'].required = True
         self.fields['description'].widget.attrs.update({'class': 'form-control', 'id': 'description'})
 
-        self.fields['size'].label = "اندازه بنر:"
+        self.fields['size'].label = _("Banner Size") + ":"
         self.fields['size'].required = True
         self.fields['size'].widget.attrs.update({'class': 'form-control', 'id': 'size'})
 
-class sod_modir_max_count_level_FormSetting(Form):
 
+class sod_modir_max_count_level_FormSetting(Form):
     sode_modir = forms.CharField()
     had_aksar_count_level = forms.CharField()
 
     def __init__(self, *args, **kwargs):
         super(sod_modir_max_count_level_FormSetting, self).__init__(*args, **kwargs)
 
-        self.fields['sode_modir'].label = "سود مدیر:"
+        self.fields['sode_modir'].label = _("Manager Interest") + ":"
         self.fields['sode_modir'].required = True
         self.fields['sode_modir'].widget.attrs.update({'class': 'form-control', 'id': 'sode_modir'})
 
-        self.fields['had_aksar_count_level'].label = "حداکثر تعداد سطح"
+        self.fields['had_aksar_count_level'].label = _("Max Level") + ":"
         self.fields['had_aksar_count_level'].required = True
-        self.fields['had_aksar_count_level'].widget.attrs.update({'class': 'form-control', 'id': 'had_aksar_count_level'})
+        self.fields['had_aksar_count_level'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'had_aksar_count_level'})
+
 
 class some_of_tanzimatpaye_form(Form):
     VAZEYAT_CHOICES = (
         ('1', _("activate")),
         ('0', _("deactivate")),
     )
-    taghier_teadad_click=forms.ChoiceField(choices=VAZEYAT_CHOICES)
+    taghier_teadad_click = forms.ChoiceField(choices=VAZEYAT_CHOICES)
     hadaghal_teadad_kharid_tabligh = forms.CharField()
     hadaghal_meghdar_mojodi = forms.CharField()
     meghdar_matlab = forms.CharField()
-    taeed_khodkar_tabligh = taghier_teadad_click=forms.ChoiceField(choices=VAZEYAT_CHOICES)
+    taeed_khodkar_tabligh = taghier_teadad_click = forms.ChoiceField(choices=VAZEYAT_CHOICES)
+
     def __init__(self, *args, **kwargs):
         super(some_of_tanzimatpaye_form, self).__init__(*args, **kwargs)
 
-        self.fields['taghier_teadad_click'].label = "تغییر تعداد کلیک"
+        self.fields['taghier_teadad_click'].label = _("Click Mount") + ":"
         self.fields['taghier_teadad_click'].required = True
         self.fields['taghier_teadad_click'].widget.attrs.update({'class': 'form-control', 'id': 'sode_modir'})
 
-        self.fields['hadaghal_teadad_kharid_tabligh'].label = "حداقل تعداد خرید "
+        self.fields['hadaghal_teadad_kharid_tabligh'].label = _("Least must buy Ads") + ":"
         self.fields['hadaghal_teadad_kharid_tabligh'].required = True
-        self.fields['hadaghal_teadad_kharid_tabligh'].widget.attrs.update({'class': 'form-control', 'id': 'hadaghal_teadad_kharid_tabligh'})
+        self.fields['hadaghal_teadad_kharid_tabligh'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'hadaghal_teadad_kharid_tabligh'})
 
-        self.fields['hadaghal_meghdar_mojodi'].label = "حداقل مقدار موجودی "
+        self.fields['hadaghal_meghdar_mojodi'].label =  _("Least Balance to publish") + ":"
         self.fields['hadaghal_meghdar_mojodi'].required = True
-        self.fields['hadaghal_meghdar_mojodi'].widget.attrs.update({'class': 'form-control', 'id': 'hadaghal_meghdar_mojodi'})
+        self.fields['hadaghal_meghdar_mojodi'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'hadaghal_meghdar_mojodi'})
 
-        self.fields['meghdar_matlab'].label = "مقدار مطلب تبلیغ"
+        self.fields['meghdar_matlab'].label = _("Max Add text len") + ":"
         self.fields['meghdar_matlab'].required = True
         self.fields['meghdar_matlab'].widget.attrs.update({'class': 'form-control', 'id': 'meghdar_matlab'})
 
-        self.fields['taeed_khodkar_tabligh'].label = "تایید خودکار تبلیغ"
+        self.fields['taeed_khodkar_tabligh'].label = _("Auto Check Ads") + ":"
         self.fields['taeed_khodkar_tabligh'].required = True
-        self.fields['taeed_khodkar_tabligh'].widget.attrs.update({'class': 'form-control', 'id': 'taeed_khodkar_tabligh'})
-
+        self.fields['taeed_khodkar_tabligh'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'taeed_khodkar_tabligh'})

@@ -14,10 +14,10 @@
     </style>
 {% endblock %}
 {% block page_title %}
-    لیست تیکت ها
+    {% trans "List tickets" %}
 {% endblock %}
 {% block dashboard %}
-    <li>لیست تیکت ها</li>
+    <li>{% trans "List tickets" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -34,13 +34,13 @@
                                    class="table table-bordered table-striped table-centered vertical-middle-align">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">شماره</th>
-                                    <th class="text-center">عنوان</th>
-                                    <th class="text-center">سازنده تیکت</th>
-                                    <th class="text-center">تاریخ</th>
-                                    <th class="text-center">وضعیت</th>
-                                    <th class="text-center">پیام جدید</th>
-                                    <th class="text-center">عملیات</th>
+                                    <th class="text-center">{% trans "ID" %}</th>
+                                    <th class="text-center">{% trans "Title" %}</th>
+                                    <th class="text-center">{% trans "Ticket Creator" %}</th>
+                                    <th class="text-center">{% trans "Date" %}</th>
+                                    <th class="text-center">{% trans "Status" %}</th>
+                                    <th class="text-center">{% trans "New Messages" %}</th>
+                                    <th class="text-center">{% trans "Action" %}</th>
                                 </tr>
                                 </thead>
                                 <tbody>

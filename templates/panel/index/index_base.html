@@ -11,10 +11,15 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
           name="viewport">
-    <!-- Bootstrap 3.3.7 -->
-    <link rel="stylesheet" href="{% static 'dist/css/bootstrap-theme.css' %}">
-    <!-- Bootstrap rtl -->
-    <link rel="stylesheet" href="{% static 'dist/css/rtl.css' %}">
+    {% if LANGUAGE_CODE == 'fa' %}
+        <!-- Bootstrap 3.3.7 -->
+        <link rel="stylesheet" href="{% static 'dist/css/bootstrap-theme.css' %}">
+        <!-- Bootstrap rtl -->
+        <link rel="stylesheet" href="{% static 'dist/css/rtl.css' %}">
+    {% else %}
+        <!-- Bootstrap 3.3.7 -->
+        <link rel="stylesheet" href="{% static 'dist/css/bootstrap.min.css' %}">
+    {% endif %}
     <!-- my_index css -->
     <link rel="stylesheet" href="{% static 'dist/my_css/index.css' %}">
     <!-- persian Date Picker -->
@@ -27,11 +32,20 @@
     <link rel="stylesheet"
           href="{% static 'bower_components/Ionicons/css/ionicons.min.css' %}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.css' %}">
+
+    {% if LANGUAGE_CODE == 'fa' %}
+        <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'dist/css/AdminLTE-en.min.css' %}">
+    {% endif %}
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet"
-          href="{% static 'dist/css/skins/_all-skins.min.css' %}">
+
+    {% if LANGUAGE_CODE == 'fa' %}
+        <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins.min.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'dist/css/skins/_all-skins-en.min.css' %}">
+    {% endif %}
     <!-- Morris chart -->
     <link rel="stylesheet"
           href="{% static 'bower_components/morris.js/morris.css' %}">
@@ -122,6 +136,13 @@
         .dataTables_paginate {
             text-align: center;
         }
+
+        {% if LANGUAGE_CODE == 'en' %}
+            .close.pull-left {
+                left: auto;
+                right: -101%;
+            }
+        {% endif %}
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -153,20 +174,20 @@
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
                         <!-- User Account: style can be found in dropdown.less -->
-{#                        <li class="dropdown messages-menu">#}
-{#                            <a href="#" class="dropdown-toggle"#}
-{#                               data-toggle="dropdown" aria-expanded="false">#}
-{#                                {% trans "Change Language" %}#}
-{#                            </a>#}
-{#                            <ul class="dropdown-menu">#}
-{#                                <li class="header" id="persian-lang">#}
-{#                                    {% trans "Persian" %}#}
-{#                                </li>#}
-{#                                <li class="header" id="english-lang">#}
-{#                                    {% trans "English" %}#}
-{#                                </li>#}
-{#                            </ul>#}
-{#                        </li>#}
+                        {#                        <li class="dropdown messages-menu">#}
+                        {#                            <a href="#" class="dropdown-toggle"#}
+                        {#                               data-toggle="dropdown" aria-expanded="false">#}
+                        {#                                {% trans "Change Language" %}#}
+                        {#                            </a>#}
+                        {#                            <ul class="dropdown-menu">#}
+                        {#                                <li class="header" id="persian-lang">#}
+                        {#                                    {% trans "Persian" %}#}
+                        {#                                </li>#}
+                        {#                                <li class="header" id="english-lang">#}
+                        {#                                    {% trans "English" %}#}
+                        {#                                </li>#}
+                        {#                            </ul>#}
+                        {#                        </li>#}
                         <li class="dropdown messages-menu">
                             <a href="#" class="dropdown-toggle"
                                data-toggle="dropdown" aria-expanded="false">
@@ -498,7 +519,7 @@
                             </li>
                         </ul>
                     </li>
-                <li class="treeview">
+                    <li class="treeview">
                         <a href="#">
                             <i class="fa fa-bullhorn"></i>
                             <span>{% trans "Referral Banner" %}</span>
@@ -535,51 +556,51 @@
                                         <i class="fa fa-code"></i>{% trans "Ads Settings" %}
                                     </a>
                                 </li>
-{#                                <li><a href="{% url 'SodeModir' %}"><i#}
-{#                                        class="fa fa-percent"></i>#}
-{#                                    {% trans "Admins interest rate" %}#}
-{#                                </a>#}
-{#                                </li>#}
+                                {#                                <li><a href="{% url 'SodeModir' %}"><i#}
+                                {#                                        class="fa fa-percent"></i>#}
+                                {#                                    {% trans "Admins interest rate" %}#}
+                                {#                                </a>#}
+                                {#                                </li>#}
                                 {#                            <li><a href="#"><i class="fa fa-list"></i>سطوح شبکه</a></li>#}
                                 <li><a href="{% url 'Languge_site' %}"><i
                                         class="fa fa-language"></i>
                                     {% trans "Default website language" %}
                                 </a></li>
-{#                                <li>#}
-{#                                    <a href="{% url 'Max_Count_Level_networkView' %}"><i#}
-{#                                            class="fa fa-arrow-up"></i>#}
-{#                                        {% trans "Max network levels" %}#}
-{#                                    </a></li>#}
+                                {#                                <li>#}
+                                {#                                    <a href="{% url 'Max_Count_Level_networkView' %}"><i#}
+                                {#                                            class="fa fa-arrow-up"></i>#}
+                                {#                                        {% trans "Max network levels" %}#}
+                                {#                                    </a></li>#}
                                 <li>
                                     <a href="{% url 'Count_Level_networkView' %}"><i
                                             class="fa fa-bars"></i>
                                         {% trans "Interests and levels" %}
                                     </a></li>
-{#                                <li>#}
-{#                                    <a href="{% url 'Count_kharid_hadaghalView' %}"><i#}
-{#                                            class="fa fa-level-down"></i>#}
-{#                                        {% trans "Least must buy Ads" %}#}
-{#                                    </a></li>#}
-{#                                <li><a href="{% url 'LeastBalanceRequired' %}"><i#}
-{#                                        class="fa fa-arrow-down"></i>#}
-{#                                    {% trans "Least Balance to publish" %}#}
-{#                                </a></li>#}
-{#                                <li>#}
-{#                                    <a href="{% url 'Taien_meghdar_matlabView' %}"><i#}
-{#                                            class="fa fa-text-width"></i>#}
-{#                                        {% trans "Max Add text len" %}#}
-{#                                    </a></li>#}
+                                {#                                <li>#}
+                                {#                                    <a href="{% url 'Count_kharid_hadaghalView' %}"><i#}
+                                {#                                            class="fa fa-level-down"></i>#}
+                                {#                                        {% trans "Least must buy Ads" %}#}
+                                {#                                    </a></li>#}
+                                {#                                <li><a href="{% url 'LeastBalanceRequired' %}"><i#}
+                                {#                                        class="fa fa-arrow-down"></i>#}
+                                {#                                    {% trans "Least Balance to publish" %}#}
+                                {#                                </a></li>#}
+                                {#                                <li>#}
+                                {#                                    <a href="{% url 'Taien_meghdar_matlabView' %}"><i#}
+                                {#                                            class="fa fa-text-width"></i>#}
+                                {#                                        {% trans "Max Add text len" %}#}
+                                {#                                    </a></li>#}
                                 <li>
                                     <a href="{% url 'Show_amar_foruserView' %}"><i
                                             class="fa fa-pie-chart"></i>
                                         {% trans "Show Status to users" %}
                                     </a></li>
-{#                                <li>#}
-{#                                    <a href="{% url 'Taeid_khodkar_tabligh' %}"><i#}
-{#                                            class="fa fa-font"></i>#}
-{#                                        {% trans "Auto Check Ads" %}#}
-{#                                    </a>#}
-{#                                </li>#}
+                                {#                                <li>#}
+                                {#                                    <a href="{% url 'Taeid_khodkar_tabligh' %}"><i#}
+                                {#                                            class="fa fa-font"></i>#}
+                                {#                                        {% trans "Auto Check Ads" %}#}
+                                {#                                    </a>#}
+                                {#                                </li>#}
                                 <li>
                                     <a href="{% url 'WebsiteTitle' %}"><i
                                             class="fa fa-font"></i>
@@ -741,7 +762,11 @@
     <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
-
+{% if LANGUAGE_CODE == 'fa' %}
+    <script src="{% static 'dist/my_js/options-fa.js' %}"></script>
+{% else %}
+    <script src="{% static 'dist/my_js/options-en.js' %}"></script>
+{% endif %}
 <!-- jQuery 3 -->
 <script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
 <!-- jQuery UI 1.11.4 -->

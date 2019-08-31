@@ -1,12 +1,13 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block page_title %}
-    ایجاد پیام جدید
+    {% trans "Send new ticket" %}
 {% endblock %}
 {% block dashboard %}
-    <li>پیام</li>
-    <li>ایجادپیام جدید</li>
+    <li>{% trans "Message" %}</li>
+    <li>{% trans "Send new ticket" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -17,7 +18,7 @@
                 <!-- general form elements -->
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">جهت ایجاد تیکت جدید، فرم زیر را پر کنید.</h3>
+                        <h3 class="box-title">{% trans "To Send new ticket, fill form bellow." %}</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -56,7 +57,7 @@
                         <!-- /.box-body -->
 
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">ثبت تیکت جدید</button>
+                            <button type="submit" class="btn btn-primary">{% trans "Send new ticket" %}</button>
                         </div>
                     </form>
                 </div>

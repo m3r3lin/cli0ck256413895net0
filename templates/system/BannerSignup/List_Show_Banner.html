@@ -23,10 +23,10 @@
     </style>
 {% endblock %}
 {% block page_title %}
-    بنرهای زیرمجموعه گیری
+    {% trans "Referral Banner" %}
 {% endblock %}
 {% block dashboard %}
-    <li>بنرهای زیرمجموعه گیری</li>
+    <li>{% trans "Referral Banner" %}</li>
 {% endblock %}
 {% block main_content %}
 
@@ -38,7 +38,7 @@
                         <div class="box-header">
                             <i class="fa fa-info-circle"></i>
                             <h3 class="box-title">
-                                بنر {{ forloop.counter }}
+                                {% trans "Banner" %} {{ forloop.counter }}
                             </h3>
                             <!-- tools box -->
                             <div class="pull-left box-tools">
@@ -57,23 +57,26 @@
                             <br>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <b>توضیحات : </b>
+                                    <b>{% trans "Description" %} : </b>
                                     <div style="direction: ltr; text-align: right; display: inline-block;"> {{ object.description }}</div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <br>
-                                    <b>سایز :</b>
+                                    <b>{% trans "Size" %} :</b>
                                     <div style="direction: ltr; text-align: right; display: inline-block;"> {{ object.size }}</div>
                                 </div>
                                 <div class="col-md-12">
                                     <br>
-                                    <b>نشانی هدف :</b>
-                                    <div style="direction: ltr; text-align: right; display: inline-block;">http://{{ request.META.HTTP_HOST }}{% url 'CreateUser'%}?referer={{ user.id }}</div>
+                                    <b>{% trans "Endpoint Link" %} :</b>
+                                    <div style="direction: ltr; text-align: right; display: inline-block;"><a
+                                            href="http://{{ request.META.HTTP_HOST }}{% url 'CreateUser'%}?referer={{ user.id }}">
+                                        http://{{ request.META.HTTP_HOST }}{% url 'CreateUser'%}?referer={{ user.id }}
+                                    </a></div>
                                 </div>
                                 <div class="col-md-12">
                                     <br>
-                                    <b>برای جاسازی این نوشته ، این کد را در سایت خود قرار بدهید:</b>
+                                    <b>{% trans "To place this image in your website.put this code in your website" %}:</b>
                                     <textarea style="width:100%; direction: ltr;text-align: left;  " readonly><a href="http://{{ request.META.HTTP_HOST }}{% url 'CreateUser'%}?referer={{ user.id }}" target="_blank"><img src="{{ object.pic.url }}"></a></textarea>
                                 </div>
                             </div>

@@ -1,6 +1,6 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
-{% load i18n %}
+{% load i18n %}{% get_current_language as LANGUAGE_CODE %}
 {% load app_filters %}
 {% block css %}
     <link rel="stylesheet" href="{% static "bower_components/jvectormap/jquery-jvectormap.css" %}">
@@ -44,6 +44,18 @@
         .dashboard-exception .info-box-text,
         body > div > div.content-wrapper > section.content > div > div > div > div > span.info-box-text {
             overflow: visible !important;
+        }
+
+        .dashboard-exception .info-box-icon {
+            width: 53px;
+        }
+
+        .dashboard-exception .info-box-content {
+        {% if LANGUAGE_CODE == 'fa' %}
+            margin-right: 53px;
+        {% else %}
+            margin-left: 53px;
+        {% endif %}
         }
     </style>
     <div class="col-md-12 dashboard-exception">
@@ -246,7 +258,7 @@
         <!-- /.content --></div>
     {% if request.user.is_superuser %}
         <!-- MAP -->
-        <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="col-md-6 col-sm-12 col-xs-12">
             <div class="box box-solid bg-light-blue-gradient">
                 <div class="box-header">
                     <i class="fa fa-map-marker"></i>
@@ -261,7 +273,7 @@
             </div>
         </div>
         <!-- Ads -->
-        <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="col-md-6 col-sm-12  col-xs-12">
             <div class="box box-solid bg-teal-gradient">
                 <div class="box-header">
                     <i class="fa fa-th"></i>
@@ -302,7 +314,7 @@
     {% else %}
 
         <!-- Referrals -->
-        <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="col-md-6 col-sm-12  col-xs-12">
             <div class="box box-solid bg-teal-gradient">
                 <div class="box-header">
                     <i class="fa fa-th"></i>
@@ -342,7 +354,7 @@
         </div>
     {% endif %}
     <!-- Clicks -->
-    <div class="col-md-4 col-sm-6 col-xs-12">
+    <div class="col-md-6 col-sm-12  col-xs-12">
         <div class="box box-solid bg-teal-gradient">
             <div class="box-header">
                 <i class="fa fa-th"></i>
@@ -381,7 +393,7 @@
         </div>
     </div>
     <!-- Payments -->
-    <div class="col-md-4 col-sm-6 col-xs-12">
+    <div class="col-md-6 col-sm-12  col-xs-12">
         <div class="box box-solid bg-teal-gradient">
             <div class="box-header">
                 <i class="fa fa-th"></i>

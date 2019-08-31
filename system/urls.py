@@ -7,7 +7,7 @@ from system.base_views.view_graph import (
     Parent_Children_List_View
 )
 from system.base_views.views_Banner import BannerCreateView, BannerListView, BannerDatatableView, BannerUpdateView, \
-    BannerDeleteView
+    BannerDeleteView, List_Banner_show_View
 from system.base_views.views_Click import ClickedOnTablighView, ClickDatatableView, ShowClick
 from system.base_views.views_Malli import (
     IncreaseBalanceView, dargah_test_part_1, HistoryMaliDatatableView,
@@ -31,8 +31,8 @@ from system.base_views.views_Tabligh import (
 from system.base_views.views_Tanzimat_Paye import (
     ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel,
     LeastBalanceRequiredView, ClickIsChangeAbleView,
-    ChangeTitlesView, UpdatePerfectMoneyField
-)
+    ChangeTitlesView, UpdatePerfectMoneyField,
+    some_of_tanzimatpaye_view)
 from system.base_views.views_Tanzimat_Paye import (
     Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView,
     Time_kharid_termView,
@@ -87,7 +87,8 @@ urlpatterns = [
     path('Montashshodeha/', Montashshodeha.as_view(), name='Montashshodeha'),
     # ---- TanzimatPaye
     path('ActiveCodeMoaref/', ActiveCodeMoarefView.as_view(), name='ActiveCodeMoaref'),
-    path('ClickIsChangeAble/', ClickIsChangeAbleView.as_view(), name='ClickIsChangeAble'),
+    #path('ClickIsChangeAble/', ClickIsChangeAbleView.as_view(), name='ClickIsChangeAble'),
+    path('ClickIsChangeAble/', some_of_tanzimatpaye_view.as_view(), name='ClickIsChangeAble'),
     path('LeastBalanceRequired/', LeastBalanceRequiredView.as_view(), name='LeastBalanceRequired'),
     path('TedadSathShabake/', Count_Level_networkView.as_view(), name='TedadSathShabake'),
     path('SodeModir/', SodeModirView.as_view(), name='SodeModir'),
@@ -159,4 +160,6 @@ urlpatterns = [
     path('List_Banner_Datatable/', BannerDatatableView.as_view(), name='List_Banner_Datatable'),
     path('UpdateBanner/<int:pk>', BannerUpdateView.as_view(), name='UpdateBanner'),
     path('DeleteBanner/<int:pk>', BannerDeleteView.as_view(), name='DeleteBanner'),
+    path('List_Banner_show/', List_Banner_show_View.as_view(), name='List_Banner_show'),
+
 ]

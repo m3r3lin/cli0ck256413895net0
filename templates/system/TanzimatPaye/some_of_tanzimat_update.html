@@ -1,0 +1,78 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% load i18n %}
+{% block page_title %}
+    {% trans "Update Number of clicks" %}
+{% endblock %}
+{% block dashboard %}
+    <li>{% trans "Update Number of clicks" %}</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{% trans "Update Number of clicks" %}</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="box-body">
+                            {% include "errors.html" %}
+                            {% include "messages.html" %}
+                            <div class="row">
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    {% if form.taghier_teadad_click.label_tag %}
+                                        <label for="value">{{ form.taghier_teadad_click.label_tag }}<span
+                                                class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.taghier_teadad_click }}
+                                </div>
+                                <div class="form-group col-sm-6 col-md-3">
+                                    {% if form.hadaghal_teadad_kharid_tabligh.label_tag %}
+                                        <label for="value">{{ form.hadaghal_teadad_kharid_tabligh.label_tag }}<span
+                                                class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.hadaghal_teadad_kharid_tabligh }}
+                                </div>
+                                <div class="form-group col-sm-6 col-md-3">
+                                    {% if form.hadaghal_meghdar_mojodi.label_tag %}
+                                        <label for="value">{{ form.hadaghal_meghdar_mojodi.label_tag }}<span
+                                                class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.hadaghal_meghdar_mojodi }}
+                                </div>
+                                <div class="form-group col-sm-6 col-md-3">
+                                    {% if form.meghdar_matlab.label_tag %}
+                                        <label for="value">{{ form.meghdar_matlab.label_tag }}<span
+                                                class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.meghdar_matlab }}
+                                </div>
+                                <div class="form-group col-sm-6 col-md-3">
+                                    {% if form.taeed_khodkar_tabligh.label_tag %}
+                                        <label for="value">{{ form.taeed_khodkar_tabligh.label_tag }}<span
+                                                class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.taeed_khodkar_tabligh }}
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}

@@ -2038,6 +2038,7 @@ msgstr "تعیین مقدار مطلب "
 
 msgid "Show Status to users"
 msgstr "نمایش آمار برای کاربران"
+
 msgid "Auto Check Ads"
 msgstr "تایید خودکار تبلیغ"
 
@@ -2485,7 +2486,7 @@ msgid "Manager Interest"
 msgstr "سود مدیر"
 
 msgid "Max Level"
-msgstr "سود مدیر"
+msgstr "بیشترین تعداد سطح"
 
 msgid "Banner Size"
 msgstr "اندازه بنر"

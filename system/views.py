@@ -146,7 +146,7 @@ class Dashboard(LoginRequiredMixin, View):
         # Admin queries
         this_month_clicks = dict(tarikh__month=datetime.now().month)
         this_month_publishes = dict(tarikh__month=datetime.now().month)
-        online_time_limite = timezone.now() - timedelta(seconds=600)
+        online_time_limite = timezone.now() - timedelta(minutes=10)
         count_user_online = User.objects.filter(
             last_activity__gte=online_time_limite).count()
         all_User = User.objects.count()
@@ -195,8 +195,13 @@ class Dashboard(LoginRequiredMixin, View):
             .values('by_day', 'by_day_count')
 
         a = str(past_five_days_click.query)
-        by_country = User.objects.filter(country__isnull=False) \
+        online_time_limite = timezone.now() - timedelta(minutes=10)
+        count_user_online = User.objects.filter(
+            last_activity__gte=online_time_limite).count()
+        by_country = User.objects.filter(last_activity__gte=online_time_limite).\
+            filter(country__isnull=False).values('country') \
             .annotate(count_user_online_country=Count("country")).values('country', 'count_user_online_country')
+        p = by_country.query
 
         if not user.is_superuser:
             this_month_clicks['montasher_konande'] = user

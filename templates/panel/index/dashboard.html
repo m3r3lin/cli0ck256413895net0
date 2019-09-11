@@ -14,32 +14,66 @@
         {% include "errors.html" %}
         {% include "messages.html" %}
     </div>
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="row">
-            <section class="col-lg-12 col-md-12">
-                <div class="box box-info">
-                    <div class="box-header">
-                        <i class="fa fa-info-circle"></i>
-                        <h3 class="box-title">
-                            {% trans "Admin Notifications" %}
-                        </h3>
-                        <!-- tools box -->
-                        <div class="pull-left box-tools">
-                            <button type="button" class="btn bg-info btn-sm" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </button>
+    {% if request.user.is_superuser %}
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+                <section class="col-lg-12 col-md-12">
+                    <div class="box box-info">
+                        <div class="box-header">
+                            <i class="fa fa-info-circle"></i>
+                            <h3 class="box-title">
+                                {% trans "Admin Notifications" %}
+                            </h3>
+                            <!-- tools box -->
+                            <div class="pull-left box-tools">
+                                <button type="button" class="btn bg-info btn-sm" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <!-- /. tools -->
                         </div>
-                        <!-- /. tools -->
+                        <div class="box-body">
+                            {% for pm in queries.all_infopm %}
+                                <h5 style="margin-bottom: 25px;"><b>{{ forloop.counter }}. </b>{{ pm.body }}</h5>
+                            {% endfor %}
+                        </div>
                     </div>
-                    <div class="box-body">
-                        {% for pm in queries.all_infopm %}
-                            <h5 style="margin-bottom: 25px;"><b>{{ forloop.counter }}. </b>{{ pm.body }}</h5>
-                        {% endfor %}
-                    </div>
-                </div>
-            </section>
+                </section>
+            </div>
         </div>
-    </div>
+    {% endif %}
+    {% if queries.should_buy %}
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+                <section class="col-lg-12 col-md-12">
+                    <div class="box box-info">
+                        <div class="box-header">
+                            <i class="fa fa-info-circle"></i>
+                            <h3 class="box-title">
+                                {% trans "When will your interests finish ?" %}
+                            </h3>
+                            <!-- tools box -->
+                            <div class="pull-left box-tools">
+                                <button type="button" class="btn bg-info btn-sm" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <p style="display: inline">{% trans 'To receive you referrals interests you should buy aleast an other' %}
+                                <a href="{% url  'CreateTabligh' %}" class="btn btn-primary">{{queries.should_buy}}</a>
+                                {% trans 'Ads to proceed.' %}
+                                <video autoplay="autoplay" loop="true" muted="true"
+                                       style="display: inline;width: 25px;">
+                                    <source src="{% static 'img/flashlight.gif' %}" type="video/mp4"/>
+                                </video>
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    {% endif %}
     <style>
         .dashboard-exception .info-box-text,
         body > div > div.content-wrapper > section.content > div > div > div > div > span.info-box-text {

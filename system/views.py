@@ -9,8 +9,8 @@ from django.views import View
 from Ads_Project.functions import LoginRequiredMixin
 from system.models import (
     User, Tabligh, Click, TablighatMontasherKonande,
-    Payam, Infopm, TanzimatPaye, HistoryIndirect, SHOW_AMAR_FOR_USER
-)
+    Payam, Infopm, TanzimatPaye, HistoryIndirect, SHOW_AMAR_FOR_USER,
+    COUNT_KHARI_HADAGHAL)
 
 
 class Dashboard(LoginRequiredMixin, View):
@@ -251,6 +251,11 @@ class Dashboard(LoginRequiredMixin, View):
             },
         }
 
+        if not request.user.is_superuser and not request.user.allow_indirect():
+            should_buy = TanzimatPaye.get_settings(COUNT_KHARI_HADAGHAL, 0) - \
+                         request.user.tabligh_set.filter(vazeyat=1).count()
+            if should_buy > 0:
+                queries['should_buy'] = should_buy
         tablighs = Tabligh.objects.filter(vazeyat=1).order_by('-id')[:10]
         message_not_read = Payam.objects.filter(Q(girande=self.request.user),
                                                 Q(vazeyat=1))

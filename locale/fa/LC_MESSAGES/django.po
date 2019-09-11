@@ -2514,3 +2514,12 @@ msgstr "بروزرسانی سود مدیر و حداکثر سطح"
 
 msgid "New Messages"
 msgstr "پیام جدید"
+
+msgid "When will your interests finish ?"
+msgstr "مدت زمان فعال بودن کسب درآمد"
+
+msgid "To receive you referrals interests you should buy aleast an other"
+msgstr "برای در یافت در آمد از زیر جموعه ها شما باید تعداد"
+
+msgid "Ads to proceed."
+msgstr "تبلیغ خریداری کنید."

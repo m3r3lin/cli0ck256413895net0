@@ -42,38 +42,34 @@
             </div>
         </div>
     {% endif %}
-    {% if queries.should_buy %}
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="row">
-                <section class="col-lg-12 col-md-12">
-                    <div class="box box-info">
-                        <div class="box-header">
-                            <i class="fa fa-info-circle"></i>
-                            <h3 class="box-title">
-                                {% trans "When will your interests finish ?" %}
-                            </h3>
-                            <!-- tools box -->
-                            <div class="pull-left box-tools">
-                                <button type="button" class="btn bg-info btn-sm" data-widget="collapse">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="box-body">
-                            <p style="display: inline">{% trans 'To receive you referrals interests you should buy aleast an other' %}
-                                <a href="{% url  'CreateTabligh' %}" class="btn btn-primary">{{queries.should_buy}}</a>
-                                {% trans 'Ads to proceed.' %}
-                                <video autoplay="autoplay" loop="true" muted="true"
-                                       style="display: inline;width: 25px;">
-                                    <source src="{% static 'img/flashlight.gif' %}" type="video/mp4"/>
-                                </video>
-                            </p>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            <section class="col-lg-12 col-md-12">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <i class="fa fa-info-circle"></i>
+                        <h3 class="box-title">
+                            {% trans "When will your interests finish ?" %}
+                        </h3>
+                        <!-- tools box -->
+                        <div class="pull-left box-tools">
+                            <button type="button" class="btn bg-info btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
                         </div>
                     </div>
-                </section>
-            </div>
+                    <div class="box-body">
+                        <p style="display: inline">
+                            {% autoescape off %}
+                                {% parse_simple_settings LANGUAGE_CODE request %}
+                            {% endautoescape %}
+                            <img src="{% static "img/flashlight.gif" %}" width="25px"/>
+                        </p>
+                    </div>
+                </div>
+            </section>
         </div>
-    {% endif %}
+    </div>
     <style>
         .dashboard-exception .info-box-text,
         body > div > div.content-wrapper > section.content > div > div > div > div > span.info-box-text {
@@ -103,7 +99,7 @@
                         <span class="info-box-number">{{ queries.this_month_clicks }}</span>
 
                         <div class="progress">
-                            <div class="progress-bar" style="width: 0%"></div>
+                            <div class="progress-bar" style="width: 0"></div>
                         </div>
                         <span class="progress-description">
                         0 {% trans "Increase Rate" %}
@@ -142,7 +138,7 @@
                         <span class="info-box-number">{{ queries.all_direct_recieve|floatformat:0 }}</span>
 
                         <div class="progress">
-                            <div class="progress-bar" style="width: 0%"></div>
+                            <div class="progress-bar" style="width: 0"></div>
                         </div>
                         <span class="progress-description">
                         0 {% trans "Increase Rate" %}

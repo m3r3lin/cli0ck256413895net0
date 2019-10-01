@@ -1,11 +1,15 @@
 import os
+from datetime import timedelta, datetime
 
 from django import template
 
 from Ads_Project import settings
 from Ads_Project.functions import gregorian_to_jalali
-from Ads_Project.settings import MAIN_ADMIN_ID, BASE_DIR
-from system.models import TanzimatPaye, TablighatMontasherKonande, User
+from Ads_Project.settings import MAIN_ADMIN_ID
+from system.models import (
+    TanzimatPaye, TablighatMontasherKonande, User, COUNT_KHARI_HADAGHAL, Tabligh,
+    MAX_TIME_TILL_EXPIRE
+)
 
 register = template.Library()
 
@@ -55,8 +59,10 @@ def date_jalali(value, mode=1):
 
 
 @register.simple_tag
-def setting(key, default):
+def setting(key, default, if_string_default=False):
     settings = TanzimatPaye.get_settings(key, default)
+    if if_string_default and isinstance(settings, str) and settings == '':
+        return default
     return settings
 
 
@@ -78,6 +84,33 @@ def is_main_admin(user):
 @register.filter(name='generate_publish_url')
 def generate_publish_url(value, user: User):
     return value + '--' + str(user.id)
+
+
+@register.simple_tag
+def parse_simple_settings(lang, request):
+    translated = ''
+    if request.user.allow_indirect():
+        translated = TanzimatPaye.get_settings(f'{lang}_message_2', '')
+    else:
+        translated = TanzimatPaye.get_settings(f'{lang}_message_1', '')
+    days = TanzimatPaye.get_settings(MAX_TIME_TILL_EXPIRE, 0)
+    fifteen_day_ago = datetime.now() - timedelta(days=days)
+    print(days, fifteen_day_ago)
+    if '%2%' in translated:
+        should_buy = TanzimatPaye.get_settings(COUNT_KHARI_HADAGHAL, 0) - \
+                     request.user.tabligh_set.filter(vazeyat=1, tarikh_ijad__gte=fifteen_day_ago).count()
+        translated = translated.replace('%2%', '<b>{}</b>'.format(str(should_buy)))
+    if '%1%' in translated:
+        i = Tabligh.objects.filter(code_tabligh_gozaar=request.user,
+                                   vazeyat=1,
+                                   tarikh_ijad__gte=fifteen_day_ago) \
+            .order_by('-tarikh_ijad').first()
+        if i:
+            how_log = i.tarikh_ijad - fifteen_day_ago
+            translated = translated.replace("%1%", how_log.days)
+    if '%3%' in translated:
+        translated = translated.replace("%3%", days)
+    return translated
 
 
 @register.simple_tag

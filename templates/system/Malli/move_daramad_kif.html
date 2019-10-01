@@ -1,6 +1,7 @@
 {% extends "panel/index/index_base.html" %}
 {% load static %}
 {% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 {% load app_filters %}
 {% block css %}
 {% endblock %}
@@ -35,9 +36,9 @@
                                     <div class="col-md-12 ">
                                         <div class="alert alert-warning alert-dismissable" role="alert">
                                             <a href="#" class="close pull-left" data-dismiss="alert" aria-label="close">×</a>
-                                            {% trans "You should at least buy" %}
-                                            {% setting 'count_kharid_hadaghl' 0 %}
-                                            {% trans "So you can use your referrals income" %}
+                                            {% autoescape off %}
+                                                {% parse_simple_settings LANGUAGE_CODE request %}
+                                            {% endautoescape %}
                                         </div>
                                     </div>
                                 {% endif %}

@@ -32,7 +32,8 @@ from system.base_views.views_Tanzimat_Paye import (
     ActiveCodeMoarefView, SodeModirView, MaxCountNetworkLevel,
     LeastBalanceRequiredView, ClickIsChangeAbleView,
     ChangeTitlesView, UpdatePerfectMoneyField,
-    some_of_tanzimatpaye_view)
+    some_of_tanzimatpaye_view, ChangeAlertMessager
+)
 from system.base_views.views_Tanzimat_Paye import (
     Languge_siteView, Count_Level_networkView, Count_kharid_hadaghalView,
     Time_kharid_termView,
@@ -161,5 +162,7 @@ urlpatterns = [
     path('UpdateBanner/<int:pk>', BannerUpdateView.as_view(), name='UpdateBanner'),
     path('DeleteBanner/<int:pk>', BannerDeleteView.as_view(), name='DeleteBanner'),
     path('List_Banner_show/', List_Banner_show_View.as_view(), name='List_Banner_show'),
+    # ---- Language
+    path('AlertMessages/', ChangeAlertMessager.as_view(), name='ChangeAlertMessager'),
 
 ]

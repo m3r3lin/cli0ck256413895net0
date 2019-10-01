@@ -2391,7 +2391,6 @@ msgstr "تعداد زیر مجموعه بر اساس سطح"
 msgid "Last 30 days payments"
 msgstr "تعداد کل هزینه های دریافتی بابت کلیک اعضا"
 
-
 msgid "Today Referrals"
 msgstr "زیرمجموعه های امروز"
 
@@ -2523,3 +2522,33 @@ msgstr "برای در یافت در آمد از زیر جموعه ها شما ب
 
 msgid "Ads to proceed."
 msgstr "تبلیغ خریداری کنید."
+
+msgid "Change Alert Messages"
+msgstr "تغییر پیام های سیستم"
+
+msgid "Persian ads shortage message"
+msgstr "پیام کمبود تبلیغ فارسی"
+
+msgid "English ads shortage message"
+msgstr "پیام کمبود تبلیغ انگلیسی"
+
+msgid "Persian ads shortage warning"
+msgstr "پیام اخطار کمبود تبلیغ فارسی"
+
+msgid "English ads shortage warning"
+msgstr "پیام اخطار کمبود تبلیغ انگلیسی"
+
+msgid "You can use this signs to get required information"
+msgstr "شما میتوانید از علائم زیر استفاده کنید تا اطلاعات را در مکان مورد نظر خود جارگذاری کنید"
+
+msgid "Days Left till shortage"
+msgstr "تعداد روزی که تا کمبود تبلیغ مانده"
+
+msgid "Number of ads required"
+msgstr "تعداد تبلیغاتی که کاربر باید بعد از رسیدن به کمبود خریداری کند"
+
+msgid "Max number of ads a user must buy"
+msgstr "حداکثر تعداد تبلیغی که کاربر باید خریداری کند"
+
+msgid "Delay till last ads transaction"
+msgstr "فاصله زمانی بین آخرین خرید تبلیغ"

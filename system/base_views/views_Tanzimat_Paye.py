@@ -1,26 +1,30 @@
 import os
 
 from django.contrib import messages
-from django.contrib.admindocs.views import TemplateDetailView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import UpdateView, View, CreateView , FormView,TemplateView
+from django.views.generic import UpdateView, View, CreateView, FormView
 from django_datatables_view.base_datatable_view import BaseDatatableView
-from django import forms
-from django.forms import Form, CharField
+
 from Ads_Project.functions import LoginRequiredMixin
 from Ads_Project.settings import BASE_DIR
-from system.forms import ActiveCodeMoarefForm, SodeModirForm, sod_modir_max_count_level_FormSetting, \
-    some_of_tanzimatpaye_form
+from system.forms import (
+    ActiveCodeMoarefForm, SodeModirForm, sod_modir_max_count_level_FormSetting,
+    some_of_tanzimatpaye_form,
+    ChangeLanguageClass
+)
 from system.forms import (
     Languge_siteForm, Count_level_networkForm, Count_kharid_hadaghalForm, Time_kharid_termForm,
     Taien_meghdar_matlabForm, Show_amarforuserForm, Taied_khodkar_tablighForm, Vahed_poll_siteForm,
     Count_visit_tabligh_Form, Taien_hadaghal_etbarForm, Amar_jaali_Form, MaxNetworkCountForm, LeastBalanceRequiredForm,
-    ClickIsChangeAbleForm,PerfectMoneyFormSetting
+    ClickIsChangeAbleForm, PerfectMoneyFormSetting
 )
-from system.models import TanzimatPaye, ACTIV_MOAREF, LANGUGE_SITE,PERFECT_USER_ID,PERFECT_TITLE,PERFECT_PASSPHRASE
+from system.models import (
+    TanzimatPaye, ACTIV_MOAREF, LANGUGE_SITE, PERFECT_USER_ID, PERFECT_TITLE, PERFECT_PASSPHRASE,
+    MAX_TIME_TILL_EXPIRE
+)
 from system.models import (
     VAHED_POLL_SITE, COUNT_LEVEL_NETWORK, SODE_MODIR,
     SHOW_AMAR_FOR_USER, SATH, LEAST_BALANCE_REQUIRED, COUNT_KHARI_HADAGHAL,
@@ -182,7 +186,8 @@ class Count_Level_networkView2(LoginRequiredMixin, CreateView):
 
 class Count_Level_networkView(LoginRequiredMixin, View):
     starts_with = SATH
-    def get(self,request):
+
+    def get(self, request):
         sode_modir, cre = TanzimatPaye.objects.get_or_create(onvan=SODE_MODIR, defaults={
             "onvan": SODE_MODIR,
             'value': 0,
@@ -192,13 +197,14 @@ class Count_Level_networkView(LoginRequiredMixin, View):
             'value': 5,
         })
         sod_form = sod_modir_max_count_level_FormSetting(data={
-            "sode_modir":sode_modir.value,
-            "had_aksar_count_level":max_count_level_network.value
+            "sode_modir": sode_modir.value,
+            "had_aksar_count_level": max_count_level_network.value
         })
-        levelnetwork_form=Count_level_networkForm
-        return render(request, 'system/TanzimatPaye/Count_level_network.html', {'sod_form': sod_form,'form':levelnetwork_form})
+        levelnetwork_form = Count_level_networkForm
+        return render(request, 'system/TanzimatPaye/Count_level_network.html',
+                      {'sod_form': sod_form, 'form': levelnetwork_form})
 
-    def post(self,request):
+    def post(self, request):
         sode_modir, cre = TanzimatPaye.objects.get_or_create(onvan=SODE_MODIR, defaults={
             "onvan": SODE_MODIR,
             'value': 0,
@@ -213,19 +219,19 @@ class Count_Level_networkView(LoginRequiredMixin, View):
             if int(request.POST.get("onvan")) > int(TanzimatPaye.get_settings(COUNT_LEVEL_NETWORK, 0)):
                 messages.error(self.request, _("Level you exceeds max level"))
                 return self.get(request)
-            onvan=request.POST.get("onvan")
+            onvan = request.POST.get("onvan")
             onvan = Count_Level_networkView.starts_with + str(int(onvan))
             messages.success(self.request, _("Level is created"))
-            t =  TanzimatPaye.objects.update_or_create(onvan=onvan, defaults={
+            t = TanzimatPaye.objects.update_or_create(onvan=onvan, defaults={
                 "onvan": onvan,
                 'value': request.POST.get("value"),
             })
         elif "sod_form" in request.POST:
-            sode_modir.value=request.POST.get("sode_modir")
+            sode_modir.value = request.POST.get("sode_modir")
             sode_modir.save()
-            max_count_level_network.value=request.POST.get("had_aksar_count_level")
+            max_count_level_network.value = request.POST.get("had_aksar_count_level")
             max_count_level_network.save()
-            messages.success(self.request,"بروزرسانی سود مدیر و حداکثر سطح با موفقیت انجام شد.")
+            messages.success(self.request, "بروزرسانی سود مدیر و حداکثر سطح با موفقیت انجام شد.")
         sod_form = sod_modir_max_count_level_FormSetting(data={
             "sode_modir": sode_modir.value,
             "had_aksar_count_level": max_count_level_network.value
@@ -605,27 +611,26 @@ class UpdatePerfectMoneyField(LoginRequiredMixin, FormView):
         PERFECT_USER_ID_VALUE = TanzimatPaye.get_settings(PERFECT_USER_ID, 0)
         PERFECT_TITLE_VALUE = TanzimatPaye.get_settings(PERFECT_TITLE, 0)
         PERFECT_PASSPHRASE_VALUE = TanzimatPaye.get_settings(PERFECT_PASSPHRASE, 0)
-        context['form'].fields['PERFECT_USER_ID'].initial=PERFECT_USER_ID_VALUE
-        context['form'].fields['PAYEE_NAME'].initial=PERFECT_TITLE_VALUE
-        context['form'].fields['Passphrase'].initial=PERFECT_PASSPHRASE_VALUE
+        context['form'].fields['PERFECT_USER_ID'].initial = PERFECT_USER_ID_VALUE
+        context['form'].fields['PAYEE_NAME'].initial = PERFECT_TITLE_VALUE
+        context['form'].fields['Passphrase'].initial = PERFECT_PASSPHRASE_VALUE
         return context
 
     def form_valid(self, form):
-
         PERFECT_USER_ID_object, e = TanzimatPaye.objects.update_or_create(onvan=PERFECT_USER_ID, defaults={
-                "onvan": PERFECT_USER_ID,
-                'value': self.request.POST.get('PERFECT_USER_ID'),
-            })
+            "onvan": PERFECT_USER_ID,
+            'value': self.request.POST.get('PERFECT_USER_ID'),
+        })
         print(e)
         PERFECT_TITLE_object, e = TanzimatPaye.objects.update_or_create(onvan=PERFECT_TITLE, defaults={
-                "onvan": PERFECT_TITLE,
-                'value': self.request.POST.get('PAYEE_NAME'),
-            })
+            "onvan": PERFECT_TITLE,
+            'value': self.request.POST.get('PAYEE_NAME'),
+        })
         print(e)
         PERFECT_PASSPHRASE_object, e = TanzimatPaye.objects.update_or_create(onvan=PERFECT_PASSPHRASE, defaults={
-                "onvan": PERFECT_PASSPHRASE,
-                'value': self.request.POST.get('Passphrase'),
-            })
+            "onvan": PERFECT_PASSPHRASE,
+            'value': self.request.POST.get('Passphrase'),
+        })
         print(e)
         messages.success(self.request, _("Settings were updated successfully"))
         return super(UpdatePerfectMoneyField, self).form_valid(form)
@@ -635,65 +640,96 @@ class UpdatePerfectMoneyField(LoginRequiredMixin, FormView):
 
 
 class some_of_tanzimatpaye_view(LoginRequiredMixin, View):
-    def get(self,request):
-
+    def get(self, request):
         click_is_change, cre = TanzimatPaye.objects.get_or_create(onvan=CLICK_IS_CHANGEABLE, defaults={
             "onvan": CLICK_IS_CHANGEABLE,
             'value': 0,
         })
 
-        count_hadaghal_kharid, cre = TanzimatPaye.objects.get_or_create(onvan=COUNT_KHARI_HADAGHAL, defaults={
+        count_hadaghal_kharid, ___ = TanzimatPaye.objects.get_or_create(onvan=COUNT_KHARI_HADAGHAL, defaults={
             "onvan": COUNT_KHARI_HADAGHAL,
             'value': 0,
         })
 
-        hadaghal_meghdar_mojodi, cre = TanzimatPaye.objects.get_or_create(onvan=LEAST_BALANCE_REQUIRED, defaults={
+        hadaghal_meghdar_mojodi, ___ = TanzimatPaye.objects.get_or_create(onvan=LEAST_BALANCE_REQUIRED, defaults={
             "onvan": LEAST_BALANCE_REQUIRED,
             'value': 0,
         })
 
-        Taien_Meghdar_Matlab, cre = TanzimatPaye.objects.get_or_create(onvan='taien_meghdar_matlab', defaults={
+        Taien_Meghdar_Matlab, ___ = TanzimatPaye.objects.get_or_create(onvan='taien_meghdar_matlab', defaults={
             "onvan": 'taien_meghdar_matlab',
             'value': 0,
         })
 
-        Taied_Khodkar_Tabligh, cre = TanzimatPaye.objects.get_or_create(onvan='taied_khodkar_tabligh', defaults={
+        Taied_Khodkar_Tabligh, ___ = TanzimatPaye.objects.get_or_create(onvan='taied_khodkar_tabligh', defaults={
             "onvan": 'taied_khodkar_tabligh',
             'value': 0,
         })
-        form = some_of_tanzimatpaye_form(data={
-            'taghier_teadad_click':click_is_change.value,
-            'hadaghal_teadad_kharid_tabligh':count_hadaghal_kharid.value,
-            'hadaghal_meghdar_mojodi':hadaghal_meghdar_mojodi.value,
-            'meghdar_matlab':Taien_Meghdar_Matlab.value,
-            'taeed_khodkar_tabligh':Taied_Khodkar_Tabligh.value
-        })
-        return render(request, 'system/TanzimatPaye/some_of_tanzimat_update.html',{'form':form})
 
-    def post(self,request):
+        max_time_till_expire, ___ = TanzimatPaye.objects.get_or_create(onvan=MAX_TIME_TILL_EXPIRE, defaults={
+            "onvan": MAX_TIME_TILL_EXPIRE,
+            'value': 0,
+        })
+        form = some_of_tanzimatpaye_form(data={
+            'taghier_teadad_click': click_is_change.value,
+            'hadaghal_teadad_kharid_tabligh': count_hadaghal_kharid.value,
+            'hadaghal_meghdar_mojodi': hadaghal_meghdar_mojodi.value,
+            'meghdar_matlab': Taien_Meghdar_Matlab.value,
+            'taeed_khodkar_tabligh': Taied_Khodkar_Tabligh.value,
+            'max_time_till_expire': max_time_till_expire.value
+        })
+        return render(request, 'system/TanzimatPaye/some_of_tanzimat_update.html', {'form': form})
+
+    def post(self, request):
         print(request.POST)
-        click_is_change, cre = TanzimatPaye.objects.update_or_create(onvan=CLICK_IS_CHANGEABLE, defaults={
+        TanzimatPaye.objects.update_or_create(onvan=CLICK_IS_CHANGEABLE, defaults={
             "onvan": CLICK_IS_CHANGEABLE,
             'value': request.POST.get("taghier_teadad_click"),
         })
 
-        count_hadaghal_kharid, cre = TanzimatPaye.objects.update_or_create(onvan=COUNT_KHARI_HADAGHAL, defaults={
+        TanzimatPaye.objects.update_or_create(onvan=COUNT_KHARI_HADAGHAL, defaults={
             "onvan": COUNT_KHARI_HADAGHAL,
             'value': request.POST.get("hadaghal_teadad_kharid_tabligh"),
         })
 
-        hadaghal_meghdar_mojodi, cre = TanzimatPaye.objects.update_or_create(onvan=LEAST_BALANCE_REQUIRED, defaults={
+        TanzimatPaye.objects.update_or_create(onvan=LEAST_BALANCE_REQUIRED, defaults={
             "onvan": LEAST_BALANCE_REQUIRED,
             'value': request.POST.get("hadaghal_meghdar_mojodi"),
         })
 
-        Taien_Meghdar_Matlab, cre = TanzimatPaye.objects.update_or_create(onvan='taien_meghdar_matlab', defaults={
+        TanzimatPaye.objects.update_or_create(onvan='taien_meghdar_matlab', defaults={
             "onvan": 'taien_meghdar_matlab',
             'value': request.POST.get("meghdar_matlab"),
         })
 
-        Taied_Khodkar_Tabligh, cre = TanzimatPaye.objects.update_or_create(onvan='taied_khodkar_tabligh', defaults={
+        TanzimatPaye.objects.update_or_create(onvan='taied_khodkar_tabligh', defaults={
             "onvan": 'taied_khodkar_tabligh',
             'value': request.POST.get("taeed_khodkar_tabligh"),
         })
+
+        TanzimatPaye.objects.update_or_create(onvan=MAX_TIME_TILL_EXPIRE, defaults={
+            "onvan": MAX_TIME_TILL_EXPIRE,
+            'value': request.POST.get("max_time_till_expire"),
+        })
         return self.get(request)
+
+
+class ChangeAlertMessager(View):
+
+    def get(self, request):
+        form = ChangeLanguageClass()
+        return render(request, 'system/TanzimatPaye/NotEnoughReferralsInterests.html', {
+            'form': form
+        })
+
+    def post(self, request):
+        form = ChangeLanguageClass(request.POST)
+
+        if form.is_valid():
+            for key, field in form.cleaned_data.items():
+                TanzimatPaye.objects.update_or_create(onvan=key, defaults={
+                    "value": field
+                })
+        return render(request, 'system/TanzimatPaye/NotEnoughReferralsInterests.html', {
+            'form': form
+        })

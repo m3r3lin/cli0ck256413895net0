@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from operator import itemgetter
 from Ads_Project.functions import LoginRequiredMixin
-from django.views.generic import CreateView, ListView,FormView,View,UpdateView
+from django.views.generic import CreateView, ListView, FormView, View, UpdateView
 from django.views.generic import TemplateView
 from django.http import HttpResponse
 from system.models import User, BannerSingup
@@ -31,6 +31,7 @@ class BannerCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
     def get_success_url(self):
         return reverse('Create_Banner')
 
@@ -38,15 +39,17 @@ class BannerCreateView(LoginRequiredMixin, CreateView):
 class BannerListView(LoginRequiredMixin, TemplateView):
     template_name = 'system/BannerSignup/List_Banner.html'
 
+
 class BannerDatatableView(LoginRequiredMixin, BaseDatatableView):
     model = BannerSingup
-    columns = ['id','pic','description','size']
+    columns = ['id', 'pic', 'description', 'size']
 
     def filter_queryset(self, qs):
         search = self.request.GET.get('search[value]', None)
         if search:
-            qs = qs.filter(Q(description__icontains=search)|Q(size__icontains=search))
+            qs = qs.filter(Q(description__icontains=search) | Q(size__icontains=search))
         return qs
+
 
 class BannerUpdateView(LoginRequiredMixin, UpdateView):
     model = BannerSingup
@@ -67,12 +70,13 @@ class BannerDeleteView(LoginRequiredMixin, View):
             pelan = get_object_or_404(BannerSingup, pk=pk)
             pelan.delete()
         except ProtectedError:
-            messages.error(self.request,"متاسفانه بنر حذف نشد")
+            messages.error(self.request, "متاسفانه بنر حذف نشد")
             return redirect('List_Banner')
-        messages.success(self.request,"بنر با موفقیت حذف شد")
+        messages.success(self.request, "بنر با موفقیت حذف شد")
         return redirect('List_Banner')
 
-class List_Banner_show_View(LoginRequiredMixin,ListView):
+
+class List_Banner_show_View(LoginRequiredMixin, ListView):
     model = BannerSingup
     template_name = 'system/BannerSignup/List_Show_Banner.html'
 

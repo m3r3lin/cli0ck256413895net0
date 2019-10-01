@@ -1,5 +1,5 @@
 import math
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from allauth.account import signals
 from django.contrib.auth.hashers import make_password
@@ -172,7 +172,10 @@ class User(AbstractUser):
 
     def allow_indirect(self):
         allowed = TanzimatPaye.get_settings(COUNT_KHARI_HADAGHAL, 0)
-        return self.tabligh_set.filter(vazeyat=1).count() >= allowed
+        days = TanzimatPaye.get_settings(MAX_TIME_TILL_EXPIRE, 0)
+        # fifteen days ago
+        fda = datetime.now() - timedelta(days=days)
+        return self.tabligh_set.filter(vazeyat=1,tarikh_ijad__gte=fda).count() >= allowed
 
     def __str__(self):
         return self.username
@@ -286,9 +289,11 @@ TAIEN_MEGHDAR_MATLAB = 'taien_meghdar_matlab'
 TAIED_KHODKAR_TABLIGH = 'taied_khodkar_tabligh'
 LEAST_BALANCE_REQUIRED = 'least_balance_required'
 CLICK_IS_CHANGEABLE = 'click_is_change_able'
+ALERT_MESSAGE_TXT = 'ALERT_MESSAGE_TXT'
 PERFECT_USER_ID = 'perfect_user_id'
 PERFECT_TITLE = 'perfect_title'
 PERFECT_PASSPHRASE = 'perfect_passphrase'
+MAX_TIME_TILL_EXPIRE = 'MAX_TIME_TILL_EXPIRE'
 
 
 class TanzimatPaye(Model):

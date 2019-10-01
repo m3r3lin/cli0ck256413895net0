@@ -1,15 +1,13 @@
 import re
 
 import magic
-from django.forms import ClearableFileInput
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django import forms
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
+from django.forms import ClearableFileInput
 from django.forms import ModelForm, FileInput, Form
-from django import forms
 from django.utils.translation import ugettext_lazy as _
 from unidecode import unidecode
 
@@ -937,9 +935,10 @@ class some_of_tanzimatpaye_form(Form):
         ('0', _("deactivate")),
     )
     taghier_teadad_click = forms.ChoiceField(choices=VAZEYAT_CHOICES)
-    hadaghal_teadad_kharid_tabligh = forms.CharField()
-    hadaghal_meghdar_mojodi = forms.CharField()
-    meghdar_matlab = forms.CharField()
+    hadaghal_teadad_kharid_tabligh = forms.IntegerField()
+    hadaghal_meghdar_mojodi = forms.IntegerField()
+    meghdar_matlab = forms.IntegerField()
+    max_time_till_expire = forms.IntegerField()
     taeed_khodkar_tabligh = forms.ChoiceField(choices=VAZEYAT_CHOICES)
 
     def __init__(self, *args, **kwargs):
@@ -954,7 +953,7 @@ class some_of_tanzimatpaye_form(Form):
         self.fields['hadaghal_teadad_kharid_tabligh'].widget.attrs.update(
             {'class': 'form-control', 'id': 'hadaghal_teadad_kharid_tabligh'})
 
-        self.fields['hadaghal_meghdar_mojodi'].label =  _("Least Balance to publish") + ":"
+        self.fields['hadaghal_meghdar_mojodi'].label = _("Least Balance to publish") + ":"
         self.fields['hadaghal_meghdar_mojodi'].required = True
         self.fields['hadaghal_meghdar_mojodi'].widget.attrs.update(
             {'class': 'form-control', 'id': 'hadaghal_meghdar_mojodi'})
@@ -967,3 +966,30 @@ class some_of_tanzimatpaye_form(Form):
         self.fields['taeed_khodkar_tabligh'].required = True
         self.fields['taeed_khodkar_tabligh'].widget.attrs.update(
             {'class': 'form-control', 'id': 'taeed_khodkar_tabligh'})
+
+        self.fields['max_time_till_expire'].label = _("Delay till last ads transaction") + ":"
+        self.fields['max_time_till_expire'].required = True
+        self.fields['max_time_till_expire'].widget.attrs.update(
+            {'class': 'form-control', 'id': 'max_time_till_expire'})
+
+
+class ChangeLanguageClass(Form):
+    fa_message_1 = forms.CharField(min_length=10,max_length=500,required=False)
+    en_message_1 = forms.CharField(min_length=10,max_length=500,required=False)
+    fa_message_2 = forms.CharField(min_length=10,max_length=500,required=False)
+    en_message_2 = forms.CharField(min_length=10,max_length=500,required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(ChangeLanguageClass, self).__init__(*args, **kwargs)
+
+        self.fields['fa_message_1'].label = _("Persian ads shortage message") + ":"
+        self.fields['fa_message_1'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+        self.fields['en_message_1'].label = _("English ads shortage message") + ":"
+        self.fields['en_message_1'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+        self.fields['fa_message_2'].label = _("Persian ads shortage warning") + ":"
+        self.fields['fa_message_2'].widget.attrs.update({'class': 'form-control', 'id': 'value'})
+
+        self.fields['en_message_2'].label = _("English ads shortage warning") + ":"
+        self.fields['en_message_2'].widget.attrs.update({'class': 'form-control', 'id': 'value'})

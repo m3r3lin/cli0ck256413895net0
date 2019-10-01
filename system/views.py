@@ -262,8 +262,7 @@ class Dashboard(LoginRequiredMixin, View):
             if should_buy > 0:
                 queries['should_buy'] = should_buy
         tablighs = Tabligh.objects.filter(vazeyat=1).order_by('-id')[:10]
-        message_not_read = Payam.objects.filter(Q(girande=self.request.user),
-                                                Q(vazeyat=1))
+        message_not_read = Payam.objects.filter(Q(girande=self.request.user), Q(vazeyat=1))
 
         count_message_not_read = message_not_read.count()
 

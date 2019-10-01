@@ -1,0 +1,107 @@
+{% extends "panel/index/index_base.html" %}
+{% load static %}
+{% load i18n %}
+{% block page_title %}
+    {% trans "Change Alert Messages" %}
+{% endblock %}
+{% block dashboard %}
+    <li>{% trans "Change Alert Messages" %}</li>
+{% endblock %}
+{% block main_content %}
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{% trans "Change Alert Messages" %}</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="box-body">
+                            {% include "errors.html" %}
+                            {% include "messages.html" %}
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <p>{% trans "You can use this signs to get required information" %}</p>
+                                    <table class="table table-bordered table-striped table-hover text-center">
+                                        <thead>
+                                        <tr>
+                                            <td>علامت مورد استفاده</td>
+                                            <td>داده برگردانده شده</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>%1%</td>
+                                            <td>{% trans "Days Left till shortage" %}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>%2%</td>
+                                            <td>{% trans "Number of ads required" %}</td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>%3%</td>
+                                            <td>{% trans "Max number of ads a user must buy" %}</td></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="form-group col-sm-6 col-md-6">
+                                    {% if form.fa_message_1.label_tag %}
+                                        <label for="value">{{ form.fa_message_1.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.fa_message_1 }}
+                                    {% if form.fa_message_1.help_text %}
+                                        <p class="help-block">{{ form.fa_message_1.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-6">
+                                    {% if form.en_message_1.label_tag %}
+                                        <label for="value">{{ form.en_message_1.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.en_message_1 }}
+                                    {% if form.en_message_1.help_text %}
+                                        <p class="help-block">{{ form.en_message_1.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-6">
+                                    {% if form.fa_message_2.label_tag %}
+                                        <label for="value">{{ form.fa_message_2.label_tag }}<span class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.fa_message_2 }}
+                                    {% if form.fa_message_2.help_text %}
+                                        <p class="help-block">{{ form.fa_message_2.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-6">
+                                    {% if form.en_message_2.label_tag %}
+                                        <label for="value">{{ form.en_message_2.label_tag }}<span
+                                                class="red-star">*</span></label>
+                                    {% endif %}
+                                    {{ form.en_message_2 }}
+                                    {% if form.en_message_2.help_text %}
+                                        <p class="help-block">{{ form.en_message_2.help_text }}</p>
+                                    {% endif %}
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.modal -->
+{% endblock %}
